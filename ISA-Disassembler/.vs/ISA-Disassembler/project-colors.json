@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "887a92de-1da3-471b-94ad-d8a673de81a2": {
+      "ProjectGuid": "887a92de-1da3-471b-94ad-d8a673de81a2",
+      "DisplayName": "ISA-Disassembler",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

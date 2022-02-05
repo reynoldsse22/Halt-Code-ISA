@@ -1,0 +1,15 @@
+C:\Users\cocar\Source\Repos\Halt-Code-ISA\ISA-Disassembler\ISA-Disassembler\bin\Debug\net6.0\ISA-Disassembler.exe
+C:\Users\cocar\source\repos\Halt-Code-ISA\ISA-Disassembler\ISA-Disassembler\bin\Debug\net6.0\ISA-Disassembler.deps.json
+C:\Users\cocar\source\repos\Halt-Code-ISA\ISA-Disassembler\ISA-Disassembler\bin\Debug\net6.0\ISA-Disassembler.runtimeconfig.json
+C:\Users\cocar\Source\Repos\Halt-Code-ISA\ISA-Disassembler\ISA-Disassembler\bin\Debug\net6.0\ISA-Disassembler.dll
+C:\Users\cocar\source\repos\Halt-Code-ISA\ISA-Disassembler\ISA-Disassembler\bin\Debug\net6.0\ref\ISA-Disassembler.dll
+C:\Users\cocar\Source\Repos\Halt-Code-ISA\ISA-Disassembler\ISA-Disassembler\bin\Debug\net6.0\ISA-Disassembler.pdb
+C:\Users\cocar\Source\Repos\Halt-Code-ISA\ISA-Disassembler\ISA-Disassembler\obj\Debug\net6.0\ISA-Disassembler.csproj.AssemblyReference.cache
+C:\Users\cocar\Source\Repos\Halt-Code-ISA\ISA-Disassembler\ISA-Disassembler\obj\Debug\net6.0\ISA-Disassembler.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\cocar\Source\Repos\Halt-Code-ISA\ISA-Disassembler\ISA-Disassembler\obj\Debug\net6.0\ISA-Disassembler.AssemblyInfoInputs.cache
+C:\Users\cocar\Source\Repos\Halt-Code-ISA\ISA-Disassembler\ISA-Disassembler\obj\Debug\net6.0\ISA-Disassembler.AssemblyInfo.cs
+C:\Users\cocar\Source\Repos\Halt-Code-ISA\ISA-Disassembler\ISA-Disassembler\obj\Debug\net6.0\ISA-Disassembler.csproj.CoreCompileInputs.cache
+C:\Users\cocar\Source\Repos\Halt-Code-ISA\ISA-Disassembler\ISA-Disassembler\obj\Debug\net6.0\ISA-Disassembler.dll
+C:\Users\cocar\Source\Repos\Halt-Code-ISA\ISA-Disassembler\ISA-Disassembler\obj\Debug\net6.0\ref\ISA-Disassembler.dll
+C:\Users\cocar\Source\Repos\Halt-Code-ISA\ISA-Disassembler\ISA-Disassembler\obj\Debug\net6.0\ISA-Disassembler.pdb
+C:\Users\cocar\source\repos\Halt-Code-ISA\ISA-Disassembler\ISA-Disassembler\obj\Debug\net6.0\ISA-Disassembler.genruntimeconfig.cache
