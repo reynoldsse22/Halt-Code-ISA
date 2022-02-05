@@ -70,6 +70,9 @@ class ISA
     private static void decode(string[] program)
     {
         int byte1, byte2;
+
+        Console.WriteLine("   Team: Farmer, Reynolds, Ortiz, Beaudry");
+        Console.WriteLine("Project: ISA Design & Implementation\n");
         Console.WriteLine("Program Inst Instruct");
         Console.WriteLine("Counter Spec Mnemonic      Type FReg SReg DReg  Address");
         Console.WriteLine("------- ---- -------- --------- ---- ---- ---- --------");
@@ -105,7 +108,19 @@ class ISA
         int opcode, nibble1, address, r1, r2, rdest, temp;
         opcode = byte1 >> 4;            //Gets the opcode from the first byte
 
-        if(opcode >> 2 == 0)            //Runs if the instruction is a Control type instruction
+        if(opcode == 0)
+        {
+            Console.WriteLine(string.Format("{0,7} {1, 4} {2,8} {3,9} {4,4} {5,4} {6,4} {7,8}",
+                        programCounter.ToString("X").PadLeft(4, '0'), opcode.ToString("X"), instructions[opcode], "Control",
+                        "N/A", "N/A", "N/A", "N/A"));
+
+            controlInstrunctionCount++;
+            programCounter = programCounter + 2;
+
+            return;
+        }
+
+        else if(opcode >> 2 == 0)            //Runs if the instruction is a Control type instruction
         {
             nibble1 = byte1 & 15;       //Gets the second nibble from the first byte and combines it with the second byte 
             nibble1 = nibble1 << 8;
@@ -164,7 +179,7 @@ class ISA
             rdest = byte2 & 15;
             ArithInstrunctionCount++;
             Console.WriteLine(string.Format("{0, 7} {1, 4} {2, 8} {3, 9} {4, 4} {5, 4} {6, 4} {7, 8}",
-                        programCounter.ToString("X").PadLeft(4, '0'), opcode.ToString("X"), instructions[opcode], "R-R",
+                        programCounter.ToString("X").PadLeft(4, '0'), opcode.ToString("X"), instructions[opcode], "ALU",
                         r1.ToString("X"), r2.ToString("X"), rdest.ToString("x"), "N/A"));
 
             programCounter = programCounter + 2;
