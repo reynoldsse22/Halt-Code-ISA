@@ -8,19 +8,19 @@
     "net6.0": []
   },
   "packageFolders": {
-    "C:\\Users\\cocar\\.nuget\\packages\\": {}
+    "C:\\Users\\kfarm\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\cocar\\Source\\Repos\\Halt-Code-ISA\\ISA-Disassembler\\ISA-Disassembler\\ISA-Disassembler.csproj",
+      "projectUniqueName": "C:\\Users\\kfarm\\OneDrive\\Desktop\\all things\\Documents\\GitHub\\Halt-Code-ISA\\ISA-Disassembler\\ISA-Disassembler\\ISA-Disassembler.csproj",
       "projectName": "ISA-Disassembler",
-      "projectPath": "C:\\Users\\cocar\\Source\\Repos\\Halt-Code-ISA\\ISA-Disassembler\\ISA-Disassembler\\ISA-Disassembler.csproj",
-      "packagesPath": "C:\\Users\\cocar\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\cocar\\Source\\Repos\\Halt-Code-ISA\\ISA-Disassembler\\ISA-Disassembler\\obj\\",
+      "projectPath": "C:\\Users\\kfarm\\OneDrive\\Desktop\\all things\\Documents\\GitHub\\Halt-Code-ISA\\ISA-Disassembler\\ISA-Disassembler\\ISA-Disassembler.csproj",
+      "packagesPath": "C:\\Users\\kfarm\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\kfarm\\OneDrive\\Desktop\\all things\\Documents\\GitHub\\Halt-Code-ISA\\ISA-Disassembler\\ISA-Disassembler\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\cocar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\kfarm\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

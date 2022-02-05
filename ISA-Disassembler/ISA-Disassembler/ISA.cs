@@ -36,6 +36,12 @@ class ISA
                                 "XOR",
                                 "NOT"};
     static int programCounter = 0;
+    static int controlInstrunctionCount = 0;
+    static int ArithInstrunctionCount = 0;
+    static int memoryInstrunctionCount = 0;
+
+   
+
 
     /// <summary>Defines the entry point of the application.</summary>
     /// <param name="args">The arguments.</param>
@@ -73,6 +79,17 @@ class ISA
             byte2 = int.Parse(program[x+1], System.Globalization.NumberStyles.HexNumber);
             findDetails(byte1, byte2);
         }
+
+        //start of the Summary Stats
+        Console.WriteLine();
+        Console.WriteLine("Summary Statistics");
+        Console.WriteLine("------------------"); 
+        Console.WriteLine("Total instructions:              " + programCounter / 2 );                       //since we always go by 2's total instructions was pretty simple
+        Console.WriteLine("Control instructions:            " + controlInstrunctionCount);
+        Console.WriteLine("Arithmetic & logic instructions: " + ArithInstrunctionCount);
+        Console.WriteLine("Memory instructions:             " + memoryInstrunctionCount);
+        Console.WriteLine();
+        //end of summary Stats
         Console.WriteLine("The Program is finished");  //The program is finished once there are no more bytes to process.
         Console.ReadLine();
     }
@@ -93,6 +110,7 @@ class ISA
             nibble1 = byte1 & 15;       //Gets the second nibble from the first byte and combines it with the second byte 
             nibble1 = nibble1 << 8;
             address = nibble1 + byte2;
+            controlInstrunctionCount++;
 
 
             Console.WriteLine(string.Format("{0,7} {1, 4} {2,8} {3,9} {4,4} {5,4} {6,4} {7,8}",
@@ -107,6 +125,7 @@ class ISA
             temp = opcode & 3;  //Finds out what instruction it is in the I-type category
             r1 = byte1 & 15;    //Gets first register from the first byte
             address = byte2;    //Finds Address of the Load/Store instructions
+            memoryInstrunctionCount++;
 
             switch (temp)
             {
@@ -143,7 +162,7 @@ class ISA
             r1 = byte1 & 15;    //Gets the first, second, and destination registers for the R-Type instruction
             r2 = byte2 >> 4;
             rdest = byte2 & 15;
-
+            ArithInstrunctionCount++;
             Console.WriteLine(string.Format("{0, 7} {1, 4} {2, 8} {3, 9} {4, 4} {5, 4} {6, 4} {7, 8}",
                         programCounter.ToString("X").PadLeft(4, '0'), opcode.ToString("X"), instructions[opcode], "R-R",
                         r1.ToString("X"), r2.ToString("X"), rdest.ToString("x"), "N/A"));
