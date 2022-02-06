@@ -1,4 +1,12 @@
-﻿using System;
+﻿// ---------------------------------------------------------------------------
+// File name: Pep16.cs
+// Project name: ISA-GUI
+// ---------------------------------------------------------------------------
+// Creators: Samuel Reynolds, Nick Farmer, Carlos Ortiz, & Brandon Beaudry						
+// Course-Section: CSCI 4717-201
+// Creation Date: 2/6/22		
+// ---------------------------------------------------------------------------
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -45,6 +53,7 @@ namespace ISA_GUI
             this.Focus();
         }
 
+        /// <summary> Initializes all values and output fields on load of windows form</summary>
         private void Pep16_Load(object sender, EventArgs e)
         {
             for (int i = 0; i < 16; i++)
@@ -60,23 +69,25 @@ namespace ISA_GUI
             setRegisters();
         }
 
+        /// <summary> On RUN once the start button is clicked</summary>
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             clearProgram();
             startDecoding();
         }
 
+        /// <summary> Prints out the contents of main memory to the GUI</summary>
         private void setMemoryBox()
         {
-            
+
             int offset = 0;
             string line = "";
             int index = 0;
-            for(int i = 0; i < (100); i++)
+            for (int i = 0; i < (100); i++)
             {
                 line += "0x" + offset.ToString("x").PadLeft(4, '0') + "  ";
                 line += "\t";
-                for(int j = 0; j < 16; j++)
+                for (int j = 0; j < 16; j++)
                 {
                     line += MainMemory[index].ToString("x").PadLeft(2, '0');
                     line += " ";
@@ -84,23 +95,29 @@ namespace ISA_GUI
                 }
                 offset += 16;
                 line += "\n";
-                
+
             }
-            
+
             MemoryText.Text = line;
         }
 
+        /// <summary> Initializes and clears registers/main memory</summary>
         private void setRegisters()
         {
+            //Clear registers
             for (int i = 0; i < 16; i++)
             {
                 registers[i] = 0;
             }
 
+            //clear main memory
             for (int i = 0; i < 1048576; i++)
             {
                 MainMemory[i] = 0;
             }
+
+            //Initialize the hexidecimal text field to 0
+            //Pad left ensures that the value will be 4 digits.
             r0Hex.Text = "0x" + registers[0].ToString("x").PadLeft(4, '0');
             r1Hex.Text = "0x" + registers[1].ToString("x").PadLeft(4, '0');
             r2Hex.Text = "0x" + registers[2].ToString("x").PadLeft(4, '0');
@@ -118,6 +135,7 @@ namespace ISA_GUI
             ipHex.Text = "0x" + registers[14].ToString("x").PadLeft(4, '0');
             pcHex.Text = "0x" + registers[15].ToString("x").PadLeft(4, '0');
 
+            //Initialize the decimal register text fields to 0
             r0Dec.Text = registers[0].ToString();
             r1Dec.Text = registers[1].ToString();
             r2Dec.Text = registers[2].ToString();
@@ -136,6 +154,9 @@ namespace ISA_GUI
             pcDec.Text = registers[15].ToString();
         }
 
+        /// <summary>Separates every 16-bit instruction into two bytes 
+        /// and stores it in memory. Also calls the decodeInstruction function</summary>
+        /// <param name="program">Gets the input </param>
         private void getInstructionDetails(string[] program)
         {
             int byte1, byte2, totalInst;
@@ -153,6 +174,7 @@ namespace ISA_GUI
             totalInst = registers[15] / 2;
         }
 
+        /// <summary>Kicks off the decoding and gets inputted machine code from the user</summary>
         private void startDecoding()
         {
             string pr = "";
@@ -174,12 +196,15 @@ namespace ISA_GUI
             }
             catch (Exception)
             {
-                Console.WriteLine("Error! Invalid Instruction.");
+                decodedOutput = "Error! Invalid Instruction.";
             }
 
             setStatistics();
         }
 
+        /// <summary> Decodes the instruction into its assembly listing</summary>
+        /// <param name="byte1">Holds the first byte of the instruction </param>
+        /// <param name="byte2">Holds the second byte of the instruction </param>
         private void decodeInstruction(int byte1, int byte2)
         {
             int opcode, nibble1, temp;
@@ -267,21 +292,25 @@ namespace ISA_GUI
             }
         }
 
+        /// <summary>Decodes the I-Type Instructions</summary>
         private void decodeIType(int byte1, int byte2)
         {
 
         }
 
+        /// <summary>Decodes the C-Type Instructions</summary>
         private void decodeCType(int byte1, int byte2)
         {
 
         }
 
+        /// <summary>Decodes the R-Type Instructions</summary>
         private void decodeRType(int byte1, int byte2)
         {
 
         }
 
+        /// Sets the output field with the statistics of the program </summary>
         private void setStatistics()
         {
             setMemoryBox();
@@ -323,6 +352,7 @@ namespace ISA_GUI
             AssemblerListingTextBox.Text = decodedOutput;
         }
 
+        /// <summary>Clears registers, memory, and any output fields for new run of program.</summary>
         private void clearProgram()
         {
             memoryOffset = 0;
