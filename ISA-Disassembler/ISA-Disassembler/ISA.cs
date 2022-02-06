@@ -161,6 +161,7 @@ class ISA
                 case 2:
                     rdest = byte2 & 15;    //MOV is a special instruction that has a destination register instead of an address
                     address = -1;
+                    instrType = "Immediate";
 
                 break;
                 case 3:
@@ -190,9 +191,17 @@ class ISA
 
     }
 
+
+    /// <summary>Prints the details of the given instruction.</summary>
+    /// <param name="opcode">The opcode</param>
+    /// <param name="instrType">Instruction type</param>
+    /// <param name="r1">First register</param>
+    /// <param name="r2">Second register</param>
+    /// <param name="rdest">Register destination</param>
+    /// <param name="address">Address of the instruction</param>
     private static void printDetails(int opcode, string instrType, string r1, string r2, string rdest, string address)
     {
-        if (r1 == "FFFFFFFF")
+        if (r1 == "FFFFFFFF")  //If any of these variables is a -1 in hex then they are not used in the current intruction and will be printed as N/A
             r1 = "N/A";
         if (r2 == "FFFFFFFF")
             r2 = "N/A";
@@ -200,7 +209,7 @@ class ISA
             rdest = "N/A";
         if (address == "FFFFFFFF")
             address = "N/A";
-
+        //Prints out the details of the given instruction
         Console.WriteLine(string.Format("{0, 7} {1, 4} {2, 8} {3, 9} {4, 4} {5, 4} {6, 4} {7, 8}",
                         programCounter.ToString("X").PadLeft(4, '0'), opcode.ToString("X"), instructions[opcode], instrType,
                         r1, r2, rdest, address));
