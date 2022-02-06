@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "0a28e453-9a99-4115-9cbb-d88cf46d260e": {
+      "ProjectGuid": "0a28e453-9a99-4115-9cbb-d88cf46d260e",
+      "DisplayName": "ISA-GUI",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
