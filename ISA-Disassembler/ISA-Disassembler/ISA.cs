@@ -106,14 +106,20 @@ class ISA
     /// <param name="byte2">Second byte of a given instruction</param>
     private static void findDetails(int byte1, int byte2)
     {
-        int opcode, nibble1, address, r1, r2, rdest, temp;
+        int opcode, nibble1, temp;
+        int address = -1;
+        int r1 = -1;
+        int r2 = -1;
+        int rdest = -1;
+
+        string instrType = "";
         opcode = byte1 >> 4;            //Gets the opcode from the first byte
 
         if(opcode == 0)
         {
-            Console.WriteLine(string.Format("{0,7} {1, 4} {2,8} {3,9} {4,4} {5,4} {6,4} {7,8}",
-                        programCounter.ToString("X").PadLeft(4, '0'), opcode.ToString("X"), instructions[opcode], "Control",
-                        "N/A", "N/A", "N/A", "N/A"));
+            instrType = "Control";
+
+            printDetails(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), address.ToString("X"));
 
             controlInstrunctionCount++;
             programCounter = programCounter + 2;
@@ -123,17 +129,16 @@ class ISA
 
         else if(opcode >> 2 == 0)            //Runs if the instruction is a Control type instruction
         {
+            instrType = "Control";
             nibble1 = byte1 & 15;       //Gets the second nibble from the first byte and combines it with the second byte 
             nibble1 = nibble1 << 8;
             address = nibble1 + byte2;
             controlInstrunctionCount++;
 
 
-            Console.WriteLine(string.Format("{0,7} {1, 4} {2,8} {3,9} {4,4} {5,4} {6,4} {7,8}",
-                        programCounter.ToString("X").PadLeft(4, '0'), opcode.ToString("X"), instructions[opcode], "Control",
-                        "N/A", "N/A", "N/A", address.ToString("X")));  //Prints out the instruction and information of it
+            printDetails(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), address.ToString("X"));
 
-            
+
             programCounter = programCounter + 2; //Updates program counter
         }
         else if(opcode >> 2 == 1)  //Runs if the instruction is a Load/Store type of instruction
@@ -143,49 +148,61 @@ class ISA
             address = byte2;    //Finds Address of the Load/Store instructions
             memoryInstrunctionCount++;
 
+            instrType = "Direct";
             switch (temp)
             {
                 case 0:
-                    Console.WriteLine(string.Format("{0,7} {1, 4} {2,8} {3,9} {4,4} {5,4} {6,4} {7,8}",
-                        programCounter.ToString("X").PadLeft(4, '0'), opcode.ToString("X"), instructions[opcode], "Direct",
-                        r1.ToString("X"), "N/A", "N/A", address.ToString("X")));
+
                 break;
                 case 1:
-                    Console.WriteLine(string.Format("{0,7} {1, 4} {2,8} {3,9} {4,4} {5,4} {6,4} {7,8}",
-                        programCounter.ToString("X").PadLeft(4, '0'), opcode.ToString("X"), instructions[opcode], "Direct",
-                        "N/A", "N/A", r1.ToString("X"), address.ToString("X")));
+
 
                 break;
                 case 2:
-                    r2 = byte2 & 15;    //MOV is a special instruction that has a destination register instead of an address
-                    Console.WriteLine(string.Format("{0,7} {1, 4} {2,8} {3,9} {4,4} {5,4} {6,4} {7,8}",
-                        programCounter.ToString("X").PadLeft(4, '0'), opcode.ToString("X"), instructions[opcode], "Direct",
-                        r1.ToString("X"), "N/A", r2.ToString("X"), "N/A"));
+                    rdest = byte2 & 15;    //MOV is a special instruction that has a destination register instead of an address
+                    address = -1;
+
                 break;
                 case 3:
-                    Console.WriteLine(string.Format("{0,7} {1, 4} {2,8} {3,9} {4,4} {5,4} {6,4} {7,8}",
-                        programCounter.ToString("X").PadLeft(4, '0'), opcode.ToString("X"), instructions[opcode], "Immediate",
-                        "N/A", "N/A", r1.ToString("X"), address.ToString("X")));
+
                 break;
 
-            }
+                   
 
+            }
+            printDetails(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), address.ToString("X"));
             programCounter = programCounter + 2;
         }
         else //Runs for arithmetic instructions or R-type instructions
         {
+            instrType = "ALU";
             temp = opcode & 15; //Gets the first 3 bits of the opcode... Not used
             r1 = byte1 & 15;    //Gets the first, second, and destination registers for the R-Type instruction
             r2 = byte2 >> 4;
             rdest = byte2 & 15;
             ArithInstrunctionCount++;
-            Console.WriteLine(string.Format("{0, 7} {1, 4} {2, 8} {3, 9} {4, 4} {5, 4} {6, 4} {7, 8}",
-                        programCounter.ToString("X").PadLeft(4, '0'), opcode.ToString("X"), instructions[opcode], "ALU",
-                        r1.ToString("X"), r2.ToString("X"), rdest.ToString("x"), "N/A"));
+
+            printDetails(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), address.ToString("X"));
 
             programCounter = programCounter + 2;
 
         }
 
+    }
+
+    private static void printDetails(int opcode, string instrType, string r1, string r2, string rdest, string address)
+    {
+        if (r1 == "FFFFFFFF")
+            r1 = "N/A";
+        if (r2 == "FFFFFFFF")
+            r2 = "N/A";
+        if (rdest == "FFFFFFFF")
+            rdest = "N/A";
+        if (address == "FFFFFFFF")
+            address = "N/A";
+
+        Console.WriteLine(string.Format("{0, 7} {1, 4} {2, 8} {3, 9} {4, 4} {5, 4} {6, 4} {7, 8}",
+                        programCounter.ToString("X").PadLeft(4, '0'), opcode.ToString("X"), instructions[opcode], instrType,
+                        r1, r2, rdest, address));
     }
 }
