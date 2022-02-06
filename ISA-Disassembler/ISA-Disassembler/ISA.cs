@@ -69,7 +69,7 @@ class ISA
     /// <param name="program">The program.</param>
     private static void decode(string[] program)
     {
-        int byte1, byte2;
+        int byte1, byte2, totalInst;
 
         Console.WriteLine("   Team: Farmer, Reynolds, Ortiz, Beaudry");
         Console.WriteLine("Project: ISA Design & Implementation\n");
@@ -83,14 +83,15 @@ class ISA
             findDetails(byte1, byte2);
         }
 
+        totalInst = programCounter / 2;
         //start of the Summary Stats
         Console.WriteLine();
         Console.WriteLine("Summary Statistics");
         Console.WriteLine("------------------"); 
-        Console.WriteLine("Total instructions:              " + programCounter / 2 );                       //since we always go by 2's total instructions was pretty simple
-        Console.WriteLine("Control instructions:            " + controlInstrunctionCount);
-        Console.WriteLine("Arithmetic & logic instructions: " + ArithInstrunctionCount);
-        Console.WriteLine("Memory instructions:             " + memoryInstrunctionCount);
+        Console.WriteLine("Total instructions:              {0}", totalInst);                       //since we always go by 2's total instructions was pretty simple
+        Console.WriteLine("Control instructions:            {0}, {1}%", controlInstrunctionCount, Math.Round((double) controlInstrunctionCount / totalInst * 100, 2));
+        Console.WriteLine("Arithmetic & logic instructions: {0}, {1}%", ArithInstrunctionCount, Math.Round((double) ArithInstrunctionCount / totalInst * 100, 2));
+        Console.WriteLine("Memory instructions:             {0}, {1}%", memoryInstrunctionCount, Math.Round((double) memoryInstrunctionCount / totalInst * 100, 2));
         Console.WriteLine();
         //end of summary Stats
         Console.WriteLine("The Program is finished");  //The program is finished once there are no more bytes to process.
