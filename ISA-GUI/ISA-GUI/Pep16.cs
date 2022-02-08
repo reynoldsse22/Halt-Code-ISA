@@ -27,7 +27,7 @@ namespace ISA_GUI
                                 "LDRW",
                                 "STRW",
                                 "MOV",
-                                "LDRI",
+                                "LDWI",
                                 "ASL",
                                 "ASR",
                                 "ADD",
@@ -56,16 +56,8 @@ namespace ISA_GUI
         /// <summary> Initializes all values and output fields on load of windows form</summary>
         private void Pep16_Load(object sender, EventArgs e)
         {
-            for (int i = 0; i < 16; i++)
-            {
-                registers[i] = 0;
-            }
-
-            for (int i = 0; i < 1048576; i++)
-            {
-                MainMemory[i] = 0;
-            }
             setMemoryBox();
+            clearRegandMem();
             setRegisters();
         }
 
@@ -85,11 +77,11 @@ namespace ISA_GUI
             int index = 0;
             for (int i = 0; i < (100); i++)
             {
-                line += "0x" + offset.ToString("x").PadLeft(4, '0') + "  ";
+                line += "0x" + offset.ToString("x").PadLeft(4, '0').ToUpper() + "  ";
                 line += "\t";
                 for (int j = 0; j < 16; j++)
                 {
-                    line += MainMemory[index].ToString("x").PadLeft(2, '0');
+                    line += MainMemory[index].ToString("x").PadLeft(2, '0').ToUpper();
                     line += " ";
                     index++;
                 }
@@ -101,13 +93,12 @@ namespace ISA_GUI
             MemoryText.Text = line;
         }
 
-        /// <summary> Initializes and clears registers/main memory</summary>
-        private void setRegisters()
+        private void clearRegandMem()
         {
             //Clear registers
             for (int i = 0; i < 16; i++)
             {
-                registers[i] = 0;
+                registers[i] = 2;
             }
 
             //clear main memory
@@ -115,7 +106,11 @@ namespace ISA_GUI
             {
                 MainMemory[i] = 0;
             }
+        }
 
+        /// <summary> Updates the register window values</summary>
+        private void setRegisters()
+        {
             //Initialize the hexidecimal text field to 0
             //Pad left ensures that the value will be 4 digits.
             r0Hex.Text = "0x" + registers[0].ToString("x").PadLeft(4, '0');
@@ -181,9 +176,9 @@ namespace ISA_GUI
             string[] program;
             decodedOutput += "   Team: Beaudry, Farmer, Ortiz, Reynolds\n";
             decodedOutput += "Project: ISA Design & Implementation\n\n";
-            decodedOutput += "Program Inst Instruct\n";
-            decodedOutput += "Counter Spec Mnemonic      Type FReg SReg DReg  Address\n";
-            decodedOutput += "------- ---- -------- --------- ---- ---- ---- --------";
+            decodedOutput += "Program Inst Instruct                           Address/\n";
+            decodedOutput += "Counter Spec Mnemonic      Type FReg SReg DReg Immediate\n";
+            decodedOutput += "------- ---- -------- --------- ---- ---- ---- ---------";
 
             AssemblerListingTextBox.Text = decodedOutput;
 
@@ -193,13 +188,13 @@ namespace ISA_GUI
                 program = pr.Split(' ');        //Splits the given program into different instructions
 
                 getInstructionDetails(program);                //The splited program is given to this method to be disassembled
+                setStatistics();
             }
             catch (Exception)
             {
-                decodedOutput = "Error! Invalid Instruction.";
+                throwException("Error! Invalid Instruction.");
             }
 
-            setStatistics();
         }
 
         /// <summary> Decodes the instruction into its assembly listing</summary>
@@ -225,6 +220,7 @@ namespace ISA_GUI
                 controlInstrunctionCount++;
                 registers[15] = (short)(registers[15] + 2);  //Updates program counter
                 decodeCType(byte1, byte2);
+                setMemoryBox();                             //Updates the main memory display box
                 return;
             }
 
@@ -232,71 +228,89 @@ namespace ISA_GUI
             {
                 instrType = "Control";
 
-                printDecodedInstruction(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), address.ToString("X"));
 
                 nibble1 = byte1 & 15;       //Gets the second nibble from the first byte and combines it with the second byte 
                 nibble1 = nibble1 << 8;
                 address = nibble1 + byte2;
                 controlInstrunctionCount++;
 
+                printDecodedInstruction(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), ("0x" + address.ToString("X").PadLeft(4, '0')));
                 registers[15] = (short)(registers[15] + 2); //Updates program counter
             }
             else if (opcode >> 2 == 1)  //Runs if the instruction is a Load/Store type of instruction
             {
-                temp = opcode & 3;  //Finds out what instruction it is in the I-type category
+                //temp = opcode & 3;  //Finds out what instruction it is in the I-type category
                 r1 = byte1 & 15;    //Gets first register from the first byte
-                address = byte2;    //Finds Address of the Load/Store instructions
+                address = (r1 << 8)| byte2;    //Finds Address of the Load/Store instructions
                 memoryInstrunctionCount++;
+                rdest = byte2 & 15;
 
-                instrType = "Direct";
+                instrType = "Memory";
 
-                printDecodedInstruction(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), address.ToString("X"));
 
-                switch (temp)
+                switch (opcode)
                 {
-                    case 0:
-
+                    case 4:
+                        registers[0] = MainMemory[address];
+                        r1 = -1;
+                        r2 = -1;
+                        rdest = 0;
+                        printDecodedInstruction(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), ("0x" + address.ToString("X").PadLeft(4, '0')));
                         break;
-                    case 1:
-
-
+                    case 5:
+                        MainMemory[address] = (byte)registers[0];
+                        r1 = -1;
+                        r2 = 0;
+                        rdest = -1;
+                        printDecodedInstruction(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), ("0x" + address.ToString("X").PadLeft(4, '0')));
                         break;
-                    case 2:
-                        rdest = byte2 & 15;    //MOV is a special instruction that has a destination register instead of an address
+                    case 6:
+                        r1 = rdest;
+                        rdest = byte2 >> 4;    //MOV is a special instruction that has a destination register instead of an address
+                        registers[r1] = registers[rdest];
+                        r2 = rdest;
+                        rdest = r1;
+                        r1 = -1;
                         address = -1;
-                        instrType = "Immediate";
-
+                        printDecodedInstruction(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), address.ToString("X"));
                         break;
-                    case 3:
-
+                    case 7:
+                        registers[0] = (short)address;
+                        r1 = -1;
+                        r2 = -1;
+                        rdest = 0;
+                        printDecodedInstruction(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), ("0x" + address.ToString("X").PadLeft(4, '0')));
                         break;
-
-
-
                 }
+                
+
                 registers[15] = (short)(registers[15] + 2); //Updates program counter
             }
-            else //Runs for arithmetic instructions or R-type instructions
+            else if(opcode >> 3 == 1) //Runs for arithmetic instructions or R-type instructions
             {
                 instrType = "ALU";
 
-                printDecodedInstruction(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), address.ToString("X"));
 
                 temp = opcode & 15; //Gets the first 3 bits of the opcode... Not used
                 r1 = byte1 & 15;    //Gets the first, second, and destination registers for the R-Type instruction
                 r2 = byte2 >> 4;
                 rdest = byte2 & 15;
+
+                printDecodedInstruction(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), address.ToString("X"));
+
+                decodeRType(temp, r1, r2, rdest);
+
                 ArithInstrunctionCount++;
 
                 registers[15] = (short)(registers[15] + 2); //Updates program counter
             }
+            else
+            {
+                throwException("Invalid Instruction!");
+            }
+            setRegisters();
         }
 
-        /// <summary>Decodes the I-Type Instructions</summary>
-        private void decodeIType(int byte1, int byte2)
-        {
-
-        }
 
         /// <summary>Decodes the C-Type Instructions</summary>
         private void decodeCType(int byte1, int byte2)
@@ -305,9 +319,45 @@ namespace ISA_GUI
         }
 
         /// <summary>Decodes the R-Type Instructions</summary>
-        private void decodeRType(int byte1, int byte2)
+        private void decodeRType(int opcode, int firstReg, int secondReg, int rd)
         {
+            switch(opcode)
+            {
+                case 8:
+                    //shift left
+                    registers[rd] = (short)(registers[firstReg] << registers[secondReg]);
+                    break;
+                case 9:
+                    //shift right
+                    registers[rd] = (short)(registers[firstReg] >> registers[secondReg]);
+                    break;
+                case 10:
+                    //Add
+                    registers[rd] = (short)(registers[firstReg] + registers[secondReg]);
+                    break;
+                case 11:
+                    //Sub
+                    registers[rd] = (short)(registers[firstReg] - registers[secondReg]);
+                    break;
+                case 12:
+                    //And
+                    registers[rd] = (short)(registers[firstReg] & registers[secondReg]);
+                    break;
+                case 13:
+                    //Or
+                    registers[rd] = (short)(registers[firstReg] | registers[secondReg]);
+                    break;
+                case 14:
+                    //Xor
+                    registers[rd] = (short)(registers[firstReg] ^ registers[secondReg]);
+                    break;
+                case 15:
+                    //Not
+                    registers[rd] = (short)(~registers[firstReg]);
+                    break;
 
+            }
+            setRegisters();
         }
 
         /// Sets the output field with the statistics of the program </summary>
@@ -359,11 +409,19 @@ namespace ISA_GUI
             controlInstrunctionCount = 0;
             ArithInstrunctionCount = 0;
             memoryInstrunctionCount = 0;
+            clearRegandMem();
             setRegisters();
             //setMemoryBox();
             AssemblerListingTextBox.Text = "";
             StatsTextBox.Text = "";
             decodedOutput = "";
+        }
+
+        private void throwException(string message)
+        {
+            AssemblerListingTextBox.Text = message;
+            StatsTextBox.Text = message;
+
         }
 
     }
