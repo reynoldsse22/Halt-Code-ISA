@@ -30,9 +30,7 @@
         {
             this.CPU = new System.Windows.Forms.Label();
             this.MemoryText = new System.Windows.Forms.RichTextBox();
-            this.nFlagBox = new System.Windows.Forms.RichTextBox();
             this.ZFlagBox = new System.Windows.Forms.RichTextBox();
-            this.vFlagBox = new System.Windows.Forms.RichTextBox();
             this.cFlagBox = new System.Windows.Forms.RichTextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -50,9 +48,7 @@
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
-            this.label20 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.r0Hex = new System.Windows.Forms.RichTextBox();
             this.r0Dec = new System.Windows.Forms.RichTextBox();
@@ -106,7 +102,7 @@
             // CPU
             // 
             this.CPU.AutoSize = true;
-            this.CPU.Location = new System.Drawing.Point(702, 38);
+            this.CPU.Location = new System.Drawing.Point(571, 79);
             this.CPU.Name = "CPU";
             this.CPU.Size = new System.Drawing.Size(29, 13);
             this.CPU.TabIndex = 0;
@@ -123,48 +119,24 @@
             this.MemoryText.TabIndex = 2;
             this.MemoryText.Text = "";
             // 
-            // nFlagBox
-            // 
-            this.nFlagBox.BackColor = System.Drawing.SystemColors.Menu;
-            this.nFlagBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.nFlagBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nFlagBox.Location = new System.Drawing.Point(604, 64);
-            this.nFlagBox.Name = "nFlagBox";
-            this.nFlagBox.ReadOnly = true;
-            this.nFlagBox.Size = new System.Drawing.Size(25, 25);
-            this.nFlagBox.TabIndex = 3;
-            this.nFlagBox.Text = "";
-            // 
             // ZFlagBox
             // 
             this.ZFlagBox.BackColor = System.Drawing.SystemColors.Menu;
             this.ZFlagBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ZFlagBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ZFlagBox.Location = new System.Drawing.Point(676, 64);
+            this.ZFlagBox.Location = new System.Drawing.Point(657, 73);
             this.ZFlagBox.Name = "ZFlagBox";
             this.ZFlagBox.ReadOnly = true;
             this.ZFlagBox.Size = new System.Drawing.Size(25, 25);
             this.ZFlagBox.TabIndex = 4;
             this.ZFlagBox.Text = "";
             // 
-            // vFlagBox
-            // 
-            this.vFlagBox.BackColor = System.Drawing.SystemColors.Menu;
-            this.vFlagBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.vFlagBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.vFlagBox.Location = new System.Drawing.Point(748, 64);
-            this.vFlagBox.Name = "vFlagBox";
-            this.vFlagBox.ReadOnly = true;
-            this.vFlagBox.Size = new System.Drawing.Size(25, 25);
-            this.vFlagBox.TabIndex = 5;
-            this.vFlagBox.Text = "";
-            // 
             // cFlagBox
             // 
             this.cFlagBox.BackColor = System.Drawing.SystemColors.Menu;
             this.cFlagBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.cFlagBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cFlagBox.Location = new System.Drawing.Point(820, 64);
+            this.cFlagBox.Location = new System.Drawing.Point(719, 73);
             this.cFlagBox.Name = "cFlagBox";
             this.cFlagBox.ReadOnly = true;
             this.cFlagBox.Size = new System.Drawing.Size(25, 25);
@@ -315,37 +287,19 @@
             this.label17.TabIndex = 23;
             this.label17.Text = "PC";
             // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(583, 70);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(15, 13);
-            this.label18.TabIndex = 24;
-            this.label18.Text = "N";
-            // 
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(656, 70);
+            this.label19.Location = new System.Drawing.Point(639, 79);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(14, 13);
             this.label19.TabIndex = 25;
             this.label19.Text = "Z";
             // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(727, 70);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(14, 13);
-            this.label20.TabIndex = 26;
-            this.label20.Text = "V";
-            // 
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(800, 70);
+            this.label21.Location = new System.Drawing.Point(701, 79);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(14, 13);
             this.label21.TabIndex = 27;
@@ -872,9 +826,7 @@
             this.Controls.Add(this.r0Dec);
             this.Controls.Add(this.r0Hex);
             this.Controls.Add(this.label21);
-            this.Controls.Add(this.label20);
             this.Controls.Add(this.label19);
-            this.Controls.Add(this.label18);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.label15);
@@ -892,9 +844,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cFlagBox);
-            this.Controls.Add(this.vFlagBox);
             this.Controls.Add(this.ZFlagBox);
-            this.Controls.Add(this.nFlagBox);
             this.Controls.Add(this.CPU);
             this.Controls.Add(this.MemoryText);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -916,9 +866,7 @@
         #endregion
         private System.Windows.Forms.Label CPU;
         private System.Windows.Forms.RichTextBox MemoryText;
-        private System.Windows.Forms.RichTextBox nFlagBox;
         private System.Windows.Forms.RichTextBox ZFlagBox;
-        private System.Windows.Forms.RichTextBox vFlagBox;
         private System.Windows.Forms.RichTextBox cFlagBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
@@ -936,9 +884,7 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.RichTextBox r0Hex;
         private System.Windows.Forms.RichTextBox r0Dec;

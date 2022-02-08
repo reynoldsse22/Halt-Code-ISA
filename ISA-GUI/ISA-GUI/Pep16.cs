@@ -41,7 +41,7 @@ namespace ISA_GUI
         static int ArithInstructionCount = 0;
         static int memoryInstructionCount = 0;
         static int memoryOffset = 0;
-        static short[] registers = new short[16];
+        static ushort[] registers = new ushort[16];
         static byte[] MainMemory = new byte[1048576];
         static string decodedOutput = "";
         bool doneExecuting = false;
@@ -64,13 +64,13 @@ namespace ISA_GUI
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             clearProgram();
+            doneExecuting = false;
             startDecoding();
         }
 
         /// <summary> Prints out the contents of main memory to the GUI</summary>
-        private void setMemoryBox()
+        private void setMemoryBox() 
         {
-
             int offset = 0;
             string line = "";
             int index = 0;
@@ -110,6 +110,8 @@ namespace ISA_GUI
         /// <summary> Updates the register window values</summary>
         private void setRegisters()
         {
+            int clear = 0;
+            int zero = 0;
             //Initialize the hexidecimal text field to 0
             //Pad left ensures that the value will be 4 digits.
             r0Hex.Text = "0x" + registers[0].ToString("x").PadLeft(4, '0');
@@ -146,6 +148,16 @@ namespace ISA_GUI
             asprDec.Text = registers[13].ToString();
             ipDec.Text = registers[14].ToString();
             pcDec.Text = registers[15].ToString();
+
+            if((registers[13] & 2) == 2)
+                ZFlagBox.Text = 1.ToString();
+            else
+                ZFlagBox.Text = 0.ToString();
+
+            if ((registers[13] & 1) == 1)
+                cFlagBox.Text = 1.ToString();
+            else
+                cFlagBox.Text = 0.ToString();
         }
 
         /// <summary>Separates every 16-bit instruction into two bytes 
@@ -217,7 +229,7 @@ namespace ISA_GUI
                 printDecodedInstruction(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), address.ToString("X"));
 
                 controlInstructionCount++;
-                registers[15] = (short)(registers[15] + 2);  //Updates program counter
+                registers[15] = (ushort)(registers[15] + 2);  //Updates program counter
                 registers[14] += 2;                         //Updates Instruction Pointer
                 setMemoryBox();                             //Updates the main memory display box
                 setRegisters();
@@ -238,7 +250,7 @@ namespace ISA_GUI
                 decodeCType(opcode, byte1, byte2);
 
                 printDecodedInstruction(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), ("0x" + address.ToString("X").PadLeft(4, '0')));
-                registers[15] = (short)(registers[15] + 2); //Updates program counter
+                registers[15] = (ushort)(registers[15] + 2); //Updates program counter
             }
             else if (opcode >> 2 == 1)  //Runs if the instruction is a Load/Store type of instruction
             {
@@ -278,7 +290,7 @@ namespace ISA_GUI
                         printDecodedInstruction(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), address.ToString("X"));
                         break;
                     case 7:
-                        registers[0] = (short)address;
+                        registers[0] = (ushort)address;
                         r1 = -1;
                         r2 = -1;
                         rdest = 0;
@@ -287,7 +299,7 @@ namespace ISA_GUI
                 }
                 
 
-                registers[15] = (short)(registers[15] + 2); //Updates program counter
+                registers[15] = (ushort)(registers[15] + 2); //Updates program counter
                 registers[14] += 2;                         //Updates Instruction Pointer
             }
             else if(opcode >> 3 == 1) //Runs for arithmetic instructions or R-type instructions
@@ -306,7 +318,7 @@ namespace ISA_GUI
 
                 ArithInstructionCount++;
 
-                registers[15] = (short)(registers[15] + 2); //Updates program counter
+                registers[15] = (ushort)(registers[15] + 2); //Updates program counter
                 registers[14] += 2;                         //Updates Instruction Pointer
 
             }
@@ -327,17 +339,17 @@ namespace ISA_GUI
             switch(opcode)
             {
                 case 1: //unconditional branch
-                    registers[14] = (short)address;
+                    registers[14] = (ushort)address;
                     break;
                 case 2: //branch if equal
                     if((registers[13] & 4) == 0)
-                        registers[14] = (short)address;
+                        registers[14] = (ushort)address;
                     else
                         registers[14] += 2;                         //Updates Instruction Pointer
                     break;
                 case 3: //branch if not equal
                     if ((registers[13] & 4) == 1)
-                        registers[14] = (short)address;
+                        registers[14] = (ushort)address;
                     else
                         registers[14] += 2;                         //Updates Instruction Pointer
                     break;
@@ -349,42 +361,71 @@ namespace ISA_GUI
         /// <summary>Decodes the R-Type Instructions</summary>
         private void decodeRType(int opcode, int firstReg, int secondReg, int rd)
         {
+            int statusFlag = 0;
+            bool zero = false;
+            bool carry = false;
             switch(opcode)
             {
                 case 8:
                     //shift left
-                    registers[rd] = (short)(registers[firstReg] << registers[secondReg]);
+                    registers[rd] = (ushort)(registers[firstReg] << registers[secondReg]);
+                    if(registers[rd] == 0)
+                        zero = true;
                     break;
                 case 9:
                     //shift right
-                    registers[rd] = (short)(registers[firstReg] >> registers[secondReg]);
+                    registers[rd] = (ushort)(registers[firstReg] >> registers[secondReg]);
+                    if (registers[rd] == 0)
+                        zero = true;
                     break;
                 case 10:
                     //Add
-                    registers[rd] = (short)(registers[firstReg] + registers[secondReg]);
+                    registers[rd] = (ushort)(registers[firstReg] + registers[secondReg]);
+                    if (registers[rd] < firstReg)
+                        carry = true;
+                    if (registers[rd] == 0)
+                        zero = true;
                     break;
                 case 11:
                     //Sub
-                    registers[rd] = (short)(registers[firstReg] - registers[secondReg]);
+                    registers[rd] = (ushort)(registers[firstReg] - registers[secondReg]);
+                    if (registers[rd] > firstReg)
+                        carry = true;
+                    if (registers[rd] == 0)
+                        zero = true;
                     break;
                 case 12:
                     //And
-                    registers[rd] = (short)(registers[firstReg] & registers[secondReg]);
+                    registers[rd] = (ushort)(registers[firstReg] & registers[secondReg]);
+                    if (registers[rd] == 0)
+                        zero = true;
                     break;
                 case 13:
                     //Or
-                    registers[rd] = (short)(registers[firstReg] | registers[secondReg]);
+                    registers[rd] = (ushort)(registers[firstReg] | registers[secondReg]);
+                    if (registers[rd] == 0)
+                        zero = true;
                     break;
                 case 14:
                     //Xor
-                    registers[rd] = (short)(registers[firstReg] ^ registers[secondReg]);
+                    registers[rd] = (ushort)(registers[firstReg] ^ registers[secondReg]);
+                    if (registers[rd] == 0)
+                        zero = true;
                     break;
                 case 15:
                     //Not
-                    registers[rd] = (short)(~registers[firstReg]);
+                    registers[rd] = (ushort)(~registers[firstReg]);
+                    if (registers[rd] == 0)
+                        zero = true;
                     break;
-
             }
+
+            if (zero)
+                statusFlag += 2;
+            if (carry)
+                statusFlag += 1;
+
+            registers[13] = (ushort)statusFlag;
             setRegisters();
         }
 
@@ -452,6 +493,8 @@ namespace ISA_GUI
             StatsTextBox.Text = message;
             doneExecuting = true;
         }
+
+        
 
     }
 
