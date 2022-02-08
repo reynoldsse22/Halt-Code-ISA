@@ -24,8 +24,8 @@ namespace ISA_GUI
                                 "BR",
                                 "BRNE",
                                 "BREQ",
-                                "LDRW",
-                                "STRW",
+                                "LDWM",
+                                "STWM",
                                 "MOV",
                                 "LDWI",
                                 "ASL",
@@ -44,6 +44,7 @@ namespace ISA_GUI
         static ushort[] registers = new ushort[16];
         static byte[] MainMemory = new byte[1048576];
         static string decodedOutput = "";
+        static string decodedAssembly = "";
         bool doneExecuting = false;
 
         public Pep16()
@@ -77,7 +78,7 @@ namespace ISA_GUI
             for (int i = 0; i < (500); i++)
             {
                 line += "0x" + offset.ToString("x").PadLeft(4, '0').ToUpper() + "  ";
-                line += "\t";
+                line += "|  ";
                 for (int j = 0; j < 16; j++)
                 {
                     line += MainMemory[index].ToString("x").PadLeft(2, '0').ToUpper();
@@ -85,7 +86,7 @@ namespace ISA_GUI
                     index++;
                 }
                 offset += 16;
-                line += "\n";
+                line += "  |\n";
 
             }
 
@@ -187,13 +188,15 @@ namespace ISA_GUI
             string pr = "";
             string[] program;
             decodedOutput += "   Team: Beaudry, Farmer, Ortiz, Reynolds\n";
-            decodedOutput += "Project: ISA Design & Implementation\n\n";
+            decodedOutput += "Project: ISA Design & Implementation\n";
+            decodedOutput += "------------------------------------------------------------------\n\n";
             decodedOutput += "Program Inst Instruct                           Address/\n";
             decodedOutput += "Counter Spec Mnemonic      Type FReg SReg DReg Immediate\n";
             decodedOutput += "------- ---- -------- --------- ---- ---- ---- ---------";
-
+            
             AssemblerListingTextBox.Text = decodedOutput;
 
+            decodedAssembly = "------------------------------------------------------------------\n";
             try
             {
                 pr = InputBox.Text;
@@ -227,7 +230,7 @@ namespace ISA_GUI
                 instrType = "Control";
 
                 printDecodedInstruction(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), address.ToString("X"));
-
+                printAssembly("STOP", "", "", "");
                 controlInstructionCount++;
                 registers[15] = (ushort)(registers[15] + 2);  //Updates program counter
                 registers[14] += 2;                         //Updates Instruction Pointer
@@ -271,6 +274,7 @@ namespace ISA_GUI
                         r2 = -1;
                         rdest = 0;
                         printDecodedInstruction(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), ("0x" + address.ToString("X").PadLeft(4, '0')));
+                        printAssembly("LDWM", "r" + rdest.ToString(), "0x" + address.ToString("X").PadLeft(4, '0'), "");
                         break;
                     case 5:
                         MainMemory[address] = (byte)registers[0];
@@ -278,6 +282,7 @@ namespace ISA_GUI
                         r2 = 0;
                         rdest = -1;
                         printDecodedInstruction(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), ("0x" + address.ToString("X").PadLeft(4, '0')));
+                        printAssembly("STWM", "r" + r2.ToString(), "0x" + address.ToString("X").PadLeft(4, '0'), "");
                         break;
                     case 6:
                         r1 = rdest;
@@ -288,6 +293,7 @@ namespace ISA_GUI
                         r1 = -1;
                         address = -1;
                         printDecodedInstruction(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), address.ToString("X"));
+                        printAssembly("MOV", "r" + rdest.ToString(), "r" + r2.ToString(), "");
                         break;
                     case 7:
                         registers[0] = (ushort)address;
@@ -295,6 +301,7 @@ namespace ISA_GUI
                         r2 = -1;
                         rdest = 0;
                         printDecodedInstruction(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), ("0x" + address.ToString("X").PadLeft(4, '0')));
+                        printAssembly("LDWI", "r" + rdest.ToString(), "#" + address.ToString(), "");
                         break;
                 }
                 
@@ -340,18 +347,21 @@ namespace ISA_GUI
             {
                 case 1: //unconditional branch
                     registers[14] = (ushort)address;
+                    printAssembly("BR", "0x" + address.ToString("X").PadLeft(4, '0'), "", "");
                     break;
-                case 2: //branch if equal
-                    if((registers[13] & 4) == 0)
+                case 2: //branch not equal
+                    if((registers[13] & 4) == 1)
                         registers[14] = (ushort)address;
                     else
                         registers[14] += 2;                         //Updates Instruction Pointer
+                    printAssembly("BRNE", "0x" + address.ToString("X").PadLeft(4, '0'), "", "");
                     break;
                 case 3: //branch if not equal
-                    if ((registers[13] & 4) == 1)
+                    if ((registers[13] & 4) == 0)
                         registers[14] = (ushort)address;
                     else
                         registers[14] += 2;                         //Updates Instruction Pointer
+                    printAssembly("BREQ", "0x" + address.ToString("X").PadLeft(4, '0'), "", "");
                     break;
             }
            
@@ -371,12 +381,14 @@ namespace ISA_GUI
                     registers[rd] = (ushort)(registers[firstReg] << registers[secondReg]);
                     if(registers[rd] == 0)
                         zero = true;
+                    printAssembly("ASL", "r" + firstReg, "#" + secondReg.ToString(), "r" + rd);
                     break;
                 case 9:
                     //shift right
                     registers[rd] = (ushort)(registers[firstReg] >> registers[secondReg]);
                     if (registers[rd] == 0)
                         zero = true;
+                    printAssembly("ASR", "r" + firstReg, "#" + secondReg.ToString(), "r" + rd);
                     break;
                 case 10:
                     //Add
@@ -385,6 +397,7 @@ namespace ISA_GUI
                         carry = true;
                     if (registers[rd] == 0)
                         zero = true;
+                    printAssembly("ADD", "r" + firstReg, "r" + secondReg.ToString(), "r" + rd);
                     break;
                 case 11:
                     //Sub
@@ -393,30 +406,35 @@ namespace ISA_GUI
                         carry = true;
                     if (registers[rd] == 0)
                         zero = true;
+                    printAssembly("SUB", "r" + firstReg, "r" + secondReg.ToString(), "r" + rd);
                     break;
                 case 12:
                     //And
                     registers[rd] = (ushort)(registers[firstReg] & registers[secondReg]);
                     if (registers[rd] == 0)
                         zero = true;
+                    printAssembly("AND", "r" + firstReg, "r" + secondReg.ToString(), "r" + rd);
                     break;
                 case 13:
                     //Or
                     registers[rd] = (ushort)(registers[firstReg] | registers[secondReg]);
                     if (registers[rd] == 0)
                         zero = true;
+                    printAssembly("OR", "r" + firstReg, "r" + secondReg.ToString(), "r" + rd);
                     break;
                 case 14:
                     //Xor
                     registers[rd] = (ushort)(registers[firstReg] ^ registers[secondReg]);
                     if (registers[rd] == 0)
                         zero = true;
+                    printAssembly("XOR", "r" + firstReg, "r" + secondReg.ToString(), "r" + rd);
                     break;
                 case 15:
                     //Not
                     registers[rd] = (ushort)(~registers[firstReg]);
                     if (registers[rd] == 0)
                         zero = true;
+                    printAssembly("NOT", "r" + firstReg, "r" + rd.ToString(),"");
                     break;
             }
 
@@ -470,6 +488,18 @@ namespace ISA_GUI
 
             AssemblerListingTextBox.Text = decodedOutput;
         }
+
+        private void printAssembly(string instruction, string first, string second, string third)
+        {
+            if (second != "")
+                first += ",";
+            if (third != "")
+                second += ",";
+            decodedAssembly += (instruction.ToUpper() + "\t" + first  + second +  third + "\n");
+
+            AssemblyTextBox.Text = decodedAssembly;
+        }
+
 
         /// <summary>Clears registers, memory, and any output fields for new run of program.</summary>
         private void clearProgram()
