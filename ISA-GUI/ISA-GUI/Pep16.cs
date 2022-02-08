@@ -350,14 +350,14 @@ namespace ISA_GUI
                     printAssembly("BR", "0x" + address.ToString("X").PadLeft(4, '0'), "", "");
                     break;
                 case 2: //branch not equal
-                    if((registers[13] & 4) == 1)
+                    if((registers[13] & 2) == 0)
                         registers[14] = (ushort)address;
                     else
                         registers[14] += 2;                         //Updates Instruction Pointer
                     printAssembly("BRNE", "0x" + address.ToString("X").PadLeft(4, '0'), "", "");
                     break;
-                case 3: //branch if not equal
-                    if ((registers[13] & 4) == 0)
+                case 3: //branch if equal
+                    if ((registers[13] & 2) == 1)
                         registers[14] = (ushort)address;
                     else
                         registers[14] += 2;                         //Updates Instruction Pointer
