@@ -37,15 +37,14 @@ namespace ISA_GUI
                                 "XOR",
                                 "NOT"};
 
-        static int controlInstrunctionCount = 0;
-        static int ArithInstrunctionCount = 0;
-        static int memoryInstrunctionCount = 0;
+        static int controlInstructionCount = 0;
+        static int ArithInstructionCount = 0;
+        static int memoryInstructionCount = 0;
         static int memoryOffset = 0;
         static short[] registers = new short[16];
-
         static byte[] MainMemory = new byte[1048576];
-
         static string decodedOutput = "";
+        bool doneExecuting = false;
 
         public Pep16()
         {
@@ -98,7 +97,7 @@ namespace ISA_GUI
             //Clear registers
             for (int i = 0; i < 16; i++)
             {
-                registers[i] = 2;
+                registers[i] = 0;
             }
 
             //clear main memory
@@ -155,10 +154,11 @@ namespace ISA_GUI
         private void getInstructionDetails(string[] program)
         {
             int byte1, byte2, totalInst;
-            for (int x = 0; x < program.Length; x = x + 2)      //Gets two bytes from the instructions and finds out what that instruction does.
+
+            while(!doneExecuting)
             {
-                byte1 = int.Parse(program[x], System.Globalization.NumberStyles.HexNumber);
-                byte2 = int.Parse(program[x + 1], System.Globalization.NumberStyles.HexNumber);
+                byte1 = int.Parse(program[registers[14]], System.Globalization.NumberStyles.HexNumber);
+                byte2 = int.Parse(program[registers[14] + 1], System.Globalization.NumberStyles.HexNumber);
                 decodeInstruction(byte1, byte2);
                 MainMemory[memoryOffset] = (byte)byte1;
                 memoryOffset++;
@@ -186,7 +186,6 @@ namespace ISA_GUI
             {
                 pr = InputBox.Text;
                 program = pr.Split(' ');        //Splits the given program into different instructions
-
                 getInstructionDetails(program);                //The splited program is given to this method to be disassembled
                 setStatistics();
             }
@@ -217,10 +216,12 @@ namespace ISA_GUI
 
                 printDecodedInstruction(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), address.ToString("X"));
 
-                controlInstrunctionCount++;
+                controlInstructionCount++;
                 registers[15] = (short)(registers[15] + 2);  //Updates program counter
-                decodeCType(byte1, byte2);
+                registers[14] += 2;                         //Updates Instruction Pointer
                 setMemoryBox();                             //Updates the main memory display box
+                setRegisters();
+                doneExecuting = true;                       //Done executing
                 return;
             }
 
@@ -232,7 +233,9 @@ namespace ISA_GUI
                 nibble1 = byte1 & 15;       //Gets the second nibble from the first byte and combines it with the second byte 
                 nibble1 = nibble1 << 8;
                 address = nibble1 + byte2;
-                controlInstrunctionCount++;
+                controlInstructionCount++;
+
+                decodeCType(opcode, byte1, byte2);
 
                 printDecodedInstruction(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), ("0x" + address.ToString("X").PadLeft(4, '0')));
                 registers[15] = (short)(registers[15] + 2); //Updates program counter
@@ -242,7 +245,7 @@ namespace ISA_GUI
                 //temp = opcode & 3;  //Finds out what instruction it is in the I-type category
                 r1 = byte1 & 15;    //Gets first register from the first byte
                 address = (r1 << 8)| byte2;    //Finds Address of the Load/Store instructions
-                memoryInstrunctionCount++;
+                memoryInstructionCount++;
                 rdest = byte2 & 15;
 
                 instrType = "Memory";
@@ -285,6 +288,7 @@ namespace ISA_GUI
                 
 
                 registers[15] = (short)(registers[15] + 2); //Updates program counter
+                registers[14] += 2;                         //Updates Instruction Pointer
             }
             else if(opcode >> 3 == 1) //Runs for arithmetic instructions or R-type instructions
             {
@@ -300,9 +304,11 @@ namespace ISA_GUI
 
                 decodeRType(temp, r1, r2, rdest);
 
-                ArithInstrunctionCount++;
+                ArithInstructionCount++;
 
                 registers[15] = (short)(registers[15] + 2); //Updates program counter
+                registers[14] += 2;                         //Updates Instruction Pointer
+
             }
             else
             {
@@ -313,9 +319,31 @@ namespace ISA_GUI
 
 
         /// <summary>Decodes the C-Type Instructions</summary>
-        private void decodeCType(int byte1, int byte2)
+        private void decodeCType(int opcode, int byte1, int byte2)
         {
-
+            int r1 = byte1 & 15;
+            int address = (r1 << 8) | byte2;
+            
+            switch(opcode)
+            {
+                case 1: //unconditional branch
+                    registers[14] = (short)address;
+                    break;
+                case 2: //branch if equal
+                    if((registers[13] & 4) == 0)
+                        registers[14] = (short)address;
+                    else
+                        registers[14] += 2;                         //Updates Instruction Pointer
+                    break;
+                case 3: //branch if not equal
+                    if ((registers[13] & 4) == 1)
+                        registers[14] = (short)address;
+                    else
+                        registers[14] += 2;                         //Updates Instruction Pointer
+                    break;
+            }
+           
+            
         }
 
         /// <summary>Decodes the R-Type Instructions</summary>
@@ -369,9 +397,9 @@ namespace ISA_GUI
             statistics += "Summary Statistics\n";
             statistics += "------------------\n";
             statistics += String.Format("Total instructions:              {0}\n", totalInst);                       //since we always go by 2's total instructions was pretty simple
-            statistics += String.Format("Control instructions:            {0}, {1}%\n", controlInstrunctionCount, Math.Round((double)controlInstrunctionCount / totalInst * 100, 2));
-            statistics += String.Format("Arithmetic & logic instructions: {0}, {1}%\n", ArithInstrunctionCount, Math.Round((double)ArithInstrunctionCount / totalInst * 100, 2));
-            statistics += String.Format("Memory instructions:             {0}, {1}%\n", memoryInstrunctionCount, Math.Round((double)memoryInstrunctionCount / totalInst * 100, 2));
+            statistics += String.Format("Control instructions:            {0}, {1}%\n", controlInstructionCount, Math.Round((double)controlInstructionCount / totalInst * 100, 2));
+            statistics += String.Format("Arithmetic & logic instructions: {0}, {1}%\n", ArithInstructionCount, Math.Round((double)ArithInstructionCount / totalInst * 100, 2));
+            statistics += String.Format("Memory instructions:             {0}, {1}%\n", memoryInstructionCount, Math.Round((double)memoryInstructionCount / totalInst * 100, 2));
 
             StatsTextBox.Text = statistics;
         }
@@ -406,9 +434,9 @@ namespace ISA_GUI
         private void clearProgram()
         {
             memoryOffset = 0;
-            controlInstrunctionCount = 0;
-            ArithInstrunctionCount = 0;
-            memoryInstrunctionCount = 0;
+            controlInstructionCount = 0;
+            ArithInstructionCount = 0;
+            memoryInstructionCount = 0;
             clearRegandMem();
             setRegisters();
             //setMemoryBox();
@@ -417,11 +445,12 @@ namespace ISA_GUI
             decodedOutput = "";
         }
 
+        /// <summary>Used to kill the program in case of any error in decoding data arises</summary>
         private void throwException(string message)
         {
             AssemblerListingTextBox.Text = message;
             StatsTextBox.Text = message;
-
+            doneExecuting = true;
         }
 
     }
