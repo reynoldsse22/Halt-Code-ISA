@@ -74,7 +74,7 @@ namespace ISA_GUI
             int offset = 0;
             string line = "";
             int index = 0;
-            for (int i = 0; i < (100); i++)
+            for (int i = 0; i < (500); i++)
             {
                 line += "0x" + offset.ToString("x").PadLeft(4, '0').ToUpper() + "  ";
                 line += "\t";
@@ -381,7 +381,7 @@ namespace ISA_GUI
                 case 10:
                     //Add
                     registers[rd] = (ushort)(registers[firstReg] + registers[secondReg]);
-                    if (registers[rd] < firstReg)
+                    if (registers[rd] < registers[firstReg])
                         carry = true;
                     if (registers[rd] == 0)
                         zero = true;
@@ -389,7 +389,7 @@ namespace ISA_GUI
                 case 11:
                     //Sub
                     registers[rd] = (ushort)(registers[firstReg] - registers[secondReg]);
-                    if (registers[rd] > firstReg)
+                    if (registers[rd] > registers[firstReg])
                         carry = true;
                     if (registers[rd] == 0)
                         zero = true;
