@@ -41,6 +41,7 @@ namespace ISA_GUI
         static int ArithInstructionCount = 0;
         static int memoryInstructionCount = 0;
         static int memoryOffset = 0;
+        static int processed = 0;
         static ushort[] registers = new ushort[16];
         static byte[] MainMemory = new byte[1048576];
         static string decodedOutput = "";
@@ -73,10 +74,10 @@ namespace ISA_GUI
         private void setMemoryBox() 
         {
             int offset = 0;
-            string line = "ADDRESS |   0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F  |\n";
-            line += "-------------------------------------------------------------\n";
+            string line = "ADDRESS |   0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F  |  ASCII ENCODING  |\n";
+            line += "--------------------------------------------------------------------------------\n";
             int index = 0;
-            for (int i = 0; i < (500); i++)
+            for (int i = 0; i < (100); i++)
             {
                 line += "0x" + offset.ToString("x").PadLeft(4, '0').ToUpper() + "  ";
                 line += "|  ";
@@ -86,9 +87,18 @@ namespace ISA_GUI
                     line += " ";
                     index++;
                 }
+                line += " | ";
+                index -= 16;
+                for (int j = 0; j < 16; j++)
+                {
+                    if((MainMemory[index] < 32) || (MainMemory[index] > 255))
+                        line += '.';
+                    else
+                        line += Convert.ToChar(MainMemory[index]);
+                    index++;
+                }
                 offset += 16;
                 line += " |\n";
-
             }
 
             MemoryText.Text = line;
@@ -112,8 +122,6 @@ namespace ISA_GUI
         /// <summary> Updates the register window values</summary>
         private void setRegisters()
         {
-            int clear = 0;
-            int zero = 0;
             //Initialize the hexidecimal text field to 0
             //Pad left ensures that the value will be 4 digits.
             r0Hex.Text = "0x" + registers[0].ToString("x").PadLeft(4, '0');
@@ -174,10 +182,13 @@ namespace ISA_GUI
                 byte1 = int.Parse(program[registers[14]], System.Globalization.NumberStyles.HexNumber);
                 byte2 = int.Parse(program[registers[14] + 1], System.Globalization.NumberStyles.HexNumber);
                 decodeInstruction(byte1, byte2);
-                MainMemory[memoryOffset] = (byte)byte1;
-                memoryOffset++;
-                MainMemory[memoryOffset] = (byte)byte2;
-                memoryOffset++;
+                if (registers[14] >= processed)
+                {
+                    MainMemory[memoryOffset] = (byte)byte1;
+                    memoryOffset++;
+                    MainMemory[memoryOffset] = (byte)byte2;
+                    memoryOffset++;
+                }
             }
 
             totalInst = registers[15] / 2;
@@ -229,15 +240,14 @@ namespace ISA_GUI
             if (opcode == 0)
             {
                 instrType = "Control";
-
-                printDecodedInstruction(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), address.ToString("X"));
-                printAssembly("STOP", "", "", "");
                 controlInstructionCount++;
                 registers[15] = (ushort)(registers[15] + 2);  //Updates program counter
                 registers[14] += 2;                         //Updates Instruction Pointer
                 setMemoryBox();                             //Updates the main memory display box
                 setRegisters();
                 doneExecuting = true;                       //Done executing
+                printAssembly("STOP", "", "", "");
+                printDecodedInstruction(opcode, instrType, r1.ToString("X"), r2.ToString("X"), rdest.ToString("X"), address.ToString("X"));
                 return;
             }
 
@@ -308,7 +318,11 @@ namespace ISA_GUI
                 
 
                 registers[15] = (ushort)(registers[15] + 2); //Updates program counter
-                registers[14] += 2;                         //Updates Instruction Pointer
+                registers[14] += 2;                          //Updates Instruction Pointer
+                if (registers[14] >= processed)
+                {
+                    processed += 2;
+                }
             }
             else if(opcode >> 3 == 1) //Runs for arithmetic instructions or R-type instructions
             {
@@ -327,7 +341,11 @@ namespace ISA_GUI
                 ArithInstructionCount++;
 
                 registers[15] = (ushort)(registers[15] + 2); //Updates program counter
-                registers[14] += 2;                         //Updates Instruction Pointer
+                registers[14] += 2;                          //Updates Instruction Pointer
+                if (registers[14] >= processed)
+                {
+                    processed += 2;
+                }
 
             }
             else
@@ -347,17 +365,29 @@ namespace ISA_GUI
             switch(opcode)
             {
                 case 1: //unconditional branch
+                    if (registers[14] >= processed)
+                    {
+                        processed += 2;
+                    }
                     registers[14] = (ushort)address;
                     printAssembly("BR", "0x" + address.ToString("X").PadLeft(4, '0'), "", "");
                     break;
                 case 2: //branch not equal
-                    if((registers[13] & 2) == 0)
+                    if (registers[14] >= processed)
+                    {
+                        processed += 2;
+                    }
+                    if ((registers[13] & 2) == 0)
                         registers[14] = (ushort)address;
                     else
                         registers[14] += 2;                         //Updates Instruction Pointer
                     printAssembly("BRNE", "0x" + address.ToString("X").PadLeft(4, '0'), "", "");
                     break;
                 case 3: //branch if equal
+                    if (registers[14] >= processed)
+                    {
+                        processed += 2;
+                    }
                     if ((registers[13] & 2) == 1)
                         registers[14] = (ushort)address;
                     else
@@ -365,8 +395,7 @@ namespace ISA_GUI
                     printAssembly("BREQ", "0x" + address.ToString("X").PadLeft(4, '0'), "", "");
                     break;
             }
-           
-            
+
         }
 
         /// <summary>Decodes the R-Type Instructions</summary>
@@ -492,13 +521,21 @@ namespace ISA_GUI
 
         private void printAssembly(string instruction, string first, string second, string third)
         {
-            if (second != "")
-                first += ",";
-            if (third != "")
-                second += ",";
-            decodedAssembly += (instruction.ToUpper() + "\t" + first  + second +  third + "\n");
+            if (registers[14] < processed) 
+            {
+                return;
+            }
+            else
+            {
+                if (second != "")
+                    first += ",";
+                if (third != "")
+                    second += ",";
+                decodedAssembly += (instruction.ToUpper() + "\t" + first + second + third + "\n");
 
-            AssemblyTextBox.Text = decodedAssembly;
+                AssemblyTextBox.Text = decodedAssembly;
+            }
+            
         }
 
 

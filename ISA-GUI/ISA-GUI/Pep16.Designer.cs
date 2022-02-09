@@ -85,21 +85,21 @@
             this.Output = new System.Windows.Forms.TabControl();
             this.sourceCodeBox = new System.Windows.Forms.TabPage();
             this.AssemblerListingTextBox = new System.Windows.Forms.RichTextBox();
+            this.AssemblyTab = new System.Windows.Forms.TabPage();
+            this.AssemblyTextBox = new System.Windows.Forms.RichTextBox();
             this.summaryStatsBox = new System.Windows.Forms.TabPage();
             this.StatsTextBox = new System.Windows.Forms.RichTextBox();
             this.objectCode = new System.Windows.Forms.TabControl();
             this.objectCodeBox = new System.Windows.Forms.TabPage();
             this.InputBox = new System.Windows.Forms.RichTextBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.AssemblyTab = new System.Windows.Forms.TabPage();
-            this.AssemblyTextBox = new System.Windows.Forms.RichTextBox();
             this.Output.SuspendLayout();
             this.sourceCodeBox.SuspendLayout();
+            this.AssemblyTab.SuspendLayout();
             this.summaryStatsBox.SuspendLayout();
             this.objectCode.SuspendLayout();
             this.objectCodeBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.AssemblyTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // CPU
@@ -118,7 +118,7 @@
             this.MemoryText.Name = "MemoryText";
             this.MemoryText.ReadOnly = true;
             this.MemoryText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.MemoryText.Size = new System.Drawing.Size(465, 642);
+            this.MemoryText.Size = new System.Drawing.Size(585, 642);
             this.MemoryText.TabIndex = 2;
             this.MemoryText.Text = "";
             // 
@@ -726,6 +726,29 @@
             this.AssemblerListingTextBox.TabIndex = 0;
             this.AssemblerListingTextBox.Text = "";
             // 
+            // AssemblyTab
+            // 
+            this.AssemblyTab.Controls.Add(this.AssemblyTextBox);
+            this.AssemblyTab.Location = new System.Drawing.Point(4, 22);
+            this.AssemblyTab.Name = "AssemblyTab";
+            this.AssemblyTab.Padding = new System.Windows.Forms.Padding(3);
+            this.AssemblyTab.Size = new System.Drawing.Size(532, 275);
+            this.AssemblyTab.TabIndex = 2;
+            this.AssemblyTab.Text = "Assembly";
+            this.AssemblyTab.UseVisualStyleBackColor = true;
+            // 
+            // AssemblyTextBox
+            // 
+            this.AssemblyTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.AssemblyTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.AssemblyTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AssemblyTextBox.Location = new System.Drawing.Point(0, 0);
+            this.AssemblyTextBox.Name = "AssemblyTextBox";
+            this.AssemblyTextBox.ReadOnly = true;
+            this.AssemblyTextBox.Size = new System.Drawing.Size(532, 275);
+            this.AssemblyTextBox.TabIndex = 1;
+            this.AssemblyTextBox.Text = "";
+            // 
             // summaryStatsBox
             // 
             this.summaryStatsBox.Controls.Add(this.StatsTextBox);
@@ -789,34 +812,11 @@
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
-            // AssemblyTab
-            // 
-            this.AssemblyTab.Controls.Add(this.AssemblyTextBox);
-            this.AssemblyTab.Location = new System.Drawing.Point(4, 22);
-            this.AssemblyTab.Name = "AssemblyTab";
-            this.AssemblyTab.Padding = new System.Windows.Forms.Padding(3);
-            this.AssemblyTab.Size = new System.Drawing.Size(532, 275);
-            this.AssemblyTab.TabIndex = 2;
-            this.AssemblyTab.Text = "Assembly";
-            this.AssemblyTab.UseVisualStyleBackColor = true;
-            // 
-            // AssemblyTextBox
-            // 
-            this.AssemblyTextBox.BackColor = System.Drawing.SystemColors.Window;
-            this.AssemblyTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.AssemblyTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AssemblyTextBox.Location = new System.Drawing.Point(0, 0);
-            this.AssemblyTextBox.Name = "AssemblyTextBox";
-            this.AssemblyTextBox.ReadOnly = true;
-            this.AssemblyTextBox.Size = new System.Drawing.Size(532, 275);
-            this.AssemblyTextBox.TabIndex = 1;
-            this.AssemblyTextBox.Text = "";
-            // 
             // Pep16
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1351, 770);
+            this.ClientSize = new System.Drawing.Size(1475, 770);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.objectCode);
             this.Controls.Add(this.Output);
@@ -881,11 +881,11 @@
             this.Load += new System.EventHandler(this.Pep16_Load);
             this.Output.ResumeLayout(false);
             this.sourceCodeBox.ResumeLayout(false);
+            this.AssemblyTab.ResumeLayout(false);
             this.summaryStatsBox.ResumeLayout(false);
             this.objectCode.ResumeLayout(false);
             this.objectCodeBox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.AssemblyTab.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
