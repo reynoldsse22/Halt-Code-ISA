@@ -73,7 +73,8 @@ namespace ISA_GUI
         private void setMemoryBox() 
         {
             int offset = 0;
-            string line = "";
+            string line = "ADDRESS |   0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F  |\n";
+            line += "-------------------------------------------------------------\n";
             int index = 0;
             for (int i = 0; i < (500); i++)
             {
@@ -86,7 +87,7 @@ namespace ISA_GUI
                     index++;
                 }
                 offset += 16;
-                line += "  |\n";
+                line += " |\n";
 
             }
 
@@ -189,14 +190,14 @@ namespace ISA_GUI
             string[] program;
             decodedOutput += "   Team: Beaudry, Farmer, Ortiz, Reynolds\n";
             decodedOutput += "Project: ISA Design & Implementation\n";
-            decodedOutput += "------------------------------------------------------------------\n\n";
+            decodedOutput += "----------------------------------------------------------------\n\n";
             decodedOutput += "Program Inst Instruct                           Address/\n";
             decodedOutput += "Counter Spec Mnemonic      Type FReg SReg DReg Immediate\n";
             decodedOutput += "------- ---- -------- --------- ---- ---- ---- ---------";
             
             AssemblerListingTextBox.Text = decodedOutput;
 
-            decodedAssembly = "------------------------------------------------------------------\n";
+            decodedAssembly = "----------------------------------------------------------------\n";
             try
             {
                 pr = InputBox.Text;
