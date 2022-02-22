@@ -16,7 +16,7 @@ namespace ISA_GUI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Pep16());
+            Application.Run(new BUC10());
         }
     }
 }

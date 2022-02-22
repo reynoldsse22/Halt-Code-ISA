@@ -46,27 +46,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Pep16.cs">
+    <Compile Include="ALU.cs" />
+    <Compile Include="DataMemory.cs" />
+    <Compile Include="ControlUnit.cs" />
+    <Compile Include="ExecutionUnit.cs" />
+    <Compile Include="Fetch.cs" />
+    <Compile Include="InstructionMemory.cs" />
+    <Compile Include="BUC10.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Pep16.Designer.cs">
-      <DependentUpon>Pep16.cs</DependentUpon>
+    <Compile Include="BUC10.Designer.cs">
+      <DependentUpon>BUC10.cs</DependentUpon>
     </Compile>
+    <Compile Include="CentralProcessingUnit.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Pep16.resx">
-      <DependentUpon>Pep16.cs</DependentUpon>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="RegisterFile.cs" />
+    <EmbeddedResource Include="BUC10.resx">
+      <DependentUpon>BUC10.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -85,6 +93,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\Play2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\debug.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-bug-24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-bug-48.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
