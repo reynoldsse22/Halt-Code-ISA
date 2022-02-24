@@ -48,10 +48,11 @@ namespace ISA_GUI
 		 */
         public byte[] getNextInstruction(ref RegisterFile registers, ref InstructionMemory IM)
         {
-            byte[] instruction = new byte[2];
+            byte[] instruction = new byte[3];
             instruction[0] = IM.instructions[IM.ProgramCounter++];
             instruction[1] = IM.instructions[IM.ProgramCounter++];
-            IM.CurrentInstruction = (ushort)(instruction[1] + (instruction[0] << 8));
+            instruction[2] = IM.instructions[IM.ProgramCounter++];
+            IM.CurrentInstruction = (ushort)(instruction[2] + (instruction[1] << 8)+ (instruction[0] << 16));
             return instruction;
         }
     }

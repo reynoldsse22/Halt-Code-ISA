@@ -205,9 +205,9 @@ namespace ISA_GUI
             decodedString.Append("   Team: Beaudry, Farmer, Ortiz, Reynolds\n" +
             "Project: ISA Design & Implementation\n" +
             "--------------------------------------------------------------\n\n" +
-            "Program Inst Instruct                           Address/\n" +
-            "Counter Spec Mnemonic      Type FReg SReg DReg Immediate\n" +
-            "------- ---- -------- --------- ---- ---- ---- ---------");
+            "Program ADDR Inst Instruct                           Address/\n" +
+            "Counter Mode Spec Mnemonic      Type FReg SReg DReg Immediate\n" +
+            "------- ---- ---- -------- --------- ---- ---- ---- ---------");
             assemblyOutput.Clear();
             cpu.IM.ProgramCounter = 0;
             cpu.IM.CurrentInstruction = 0;
