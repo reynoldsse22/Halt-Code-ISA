@@ -61,10 +61,10 @@ namespace ISA_GUI
 		 *   @param  int address
 		 *   @param  string instrType
 		 */
-        public void decode(ref InstructionMemory IM, byte[] instruct, out int opcode, out int r1, out int r2, out int r3, out int address, out string instrType, out int addrMode)
+        public void decode(ref InstructionMemory IM, byte[] instruct, out int opcode, out int r1, out int r2, out int r3, out int address, out string instrType, out int instrFlag)
         {
             //value is -1 if not used in the current instruction
-            int nibble1, temp, addressingMode;
+            int nibble1, temp;
             address = -1;
             r1 = -1;
             r2 = -1;
@@ -75,14 +75,14 @@ namespace ISA_GUI
             byte TSB = instruct[1];
             byte LSB = instruct[2];
 
-            addrMode = MSB >> 5;
+            instrFlag = MSB >> 5;
             opcode = MSB & 31;
 
             if(opcode == 0) //Halt instruction
             {
                 instrType = "Control";
                 controlInstructionCount++;
-                if ((IM.ProgramCounter/2) > instructionsProcessed)
+                if ((IM.ProgramCounter/3) > instructionsProcessed)
                     instructionsProcessed++;
                 totalInstructions++;
             }
@@ -96,11 +96,23 @@ namespace ISA_GUI
                 nibble1 = MSB & 15;       //Gets the second nibble from the first byte and combines it with the second byte 
                 address = (TSB << 8) | LSB;
                 controlInstructionCount++;
-                if ((IM.ProgramCounter / 2) > instructionsProcessed)
+                if ((IM.ProgramCounter / 3) > instructionsProcessed)
                     instructionsProcessed++;
                 totalInstructions++;
             }
-            else if(opcode >> 3 == 1)  //I-type instructions
+            else if(opcode >> 4 == 1) //R-type instructions
+            {
+                instrType = "ALU";
+                temp = opcode & 15; //Gets the first 3 bits of the opcode... Not used
+                r1 = TSB;    //Gets the first, second, and destination registers for the R-Type instruction
+                r2 = (LSB & 240) >> 4;
+                r3 = LSB & 15;
+                ALUInstructionCount++;
+                if ((IM.ProgramCounter / 3) >= instructionsProcessed)
+                    instructionsProcessed++;
+                totalInstructions++;
+            }
+            else if(opcode >> 3 == 1)
             {
                 instrType = "Memory";
                 //nibble1 = MSB & 15;    //Gets first register from the first byte
@@ -114,32 +126,24 @@ namespace ISA_GUI
                         r3 = 0;
                         break;
                     case 11:
-                        r1 = 0;
-                        nibble1 = r3;
-                        r2 = TSB & 15;    //MOV is a special instruction that has a destination register instead of an address
-                        r3 = nibble1;
-                        address = -1;
-                        break;
                     case 12:
+                    case 13:
                         r1 = -1;
                         r2 = -1;
-                        r3 = 0;
+                        r3 = (TSB & 240) >> 4;
+                        address = address & 4095;
                         break;
+                    case 14:
+                    case 15:
+                        r1 = -1;
+                        r2 = r3;
+                        r3 = LSB & 15;
+                        address = -1;
+                        break;
+                    
                 }
                 memoryInstructionCount++;
-                if ((IM.ProgramCounter / 2) > instructionsProcessed)
-                    instructionsProcessed++;
-                totalInstructions++;
-            }
-            else if(opcode >> 4 == 1) //R-type instructions
-            {
-                instrType = "ALU";
-                temp = opcode & 15; //Gets the first 3 bits of the opcode... Not used
-                r1 = TSB >> 4;    //Gets the first, second, and destination registers for the R-Type instruction
-                r2 = TSB & 15;
-                r3 = LSB >> 4;
-                ALUInstructionCount++;
-                if ((IM.ProgramCounter / 2) >= instructionsProcessed)
+                if ((IM.ProgramCounter / 3) > instructionsProcessed)
                     instructionsProcessed++;
                 totalInstructions++;
             }

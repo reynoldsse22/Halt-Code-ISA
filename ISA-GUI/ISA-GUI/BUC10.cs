@@ -37,12 +37,12 @@ namespace ISA_GUI
         StringBuilder assemblyOutput = new StringBuilder();                     //Mutable string for the assembly instructions
         StringBuilder pipelineOutput = new StringBuilder();                     //Mutable string for the pipeline output
         StringBuilder decodedString = new StringBuilder(                        //Mutable string for the decoded instructions
-            "   Team: Beaudry, Farmer, Ortiz, Reynolds\n" + 
-            "Project: ISA Design & Implementation\n" + 
-            "--------------------------------------------------------------\n\n" + 
-            "Program Inst Instruct                           Address/\n" + 
-            "Counter Spec Mnemonic      Type FReg SReg DReg Immediate\n" + 
-            "------- ---- -------- --------- ---- ---- ---- ---------");
+            "   Team: Beaudry, Farmer, Ortiz, Reynolds\n" +
+            "Project: ISA Design & Implementation\n" +
+            "---------------------------------------------------------------\n\n" +
+            "Program  Inst Inst Instruct                            Address/\n" +
+            "Counter  Flag Spec Mnemonic      Type FReg SReg DReg  Immediate\n" +
+            "-------- ---- ---- -------- --------- ---- ---- ---- ----------");
         /**
 	    * Method Name: BUC10 <br>
 	    * Method Purpose: Class constructor
@@ -204,10 +204,10 @@ namespace ISA_GUI
             decodedString.Clear();
             decodedString.Append("   Team: Beaudry, Farmer, Ortiz, Reynolds\n" +
             "Project: ISA Design & Implementation\n" +
-            "--------------------------------------------------------------\n\n" +
-            "Program ADDR Inst Instruct                           Address/\n" +
-            "Counter Mode Spec Mnemonic      Type FReg SReg DReg Immediate\n" +
-            "------- ---- ---- -------- --------- ---- ---- ---- ---------");
+            "---------------------------------------------------------------\n\n" +
+            "Program  Inst Inst Instruct                            Address/\n" +
+            "Counter  Flag Spec Mnemonic      Type FReg SReg DReg  Immediate\n" +
+            "-------- ---- ---- -------- --------- ---- ---- ---- ----------");
             assemblyOutput.Clear();
             cpu.IM.ProgramCounter = 0;
             cpu.IM.CurrentInstruction = 0;
@@ -271,22 +271,22 @@ namespace ISA_GUI
         {
             //Initialize the hexidecimal text field to 0
             //Pad left ensures that the value will be 4 digits.
-            r0Hex.Text = "0x" + cpu.registers.registers[0].ToString("x").PadLeft(4, '0');
-            r1Hex.Text = "0x" + cpu.registers.registers[1].ToString("x").PadLeft(4, '0');
-            r2Hex.Text = "0x" + cpu.registers.registers[2].ToString("x").PadLeft(4, '0');
-            r3Hex.Text = "0x" + cpu.registers.registers[3].ToString("x").PadLeft(4, '0');
-            r4Hex.Text = "0x" + cpu.registers.registers[4].ToString("x").PadLeft(4, '0');
-            r5Hex.Text = "0x" + cpu.registers.registers[5].ToString("x").PadLeft(4, '0');
-            r6Hex.Text = "0x" + cpu.registers.registers[6].ToString("x").PadLeft(4, '0');
-            r7Hex.Text = "0x" + cpu.registers.registers[7].ToString("x").PadLeft(4, '0');
-            r8Hex.Text = "0x" + cpu.registers.registers[8].ToString("x").PadLeft(4, '0');
-            r9Hex.Text = "0x" + cpu.registers.registers[9].ToString("x").PadLeft(4, '0');
-            r10Hex.Text = "0x" + cpu.registers.registers[10].ToString("x").PadLeft(4, '0');
-            r11Hex.Text = "0x" + cpu.registers.registers[11].ToString("x").PadLeft(4, '0');
-            r12Hex.Text = "0x" + cpu.registers.registers[12].ToString("x").PadLeft(4, '0');
-            asprHex.Text = "0x" + cpu.registers.registers[13].ToString("x").PadLeft(4, '0');
-            cirHex.Text = "0x" + cpu.IM.CurrentInstruction.ToString("x").PadLeft(4, '0');
-            pcHex.Text = "0x" + cpu.IM.ProgramCounter.ToString("x").PadLeft(4, '0');
+            r0Hex.Text = "0x" + cpu.registers.registers[0].ToString("x").PadLeft(6, '0');
+            r1Hex.Text = "0x" + cpu.registers.registers[1].ToString("x").PadLeft(6, '0');
+            r2Hex.Text = "0x" + cpu.registers.registers[2].ToString("x").PadLeft(6, '0');
+            r3Hex.Text = "0x" + cpu.registers.registers[3].ToString("x").PadLeft(6, '0');
+            r4Hex.Text = "0x" + cpu.registers.registers[4].ToString("x").PadLeft(6, '0');
+            r5Hex.Text = "0x" + cpu.registers.registers[5].ToString("x").PadLeft(6, '0');
+            r6Hex.Text = "0x" + cpu.registers.registers[6].ToString("x").PadLeft(6, '0');
+            r7Hex.Text = "0x" + cpu.registers.registers[7].ToString("x").PadLeft(6, '0');
+            r8Hex.Text = "0x" + cpu.registers.registers[8].ToString("x").PadLeft(6, '0');
+            r9Hex.Text = "0x" + cpu.registers.registers[9].ToString("x").PadLeft(6, '0');
+            r10Hex.Text = "0x" + cpu.registers.registers[10].ToString("x").PadLeft(6, '0');
+            r11Hex.Text = "0x" + cpu.registers.registers[11].ToString("x").PadLeft(6, '0');
+            r12Hex.Text = "0x" + cpu.registers.registers[12].ToString("x").PadLeft(6, '0');
+            asprHex.Text = "0x" + cpu.registers.registers[13].ToString("x").PadLeft(6, '0');
+            cirHex.Text = "0x" + cpu.IM.CurrentInstruction.ToString("x").PadLeft(6, '0');
+            pcHex.Text = "0x" + cpu.IM.ProgramCounter.ToString("x").PadLeft(6, '0');
 
             //Initialize the decimal register text fields to 0
             r0Dec.Text = cpu.registers.registers[0].ToString();
@@ -354,13 +354,13 @@ namespace ISA_GUI
         private void setMemoryBox()
         {
             int offset = 0;
-            StringBuilder line = new StringBuilder("ADDRESS |   0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F  |  ASCII ENCODING  |\n");
+            StringBuilder line = new StringBuilder("ADDRESS  |  0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F |  ASCII ENCODING  |\n");
             line.Append("--------------------------------------------------------------------------------\n");
             int index = 0;
             for (int i = 0; i < (2000); i++)
             {
-                line.Append("0x" + offset.ToString("x").PadLeft(4, '0').ToUpper() + "  ");
-                line.Append("|  ");
+                line.Append("0x" + offset.ToString("x").PadLeft(6, '0').ToUpper() + " ");
+                line.Append("| ");
                 for (int j = 0; j < 16; j++)
                 {
                     if (cpu.IM.instructions.Any())
@@ -370,7 +370,7 @@ namespace ISA_GUI
                     line.Append(" ");
                     index++;
                 }
-                line.Append(" | ");
+                line.Append("| ");
                 index -= 16;
                 for (int j = 0; j < 16; j++)
                 {

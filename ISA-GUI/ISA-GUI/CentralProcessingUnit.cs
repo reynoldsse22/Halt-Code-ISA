@@ -42,11 +42,11 @@ namespace ISA_GUI
                                 "BRGE",
                                 "LDWM",
                                 "STWM",
-                                "MOV",
-                                "LDWI",
+                                "LDWM",
+                                "LDHH",
                                 "CMPI",
                                 "CMPR",
-                                "N/A",
+                                "MOV",
                                 "ASL",
                                 "ASR",
                                 "LSL",
@@ -94,7 +94,7 @@ namespace ISA_GUI
 		 */
         public bool runProgram(List<string> input, bool debug, ref StringBuilder assemblyString, ref StringBuilder decodedString, ref bool halted)
         {
-            int opcode, r1, r2, r3, address, addrMode;            //parameters for the instructions
+            int opcode, r1, r2, r3, address, instrFlag;            //parameters for the instructions
             string instrType;
             byte[] instruct = new byte[3];
 
@@ -103,18 +103,18 @@ namespace ISA_GUI
                 IM.setInstructionSize(input.Count);     //Set the instruction size based on the amount of instructions given
                 storeProgramInMemory(input);            //Store the program in main memory and the instruction memory unit
                 instruct = fetch.getNextInstruction(ref registers, ref IM);        //FETCH - get the next instruction
-                CU.decode(ref IM, instruct, out opcode, out r1, out r2, out r3, out address, out instrType, out addrMode);      //DECODE - Decode the instruction
+                CU.decode(ref IM, instruct, out opcode, out r1, out r2, out r3, out address, out instrType, out instrFlag);      //DECODE - Decode the instruction
                 halted = EU.execute(ref registers, ref dataMemory, ref alu, ref IM, in opcode, in r1, in r2, in r3, in address);        //EXECUTE - Execute the instruction
                 buildAssemblyString(ref assemblyString, opcode, r1, r2, r3, address, instrType);    //Build the associated assembly syntax string for the instruction
-                buildDecodedString(ref decodedString, opcode, r1, r2, r3, address, instrType, addrMode);      //Build the decoded instruction string
+                buildDecodedString(ref decodedString, opcode, r1, r2, r3, address, instrType, instrFlag);      //Build the decoded instruction string
             }
             else if(debug && IM.instructions.Count > 0) //if in debug mode and the program has been started
             {
                 instruct = fetch.getNextInstruction(ref registers, ref IM);            //FETCH - get the next instruction
-                CU.decode(ref IM, instruct, out opcode, out r1, out r2, out r3, out address, out instrType, out addrMode);          //DECODE - Decode the instruction
+                CU.decode(ref IM, instruct, out opcode, out r1, out r2, out r3, out address, out instrType, out instrFlag);          //DECODE - Decode the instruction
                 halted = EU.execute(ref registers, ref dataMemory, ref alu, ref IM, in opcode, in r1, in r2, in r3, in address);        //EXECUTE - Execute the instruction
                 buildAssemblyString(ref assemblyString, opcode, r1, r2, r3, address, instrType);    //Build the associated assembly syntax string for the instruction
-                buildDecodedString(ref decodedString, opcode, r1, r2, r3, address, instrType, addrMode);      //Build the decoded instruction string
+                buildDecodedString(ref decodedString, opcode, r1, r2, r3, address, instrType, instrFlag);      //Build the decoded instruction string
             }
             else   //If not in debug mode (run button was pressed)
             {
@@ -123,10 +123,10 @@ namespace ISA_GUI
                 while (!halted) //while the halt instruction hasn't been discovered
                 {
                     instruct = fetch.getNextInstruction(ref registers, ref IM);            //FETCH - get the next instruction
-                    CU.decode(ref IM, instruct, out opcode, out r1, out r2, out r3, out address, out instrType, out addrMode);      //DECODE - Decode the instruction
+                    CU.decode(ref IM, instruct, out opcode, out r1, out r2, out r3, out address, out instrType, out instrFlag);      //DECODE - Decode the instruction
                     halted = EU.execute(ref registers, ref dataMemory, ref alu, ref IM, in opcode, in r1, in r2, in r3, in address);       //EXECUTE - Execute the instruction
                     buildAssemblyString(ref assemblyString, opcode, r1, r2, r3, address, instrType);        //Build the associated assembly syntax string for the instruction
-                    buildDecodedString(ref decodedString, opcode, r1, r2, r3, address, instrType, addrMode);          //Build the decoded instruction string
+                    buildDecodedString(ref decodedString, opcode, r1, r2, r3, address, instrType, instrFlag);          //Build the decoded instruction string
                 }
             }
             return halted;  //return program status (if halt instruction was found or not)
@@ -221,7 +221,7 @@ namespace ISA_GUI
 		 */
         public void appendAssemblyString(ref StringBuilder assemblyString, string instruction, string first, string second, string third)
         {
-            if ((IM.ProgramCounter / 2) < CU.instructionsProcessed) //if the program counter is referencing an instruction we have already processed - Don't need the assembly syntax
+            if ((IM.ProgramCounter / 3) < CU.instructionsProcessed) //if the program counter is referencing an instruction we have already processed - Don't need the assembly syntax
                 return;
 
             if (second != "")
@@ -247,10 +247,10 @@ namespace ISA_GUI
         *   @param  int address
         *   @param  string instrType
         */
-        public void buildDecodedString(ref StringBuilder decodedString, int opcode, int r1, int r2, int r3, int address, string instrType, int addrMode)
+        public void buildDecodedString(ref StringBuilder decodedString, int opcode, int r1, int r2, int r3, int address, string instrType, int instrFlag)
         {
             //If any of these variables is negative then they are not used in the current intruction and will be printed as N/A
-            string r1Str, r2Str, r3Str, addressStr, addressingMode;
+            string r1Str, r2Str, r3Str, addressStr, instrFlagStr;
             if (r1 == -1) 
                 r1Str = "N/A";
             else
@@ -267,16 +267,19 @@ namespace ISA_GUI
                 addressStr = "N/A";
             else
                 addressStr = address.ToString("X");
-            switch(addrMode)
+            switch(instrFlag)
             { 
                 case 1:
-                    addressingMode = "FLT";
+                    instrFlagStr = "FLT";
                     break;
                 case 2:
-                    addressingMode = "STAT";
+                    instrFlagStr = "STAT";
+                    break;
+                case 3:
+                    instrFlagStr = "FLST";
                     break;
                 default:
-                    addressingMode = "N/A";
+                    instrFlagStr = "N/A";
                     break;
             }
 
@@ -284,14 +287,14 @@ namespace ISA_GUI
             if (opcode == 0 || opcode == 1 || opcode == 11 || (opcode >= 17 && opcode <=27))
             {
                 decodedString.Append((string.Format("\n{0, 7} {1, 4} {2, 4} {3, 8} {4, 9} {5, 4} {6, 4} {7, 4} {8, 8}",
-                            (IM.ProgramCounter - 2).ToString("X").PadLeft(4, '0'), addressingMode, opcode.ToString("X"), instructions[opcode], instrType,
+                            (IM.ProgramCounter - 3).ToString("X").PadLeft(6, '0'), instrFlagStr, opcode.ToString("X"), instructions[opcode], instrType,
                             r1Str, r2Str, r3Str, addressStr)));
             }
             else
             {
                 decodedString.Append((string.Format("\n{0, 7} {1, 4} {2, 4} {3, 8} {4, 9} {5, 4} {6, 4} {7, 4} {8, 8}",
-                            (IM.ProgramCounter - 2).ToString("X").PadLeft(4, '0'), addressingMode, opcode.ToString("X"), instructions[opcode], instrType,
-                            r1Str, r2Str, r3Str, ("0x" + addressStr.PadLeft(4, '0')))));
+                            (IM.ProgramCounter - 3).ToString("X").PadLeft(6, '0'), instrFlagStr, opcode.ToString("X"), instructions[opcode], instrType,
+                            r1Str, r2Str, r3Str, ("0x" + addressStr.PadLeft(6, '0')))));
 
             }
         }
