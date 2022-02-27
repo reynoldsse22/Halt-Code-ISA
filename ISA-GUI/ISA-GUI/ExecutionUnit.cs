@@ -55,7 +55,7 @@ namespace ISA_GUI
 		 */
         public bool execute(ref RegisterFile registers, ref DataMemory memory, ref ALU alu, ref InstructionMemory IM, in int opcode, in int r1, in int r2, in int r3, in int address, in int instrFlag)
         {
-            int floatingPoint = instrFlag & 2;          //gets the floating point bit from the first four bits 0X00
+            int floatingPoint = (instrFlag & 2) >> 1;          //gets the floating point bit from the first four bits 0X00
             int ASPR = instrFlag & 1;                   //gets the ASPR bit from the first four bits 00X0
 
             switch (opcode)
@@ -103,36 +103,58 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        registers.floatRegisters[0] = memory.MainMemory[address] << 16;            //Loads the MSB value from the address in memory to f0
-                        registers.floatRegisters[0] += (memory.MainMemory[address + 1] << 8);      //Loads the TSB value from the address in memory to f0
-                        registers.floatRegisters[0] += (memory.MainMemory[address + 2]);           //Loads the LSB value from the address in memory to f0
+                        byte[] memoryFloat = new byte[4];
+                        memoryFloat[3] = (byte)(memory.MainMemory[address]);                           //Loads the MSB value from the address in memory to f0
+                        memoryFloat[2] = (byte)(memory.MainMemory[address + 1]);                       //Loads the TSB value from the address in memory to f0
+                        memoryFloat[1] = (byte)(memory.MainMemory[address + 2]);                       //Loads the LSB value from the address in memory to f0
+                        registers.floatRegisters[0] = System.BitConverter.ToSingle(memoryFloat, 0);
                     }
                     break;
                 case 10:
                     if(floatingPoint != 1)
                     {
-                        memory.MainMemory[address] = (byte)(registers.intRegisters[r1] & 16711680);      //Stores the MSB value of r0 at the address in memory
-                        memory.MainMemory[address + 1] = (byte)(registers.intRegisters[r1] & 65280);     //Stores the TSB value of r0 at the address in memory
-                        memory.MainMemory[address + 2] = (byte)(registers.intRegisters[r1] & 255);       //Stores the LSB value of r0 at the address in memory
+                        memory.MainMemory[address] = (byte)(registers.intRegisters[0] & 16711680);      //Stores the MSB value of r0 at the address in memory
+                        memory.MainMemory[address + 1] = (byte)(registers.intRegisters[0] & 65280);     //Stores the TSB value of r0 at the address in memory
+                        memory.MainMemory[address + 2] = (byte)(registers.intRegisters[0] & 255);       //Stores the LSB value of r0 at the address in memory
                     }
                     else
                     {
-                        //memory.MainMemory[address] = (byte)(registers.floatRegisters[0] & (float)16711680);      //Stores the MSB value of f0 at the address in memory
-                        //memory.MainMemory[address + 1] = (byte)(registers.floatRegisters[0] & (float)65280);     //Stores the TSB value of f0 at the address in memory
-                        //memory.MainMemory[address + 2] = (byte)(registers.floatRegisters[0] & (float)255);       //Stores the LSB value of f0 at the address in memory
+                        byte[] currentFloat = System.BitConverter.GetBytes(registers.floatRegisters[0]);        //Float to be stored
+                        memory.MainMemory[address] = currentFloat[3];                                           //Stores the MSB value of f0 at the address in memory
+                        memory.MainMemory[address + 1] = currentFloat[2];                                       //Stores the TSB value of f0 at the address in memory
+                        memory.MainMemory[address + 2] = currentFloat[1];                                       //Stores the LSB value of f0 at the address in memory
                     }
                     break;
                 case 11:
                     if (floatingPoint != 1)
                         registers.intRegisters[r1] = address;
                     else
-                        registers.floatRegisters[r1] = address;
+                    {
+                        byte[] floatArray = new byte[4];                //create a new array of 4 bytes to convert the low address to float
+                                                                        //Must be read in back to front because BitConverter reads the first element of array as LSB
+                        floatArray[0] = 0x00;                           //last byte is 0 because we don't use it
+                        floatArray[1] = (byte)(address & 255);          //1 byte
+                        floatArray[2] = (byte)((address >> 8) & 15);    //get first 4 bits by shifting right 8 times and ANDing with 0xF to get only those 4
+                        floatArray[3] = 0x00;                           //first byte is 0 because we don't use them 
+                        registers.floatRegisters[r1] = System.BitConverter.ToSingle(floatArray, 0);
+                    }
                     break;
                 case 12:
                     if(floatingPoint != 1)
                         registers.intRegisters[r1] += (address << 12);
                     else
-                        registers.floatRegisters[r1] += (address << 12);
+                    {
+                        byte[] backArray = System.BitConverter.GetBytes(registers.floatRegisters[r1]);      //old 12 bytes of array
+                        byte[] floatArray = new byte[4];                //create a new array of 4 bytes to convert the low address to float
+                                                                        //Must be read in back to front because BitConverter reads the first element of array as LSB
+                        floatArray[0] = 0x00;                           //last byte is 0 because we don't use it
+                        floatArray[1] = backArray[1];                   //the old elements are returned to their former spot
+                        floatArray[2] = (byte)(((address & 15) << 4) | (int)backArray[2]);    //get first of 4 bits by ANDing with the address by 0xF
+                                                                                              //and shifting left 4 (should be in form 0x_0)
+                                                                                              //the second 4 are found by ORing with the old array
+                        floatArray[3] = (byte)((address >> 4) & 255);   //get first byte by shifting right 4 and ANDing with 0xFF
+                        registers.floatRegisters[r1] = System.BitConverter.ToSingle(floatArray, 0);
+                    }
                     break;
                 case 13:
                 case 14:
