@@ -232,10 +232,12 @@ namespace ISA_GUI
         private void clearRegandMem()
         {
             //Clear registers
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < 7; i++)
             {
-                cpu.registers.registers[i] = 0;
+                cpu.registers.intRegisters[i] = 0;
+                cpu.registers.floatRegisters[i] = 0;
             }
+            cpu.registers.ASPR = 0;
 
             //clear main memory
             Array.Clear(cpu.dataMemory.MainMemory, 0, cpu.dataMemory.MainMemory.Length);
@@ -271,48 +273,50 @@ namespace ISA_GUI
         {
             //Initialize the hexidecimal text field to 0
             //Pad left ensures that the value will be 4 digits.
-            r0Hex.Text = "0x" + cpu.registers.registers[0].ToString("x").PadLeft(6, '0');
-            r1Hex.Text = "0x" + cpu.registers.registers[1].ToString("x").PadLeft(6, '0');
-            r2Hex.Text = "0x" + cpu.registers.registers[2].ToString("x").PadLeft(6, '0');
-            r3Hex.Text = "0x" + cpu.registers.registers[3].ToString("x").PadLeft(6, '0');
-            r4Hex.Text = "0x" + cpu.registers.registers[4].ToString("x").PadLeft(6, '0');
-            r5Hex.Text = "0x" + cpu.registers.registers[5].ToString("x").PadLeft(6, '0');
-            r6Hex.Text = "0x" + cpu.registers.registers[6].ToString("x").PadLeft(6, '0');
-            r7Hex.Text = "0x" + cpu.registers.registers[7].ToString("x").PadLeft(6, '0');
-            r8Hex.Text = "0x" + cpu.registers.registers[8].ToString("x").PadLeft(6, '0');
-            r9Hex.Text = "0x" + cpu.registers.registers[9].ToString("x").PadLeft(6, '0');
-            r10Hex.Text = "0x" + cpu.registers.registers[10].ToString("x").PadLeft(6, '0');
-            r11Hex.Text = "0x" + cpu.registers.registers[11].ToString("x").PadLeft(6, '0');
-            r12Hex.Text = "0x" + cpu.registers.registers[12].ToString("x").PadLeft(6, '0');
-            asprHex.Text = "0x" + cpu.registers.registers[13].ToString("x").PadLeft(6, '0');
+            r0Hex.Text = "0x" + cpu.registers.intRegisters[0].ToString("x").PadLeft(6, '0');
+            r1Hex.Text = "0x" + cpu.registers.intRegisters[1].ToString("x").PadLeft(6, '0');
+            r2Hex.Text = "0x" + cpu.registers.intRegisters[2].ToString("x").PadLeft(6, '0');
+            r3Hex.Text = "0x" + cpu.registers.intRegisters[3].ToString("x").PadLeft(6, '0');
+            r4Hex.Text = "0x" + cpu.registers.intRegisters[4].ToString("x").PadLeft(6, '0');
+            r5Hex.Text = "0x" + cpu.registers.intRegisters[5].ToString("x").PadLeft(6, '0');
+            r6Hex.Text = "0x" + cpu.registers.intRegisters[6].ToString("x").PadLeft(6, '0');
+            //f0Hex.Text = "0x" + cpu.registers.floatRegisters[0].ToString("x").PadLeft(6, '0');
+            //f1Hex.Text = "0x" + cpu.registers.floatRegisters[1].ToString("x").PadLeft(6, '0');
+            //f2Hex.Text = "0x" + cpu.registers.floatRegisters[2].ToString("x").PadLeft(6, '0');
+            //f3Hex.Text = "0x" + cpu.registers.floatRegisters[3].ToString("x").PadLeft(6, '0');
+            //f4Hex.Text = "0x" + cpu.registers.floatRegisters[4].ToString("x").PadLeft(6, '0');
+            //f5Hex.Text = "0x" + cpu.registers.floatRegisters[5].ToString("x").PadLeft(6, '0');
+            //f6Hex.Text = "0x" + cpu.registers.floatRegisters[6].ToString("x").PadLeft(6, '0');
+            asprHex.Text = "0x" + cpu.registers.ASPR.ToString("x").PadLeft(6, '0');
             cirHex.Text = "0x" + cpu.IM.CurrentInstruction.ToString("x").PadLeft(6, '0');
             pcHex.Text = "0x" + cpu.IM.ProgramCounter.ToString("x").PadLeft(6, '0');
 
             //Initialize the decimal register text fields to 0
-            r0Dec.Text = cpu.registers.registers[0].ToString();
-            r1Dec.Text = cpu.registers.registers[1].ToString();
-            r2Dec.Text = cpu.registers.registers[2].ToString();
-            r3Dec.Text = cpu.registers.registers[3].ToString();
-            r4Dec.Text = cpu.registers.registers[4].ToString();
-            r5Dec.Text = cpu.registers.registers[5].ToString();
-            r6Dec.Text = cpu.registers.registers[6].ToString();
-            r7Dec.Text = cpu.registers.registers[7].ToString();
-            r8Dec.Text = cpu.registers.registers[8].ToString();
-            r9Dec.Text = cpu.registers.registers[9].ToString();
-            r10Dec.Text = cpu.registers.registers[10].ToString();
-            r11Dec.Text = cpu.registers.registers[11].ToString();
-            r12Dec.Text = cpu.registers.registers[12].ToString();
-            asprDec.Text = cpu.registers.registers[13].ToString();
+            r0Dec.Text = cpu.registers.intRegisters[0].ToString();
+            r1Dec.Text = cpu.registers.intRegisters[1].ToString();
+            r2Dec.Text = cpu.registers.intRegisters[2].ToString();
+            r3Dec.Text = cpu.registers.intRegisters[3].ToString();
+            r4Dec.Text = cpu.registers.intRegisters[4].ToString();
+            r5Dec.Text = cpu.registers.intRegisters[5].ToString();
+            r6Dec.Text = cpu.registers.intRegisters[6].ToString();
+            f0Dec.Text = cpu.registers.floatRegisters[0].ToString();
+            f1Dec.Text = cpu.registers.floatRegisters[1].ToString();
+            f2Dec.Text = cpu.registers.floatRegisters[2].ToString();
+            f3Dec.Text = cpu.registers.floatRegisters[3].ToString();
+            f4Dec.Text = cpu.registers.floatRegisters[4].ToString();
+            f5Dec.Text = cpu.registers.floatRegisters[5].ToString();
+            f6Dec.Text = cpu.registers.floatRegisters[6].ToString();
+            asprDec.Text = cpu.registers.ASPR.ToString();
             cirDec.Text = cpu.IM.CurrentInstruction.ToString();
             pcDec.Text = cpu.IM.ProgramCounter.ToString();
 
             //Initialize the Z and C flags based on the ASPR register
-            if ((cpu.registers.registers[13] & 2) == 2)
+            if ((cpu.registers.ASPR & 2) == 2)
                 ZFlagBox.Text = 1.ToString();
             else
                 ZFlagBox.Text = 0.ToString();
 
-            if ((cpu.registers.registers[13] & 1) == 1)
+            if ((cpu.registers.ASPR & 1) == 1)
                 cFlagBox.Text = 1.ToString();
             else
                 cFlagBox.Text = 0.ToString();

@@ -53,75 +53,163 @@ namespace ISA_GUI
 		 *   @param  int r3
 		 *   @param  int address
 		 */
-        public void execute(ref RegisterFile registers, ref DataMemory memory, ref ALU alu, ref InstructionMemory IM, in int opcode, in int r1, in int r2, in int r3, in int address)
+        public void execute(ref RegisterFile registers, ref DataMemory memory, ref ALU alu, ref InstructionMemory IM, in int opcode, in int r1, in int r2, in int r3, in int address, in int instrFlag)
         {
             int statusFlag = 0;
+            int floatingPoint = instrFlag & 2;      //gets the floating point bit from the first four bits 0X00
+            int ASPR = instrFlag & 1;               //gets the ASPR bit from the first four bits 00X0
             bool zero = false;
             bool carry = false;
             switch (opcode)
             {
-                case 8:
-                    //shift left
-                    registers.registers[r3] = (ushort)(registers.registers[r1] << registers.registers[r2]);
-                    if (registers.registers[r3] == 0)
-                        zero = true;
-                    break;
-                case 9:
-                    //shift right
-                    registers.registers[r3] = (ushort)(registers.registers[r1] >> registers.registers[r2]);
-                    if (registers.registers[r3] == 0)
-                        zero = true;
-                    break;
-                case 10:
-                    //Add
-                    registers.registers[r3] = (ushort)(registers.registers[r1] + registers.registers[r2]);
-                    if (registers.registers[r3] < registers.registers[r1])
-                        carry = true;
-                    if (registers.registers[r3] == 0)
-                        zero = true;
-                    break;
-                case 11:
-                    //Sub
-                    registers.registers[r3] = (ushort)(registers.registers[r1] - registers.registers[r2]);
-                    if (registers.registers[r3] > registers.registers[r1])
-                        carry = true;
-                    if (registers.registers[r3] == 0)
-                        zero = true;
-                    break;
-                case 12:
-                    //And
-                    registers.registers[r3] = (ushort)(registers.registers[r1] & registers.registers[r2]);
-                    if (registers.registers[r3] == 0)
-                        zero = true;
-                    break;
                 case 13:
-                    //Or
-                    registers.registers[r3] = (ushort)(registers.registers[r1] | registers.registers[r2]);
-                    if (registers.registers[r3] == 0)
-                        zero = true;
+                    if (floatingPoint != 1)
+                    {
+                        int compare = (address - registers.intRegisters[r1]);
+                        if (compare > address && ASPR == 1)
+                            carry = true;
+                        if (compare == 0 && ASPR == 1)
+                            zero = true;
+                    }
                     break;
                 case 14:
-                    //Xor
-                    registers.registers[r3] = (ushort)(registers.registers[r1] ^ registers.registers[r2]);
-                    if (registers.registers[r3] == 0)
-                        zero = true;
+                    if (floatingPoint != 1)
+                    {
+                        int compare = (registers.intRegisters[r2] - registers.intRegisters[r3]);
+                        if (compare > address && ASPR == 1)
+                            carry = true;
+                        if (compare == 0 && ASPR == 1)
+                            zero = true;
+                    }
                     break;
-                case 15:
-                    //Not
-                    registers.registers[r3] = (ushort)(~registers.registers[r1]);
-                    if (registers.registers[r3] == 0)
-                        zero = true;
+                case 16:
+                    //arithmetic shift left
+                    if (floatingPoint!= 1)
+                    {
+                        registers.intRegisters[r3] = (registers.intRegisters[r1] << registers.intRegisters[r2]);
+                        if (registers.intRegisters[r3] == 0 && ASPR == 1)
+                            zero = true;
+                    }
+                    break;
+                case 17:
+                    //arithmetic shift right
+                    if (floatingPoint != 1)
+                    {
+                        registers.intRegisters[r3] = (registers.intRegisters[r1] >> registers.intRegisters[r2]);
+                        if (registers.intRegisters[r3] == 0 && ASPR == 1)
+                            zero = true;
+                    }
+                    break;
+                case 18:
+                    //logical shift left
+                    if (floatingPoint != 1)
+                    {
+                        int rotateBit;
+                        rotateBit = (registers.intRegisters[r1] & 8388608) >> 23;
+                        registers.intRegisters[r3] = registers.intRegisters[r1] << registers.intRegisters[r2];
+                        registers.intRegisters[r3] = registers.intRegisters[r3] & 16777215;
+                        registers.intRegisters[r3] = registers.intRegisters[r3] | rotateBit;
+                        if (registers.intRegisters[r3] == 0 && ASPR == 1)
+                            zero = true;
+                    }
+                    break;
+                case 19:
+                    //logical shift right
+                    if (floatingPoint != 1)
+                    {
+                        int rotateBit;
+                        rotateBit = (registers.intRegisters[r1] & 1) << 23;
+                        registers.intRegisters[r3] = registers.intRegisters[r1] >> registers.intRegisters[r2];
+                        registers.intRegisters[r3] = registers.intRegisters[r3] & 16777215;
+                        registers.intRegisters[r3] = registers.intRegisters[r3] | rotateBit;
+                        if (registers.intRegisters[r3] == 0 && ASPR == 1)
+                            zero = true;
+                    }
+                        break;
+                case 20:
+                    //Add
+                    if (floatingPoint != 1)
+                    {
+                        registers.intRegisters[r3] = (registers.intRegisters[r1] + registers.intRegisters[r2]);
+                        if (registers.intRegisters[r3] < registers.intRegisters[r1] && ASPR == 1)
+                            carry = true;
+                        if (registers.intRegisters[r3] == 0 && ASPR == 1)
+                            zero = true;
+                    }
+                    break;
+                case 21:
+                    //Sub
+                    if (floatingPoint != 1)
+                    {
+                        registers.intRegisters[r3] = (registers.intRegisters[r1] - registers.intRegisters[r2]);
+                        if (registers.intRegisters[r3] > registers.intRegisters[r1] && ASPR == 1)
+                            carry = true;
+                        if (registers.intRegisters[r3] == 0 && ASPR == 1)
+                            zero = true;
+                    }
+                    break;
+                case 22:
+                    //Multiply
+                    if (floatingPoint != 1)
+                    {
+                        registers.intRegisters[r3] = registers.intRegisters[r1] * registers.intRegisters[r2];
+                    }
+                        break;
+                case 23:
+                    //Divide
+                    if (floatingPoint != 1)
+                    {
+                        registers.intRegisters[r3] = (int)registers.intRegisters[r1] / (int)registers.intRegisters[r2];
+                    }
+                        break;
+                case 24:
+                    //AND
+                    if (floatingPoint != 1)
+                    {
+                        registers.intRegisters[r3] = (registers.intRegisters[r1] & registers.intRegisters[r2]);
+                        if (registers.intRegisters[r3] == 0 && ASPR == 1)
+                            zero = true;
+                    }
+                    break;
+                case 25:
+                    //OR
+                    if (floatingPoint != 1)
+                    {
+                        registers.intRegisters[r3] = (registers.intRegisters[r1] | registers.intRegisters[r2]);
+                        if (registers.intRegisters[r3] == 0 && ASPR == 1)
+                            zero = true;
+                    }
+                    break;
+                case 26:
+                    //XOR
+                    if (floatingPoint != 1)
+                    {
+                        registers.intRegisters[r3] = (registers.intRegisters[r1] ^ registers.intRegisters[r2]);
+                        if (registers.intRegisters[r3] == 0 && ASPR == 1)
+                            zero = true;
+                    }
+                    break;
+                case 27:
+                    //NOT
+                    if (floatingPoint != 1)
+                    {
+                        registers.intRegisters[r3] = (~registers.intRegisters[r1]);
+                        if (registers.intRegisters[r3] == 0 && ASPR == 1)
+                            zero = true;
+                    }
                     break;
             }
 
            // Determine the bit map for ASPR register
+           if(ASPR == 1)
+            {
+                if (zero)
+                    statusFlag += 2;
+                if (carry)
+                    statusFlag += 1;
 
-            if (zero)
-                statusFlag += 2;
-            if (carry)
-                statusFlag += 1;
-
-            registers.registers[13] = (ushort)statusFlag;       //assign the ASPR register the bit map value
+                registers.ASPR = statusFlag;       //assign the ASPR register the bit map value
+            }
         }
     }
 }

@@ -24,7 +24,9 @@ namespace ISA_GUI
 	*/
     internal class RegisterFile
     {
-        public ushort[] registers = new ushort[16];     //16 16-bit registers
+        public int[] intRegisters = new int[7];     //16 16-bit registers
+		public float[] floatRegisters = new float[7];
+		public int ASPR;
 
 		/**
 	    * Method Name: RegisterFile <br>
@@ -37,7 +39,9 @@ namespace ISA_GUI
 		public RegisterFile()
         {
             //Initialize registers
-            Array.Clear(registers, 0, registers.Length);
-        }
+            Array.Clear(intRegisters, 0, intRegisters.Length);
+			Array.Clear(floatRegisters, 0, floatRegisters.Length);
+			ASPR = 0;
+		}
     }
 }

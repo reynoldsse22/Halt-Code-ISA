@@ -104,7 +104,7 @@ namespace ISA_GUI
                 storeProgramInMemory(input);            //Store the program in main memory and the instruction memory unit
                 instruct = fetch.getNextInstruction(ref registers, ref IM);        //FETCH - get the next instruction
                 CU.decode(ref IM, instruct, out opcode, out r1, out r2, out r3, out address, out instrType, out instrFlag);      //DECODE - Decode the instruction
-                halted = EU.execute(ref registers, ref dataMemory, ref alu, ref IM, in opcode, in r1, in r2, in r3, in address);        //EXECUTE - Execute the instruction
+                halted = EU.execute(ref registers, ref dataMemory, ref alu, ref IM, in opcode, in r1, in r2, in r3, in address, in instrFlag);        //EXECUTE - Execute the instruction
                 buildAssemblyString(ref assemblyString, opcode, r1, r2, r3, address, instrType);    //Build the associated assembly syntax string for the instruction
                 buildDecodedString(ref decodedString, opcode, r1, r2, r3, address, instrType, instrFlag);      //Build the decoded instruction string
             }
@@ -112,7 +112,7 @@ namespace ISA_GUI
             {
                 instruct = fetch.getNextInstruction(ref registers, ref IM);            //FETCH - get the next instruction
                 CU.decode(ref IM, instruct, out opcode, out r1, out r2, out r3, out address, out instrType, out instrFlag);          //DECODE - Decode the instruction
-                halted = EU.execute(ref registers, ref dataMemory, ref alu, ref IM, in opcode, in r1, in r2, in r3, in address);        //EXECUTE - Execute the instruction
+                halted = EU.execute(ref registers, ref dataMemory, ref alu, ref IM, in opcode, in r1, in r2, in r3, in address, in instrFlag);        //EXECUTE - Execute the instruction
                 buildAssemblyString(ref assemblyString, opcode, r1, r2, r3, address, instrType);    //Build the associated assembly syntax string for the instruction
                 buildDecodedString(ref decodedString, opcode, r1, r2, r3, address, instrType, instrFlag);      //Build the decoded instruction string
             }
@@ -124,7 +124,7 @@ namespace ISA_GUI
                 {
                     instruct = fetch.getNextInstruction(ref registers, ref IM);            //FETCH - get the next instruction
                     CU.decode(ref IM, instruct, out opcode, out r1, out r2, out r3, out address, out instrType, out instrFlag);      //DECODE - Decode the instruction
-                    halted = EU.execute(ref registers, ref dataMemory, ref alu, ref IM, in opcode, in r1, in r2, in r3, in address);       //EXECUTE - Execute the instruction
+                    halted = EU.execute(ref registers, ref dataMemory, ref alu, ref IM, in opcode, in r1, in r2, in r3, in address, in instrFlag);       //EXECUTE - Execute the instruction
                     buildAssemblyString(ref assemblyString, opcode, r1, r2, r3, address, instrType);        //Build the associated assembly syntax string for the instruction
                     buildDecodedString(ref decodedString, opcode, r1, r2, r3, address, instrType, instrFlag);          //Build the decoded instruction string
                 }
@@ -152,6 +152,8 @@ namespace ISA_GUI
             }
         }
 
+
+        //NEEDS TO BE UPDATED//
         /**
 		 * Method Name: buildAssemblyString <br>
 		 * Method Purpose: Builds the assembly string to include the current instruction assembly syntax
@@ -204,6 +206,7 @@ namespace ISA_GUI
             }
         }
 
+        //NEEDS TO BE UPDATED//
         /**
 		 * Method Name: appendAssemblyString <br>
 		 * Method Purpose: Appends the current instruction assembly syntax to the assembly string
@@ -232,6 +235,7 @@ namespace ISA_GUI
             assemblyString.Append(instruction.ToUpper() + "\t" + first + second + third + "\n");
         }
 
+        //NEEDS TO BE UPDATED//
         /**
         * Method Name: buildDecodedString <br>
         * Method Purpose: Appends to the decoded instruction string to include the current instruction

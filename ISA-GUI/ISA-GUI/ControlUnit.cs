@@ -95,6 +95,15 @@ namespace ISA_GUI
                 instrType = "Control";
                 nibble1 = MSB & 15;       //Gets the second nibble from the first byte and combines it with the second byte 
                 address = (TSB << 8) | LSB;
+
+                //if register above 6 is discovered, decrease by 7 to target floating point register
+                if (r1 > 6)
+                    r1 -= 7;
+                if (r2 > 6)
+                    r2 -= 7;
+                if (r3 > 6)
+                    r3 -= 7;
+
                 controlInstructionCount++;
                 if ((IM.ProgramCounter / 3) > instructionsProcessed)
                     instructionsProcessed++;
@@ -107,6 +116,15 @@ namespace ISA_GUI
                 r1 = TSB;    //Gets the first, second, and destination registers for the R-Type instruction
                 r2 = (LSB & 240) >> 4;
                 r3 = LSB & 15;
+
+                //if register above 6 is discovered, decrease by 7 to target floating point register
+                if (r1 > 6)
+                    r1 -= 7;
+                if (r2 > 6)
+                    r2 -= 7;
+                if (r3 > 6)
+                    r3 -= 7;
+
                 ALUInstructionCount++;
                 if ((IM.ProgramCounter / 3) >= instructionsProcessed)
                     instructionsProcessed++;
@@ -128,9 +146,9 @@ namespace ISA_GUI
                     case 11:
                     case 12:
                     case 13:
-                        r1 = -1;
+                        r1 = (TSB & 240) >> 4;
                         r2 = -1;
-                        r3 = (TSB & 240) >> 4;
+                        r3 = -1;
                         address = address & 4095;
                         break;
                     case 14:
@@ -142,6 +160,14 @@ namespace ISA_GUI
                         break;
                     
                 }
+                //if register above 6 is discovered, decrease by 7 to target floating point register
+                if (r1 > 6)
+                    r1 -= 7;
+                if (r2 > 6)
+                    r2 -= 7;
+                if (r3 > 6)
+                    r3 -= 7;
+
                 memoryInstructionCount++;
                 if ((IM.ProgramCounter / 3) > instructionsProcessed)
                     instructionsProcessed++;

@@ -25,8 +25,8 @@ namespace ISA_GUI
     internal class InstructionMemory
     {
         public List<byte> instructions;     //the program instructions
-        public ushort ProgramCounter;       //The program counter
-        public ushort CurrentInstruction;   //The current instruction register CIR
+        public int ProgramCounter;       //The program counter
+        public int CurrentInstruction;   //The current instruction register CIR
 
         /**
 	    * Method Name: InstructionMemory <br>
