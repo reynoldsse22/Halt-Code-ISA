@@ -52,11 +52,12 @@ namespace ISA_GUI
 		 *   @param  int r2
 		 *   @param  int r3
 		 *   @param  int address
+		 *   @param  int instrFlag
 		 */
         public bool execute(ref RegisterFile registers, ref DataMemory memory, ref ALU alu, ref InstructionMemory IM, in int opcode, in int r1, in int r2, in int r3, in int address, in int instrFlag)
         {
-            int floatingPoint = (instrFlag & 2) >> 1;          //gets the floating point bit from the first four bits 0X00
-            int ASPR = instrFlag & 1;                   //gets the ASPR bit from the first four bits 00X0
+            int floatingPoint = (instrFlag & 2) >> 1;           //gets the floating point bit from the first four bits 0X00
+            int ASPR = instrFlag & 1;                           //gets the ASPR bit from the first four bits 00X0
 
             switch (opcode)
             { 
@@ -127,7 +128,7 @@ namespace ISA_GUI
                     break;
                 case 11:
                     if (floatingPoint != 1)
-                        registers.intRegisters[r1] = address;
+                        registers.intRegisters[r3] = address;
                     else
                     {
                         byte[] floatArray = new byte[4];                //create a new array of 4 bytes to convert the low address to float
@@ -136,15 +137,15 @@ namespace ISA_GUI
                         floatArray[1] = (byte)(address & 255);          //1 byte
                         floatArray[2] = (byte)((address >> 8) & 15);    //get first 4 bits by shifting right 8 times and ANDing with 0xF to get only those 4
                         floatArray[3] = 0x00;                           //first byte is 0 because we don't use them 
-                        registers.floatRegisters[r1] = System.BitConverter.ToSingle(floatArray, 0);
+                        registers.floatRegisters[r3] = System.BitConverter.ToSingle(floatArray, 0);
                     }
                     break;
                 case 12:
                     if(floatingPoint != 1)
-                        registers.intRegisters[r1] += (address << 12);
+                        registers.intRegisters[r3] += (address << 12);
                     else
                     {
-                        byte[] backArray = System.BitConverter.GetBytes(registers.floatRegisters[r1]);      //old 12 bytes of array
+                        byte[] backArray = System.BitConverter.GetBytes(registers.floatRegisters[r3]);      //old 12 bytes of array
                         byte[] floatArray = new byte[4];                //create a new array of 4 bytes to convert the low address to float
                                                                         //Must be read in back to front because BitConverter reads the first element of array as LSB
                         floatArray[0] = 0x00;                           //last byte is 0 because we don't use it
@@ -153,7 +154,7 @@ namespace ISA_GUI
                                                                                               //and shifting left 4 (should be in form 0x_0)
                                                                                               //the second 4 are found by ORing with the old array
                         floatArray[3] = (byte)((address >> 4) & 255);   //get first byte by shifting right 4 and ANDing with 0xFF
-                        registers.floatRegisters[r1] = System.BitConverter.ToSingle(floatArray, 0);
+                        registers.floatRegisters[r3] = System.BitConverter.ToSingle(floatArray, 0);
                     }
                     break;
                 case 13:

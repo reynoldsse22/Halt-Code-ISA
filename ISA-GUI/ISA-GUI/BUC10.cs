@@ -35,11 +35,11 @@ namespace ISA_GUI
         bool halted = true;                                                     //Determines if the program has been halted yet
         List<string> program;                                                   //Holds the user inputted instructions
         StringBuilder assemblyOutput = new StringBuilder();                     //Mutable string for the assembly instructions
-        StringBuilder pipelineOutput = new StringBuilder();                     //Mutable string for the pipeline output
-        StringBuilder decodedString = new StringBuilder(                        //Mutable string for the decoded instructions
+        StringBuilder pipelineOutput = new StringBuilder(                       //Mutable string for the pipeline output
             "   Team: Beaudry, Farmer, Ortiz, Reynolds\n" +
-            "Project: ISA Design & Implementation\n" +
-            "---------------------------------------------------------------\n\n" +
+            "Project: Pipeline ISA Implementation\n" +
+            "---------------------------------------------------------------\n\n");
+        StringBuilder decodedString = new StringBuilder(                        //Mutable string for the decoded instructions
             "Program  Inst Inst Instruct                            Address/\n" +
             "Counter  Flag Spec Mnemonic      Type FReg SReg DReg  Immediate\n" +
             "-------- ---- ---- -------- --------- ---- ---- ---- ----------");
@@ -202,12 +202,15 @@ namespace ISA_GUI
         private void clearProgram()
         {
             decodedString.Clear();
-            decodedString.Append("   Team: Beaudry, Farmer, Ortiz, Reynolds\n" +
-            "Project: ISA Design & Implementation\n" +
-            "---------------------------------------------------------------\n\n" +
+            decodedString.Append(
             "Program  Inst Inst Instruct                            Address/\n" +
             "Counter  Flag Spec Mnemonic      Type FReg SReg DReg  Immediate\n" +
             "-------- ---- ---- -------- --------- ---- ---- ---- ----------");
+            pipelineOutput.Clear();
+            pipelineOutput.Append(
+            "   Team: Beaudry, Farmer, Ortiz, Reynolds\n" +
+            "Project: Pipeline ISA Implementation\n" +
+            "---------------------------------------------------------------\n\n");
             assemblyOutput.Clear();
             cpu.IM.ProgramCounter = 0;
             cpu.IM.CurrentInstruction = 0;
@@ -273,23 +276,23 @@ namespace ISA_GUI
         {
             //Initialize the hexidecimal text field to 0
             //Pad left ensures that the value will be 4 digits.
-            r0Hex.Text = "0x" + cpu.registers.intRegisters[0].ToString("x").PadLeft(6, '0');
-            r1Hex.Text = "0x" + cpu.registers.intRegisters[1].ToString("x").PadLeft(6, '0');
-            r2Hex.Text = "0x" + cpu.registers.intRegisters[2].ToString("x").PadLeft(6, '0');
-            r3Hex.Text = "0x" + cpu.registers.intRegisters[3].ToString("x").PadLeft(6, '0');
-            r4Hex.Text = "0x" + cpu.registers.intRegisters[4].ToString("x").PadLeft(6, '0');
-            r5Hex.Text = "0x" + cpu.registers.intRegisters[5].ToString("x").PadLeft(6, '0');
-            r6Hex.Text = "0x" + cpu.registers.intRegisters[6].ToString("x").PadLeft(6, '0');
-            //f0Hex.Text = "0x" + cpu.registers.floatRegisters[0].ToString("x").PadLeft(6, '0');
-            //f1Hex.Text = "0x" + cpu.registers.floatRegisters[1].ToString("x").PadLeft(6, '0');
-            //f2Hex.Text = "0x" + cpu.registers.floatRegisters[2].ToString("x").PadLeft(6, '0');
-            //f3Hex.Text = "0x" + cpu.registers.floatRegisters[3].ToString("x").PadLeft(6, '0');
-            //f4Hex.Text = "0x" + cpu.registers.floatRegisters[4].ToString("x").PadLeft(6, '0');
-            //f5Hex.Text = "0x" + cpu.registers.floatRegisters[5].ToString("x").PadLeft(6, '0');
-            //f6Hex.Text = "0x" + cpu.registers.floatRegisters[6].ToString("x").PadLeft(6, '0');
-            asprHex.Text = "0x" + cpu.registers.ASPR.ToString("x").PadLeft(6, '0');
-            cirHex.Text = "0x" + cpu.IM.CurrentInstruction.ToString("x").PadLeft(6, '0');
-            pcHex.Text = "0x" + cpu.IM.ProgramCounter.ToString("x").PadLeft(6, '0');
+            r0Hex.Text = "0x" + cpu.registers.intRegisters[0].ToString("X").PadLeft(6, '0');
+            r1Hex.Text = "0x" + cpu.registers.intRegisters[1].ToString("X").PadLeft(6, '0');
+            r2Hex.Text = "0x" + cpu.registers.intRegisters[2].ToString("X").PadLeft(6, '0');
+            r3Hex.Text = "0x" + cpu.registers.intRegisters[3].ToString("X").PadLeft(6, '0');
+            r4Hex.Text = "0x" + cpu.registers.intRegisters[4].ToString("X").PadLeft(6, '0');
+            r5Hex.Text = "0x" + cpu.registers.intRegisters[5].ToString("X").PadLeft(6, '0');
+            r6Hex.Text = "0x" + cpu.registers.intRegisters[6].ToString("X").PadLeft(6, '0');
+            f0Hex.Text = "0x" + (BitConverter.ToString(BitConverter.GetBytes(cpu.registers.floatRegisters[0]))).PadLeft(6, '0').Replace("-", "").Remove(0,2);
+            f1Hex.Text = "0x" + (BitConverter.ToString(BitConverter.GetBytes(cpu.registers.floatRegisters[1]))).PadLeft(6, '0').Replace("-", "").Remove(0,2);
+            f2Hex.Text = "0x" + (BitConverter.ToString(BitConverter.GetBytes(cpu.registers.floatRegisters[2]))).PadLeft(6, '0').Replace("-", "").Remove(0, 2);
+            f3Hex.Text = "0x" + (BitConverter.ToString(BitConverter.GetBytes(cpu.registers.floatRegisters[3]))).PadLeft(6, '0').Replace("-", "").Remove(0, 2);
+            f4Hex.Text = "0x" + (BitConverter.ToString(BitConverter.GetBytes(cpu.registers.floatRegisters[4]))).PadLeft(6, '0').Replace("-", "").Remove(0, 2);
+            f5Hex.Text = "0x" + (BitConverter.ToString(BitConverter.GetBytes(cpu.registers.floatRegisters[5]))).PadLeft(6, '0').Replace("-", "").Remove(0, 2);
+            f6Hex.Text = "0x" + (BitConverter.ToString(BitConverter.GetBytes(cpu.registers.floatRegisters[6]))).PadLeft(6, '0').Replace("-", "").Remove(0, 2);
+            asprHex.Text = "0x" + cpu.registers.ASPR.ToString("X").PadLeft(6, '0');
+            cirHex.Text = "0x" + cpu.IM.CurrentInstruction.ToString("X").PadLeft(6, '0');
+            pcHex.Text = "0x" + cpu.IM.ProgramCounter.ToString("X").PadLeft(6, '0');
 
             //Initialize the decimal register text fields to 0
             r0Dec.Text = cpu.registers.intRegisters[0].ToString();

@@ -146,12 +146,17 @@ namespace ISA_GUI
                     case 11:
                     case 12:
                     case 13:
-                        r1 = (TSB & 240) >> 4;
+                        r1 = -1;
                         r2 = -1;
-                        r3 = -1;
+                        r3 = (TSB & 240) >> 4;
                         address = address & 4095;
                         break;
                     case 14:
+                        r1 = r3;
+                        r2 = LSB & 15;
+                        r3 = -1;
+                        address = -1;
+                        break;
                     case 15:
                         r1 = -1;
                         r2 = r3;

@@ -56,7 +56,7 @@ namespace ISA_GUI
         public void execute(ref RegisterFile registers, ref DataMemory memory, ref ALU alu, ref InstructionMemory IM, in int opcode, in int r1, in int r2, in int r3, in int address, in int instrFlag)
         {
             int statusFlag = 0;
-            int floatingPoint = instrFlag & 2;      //gets the floating point bit from the first four bits 0X00
+            int floatingPoint = (instrFlag & 2) >> 1;      //gets the floating point bit from the first four bits 0X00
             int ASPR = instrFlag & 1;               //gets the ASPR bit from the first four bits 00X0
             bool zero = false;
             bool carry = false;
@@ -71,11 +71,27 @@ namespace ISA_GUI
                         if (compare == 0 && ASPR == 1)
                             zero = true;
                     }
+                    else
+                    {
+                        float compare = (address - registers.floatRegisters[r1]);
+                        if (compare > address && ASPR == 1)
+                            carry = true;
+                        if (compare == 0 && ASPR == 1)
+                            zero = true;
+                    }
                     break;
                 case 14:
                     if (floatingPoint != 1)
                     {
-                        int compare = (registers.intRegisters[r2] - registers.intRegisters[r3]);
+                        int compare = (registers.intRegisters[r1] - registers.intRegisters[r2]);
+                        if (compare > address && ASPR == 1)
+                            carry = true;
+                        if (compare == 0 && ASPR == 1)
+                            zero = true;
+                    }
+                    else
+                    {
+                        float compare = (registers.floatRegisters[r1] - registers.intRegisters[r2]);
                         if (compare > address && ASPR == 1)
                             carry = true;
                         if (compare == 0 && ASPR == 1)
@@ -90,6 +106,8 @@ namespace ISA_GUI
                         if (registers.intRegisters[r3] == 0 && ASPR == 1)
                             zero = true;
                     }
+                    else
+                        throw new Exception("Invalid Instruction!");
                     break;
                 case 17:
                     //arithmetic shift right
@@ -99,6 +117,8 @@ namespace ISA_GUI
                         if (registers.intRegisters[r3] == 0 && ASPR == 1)
                             zero = true;
                     }
+                    else
+                        throw new Exception("Invalid Instruction!");
                     break;
                 case 18:
                     //logical shift left
@@ -112,6 +132,8 @@ namespace ISA_GUI
                         if (registers.intRegisters[r3] == 0 && ASPR == 1)
                             zero = true;
                     }
+                    else
+                        throw new Exception("Invalid Instruction!");
                     break;
                 case 19:
                     //logical shift right
@@ -125,7 +147,9 @@ namespace ISA_GUI
                         if (registers.intRegisters[r3] == 0 && ASPR == 1)
                             zero = true;
                     }
-                        break;
+                    else
+                        throw new Exception("Invalid Instruction!");
+                    break;
                 case 20:
                     //Add
                     if (floatingPoint != 1)
@@ -134,6 +158,14 @@ namespace ISA_GUI
                         if (registers.intRegisters[r3] < registers.intRegisters[r1] && ASPR == 1)
                             carry = true;
                         if (registers.intRegisters[r3] == 0 && ASPR == 1)
+                            zero = true;
+                    }
+                    else
+                    {
+                        registers.floatRegisters[r3] = (registers.floatRegisters[r1] + registers.floatRegisters[r2]);
+                        if (registers.floatRegisters[r3] < registers.floatRegisters[r1] && ASPR == 1)
+                            carry = true;
+                        if (registers.floatRegisters[r3] == 0 && ASPR == 1)
                             zero = true;
                     }
                     break;
@@ -147,6 +179,14 @@ namespace ISA_GUI
                         if (registers.intRegisters[r3] == 0 && ASPR == 1)
                             zero = true;
                     }
+                    else
+                    {
+                        registers.floatRegisters[r3] = (registers.floatRegisters[r1] - registers.floatRegisters[r2]);
+                        if (registers.floatRegisters[r3] > registers.floatRegisters[r1] && ASPR == 1)
+                            carry = true;
+                        if (registers.floatRegisters[r3] == 0 && ASPR == 1)
+                            zero = true;
+                    }
                     break;
                 case 22:
                     //Multiply
@@ -154,14 +194,22 @@ namespace ISA_GUI
                     {
                         registers.intRegisters[r3] = registers.intRegisters[r1] * registers.intRegisters[r2];
                     }
-                        break;
+                    else
+                    {
+                        registers.floatRegisters[r3] = registers.floatRegisters[r1] * registers.floatRegisters[r2];
+                    }
+                    break;
                 case 23:
                     //Divide
                     if (floatingPoint != 1)
                     {
                         registers.intRegisters[r3] = (int)registers.intRegisters[r1] / (int)registers.intRegisters[r2];
                     }
-                        break;
+                    else
+                    {
+                        registers.floatRegisters[r3] = (int)registers.floatRegisters[r1] / (int)registers.floatRegisters[r2];
+                    }
+                    break;
                 case 24:
                     //AND
                     if (floatingPoint != 1)
@@ -170,6 +218,8 @@ namespace ISA_GUI
                         if (registers.intRegisters[r3] == 0 && ASPR == 1)
                             zero = true;
                     }
+                    else
+                        throw new Exception("Invalid Instruction!");
                     break;
                 case 25:
                     //OR
@@ -179,6 +229,8 @@ namespace ISA_GUI
                         if (registers.intRegisters[r3] == 0 && ASPR == 1)
                             zero = true;
                     }
+                    else
+                        throw new Exception("Invalid Instruction!");
                     break;
                 case 26:
                     //XOR
@@ -188,6 +240,8 @@ namespace ISA_GUI
                         if (registers.intRegisters[r3] == 0 && ASPR == 1)
                             zero = true;
                     }
+                    else
+                        throw new Exception("Invalid Instruction!");
                     break;
                 case 27:
                     //NOT
@@ -197,6 +251,8 @@ namespace ISA_GUI
                         if (registers.intRegisters[r3] == 0 && ASPR == 1)
                             zero = true;
                     }
+                    else
+                        throw new Exception("Invalid Instruction!");
                     break;
             }
 

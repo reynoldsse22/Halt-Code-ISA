@@ -105,7 +105,7 @@ namespace ISA_GUI
                 instruct = fetch.getNextInstruction(ref registers, ref IM);        //FETCH - get the next instruction
                 CU.decode(ref IM, instruct, out opcode, out r1, out r2, out r3, out address, out instrType, out instrFlag);      //DECODE - Decode the instruction
                 halted = EU.execute(ref registers, ref dataMemory, ref alu, ref IM, in opcode, in r1, in r2, in r3, in address, in instrFlag);        //EXECUTE - Execute the instruction
-                buildAssemblyString(ref assemblyString, opcode, r1, r2, r3, address, instrType);    //Build the associated assembly syntax string for the instruction
+                buildAssemblyString(ref assemblyString, opcode, r1, r2, r3, address, instrType, instrFlag);    //Build the associated assembly syntax string for the instruction
                 buildDecodedString(ref decodedString, opcode, r1, r2, r3, address, instrType, instrFlag);      //Build the decoded instruction string
             }
             else if(debug && IM.instructions.Count > 0) //if in debug mode and the program has been started
@@ -113,7 +113,7 @@ namespace ISA_GUI
                 instruct = fetch.getNextInstruction(ref registers, ref IM);            //FETCH - get the next instruction
                 CU.decode(ref IM, instruct, out opcode, out r1, out r2, out r3, out address, out instrType, out instrFlag);          //DECODE - Decode the instruction
                 halted = EU.execute(ref registers, ref dataMemory, ref alu, ref IM, in opcode, in r1, in r2, in r3, in address, in instrFlag);        //EXECUTE - Execute the instruction
-                buildAssemblyString(ref assemblyString, opcode, r1, r2, r3, address, instrType);    //Build the associated assembly syntax string for the instruction
+                buildAssemblyString(ref assemblyString, opcode, r1, r2, r3, address, instrType, instrFlag);    //Build the associated assembly syntax string for the instruction
                 buildDecodedString(ref decodedString, opcode, r1, r2, r3, address, instrType, instrFlag);      //Build the decoded instruction string
             }
             else   //If not in debug mode (run button was pressed)
@@ -125,7 +125,7 @@ namespace ISA_GUI
                     instruct = fetch.getNextInstruction(ref registers, ref IM);            //FETCH - get the next instruction
                     CU.decode(ref IM, instruct, out opcode, out r1, out r2, out r3, out address, out instrType, out instrFlag);      //DECODE - Decode the instruction
                     halted = EU.execute(ref registers, ref dataMemory, ref alu, ref IM, in opcode, in r1, in r2, in r3, in address, in instrFlag);       //EXECUTE - Execute the instruction
-                    buildAssemblyString(ref assemblyString, opcode, r1, r2, r3, address, instrType);        //Build the associated assembly syntax string for the instruction
+                    buildAssemblyString(ref assemblyString, opcode, r1, r2, r3, address, instrType, instrFlag);        //Build the associated assembly syntax string for the instruction
                     buildDecodedString(ref decodedString, opcode, r1, r2, r3, address, instrType, instrFlag);          //Build the decoded instruction string
                 }
             }
@@ -153,7 +153,6 @@ namespace ISA_GUI
         }
 
 
-        //NEEDS TO BE UPDATED//
         /**
 		 * Method Name: buildAssemblyString <br>
 		 * Method Purpose: Builds the assembly string to include the current instruction assembly syntax
@@ -169,44 +168,63 @@ namespace ISA_GUI
 		 *   @param  int address
 		 *   @param  string instrType
 		 */
-        public void buildAssemblyString(ref StringBuilder assemblyString, int opcode, int r1, int r2, int r3, int address, string instrType)
+        public void buildAssemblyString(ref StringBuilder assemblyString, int opcode, int r1, int r2, int r3, int address, string instrType, int floatFlag)
         {
-            switch(opcode) //switch on the opcode value
+            int instrFlag = (floatFlag & 2) >> 1;
+            string registerString = "r";
+            if(floatFlag == 1)
+            {
+                registerString = "f";
+            }
+            switch (opcode) //switch on the opcode value
             {
                 case 0:
                     appendAssemblyString(ref assemblyString, "STOP", "", "", ""); //HALT
                     break;
                 case 1:
+                    appendAssemblyString(ref assemblyString, "NOP", "", "", ""); //NOP
+                    break;
                 case 2:
                 case 3:
-                    appendAssemblyString(ref assemblyString, instructions[opcode], "0x" + address.ToString("X").PadLeft(4, '0'), "", "");
-                    break;
                 case 4:
                 case 5:
-                    appendAssemblyString(ref assemblyString, instructions[opcode], "r" + r3.ToString(), "0x" + address.ToString("X").PadLeft(4, '0'), "");
-                    break;
                 case 6:
-                    appendAssemblyString(ref assemblyString, instructions[opcode], "r" + r3.ToString(), "r" + r2.ToString(), "");
-                    break;
                 case 7:
-                    appendAssemblyString(ref assemblyString, instructions[opcode], "r" + r3.ToString(), "#" + address.ToString(), "");
-                    break;
                 case 8:
                 case 9:
                 case 10:
+                    appendAssemblyString(ref assemblyString, instructions[opcode], "0x" + address.ToString("X").PadLeft(4, '0'), "", "");
+                    break;
                 case 11:
                 case 12:
                 case 13:
+                    appendAssemblyString(ref assemblyString, instructions[opcode], registerString + r3.ToString(), "#" + address.ToString(), "");
+                    break;
                 case 14:
-                    appendAssemblyString(ref assemblyString, instructions[opcode], "r" + r1.ToString(), "r" + r2.ToString(), "r" + r3.ToString());
+                    appendAssemblyString(ref assemblyString, instructions[opcode], registerString + r1.ToString(), registerString + r2.ToString(), "");
                     break;
                 case 15:
-                    appendAssemblyString(ref assemblyString, instructions[opcode], "r" + r1.ToString(), "r" + r3.ToString(), "");
+                    appendAssemblyString(ref assemblyString, instructions[opcode], registerString + r2.ToString(), registerString + r3.ToString(), "");
+                    break;
+                case 16:
+                case 17:
+                case 18:
+                case 19:
+                case 20:
+                case 21:
+                case 22:
+                case 23:
+                case 24:
+                case 25:
+                case 26:
+                    appendAssemblyString(ref assemblyString, instructions[opcode], registerString + r1.ToString(), registerString + r2.ToString(), registerString + r3.ToString());
+                    break;
+                case 27:
+                    appendAssemblyString(ref assemblyString, instructions[opcode], registerString + r1.ToString(), registerString + r3.ToString(), "");
                     break;
             }
         }
 
-        //NEEDS TO BE UPDATED//
         /**
 		 * Method Name: appendAssemblyString <br>
 		 * Method Purpose: Appends the current instruction assembly syntax to the assembly string
@@ -274,10 +292,10 @@ namespace ISA_GUI
             switch(instrFlag)
             { 
                 case 1:
-                    instrFlagStr = "FLT";
+                    instrFlagStr = "STAT";
                     break;
                 case 2:
-                    instrFlagStr = "STAT";
+                    instrFlagStr = "FLT"; 
                     break;
                 case 3:
                     instrFlagStr = "FLST";
@@ -288,16 +306,16 @@ namespace ISA_GUI
             }
 
 
-            if (opcode == 0 || opcode == 1 || opcode == 11 || (opcode >= 17 && opcode <=27))
+            if (opcode == 0 || opcode == 1 || (opcode >= 11 && opcode <=27))
             {
-                decodedString.Append((string.Format("\n{0, 7} {1, 4} {2, 4} {3, 8} {4, 9} {5, 4} {6, 4} {7, 4} {8, 8}",
-                            (IM.ProgramCounter - 3).ToString("X").PadLeft(6, '0'), instrFlagStr, opcode.ToString("X"), instructions[opcode], instrType,
+                decodedString.Append((string.Format("\n{0, 8} {1, 4} {2, 4} {3, 8} {4, 9} {5, 4} {6, 4} {7, 4} {8, 10}",
+                            "0x" + (IM.ProgramCounter - 3).ToString("X").PadLeft(6, '0'), instrFlagStr, opcode.ToString("X"), instructions[opcode], instrType,
                             r1Str, r2Str, r3Str, addressStr)));
             }
             else
             {
-                decodedString.Append((string.Format("\n{0, 7} {1, 4} {2, 4} {3, 8} {4, 9} {5, 4} {6, 4} {7, 4} {8, 8}",
-                            (IM.ProgramCounter - 3).ToString("X").PadLeft(6, '0'), instrFlagStr, opcode.ToString("X"), instructions[opcode], instrType,
+                decodedString.Append((string.Format("\n{0, 8} {1, 4} {2, 4} {3, 8} {4, 9} {5, 4} {6, 4} {7, 4} {8, 10}",
+                            "0x" + (IM.ProgramCounter - 3).ToString("X").PadLeft(6, '0'), instrFlagStr, opcode.ToString("X"), instructions[opcode], instrType,
                             r1Str, r2Str, r3Str, ("0x" + addressStr.PadLeft(6, '0')))));
 
             }
