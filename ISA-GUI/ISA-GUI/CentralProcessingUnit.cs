@@ -114,6 +114,7 @@ namespace ISA_GUI
                     {
                         buildAssemblyString(ref assemblyString, stages[4]);    //Build the associated assembly syntax string for the instruction
                         buildDecodedString(ref decodedString, stages[4]);      //Build the decoded instruction string
+                        buildPipelineString(ref pipelineString,  stages[4], stages[3], stages[2], stages[1], stages[0]);   //Build the pipeline string
                         WR.success = false;
                         stages[4].end = cycleCount;
                         if (stages[4].opcode == 0)
@@ -418,9 +419,66 @@ namespace ISA_GUI
         }
 
 
-        public void buildPipelineString(ref StringBuilder pipelineString, Instruction instruction)
+        public void buildPipelineString(ref StringBuilder pipelineString, Instruction instruction, Instruction three, Instruction two, Instruction one, Instruction zero)
         {
+            int opcode = instruction.opcode;
+            int r1 = instruction.r1;
+            int r2 = instruction.r2;
+            int r3 = instruction.r3;
+            int address = instruction.address;
+            int instrFlag = instruction.instrFlag;
+            string instrType = instruction.instrType;
+            //If any of these variables is negative then they are not used in the current intruction and will be printed as N/A
+            string r1Str, r2Str, r3Str, addressStr;
+            //checks to see if the register is  a float or not
+            string ifFloat1, ifFloat2, ifFloat3;
+            if (r1 >= 7)
+                ifFloat1 = "f";
+            else
+                ifFloat1 = "r";
 
+            if (r1 >= 7)
+                ifFloat2 = "f";
+            else
+                ifFloat2 = "r";
+
+            if (r1 >= 7)
+                ifFloat3 = "f";
+            else
+                ifFloat3 = "r";
+            //end of check for float reg's
+            if (r1 == -1)
+            {
+                r1Str = "N/A";
+                ifFloat1 = "";
+            }   
+            else
+                r1Str = r1.ToString("X");
+
+            if (r2 == -1)
+            {
+                r2Str = "N/A";
+                ifFloat2 = "";
+            }
+            else
+                r2Str = r2.ToString("X");
+            if (r3 == -1)
+            {
+                r3Str = "N/A";
+                ifFloat3 = "";
+            }
+                
+            else
+                r3Str = r3.ToString("X");
+            if (address == -1)
+                addressStr = "N/A";
+            else
+                addressStr = address.ToString("X");
+
+            pipelineString.Append(instructions[opcode] +" "+ ifFloat1+r1Str + ", " +ifFloat2+r2Str + ", " + ifFloat3 +r3Str + "  " + zero.start +" - " +zero.end +
+                "     " + one.start + " - " + one.end + "      " +two.start + " - " + two.end + "     "+ three.start + " - " + three.end + "    " + instruction.start + " - " + instruction.end
+                + "\n\n");
+            
         }
     }
 }

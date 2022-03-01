@@ -236,6 +236,12 @@ namespace ISA_GUI
             "   Team: Beaudry, Farmer, Ortiz, Reynolds\n" +
             "Project: Pipeline ISA Implementation\n" +
             "---------------------------------------------------------------\n\n");
+
+            pipelineOutput.Append(
+                "                Inst.     Decode    Execute   Access    Write   \n" +
+                "Instruction     Fetch     Read Reg  Calc Adr  Memory    Register\n" +
+                "------------    ------   ---------- --------- ------- ----------\n"
+                );
             assemblyOutput.Clear();
 
             cpu.IM.ProgramCounter = 0;
