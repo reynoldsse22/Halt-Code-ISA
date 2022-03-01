@@ -32,8 +32,10 @@ namespace ISA_GUI
     public partial class BUC10 : Form
     {
         CentralProcessingUnit cpu = new CentralProcessingUnit();                //The CPU
+        ConfigCycle config = new ConfigCycle();                                 //The configuration file
         bool halted = true;                                                     //Determines if the program has been halted yet
         List<string> program;                                                   //Holds the user inputted instructions
+        Instruction[] stages = new Instruction[5];
         StringBuilder assemblyOutput = new StringBuilder();                     //Mutable string for the assembly instructions
         StringBuilder pipelineOutput = new StringBuilder(                       //Mutable string for the pipeline output
             "   Team: Beaudry, Farmer, Ortiz, Reynolds\n" +
@@ -89,7 +91,7 @@ namespace ISA_GUI
             try
             {
                 program = getInput();       //get the input from the user
-                cpu.runProgram(program, false, ref assemblyOutput, ref decodedString, ref halted);      //Run the program all the way through. Debug flag is false
+                cpu.runCycle(program, false, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config, ref stages);      //Run the program all the way through. Stepthrough flag is false
             }
             catch (Exception)  //Catch any errors when getting input from user or decoding invalid instructions
             {
@@ -105,7 +107,7 @@ namespace ISA_GUI
         }
 
         /**
-		 * Method Name: debugButton_Click <br>
+		 * Method Name: stepthroughButton_Click <br>
 		 * Method Purpose: Starts and runs program and executes only one instruction at a time when the debug button is clicked
 		 * 
 		 * <br>
@@ -114,16 +116,22 @@ namespace ISA_GUI
 		 *   @param  object sender
 		 *   @param  EventArgs e
 		 */
-        private void debugButton_Click(object sender, EventArgs e)
+        private void stepthroughButton_Click(object sender, EventArgs e)
         {
-            if(halted == true)              //If halted is true, then start program from scratch
+            if(cpu.IM.instructions.Count > 0 && halted == true)
+            {
+                clearProgram();
+                halted = false;
+                updateGUI();
+            }
+            else if(halted == true)              //If halted is true, then start program from scratch
             {
                 clearProgram();
                 halted = false;            
                 try
                 {
                     List<string> program = getInput();      //get instructions from user
-                    halted = cpu.runProgram(program, true, ref assemblyOutput, ref decodedString, ref halted);          //Kicks off the pipeline process with the program instructions. debug is set to true
+                    cpu.runCycle(program, true, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config, ref stages);      //Run the program one cycle at a time. Stepthrough flag is true
                     updateGUI();        //update the GUI
                 }
                 catch (Exception)       //Catch any errors when getting input from user or decoding invalid instructions
@@ -132,7 +140,6 @@ namespace ISA_GUI
                     AssemblerListingTextBox.Text = message;
                     StatsTextBox.Text = message;
                     pipelineTextBox.Text = message;
-                    AssemblyTextBox.Text = message;
                     halted = true;
                     return;
                 }  
@@ -141,7 +148,7 @@ namespace ISA_GUI
             {
                 try
                 {
-                    cpu.runProgram(program, true, ref assemblyOutput, ref decodedString, ref halted);           //Runs next instruction. Debug is set to true
+                    cpu.runCycle(program, true, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config, ref stages);      //Run the program one cycle at a time. Stepthrough flag is true
                 }
                 catch (Exception)       //Catch any errors when getting input from user or decoding invalid instructions
                 {
@@ -156,6 +163,23 @@ namespace ISA_GUI
                 updateGUI();        //update the GUI to reflect new changes
             }
             
+        }
+
+        /**
+		 * Method Name: restartButton_Click <br>
+		 * Method Purpose: Refreshes the program so that it can be started again. 
+		 * 
+		 * <br>
+		 * Date created: 2/28/22 <br>
+		 * <hr>
+		 *   @param  object sender
+		 *   @param  EventArgs e
+		 */
+        private void restartButton_Click(object sender, EventArgs e)
+        {
+            clearProgram();         //Initialize all GUI elements and values to their starting value
+            halted = false;
+            updateGUI();
         }
 
         /**
@@ -201,6 +225,7 @@ namespace ISA_GUI
 		 */
         private void clearProgram()
         {
+            clearPipeline();
             decodedString.Clear();
             decodedString.Append(
             "Program  Inst Inst Instruct                            Address/\n" +
@@ -212,6 +237,7 @@ namespace ISA_GUI
             "Project: Pipeline ISA Implementation\n" +
             "---------------------------------------------------------------\n\n");
             assemblyOutput.Clear();
+
             cpu.IM.ProgramCounter = 0;
             cpu.IM.CurrentInstruction = 0;
             cpu.IM.instructions.Clear();
@@ -220,6 +246,7 @@ namespace ISA_GUI
             cpu.CU.ALUInstructionCount = 0;
             cpu.CU.memoryInstructionCount = 0;
             cpu.CU.controlInstructionCount = 0;
+            StatsTextBox.Text = "";
             clearRegandMem();
             updateGUI();
         }
@@ -244,6 +271,20 @@ namespace ISA_GUI
 
             //clear main memory
             Array.Clear(cpu.dataMemory.MainMemory, 0, cpu.dataMemory.MainMemory.Length);
+        }
+
+        /**
+        * Method Name: clearPipeline <br>
+        * Method Purpose: Resets the values in the pipeline
+        * 
+        * <br>
+        * Date created: 2/19/22 <br>
+        * <hr>
+        */
+        private void clearPipeline()
+        {
+            for(int i = 0; i<5; i++)    
+                stages[i] = null;
         }
 
         /**
@@ -396,6 +437,7 @@ namespace ISA_GUI
 
             MemoryText.Text = line.ToString();
         }
+
 
     }
 

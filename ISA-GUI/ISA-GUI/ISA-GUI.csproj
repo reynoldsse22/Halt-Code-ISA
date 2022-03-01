@@ -46,11 +46,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccessMemory.cs" />
     <Compile Include="ALU.cs" />
+    <Compile Include="ConfigCycle.cs" />
     <Compile Include="DataMemory.cs" />
     <Compile Include="ControlUnit.cs" />
     <Compile Include="ExecutionUnit.cs" />
     <Compile Include="Fetch.cs" />
+    <Compile Include="Instruction.cs" />
     <Compile Include="InstructionMemory.cs" />
     <Compile Include="BUC10.cs">
       <SubType>Form</SubType>
@@ -67,6 +70,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RegisterFile.cs" />
+    <Compile Include="WriteResult.cs" />
     <EmbeddedResource Include="BUC10.resx">
       <DependentUpon>BUC10.cs</DependentUpon>
     </EmbeddedResource>
@@ -102,6 +106,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icons8-bug-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-step-64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-tracking-footstep-isolated-on-a-white-background-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-restart-48.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

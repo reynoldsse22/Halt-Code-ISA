@@ -24,6 +24,8 @@ namespace ISA_GUI
    */
     internal class Fetch
     {
+        public bool occupied;
+        public bool success;
         /**
 	    * Method Name: Fetch <br>
 	    * Method Purpose: Class constructor
@@ -34,6 +36,8 @@ namespace ISA_GUI
 	    */
         public Fetch()
         {
+            occupied = false;
+            success = false;
         }
 
         /**
@@ -46,13 +50,21 @@ namespace ISA_GUI
 		 *   @param  object sender
 		 *   @param  EventArgs e
 		 */
-        public byte[] getNextInstruction(ref RegisterFile registers, ref InstructionMemory IM)
+        public Instruction getNextInstruction(ref RegisterFile registers, ref InstructionMemory IM, ref ConfigCycle config)
         {
-            byte[] instruction = new byte[3];
-            instruction[0] = IM.instructions[IM.ProgramCounter++];
-            instruction[1] = IM.instructions[IM.ProgramCounter++];
-            instruction[2] = IM.instructions[IM.ProgramCounter++];
-            IM.CurrentInstruction = (ushort)(instruction[2] + (instruction[1] << 8)+ (instruction[0] << 16));
+            occupied = true;
+            Instruction instruction = new Instruction();
+            if ((IM.ProgramCounter + 3) > IM.instructions.Count)
+                return instruction;
+
+            instruction.cycleControl = config.fetch;
+            instruction.programCounterValue = IM.ProgramCounter;
+            instruction.binInstruction[0] = IM.instructions[IM.ProgramCounter++];
+            instruction.binInstruction[1] = IM.instructions[IM.ProgramCounter++];
+            instruction.binInstruction[2] = IM.instructions[IM.ProgramCounter++];
+            IM.CurrentInstruction = (instruction.binInstruction[2] + (instruction.binInstruction[1] << 8)+ (instruction.binInstruction[1] << 16));
+            instruction.cycleControl--;
+            success = true;
             return instruction;
         }
     }

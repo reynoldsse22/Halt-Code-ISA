@@ -53,18 +53,26 @@ namespace ISA_GUI
 		 *   @param  int r3
 		 *   @param  int address
 		 */
-        public void execute(ref RegisterFile registers, ref DataMemory memory, ref ALU alu, ref InstructionMemory IM, in int opcode, in int r1, in int r2, in int r3, in int address, in int instrFlag)
+        public void execute(ref RegisterFile registers, ref DataMemory memory, ref ALU alu, ref InstructionMemory IM, ref Instruction instruction, ref ConfigCycle config)
         {
+            int opcode = instruction.opcode;
+            int r1 = instruction.r1;
+            int r2 = instruction.r2;
+            int r3 = instruction.r3;
+            int address = instruction.address;
+            int instrFlag = instruction.instrFlag;
+            string instrType = instruction.instrType;
             int statusFlag = 0;
-            int floatingPoint = (instrFlag & 2) >> 1;      //gets the floating point bit from the first four bits 0X00
             int ASPR = instrFlag & 1;               //gets the ASPR bit from the first four bits 00X0
             bool zero = false;
             bool carry = false;
             switch (opcode)
             {
                 case 13:
-                    if (floatingPoint != 1)
+                    //Compare Immediate to Register
+                    if (!instruction.isFloat)
                     {
+                        instruction.cycleControl = config.intALU;
                         int compare = (address - registers.intRegisters[r1]);
                         if (compare > address && ASPR == 1)
                             carry = true;
@@ -73,6 +81,7 @@ namespace ISA_GUI
                     }
                     else
                     {
+                        instruction.cycleControl = config.flAddSub;
                         float compare = (address - registers.floatRegisters[r1]);
                         if (compare > address && ASPR == 1)
                             carry = true;
@@ -81,8 +90,10 @@ namespace ISA_GUI
                     }
                     break;
                 case 14:
-                    if (floatingPoint != 1)
+                    //Compare Registers
+                    if (!instruction.isFloat)
                     {
+                        instruction.cycleControl = config.calcAddress;
                         int compare = (registers.intRegisters[r1] - registers.intRegisters[r2]);
                         if (compare > address && ASPR == 1)
                             carry = true;
@@ -100,10 +111,12 @@ namespace ISA_GUI
                     break;
                 case 16:
                     //arithmetic shift left
-                    if (floatingPoint!= 1)
+                    if (!instruction.isFloat)
                     {
-                        registers.intRegisters[r3] = (registers.intRegisters[r1] << registers.intRegisters[r2]);
-                        if (registers.intRegisters[r3] == 0 && ASPR == 1)
+                        instruction.cycleControl = config.intALU;
+                        instruction.destinationReg = r3;
+                        instruction.intResult = (registers.intRegisters[r1] << registers.intRegisters[r2]);
+                        if (instruction.intResult == 0 && ASPR == 1)
                             zero = true;
                     }
                     else
@@ -111,10 +124,12 @@ namespace ISA_GUI
                     break;
                 case 17:
                     //arithmetic shift right
-                    if (floatingPoint != 1)
+                    if (!instruction.isFloat)
                     {
-                        registers.intRegisters[r3] = (registers.intRegisters[r1] >> registers.intRegisters[r2]);
-                        if (registers.intRegisters[r3] == 0 && ASPR == 1)
+                        instruction.cycleControl = config.intALU;
+                        instruction.destinationReg = r3;
+                        instruction.intResult = (registers.intRegisters[r1] >> registers.intRegisters[r2]);
+                        if (instruction.intResult == 0 && ASPR == 1)
                             zero = true;
                     }
                     else
@@ -122,14 +137,16 @@ namespace ISA_GUI
                     break;
                 case 18:
                     //logical shift left
-                    if (floatingPoint != 1)
+                    if (!instruction.isFloat)
                     {
+                        instruction.cycleControl = config.intALU;
+                        instruction.destinationReg = r3;
                         int rotateBit;
                         rotateBit = (registers.intRegisters[r1] & 8388608) >> 23;
-                        registers.intRegisters[r3] = registers.intRegisters[r1] << registers.intRegisters[r2];
-                        registers.intRegisters[r3] = registers.intRegisters[r3] & 16777215;
-                        registers.intRegisters[r3] = registers.intRegisters[r3] | rotateBit;
-                        if (registers.intRegisters[r3] == 0 && ASPR == 1)
+                        instruction.intResult = registers.intRegisters[r1] << registers.intRegisters[r2];
+                        instruction.intResult = registers.intRegisters[r3] & 16777215;
+                        instruction.intResult = registers.intRegisters[r3] | rotateBit;
+                        if (instruction.intResult == 0 && ASPR == 1)
                             zero = true;
                     }
                     else
@@ -137,14 +154,16 @@ namespace ISA_GUI
                     break;
                 case 19:
                     //logical shift right
-                    if (floatingPoint != 1)
+                    if (!instruction.isFloat)
                     {
+                        instruction.cycleControl = config.intALU;
+                        instruction.destinationReg = r3;
                         int rotateBit;
                         rotateBit = (registers.intRegisters[r1] & 1) << 23;
-                        registers.intRegisters[r3] = registers.intRegisters[r1] >> registers.intRegisters[r2];
-                        registers.intRegisters[r3] = registers.intRegisters[r3] & 16777215;
-                        registers.intRegisters[r3] = registers.intRegisters[r3] | rotateBit;
-                        if (registers.intRegisters[r3] == 0 && ASPR == 1)
+                        instruction.intResult = registers.intRegisters[r1] >> registers.intRegisters[r2];
+                        instruction.intResult = registers.intRegisters[r3] & 16777215;
+                        instruction.intResult = registers.intRegisters[r3] | rotateBit;
+                        if (instruction.intResult == 0 && ASPR == 1)
                             zero = true;
                     }
                     else
@@ -152,70 +171,100 @@ namespace ISA_GUI
                     break;
                 case 20:
                     //Add
-                    if (floatingPoint != 1)
+                    instruction.destinationReg = r3;
+                    if (!instruction.isFloat)
                     {
-                        registers.intRegisters[r3] = (registers.intRegisters[r1] + registers.intRegisters[r2]);
-                        if (registers.intRegisters[r3] < registers.intRegisters[r1] && ASPR == 1)
+                        instruction.cycleControl = config.intALU;
+                        instruction.intResult = (registers.intRegisters[r1] + registers.intRegisters[r2]);
+                        if (instruction.intResult < registers.intRegisters[r1] && ASPR == 1)
                             carry = true;
-                        if (registers.intRegisters[r3] == 0 && ASPR == 1)
+                        if (instruction.intResult == 0 && ASPR == 1)
                             zero = true;
                     }
                     else
                     {
-                        registers.floatRegisters[r3] = (registers.floatRegisters[r1] + registers.floatRegisters[r2]);
-                        if (registers.floatRegisters[r3] < registers.floatRegisters[r1] && ASPR == 1)
+                        instruction.cycleControl = config.flAddSub;
+                        instruction.floatResult = (registers.floatRegisters[r1] + registers.floatRegisters[r2]);
+                        if (instruction.floatResult < registers.floatRegisters[r1] && ASPR == 1)
                             carry = true;
-                        if (registers.floatRegisters[r3] == 0 && ASPR == 1)
+                        if (instruction.floatResult == 0 && ASPR == 1)
                             zero = true;
                     }
                     break;
                 case 21:
                     //Sub
-                    if (floatingPoint != 1)
+                    instruction.destinationReg = r3;
+                    if (!instruction.isFloat)
                     {
-                        registers.intRegisters[r3] = (registers.intRegisters[r1] - registers.intRegisters[r2]);
-                        if (registers.intRegisters[r3] > registers.intRegisters[r1] && ASPR == 1)
+                        instruction.cycleControl = config.intALU;
+                        instruction.intResult = (registers.intRegisters[r1] - registers.intRegisters[r2]);
+                        if (instruction.intResult > registers.intRegisters[r1] && ASPR == 1)
                             carry = true;
-                        if (registers.intRegisters[r3] == 0 && ASPR == 1)
+                        if (instruction.intResult == 0 && ASPR == 1)
                             zero = true;
                     }
                     else
                     {
-                        registers.floatRegisters[r3] = (registers.floatRegisters[r1] - registers.floatRegisters[r2]);
-                        if (registers.floatRegisters[r3] > registers.floatRegisters[r1] && ASPR == 1)
+                        instruction.cycleControl = config.flAddSub;
+                        instruction.floatResult = (registers.floatRegisters[r1] - registers.floatRegisters[r2]);
+                        if (instruction.floatResult > registers.floatRegisters[r1] && ASPR == 1)
                             carry = true;
-                        if (registers.floatRegisters[r3] == 0 && ASPR == 1)
+                        if (instruction.floatResult == 0 && ASPR == 1)
                             zero = true;
                     }
                     break;
                 case 22:
                     //Multiply
-                    if (floatingPoint != 1)
+                    instruction.destinationReg = r3;
+                    if (!instruction.isFloat)
                     {
-                        registers.intRegisters[r3] = registers.intRegisters[r1] * registers.intRegisters[r2];
+                        instruction.cycleControl = config.intALU;
+                        instruction.intResult = registers.intRegisters[r1] * registers.intRegisters[r2];
+                        if (instruction.intResult < registers.intRegisters[r1] && ASPR == 1)
+                            carry = true;
+                        if (instruction.intResult == 0 && ASPR == 1)
+                            zero = true;
                     }
                     else
                     {
-                        registers.floatRegisters[r3] = registers.floatRegisters[r1] * registers.floatRegisters[r2];
+                        instruction.cycleControl = config.flMult;
+                        instruction.floatResult = registers.floatRegisters[r1] * registers.floatRegisters[r2];
+                        if (instruction.floatResult > registers.floatRegisters[r1] && ASPR == 1)
+                            carry = true;
+                        if (instruction.floatResult == 0 && ASPR == 1)
+                            zero = true;
                     }
                     break;
                 case 23:
                     //Divide
-                    if (floatingPoint != 1)
+                    instruction.destinationReg = r3;
+                    if (!instruction.isFloat)
                     {
-                        registers.intRegisters[r3] = (int)registers.intRegisters[r1] / (int)registers.intRegisters[r2];
+                        instruction.cycleControl = config.intALU;
+                        instruction.intResult = (int)registers.intRegisters[r1] / (int)registers.intRegisters[r2];
+                        if (instruction.intResult > registers.intRegisters[r1] && ASPR == 1)
+                            carry = true;
+                        if (instruction.intResult == 0 && ASPR == 1)
+                            zero = true;
                     }
                     else
                     {
-                        registers.floatRegisters[r3] = (int)registers.floatRegisters[r1] / (int)registers.floatRegisters[r2];
+                        instruction.cycleControl = config.flDiv;
+                        instruction.floatResult = (int)registers.floatRegisters[r1] / (int)registers.floatRegisters[r2];
+                        if (instruction.floatResult > registers.floatRegisters[r1] && ASPR == 1)
+                            carry = true;
+                        if (instruction.floatResult == 0 && ASPR == 1)
+                            zero = true;
                     }
                     break;
                 case 24:
                     //AND
-                    if (floatingPoint != 1)
+                    if (!instruction.isFloat)
                     {
-                        registers.intRegisters[r3] = (registers.intRegisters[r1] & registers.intRegisters[r2]);
-                        if (registers.intRegisters[r3] == 0 && ASPR == 1)
+                        instruction.cycleControl = config.intALU;
+                        instruction.destinationReg = r3;
+                        instruction.intResult = (registers.intRegisters[r1] & registers.intRegisters[r2]);
+                        if (instruction.intResult == 0 && ASPR == 1)
                             zero = true;
                     }
                     else
@@ -223,10 +272,12 @@ namespace ISA_GUI
                     break;
                 case 25:
                     //OR
-                    if (floatingPoint != 1)
+                    if (!instruction.isFloat)
                     {
-                        registers.intRegisters[r3] = (registers.intRegisters[r1] | registers.intRegisters[r2]);
-                        if (registers.intRegisters[r3] == 0 && ASPR == 1)
+                        instruction.cycleControl = config.intALU;
+                        instruction.destinationReg = r3;
+                        instruction.intResult = (registers.intRegisters[r1] | registers.intRegisters[r2]);
+                        if (instruction.intResult == 0 && ASPR == 1)
                             zero = true;
                     }
                     else
@@ -234,10 +285,12 @@ namespace ISA_GUI
                     break;
                 case 26:
                     //XOR
-                    if (floatingPoint != 1)
+                    if (!instruction.isFloat)
                     {
-                        registers.intRegisters[r3] = (registers.intRegisters[r1] ^ registers.intRegisters[r2]);
-                        if (registers.intRegisters[r3] == 0 && ASPR == 1)
+                        instruction.cycleControl = config.intALU;
+                        instruction.destinationReg = r3;
+                        instruction.intResult = (registers.intRegisters[r1] ^ registers.intRegisters[r2]);
+                        if (instruction.intResult == 0 && ASPR == 1)
                             zero = true;
                     }
                     else
@@ -245,10 +298,12 @@ namespace ISA_GUI
                     break;
                 case 27:
                     //NOT
-                    if (floatingPoint != 1)
+                    if (!instruction.isFloat)
                     {
-                        registers.intRegisters[r3] = (~registers.intRegisters[r1]);
-                        if (registers.intRegisters[r3] == 0 && ASPR == 1)
+                        instruction.cycleControl = config.intALU;
+                        instruction.destinationReg = r3;
+                        instruction.intResult = (~registers.intRegisters[r1]);
+                        if (instruction.intResult == 0 && ASPR == 1)
                             zero = true;
                     }
                     else
@@ -266,6 +321,7 @@ namespace ISA_GUI
 
                 registers.ASPR = statusFlag;       //assign the ASPR register the bit map value
             }
+
         }
     }
 }

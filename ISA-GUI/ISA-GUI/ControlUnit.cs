@@ -28,7 +28,9 @@ namespace ISA_GUI
         public  int ALUInstructionCount;
         public  int memoryInstructionCount;
         public  int totalInstructions;
-        public int instructionsProcessed;
+        public  int instructionsProcessed;
+        public  bool occupied;
+        public bool success;
 
         /**
 	    * Method Name: ControlUnit <br>
@@ -44,6 +46,8 @@ namespace ISA_GUI
             ALUInstructionCount = 0;
             memoryInstructionCount = 0;
             totalInstructions = 0; 
+            occupied = false;
+            success = false;
         }
 
         /**
@@ -61,8 +65,17 @@ namespace ISA_GUI
 		 *   @param  int address
 		 *   @param  string instrType
 		 */
-        public void decode(ref InstructionMemory IM, byte[] instruct, out int opcode, out int r1, out int r2, out int r3, out int address, out string instrType, out int instrFlag)
+        public void decode(ref InstructionMemory IM, ref Instruction instruction, ref ConfigCycle config)
         {
+            occupied = true;
+            instruction.cycleControl = config.regAccess;
+            int opcode = instruction.opcode;
+            int r1 = instruction.r1;
+            int r2 = instruction.r2;
+            int r3 = instruction.r3;
+            int address = instruction.address;
+            int instrFlag = instruction.instrFlag;
+            string instrType = instruction.instrType;
             //value is -1 if not used in the current instruction
             int nibble1, temp;
             address = -1;
@@ -71,12 +84,17 @@ namespace ISA_GUI
             r3 = -1;
             instrType = "";
 
-            byte MSB = instruct[0];
-            byte TSB = instruct[1];
-            byte LSB = instruct[2];
+            byte MSB = instruction.binInstruction[0];
+            byte TSB = instruction.binInstruction[1];
+            byte LSB = instruction.binInstruction[2];
 
             instrFlag = MSB >> 5;
             opcode = MSB & 31;
+
+            if (((instrFlag & 2) >> 1) == 1)
+                instruction.isFloat = true;
+            else
+                instruction.isFloat = false;
 
             if(opcode == 0) //Halt instruction
             {
@@ -183,10 +201,16 @@ namespace ISA_GUI
                 throw new Exception("Invalid Instruction!");
             }
 
-            
+            instruction.opcode = opcode; 
+            instruction.r1 = r1;
+            instruction.r2 = r2;
+            instruction.r3 = r3;
+            instruction.instrFlag = instrFlag;
+            instruction.address = address;
+            instruction.instrType = instrType;
+            instruction.cycleControl--;
+            success = true;
+            return;
         }
-
-
-
     }
 }
