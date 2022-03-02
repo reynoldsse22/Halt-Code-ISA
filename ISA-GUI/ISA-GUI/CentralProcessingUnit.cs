@@ -449,7 +449,7 @@ namespace ISA_GUI
             //end of check for float reg's
             if (r1 == -1)
             {
-                r1Str = "N/A";
+                r1Str = "";
                 ifFloat1 = "";
             }   
             else
@@ -457,21 +457,21 @@ namespace ISA_GUI
 
             if (r2 == -1)
             {
-                r2Str = "N/A";
+                r2Str = "";
                 ifFloat2 = "";
             }
             else
                 r2Str = r2.ToString("X");
             if (r3 == -1)
             {
-                r3Str = "N/A";
+                r3Str = "";
                 ifFloat3 = "";
             }
                 
             else
                 r3Str = r3.ToString("X");
             if (address == -1)
-                addressStr = "N/A";
+                addressStr = "";
             else
                 addressStr = address.ToString("X");
 

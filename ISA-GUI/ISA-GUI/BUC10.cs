@@ -72,6 +72,11 @@ namespace ISA_GUI
         private void BUC10_Load(object sender, EventArgs e)
         {
             clearProgram();     //On load, initialize all GUI elements and values to their starting value
+            stage1Text.SelectionAlignment = HorizontalAlignment.Center;
+            stage2Text.SelectionAlignment = HorizontalAlignment.Center;
+            stage3Text.SelectionAlignment = HorizontalAlignment.Center;
+            stage4Text.SelectionAlignment = HorizontalAlignment.Center;
+            stage5Text.SelectionAlignment = HorizontalAlignment.Center;
         }
 
         /**
@@ -175,7 +180,7 @@ namespace ISA_GUI
 		 *   @param  object sender
 		 *   @param  EventArgs e
 		 */
-        private void restartButton_Click(object sender, EventArgs e)
+        private void resetButton_Click(object sender, EventArgs e)
         {
             clearProgram();         //Initialize all GUI elements and values to their starting value
             halted = false;
@@ -303,6 +308,7 @@ namespace ISA_GUI
 		 */
         private void updateGUI()
         {
+            updatePipeline();
             setRegisters();
             setStatistics();
             setMemoryBox();
@@ -397,6 +403,39 @@ namespace ISA_GUI
         }
 
 
+        private void updatePipeline()
+        {
+            int instructionHex;
+
+                if(stages[0] != null)
+                {
+                    instructionHex = (stages[0].binInstruction[2] + (stages[0].binInstruction[1] << 8) + (stages[0].binInstruction[0] << 16));
+                    stage1Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
+                }
+                if (stages[1] != null)
+                {
+                    instructionHex = (stages[1].binInstruction[2] + (stages[1].binInstruction[1] << 8) + (stages[1].binInstruction[0] << 16));
+                    stage2Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
+            }
+                if (stages[2] != null)
+                {
+                    instructionHex = (stages[2].binInstruction[2] + (stages[2].binInstruction[1] << 8) + (stages[2].binInstruction[0] << 16));
+                    stage3Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
+            }
+                if (stages[3] != null)
+                {
+                    instructionHex = (stages[3].binInstruction[2] + (stages[3].binInstruction[1] << 8) + (stages[3].binInstruction[0] << 16));
+                    stage4Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
+            }
+                if (stages[4] != null)
+                {
+                    instructionHex = (stages[4].binInstruction[2] + (stages[4].binInstruction[1] << 8) + (stages[4].binInstruction[0] << 16));
+                    stage5Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
+            }
+            
+            
+        }
+
         /**
 		 * Method Name: setMemoryBox <br>
 		 * Method Purpose: Sets the GUI with the contents of Main Memory
@@ -444,7 +483,20 @@ namespace ISA_GUI
             MemoryText.Text = line.ToString();
         }
 
+        private void RunButton_MouseHover(object sender, EventArgs e)
+        {
+            toolTip1.Show("Run program", RunButton);
+        }
 
+        private void stepthroughButton_MouseHover(object sender, EventArgs e)
+        {
+            toolTip1.Show("Step through one cycle", stepthroughButton);
+        }
+
+        private void resetButton_MouseHover(object sender, EventArgs e)
+        {
+            toolTip1.Show("Reset", resetButton);
+        }
     }
 
 }
