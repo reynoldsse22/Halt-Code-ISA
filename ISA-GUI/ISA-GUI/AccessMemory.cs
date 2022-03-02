@@ -27,6 +27,7 @@ namespace ISA_GUI
 		Instruction currentInstruction;
 		public bool occupied;
 		public bool success;
+		public bool inProgress;
 
 		/**
 	    * Method Name: AccessMemory <br>
@@ -40,10 +41,13 @@ namespace ISA_GUI
 		{
 			occupied = false;
 			success = false;
+			inProgress = false;
+
 		}
 
 		public void accessMemory(ref DataMemory memory, ref RegisterFile registers, ref Instruction instruction, ref ConfigCycle config)
         {
+			inProgress = true;
 			occupied = true;
 			switch(instruction.opcode)
             {
@@ -85,6 +89,7 @@ namespace ISA_GUI
 					break;
 			}
 			instruction.cycleControl--;
+			success = true;
         }
 
 	}

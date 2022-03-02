@@ -34,6 +34,7 @@ namespace ISA_GUI
         public WriteResult WR;
         public AccessMemory AM;
         public int cycleCount;
+        public Instruction stall = new Instruction();
         static string[] instructions = {"HALT",
                                 "NOP",
                                 "BR",
@@ -99,24 +100,16 @@ namespace ISA_GUI
             do 
             {
                 cycleCount++;
-                if (stages[4] != null && cycleCount > 5)
-                {
-                    if (WR.success == false)
-                    {
-                        stages[4].start = cycleCount;
-                        WR.writeToReg(registers, ref stages[4], ref config);
-                        stages[4].stage = 4;
-                    }
-                    else
-                        stages[4].cycleControl--;
 
+                if (stages[4] != null && !WR.inProgress)
+                {
                     if (stages[4].cycleControl == 0)
                     {
-                        buildAssemblyString(ref assemblyString, stages[4]);    //Build the associated assembly syntax string for the instruction
+                        stages[4].stage5End = cycleCount - 1;
+                        buildAssemblyString(ref assemblyString, ref stages[4]);    //Build the associated assembly syntax string for the instruction
                         buildDecodedString(ref decodedString, stages[4]);      //Build the decoded instruction string
-                        buildPipelineString(ref pipelineString,  stages[4], stages[3], stages[2], stages[1], stages[0]);   //Build the pipeline string
+                        buildPipelineString(ref pipelineString, ref stages[4]);   //Build the pipeline string
                         WR.success = false;
-                        stages[4].end = cycleCount;
                         if (stages[4].opcode == 0)
                             halted = true;
 
@@ -124,11 +117,46 @@ namespace ISA_GUI
                         WR.occupied = false;
                     }
                 }
-                if (stages[3] != null && cycleCount > 4)
+
+            stage5:
+                if (stages[4] != null)
+                {
+                    if (WR.success == false)
+                    {
+                        stages[4].stage5Start = cycleCount;
+                        WR.writeToReg(registers, ref stages[4], ref config);
+                        stages[4].stage = 4;
+                    }
+                    else
+                        stages[4].cycleControl--;
+
+                    if (stages[4].cycleControl == 0)
+                        WR.inProgress = false;
+
+                }
+                if (stages[3] != null && !AM.inProgress)
+                {
+                    if (stages[3].cycleControl == 0)
+                    {
+                        if (!WR.occupied)
+                        {
+                            AM.success = false;
+                            stages[3].stage4End = cycleCount - 1;
+                            stages[4] = stages[3];
+                            stages[3] = null;
+                            AM.occupied = false;
+                            WR.occupied = true;
+                            goto stage5;
+                        }
+                    }
+                }
+
+            stage4:
+                if (stages[3] != null)
                 {
                     if (AM.success == false)
                     {
-                        stages[3].start = cycleCount;
+                        stages[3].stage4Start = cycleCount;
                         AM.accessMemory(ref dataMemory, ref registers, ref stages[3], ref config);
                         stages[3].stage = 4;
                     }
@@ -136,22 +164,32 @@ namespace ISA_GUI
                         stages[3].cycleControl--;
 
                     if (stages[3].cycleControl == 0)
+                        AM.inProgress = false;
+                }
+
+                if (stages[2] != null && !EU.inProgress)
+                {
+                    if (stages[2].cycleControl == 0)
                     {
-                        if (!WR.occupied)
+                        if (!AM.occupied)
                         {
-                            AM.success = false;
-                            stages[3].end = cycleCount;
-                            stages[4] = stages[3];
-                            stages[3] = null;
-                            AM.occupied = false;
+                            EU.success = false;
+                            stages[2].stage3End = cycleCount - 1;
+                            stages[3] = stages[2];
+                            stages[2] = null;
+                            EU.occupied = false;
+                            AM.occupied = true;
+                            goto stage4;
                         }
                     }
                 }
-                if (stages[2] != null && cycleCount > 3)
+
+            stage3:
+                if (stages[2] != null)
                 {
                     if (EU.success == false)
                     {
-                        stages[2].start = cycleCount;
+                        stages[2].stage3Start = cycleCount;
                         EU.execute(ref registers, ref dataMemory, ref alu, ref IM, ref stages[2], ref config);        //EXECUTE - Execute the instruction
                         stages[2].stage = 3;
                     }
@@ -159,24 +197,36 @@ namespace ISA_GUI
                         stages[2].cycleControl--;
 
                     if (stages[2].cycleControl == 0)
-                    {
-                        if (!AM.occupied)
-                        {
-                            EU.success = false;
-                            stages[2].end = cycleCount;
-                            stages[3] = stages[2];
-                            stages[2] = null;
-                            EU.occupied = false;
-                        }
+                        EU.inProgress = false;
 
+                }
+
+                if(stages[1] != null && !CU.inProgress)
+                {
+                    if (stages[1].cycleControl == 0)
+                    {
+                        if (!EU.occupied)
+                        {
+                            CU.success = false;
+                            stages[1].stage2End = cycleCount - 1;
+                            stages[2] = stages[1];
+                            stages[1] = null;
+                            CU.occupied = false;
+                            EU.occupied = true;
+                            goto stage3;
+                        }
                     }
                 }
-                if (stages[1] != null && cycleCount > 2)
+                //end stage 3
+                
+
+                stage2:
+                if (stages[1] != null && cycleCount > 1)
                 {
 
                     if (CU.success == false)
                     {
-                        stages[1].start = cycleCount;
+                        stages[1].stage2Start = cycleCount;
                         CU.decode(ref IM, ref stages[1], ref config);      //DECODE - Decode the instruction
                         stages[1].stage = 2;
                     }
@@ -184,39 +234,39 @@ namespace ISA_GUI
                         stages[1].cycleControl--;
 
                     if (stages[1].cycleControl == 0)
+                        CU.inProgress = false;
+                }
+                if(stages[0] != null && !fetch.inProgress)
+                {
+                    if (stages[0].cycleControl == 0)
                     {
-                        if (!EU.occupied)
+                        fetch.inProgress = false;
+                        if (!CU.occupied)
                         {
-                            CU.success = false;
-                            stages[1].end = cycleCount;
-                            stages[2] = stages[1];
-                            stages[1] = null;
-                            CU.occupied = false;
+                            stages[0].stage1End = cycleCount - 1;
+                            fetch.success = false;
+                            stages[1] = stages[0];
+                            stages[0] = null;
+                            fetch.occupied = false;
+                            CU.occupied = true;
+                            goto stage2;
                         }
                     }
                 }
+
+                //end stage 2
                 
-
-                if (stages[0] != null)
-                {
-                    if (!CU.occupied && cycleCount > 1)
-                    {
-                        fetch.success = false;
-                        stages[0].end = cycleCount;
-                        stages[1] = stages[0];
-                        stages[0] = null;
-                        fetch.occupied = false;
-                    }
-
-                }
-
-                if (fetch.success == false)
+                if (stages[0] == null)
                 {
                     stages[0] = fetch.getNextInstruction(ref registers, ref IM, ref config);        //FETCH - get the next instruction
-                    stages[0].stage = 1;
-                    stages[0].start = cycleCount;
+                    stages[0].stage1Start = cycleCount;
+                    if (stages[0].cycleControl == 0)
+                        fetch.inProgress = false;
+                    continue;
                 }
-                
+
+                //end stage 1
+
 
             } while (!halted && !stepThrough);
 
@@ -254,7 +304,7 @@ namespace ISA_GUI
 		 *   @param  StringBuilder assemblyString
 		 *   @param  Instruction instruction
 		 */
-        public void buildAssemblyString(ref StringBuilder assemblyString, Instruction instruction)
+        public void buildAssemblyString(ref StringBuilder assemblyString, ref Instruction instruction)
         {
             int opcode = instruction.opcode;
             int r1 = instruction.r1;
@@ -271,10 +321,10 @@ namespace ISA_GUI
             switch (opcode) //switch on the opcode value
             {
                 case 0:
-                    appendAssemblyString(ref assemblyString, "STOP", "", "", ""); //HALT
+                    appendAssemblyString(ref assemblyString, "STOP", "", "", "", ref instruction); //HALT
                     break;
                 case 1:
-                    appendAssemblyString(ref assemblyString, "NOP", "", "", ""); //NOP
+                    appendAssemblyString(ref assemblyString, "NOP", "", "", "", ref instruction); //NOP
                     break;
                 case 2:
                 case 3:
@@ -285,18 +335,18 @@ namespace ISA_GUI
                 case 8:
                 case 9:
                 case 10:
-                    appendAssemblyString(ref assemblyString, instructions[opcode], "0x" + address.ToString("X").PadLeft(4, '0'), "", "");
+                    appendAssemblyString(ref assemblyString, instructions[opcode], "0x" + address.ToString("X").PadLeft(4, '0'), "", "", ref instruction);
                     break;
                 case 11:
                 case 12:
                 case 13:
-                    appendAssemblyString(ref assemblyString, instructions[opcode], registerString + r3.ToString(), "#" + address.ToString(), "");
+                    appendAssemblyString(ref assemblyString, instructions[opcode], registerString.Trim() + r3.ToString().Trim(), "#" + address.ToString().Trim(), "", ref instruction);
                     break;
                 case 14:
-                    appendAssemblyString(ref assemblyString, instructions[opcode], registerString + r1.ToString(), registerString + r2.ToString(), "");
+                    appendAssemblyString(ref assemblyString, instructions[opcode], registerString.Trim() + r1.ToString(), registerString.Trim() + r2.ToString().Trim(), "", ref instruction);
                     break;
                 case 15:
-                    appendAssemblyString(ref assemblyString, instructions[opcode], registerString + r2.ToString(), registerString + r3.ToString(), "");
+                    appendAssemblyString(ref assemblyString, instructions[opcode], registerString.Trim() + r2.ToString(), registerString.Trim() + r3.ToString().Trim(), "", ref instruction);
                     break;
                 case 16:
                 case 17:
@@ -309,10 +359,11 @@ namespace ISA_GUI
                 case 24:
                 case 25:
                 case 26:
-                    appendAssemblyString(ref assemblyString, instructions[opcode], registerString + r1.ToString(), registerString + r2.ToString(), registerString + r3.ToString());
+                    appendAssemblyString(ref assemblyString, instructions[opcode], registerString.Trim() + r1.ToString().Trim(), registerString.Trim() + r2.ToString().Trim(), 
+                        registerString.Trim() + r3.ToString().Trim(), ref instruction);
                     break;
                 case 27:
-                    appendAssemblyString(ref assemblyString, instructions[opcode], registerString + r1.ToString(), registerString + r3.ToString(), "");
+                    appendAssemblyString(ref assemblyString, instructions[opcode], registerString.Trim() + r1.ToString().Trim(), registerString.Trim() + r3.ToString().Trim(), "", ref instruction);
                     break;
             }
         }
@@ -330,7 +381,7 @@ namespace ISA_GUI
 		 *   @param  string second
 		 *   @param  string third
 		 */
-        public void appendAssemblyString(ref StringBuilder assemblyString, string instruction, string first, string second, string third)
+        public void appendAssemblyString(ref StringBuilder assemblyString, string instruction, string first, string second, string third, ref Instruction instruct)
         {
             if ((IM.ProgramCounter / 3) < CU.instructionsProcessed) //if the program counter is referencing an instruction we have already processed - Don't need the assembly syntax
                 return;
@@ -341,6 +392,9 @@ namespace ISA_GUI
                 second += ",";
 
             assemblyString.Append(instruction.ToUpper() + "\t" + first + second + third + "\n");
+            instruct.assembly1 = instruction.ToUpper();
+            instruct.assembly2 = first + second + third;
+
         }
 
         //NEEDS TO BE UPDATED//
@@ -419,7 +473,7 @@ namespace ISA_GUI
         }
 
 
-        public void buildPipelineString(ref StringBuilder pipelineString, Instruction instruction, Instruction three, Instruction two, Instruction one, Instruction zero)
+        public void buildPipelineString(ref StringBuilder pipelineString, ref Instruction instruction)
         {
             int opcode = instruction.opcode;
             int r1 = instruction.r1;
@@ -432,17 +486,18 @@ namespace ISA_GUI
             string r1Str, r2Str, r3Str, addressStr;
             //checks to see if the register is  a float or not
             string ifFloat1, ifFloat2, ifFloat3;
+            string stage1, stage2, stage3, stage4, stage5;
             if (r1 >= 7)
                 ifFloat1 = "f";
             else
                 ifFloat1 = "r";
 
-            if (r1 >= 7)
+            if (r2 >= 7)
                 ifFloat2 = "f";
             else
                 ifFloat2 = "r";
 
-            if (r1 >= 7)
+            if (r3 >= 7)
                 ifFloat3 = "f";
             else
                 ifFloat3 = "r";
@@ -475,9 +530,40 @@ namespace ISA_GUI
             else
                 addressStr = address.ToString("X");
 
-            pipelineString.Append(instructions[opcode] +" "+ ifFloat1+r1Str + ", " +ifFloat2+r2Str + ", " + ifFloat3 +r3Str + "  " + zero.start +" - " +zero.end +
-                "     " + one.start + " - " + one.end + "      " +two.start + " - " + two.end + "     "+ three.start + " - " + three.end + "    " + instruction.start + " - " + instruction.end
-                + "\n\n");
+            if (instruction.stage1Start == instruction.stage1End)
+                stage1 = instruction.stage1Start.ToString();
+            else
+                stage1 = instruction.stage1Start.ToString() + " - " + instruction.stage1End.ToString();
+
+            if (instruction.stage2Start == instruction.stage2End)
+                stage2 = instruction.stage2Start.ToString();
+            else
+                stage2 = instruction.stage2Start.ToString() + " - " + instruction.stage2End.ToString();
+
+            if (instruction.stage3Start == instruction.stage3End)
+                stage3 = instruction.stage3Start.ToString();
+            else
+                stage3 = instruction.stage3Start.ToString() + " - " + instruction.stage3End.ToString();
+
+            if (instruction.stage4Start == instruction.stage4End)
+                stage4 = instruction.stage4Start.ToString();
+            else
+                stage4 = instruction.stage4Start.ToString() + " - " + instruction.stage4End.ToString();
+
+            if (instruction.stage5Start == instruction.stage5End)
+                stage5 = instruction.stage5Start.ToString();
+            else
+                stage5 = instruction.stage5Start.ToString() + " - " + instruction.stage5End.ToString();
+
+            string output = (string.Format("\n{0, 6} {1,14} {2, 6} {3, 8} {4, 8} {5, 7} {6, 9}",
+                            instruction.assembly1.PadRight(6),instruction.assembly2.PadRight(14), stage1.PadLeft(6), stage2.PadLeft(8), stage3.PadLeft(8), stage4.PadLeft(7), stage5.PadLeft(9)));
+
+            pipelineString.Append(output);
+
+          //  pipelineString.Append(instructions[opcode] +" "+ ifFloat1+r1Str + ", " +ifFloat2+r2Str + ", " + ifFloat3 +r3Str + "  " + instruction.stage1Start +" - " + instruction.stage1End +
+          //      "     " + instruction.stage2Start + " - " + instruction.stage2End + "      " + instruction.stage3Start + " - " + instruction.stage3End + "     "+ instruction.stage4Start + " - " + 
+          //      instruction.stage4End + "    " + instruction.stage5Start + " - " + instruction.stage5End +
+          //       "\n");
             
         }
     }

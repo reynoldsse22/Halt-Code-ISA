@@ -243,10 +243,9 @@ namespace ISA_GUI
             "---------------------------------------------------------------\n\n");
 
             pipelineOutput.Append(
-                "                Inst.     Decode    Execute   Access    Write   \n" +
-                "Instruction     Fetch     Read Reg  Calc Adr  Memory    Register\n" +
-                "------------    ------   ---------- --------- ------- ----------\n"
-                );
+                "                      Inst.   Decode/ Execute/  Access  Write To\n" +
+                "     Instruction      Fetch  Read Reg Calc Adr  Memory  Register\n" +
+                "--------------------- ------ -------- -------- ------- ---------");
             assemblyOutput.Clear();
 
             cpu.IM.ProgramCounter = 0;
@@ -258,6 +257,7 @@ namespace ISA_GUI
             cpu.CU.memoryInstructionCount = 0;
             cpu.CU.controlInstructionCount = 0;
             StatsTextBox.Text = "";
+            resetPipeline();
             clearRegandMem();
             updateGUI();
         }
@@ -284,6 +284,26 @@ namespace ISA_GUI
             Array.Clear(cpu.dataMemory.MainMemory, 0, cpu.dataMemory.MainMemory.Length);
         }
 
+        private void resetPipeline()
+        {
+            cpu.fetch.inProgress = false;
+            cpu.fetch.occupied = false;
+            cpu.fetch.success = false;
+            cpu.CU.inProgress = false;
+            cpu.CU.occupied = false;
+            cpu.CU.success = false;
+            cpu.EU.inProgress = false;
+            cpu.EU.occupied = false;
+            cpu.EU.success = false;
+            cpu.AM.inProgress = false;
+            cpu.AM.occupied = false;
+            cpu.AM.success = false;
+            cpu.WR.inProgress = false;
+            cpu.WR.occupied = false;
+            cpu.WR.success = false;
+            cpu.cycleCount = 0;
+        }
+
         /**
         * Method Name: clearPipeline <br>
         * Method Purpose: Resets the values in the pipeline
@@ -296,6 +316,13 @@ namespace ISA_GUI
         {
             for(int i = 0; i<5; i++)    
                 stages[i] = null;
+
+            cpu.cycleCount = 0;
+            stage1Text.Text = "";
+            stage2Text.Text = "";
+            stage3Text.Text = "";
+            stage4Text.Text = "";
+            stage5Text.Text = "";
         }
 
         /**
@@ -312,6 +339,7 @@ namespace ISA_GUI
             setRegisters();
             setStatistics();
             setMemoryBox();
+            currentCycleText.Text = cpu.cycleCount.ToString();
             AssemblerListingTextBox.Text = decodedString.ToString();
             AssemblyTextBox.Text = assemblyOutput.ToString();
             pipelineTextBox.Text = pipelineOutput.ToString();
@@ -436,6 +464,7 @@ namespace ISA_GUI
             
         }
 
+        
         /**
 		 * Method Name: setMemoryBox <br>
 		 * Method Purpose: Sets the GUI with the contents of Main Memory

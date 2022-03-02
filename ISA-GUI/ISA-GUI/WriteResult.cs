@@ -26,6 +26,7 @@ namespace ISA_GUI
     {
 		public bool occupied;
 		public bool success;
+		public bool inProgress;
 		/**
 	    * Method Name: WriteResult <br>
 	    * Method Purpose: Class constructor
@@ -38,10 +39,13 @@ namespace ISA_GUI
         {
 			occupied = false;
 			success = false;
-        }
+			inProgress = false;
+
+		}
 
 		public void writeToReg(RegisterFile registers, ref Instruction instruction, ref ConfigCycle config)
         {
+			inProgress = true;
 			occupied = true;
 			instruction.cycleControl = config.regAccess;
 			switch (instruction.opcode)

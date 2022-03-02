@@ -26,6 +26,7 @@ namespace ISA_GUI
     {
         public bool occupied;
         public bool success;
+        public bool inProgress;
         /**
 	    * Method Name: ExecutionUnit <br>
 	    * Method Purpose: Class constructor
@@ -38,6 +39,8 @@ namespace ISA_GUI
         {
             occupied = false;
             success = false;
+            inProgress = false;
+
         }
 
         /**
@@ -61,6 +64,7 @@ namespace ISA_GUI
         public void execute(ref RegisterFile registers, ref DataMemory memory, ref ALU alu, ref InstructionMemory IM, 
                 ref Instruction instruction, ref ConfigCycle config)
         {
+            inProgress = true;
             occupied = true;
             int opcode = instruction.opcode;
             int r1 = instruction.r1;

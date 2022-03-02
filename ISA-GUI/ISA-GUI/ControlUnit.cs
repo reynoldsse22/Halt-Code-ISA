@@ -31,6 +31,7 @@ namespace ISA_GUI
         public  int instructionsProcessed;
         public  bool occupied;
         public bool success;
+        public bool inProgress;
 
         /**
 	    * Method Name: ControlUnit <br>
@@ -48,6 +49,7 @@ namespace ISA_GUI
             totalInstructions = 0; 
             occupied = false;
             success = false;
+            inProgress = false;
         }
 
         /**
@@ -67,6 +69,7 @@ namespace ISA_GUI
 		 */
         public void decode(ref InstructionMemory IM, ref Instruction instruction, ref ConfigCycle config)
         {
+            inProgress = true;
             occupied = true;
             instruction.cycleControl = config.regAccess;
             int opcode = instruction.opcode;

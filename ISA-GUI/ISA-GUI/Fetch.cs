@@ -26,6 +26,7 @@ namespace ISA_GUI
     {
         public bool occupied;
         public bool success;
+        public bool inProgress;
         /**
 	    * Method Name: Fetch <br>
 	    * Method Purpose: Class constructor
@@ -38,6 +39,7 @@ namespace ISA_GUI
         {
             occupied = false;
             success = false;
+            inProgress = false;
         }
 
         /**
@@ -53,6 +55,7 @@ namespace ISA_GUI
         public Instruction getNextInstruction(ref RegisterFile registers, ref InstructionMemory IM, ref ConfigCycle config)
         {
             occupied = true;
+            inProgress = true;
             Instruction instruction = new Instruction();
             if ((IM.ProgramCounter + 3) > IM.instructions.Count)
                 return instruction;
@@ -65,6 +68,7 @@ namespace ISA_GUI
             IM.CurrentInstruction = (instruction.binInstruction[2] + (instruction.binInstruction[1] << 8)+ (instruction.binInstruction[0] << 16));
             instruction.cycleControl--;
             success = true;
+            inProgress = false;
             return instruction;
         }
     }
