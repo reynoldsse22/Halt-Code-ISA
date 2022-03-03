@@ -383,6 +383,7 @@ namespace ISA_GUI
 		 */
         public void appendAssemblyString(ref StringBuilder assemblyString, string instruction, string first, string second, string third, ref Instruction instruct)
         {
+            string updatedAssembly = instruction.ToUpper();
             if ((IM.ProgramCounter / 3) < CU.instructionsProcessed) //if the program counter is referencing an instruction we have already processed - Don't need the assembly syntax
                 return;
 
@@ -391,8 +392,16 @@ namespace ISA_GUI
             if (third != "")
                 second += ",";
 
-            assemblyString.Append(instruction.ToUpper() + "\t" + first + second + third + "\n");
-            instruct.assembly1 = instruction.ToUpper();
+            if(instruct.opcode >= 9)
+            {
+                if(instruct.instrFlag == 1)
+
+                    updatedAssembly = "f." + updatedAssembly;
+                else
+                    updatedAssembly = "s." + updatedAssembly;
+            }
+            instruct.assembly1 = updatedAssembly;
+            assemblyString.Append(updatedAssembly + "\t" + first + second + third + "\n");
             instruct.assembly2 = first + second + third;
 
         }
