@@ -45,6 +45,18 @@ namespace ISA_GUI
 
 		}
 
+		/**
+		 * Method Name: accessMemory <br>
+		 * Method Purpose: Sets the stage for accessing and writing to main memory
+		 * 
+		 * <br>
+		 * Date created: 3/2/22 <br>
+		 * <hr>
+		 *   @param  DataMemory memory
+		 *   @param  RegisterFile registers
+		 *   @param Instruction instruction
+		 *   @param	ConfigCycle config
+		 */
 		public void accessMemory(ref DataMemory memory, ref RegisterFile registers, ref Instruction instruction, ref ConfigCycle config)
         {
 			inProgress = true;

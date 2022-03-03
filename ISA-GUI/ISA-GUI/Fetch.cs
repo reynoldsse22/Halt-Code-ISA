@@ -49,8 +49,9 @@ namespace ISA_GUI
 		 * <br>
 		 * Date created: 2/19/22 <br>
 		 * <hr>
-		 *   @param  object sender
-		 *   @param  EventArgs e
+		 *   @param  RegisterFile register
+		 *   @param  InstructionMemory IM
+		 *   @param  ConfigCycle config
 		 */
         public Instruction getNextInstruction(ref RegisterFile registers, ref InstructionMemory IM, ref ConfigCycle config)
         {

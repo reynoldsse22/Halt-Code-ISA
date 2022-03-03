@@ -59,13 +59,9 @@ namespace ISA_GUI
 		 * <br>
 		 * Date created: 2/19/22 <br>
 		 * <hr>
-		 *   @param  InstructionMemory
-		 *   @param  int opcode
-		 *   @param  int r1
-		 *   @param  int r2
-		 *   @param  int r3
-		 *   @param  int address
-		 *   @param  string instrType
+		 *   @param  InstructionMemory IM
+		 *   @param  Instruction instruction
+		 *   @param  ConfigCycle config
 		 */
         public void decode(ref InstructionMemory IM, ref Instruction instruction, ref ConfigCycle config)
         {

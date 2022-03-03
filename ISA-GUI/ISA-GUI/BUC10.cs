@@ -77,6 +77,7 @@ namespace ISA_GUI
             stage3Text.SelectionAlignment = HorizontalAlignment.Center;
             stage4Text.SelectionAlignment = HorizontalAlignment.Center;
             stage5Text.SelectionAlignment = HorizontalAlignment.Center;
+            currentCycleText.SelectionAlignment = HorizontalAlignment.Center;
         }
 
         /**
@@ -194,7 +195,7 @@ namespace ISA_GUI
 		 * <br>
 		 * Date created: 2/19/22 <br>
 		 * <hr>
-		 * Return: program - a list of two byte instructions
+		 * Return: program - a list of three byte instructions
 		 */
         private List<string> getInput()
         {
@@ -257,6 +258,7 @@ namespace ISA_GUI
             cpu.CU.memoryInstructionCount = 0;
             cpu.CU.controlInstructionCount = 0;
             StatsTextBox.Text = "";
+            currentCycleText.SelectionAlignment = HorizontalAlignment.Center;
             resetPipeline();
             clearRegandMem();
             updateGUI();
@@ -284,6 +286,14 @@ namespace ISA_GUI
             Array.Clear(cpu.dataMemory.MainMemory, 0, cpu.dataMemory.MainMemory.Length);
         }
 
+        /**
+		 * Method Name: resetPipeline <br>
+		 * Method Purpose: Resets the pipeline functional unit variables
+		 * 
+		 * <br>
+		 * Date created: 3/2/22 <br>
+		 * <hr>
+		 */
         private void resetPipeline()
         {
             cpu.fetch.inProgress = false;
@@ -431,6 +441,14 @@ namespace ISA_GUI
         }
 
 
+        /**
+		 * Method Name: updatePipeline <br>
+		 * Method Purpose: Sets the pipeline GUI elements
+		 * 
+		 * <br>
+		 * Date created: 3/2/22 <br>
+		 * <hr>
+		 */
         private void updatePipeline()
         {
             int instructionHex;
@@ -512,16 +530,46 @@ namespace ISA_GUI
             MemoryText.Text = line.ToString();
         }
 
+        /**
+		 * Method Name: RunButton_MouseHover <br>
+		 * Method Purpose: Sets up a tooltip to display to the user that the run button runs the program
+		 * 
+		 * <br>
+		 * Date created: 3/2/22 <br>
+		 * <hr>
+		 *   @param  object sender
+		 *   @param  EventArgs e
+		 */
         private void RunButton_MouseHover(object sender, EventArgs e)
         {
             toolTip1.Show("Run program", RunButton);
         }
 
+        /**
+		 * Method Name: stepthroughButton_MouseHover <br>
+		 * Method Purpose: Sets up a tooltip to display to the user that the stepthrough button runs the program one cycle at a time
+		 * 
+		 * <br>
+		 * Date created: 3/2/22 <br>
+		 * <hr>
+		 *   @param  object sender
+		 *   @param  EventArgs e
+		 */
         private void stepthroughButton_MouseHover(object sender, EventArgs e)
         {
             toolTip1.Show("Step through one cycle", stepthroughButton);
         }
 
+        /**
+		 * Method Name: resetButton_MouseHover <br>
+		 * Method Purpose: Sets up a tooltip to display to the user that the reset button resets the program
+		 * 
+		 * <br>
+		 * Date created: 3/2/22 <br>
+		 * <hr>
+		 *   @param  object sender
+		 *   @param  EventArgs e
+		 */
         private void resetButton_MouseHover(object sender, EventArgs e)
         {
             toolTip1.Show("Reset", resetButton);

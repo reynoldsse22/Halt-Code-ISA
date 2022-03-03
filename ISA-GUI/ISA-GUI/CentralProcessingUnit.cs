@@ -95,125 +95,126 @@ namespace ISA_GUI
                 IM.setInstructionSize(input.Count);     //Set the instruction size based on the amount of instructions given
                 storeProgramInMemory(input);            //Store the program in main memory and the instruction memory unit
             }
-            if (halted)
+            if (halted)         //If it is halted, do not run the program and return so that it can be reset.
                 return;
-            do 
+            do                  //run once, and if the run button was pressed, keep looping until halted
             {
-                cycleCount++;
+                cycleCount++;   //increase cycle count
 
-                if (stages[4] != null && !WR.inProgress)
+                if (stages[4] != null && !WR.inProgress)        //if there is an instruction in stage 5 AND the instruction is done inside this stage
                 {
-                    if (stages[4].cycleControl == 0)
+                    if (stages[4].cycleControl == 0)            //if the instruction is done executing in this stage
                     {
-                        stages[4].stage5End = cycleCount - 1;
+                        stages[4].stage5End = cycleCount - 1;       //set the end cycle
                         buildAssemblyString(ref assemblyString, ref stages[4]);    //Build the associated assembly syntax string for the instruction
                         buildDecodedString(ref decodedString, stages[4]);      //Build the decoded instruction string
                         buildPipelineString(ref pipelineString, ref stages[4]);   //Build the pipeline string
-                        WR.success = false;
-                        if (stages[4].opcode == 0)
+                        WR.success = false;             //reset the stage
+                        if (stages[4].opcode == 0)      //if halt is found
                             halted = true;
 
-                        stages[4] = null;
-                        WR.occupied = false;
+                        stages[4] = null;               //pop off the instruction
+                        WR.occupied = false;            //There is no longer an instruction in stage 5
                     }
                 }
 
             stage5:
-                if (stages[4] != null)
+                if (stages[4] != null)                  //If there is an instruction in stage 5
                 {
-                    if (WR.success == false)
+                    if (WR.success == false)            //If it has not been worked on yet
                     {
-                        stages[4].stage5Start = cycleCount;
-                        WR.writeToReg(registers, ref stages[4], ref config);
-                        stages[4].stage = 4;
+                        stages[4].stage5Start = cycleCount;     //Set starting cycle
+                        WR.writeToReg(registers, ref stages[4], ref config);        //WRITE TO REGISTER FILE - execute that instruction in stage 5
+                        stages[4].stage = 5;                                        //set stage
                     }
                     else
-                        stages[4].cycleControl--;
+                        stages[4].cycleControl--;      //If not done processing, decrement a cycle
 
-                    if (stages[4].cycleControl == 0)
+                    if (stages[4].cycleControl == 0)    //If done, the instruction is no longer in progress
                         WR.inProgress = false;
 
                 }
-                if (stages[3] != null && !AM.inProgress)
+
+                if (stages[3] != null && !AM.inProgress)    //If stage 4 has an instruction and it has already been processed
                 {
-                    if (stages[3].cycleControl == 0)
+                    if (stages[3].cycleControl == 0)        //Check and make sure it is finished it's required cycles
                     {
-                        if (!WR.occupied)
+                        if (!WR.occupied)                   //If stage 5 is not occupied, send the instruction in stage 4 to stage 5
                         {
-                            AM.success = false;
-                            stages[3].stage4End = cycleCount - 1;
-                            stages[4] = stages[3];
-                            stages[3] = null;
-                            AM.occupied = false;
-                            WR.occupied = true;
-                            goto stage5;
+                            AM.success = false;             //Reset success status
+                            stages[3].stage4End = cycleCount - 1;   //set ending cycle
+                            stages[4] = stages[3];                  //Send to stage 5
+                            stages[3] = null;                       //Clear stage 4
+                            AM.occupied = false;                    //Stage 4 no longer occupied
+                            WR.occupied = true;                     //Stage 5 is now occupied
+                            goto stage5;                            //Repeat stage 5 to execute that new instruction
                         }
                     }
                 }
 
             stage4:
-                if (stages[3] != null)
+                if (stages[3] != null)                      //If there is an instruction in stage 4
                 {
-                    if (AM.success == false)
+                    if (AM.success == false)                //If it has not been worked on yet
                     {
-                        stages[3].stage4Start = cycleCount;
-                        AM.accessMemory(ref dataMemory, ref registers, ref stages[3], ref config);
-                        stages[3].stage = 4;
+                        stages[3].stage4Start = cycleCount; //Set starting cycle
+                        AM.accessMemory(ref dataMemory, ref registers, ref stages[3], ref config);      //ACCESS MEMORY - execute that instruction in stage 4
+                        stages[3].stage = 4;                //set stage
                     }
                     else
-                        stages[3].cycleControl--;
+                        stages[3].cycleControl--;           //If not done processing, decrement a cycle
 
-                    if (stages[3].cycleControl == 0)
+                    if (stages[3].cycleControl == 0)        //If done, the instruction is no longer in progress
                         AM.inProgress = false;
                 }
 
-                if (stages[2] != null && !EU.inProgress)
+                if (stages[2] != null && !EU.inProgress)    //If stage 3 has an instruction and it has already been processed
                 {
-                    if (stages[2].cycleControl == 0)
+                    if (stages[2].cycleControl == 0)        //Check and make sure it is finished it's required cycles
                     {
-                        if (!AM.occupied)
+                        if (!AM.occupied)                   //If stage 4 is not occupied, send the instruction in stage 3 to stage 4
                         {
-                            EU.success = false;
-                            stages[2].stage3End = cycleCount - 1;
-                            stages[3] = stages[2];
-                            stages[2] = null;
-                            EU.occupied = false;
-                            AM.occupied = true;
-                            goto stage4;
+                            EU.success = false;                //Reset success status
+                            stages[2].stage3End = cycleCount - 1;   //set ending cycle
+                            stages[3] = stages[2];                  //Send to stage 4
+                            stages[2] = null;                       //Clear state 3
+                            EU.occupied = false;                    //Stage 3 no longer occupied
+                            AM.occupied = true;                     //Stage 4 is now occupied
+                            goto stage4;                            //Repeat stage 4 to execute that new instruction
                         }
                     }
                 }
 
             stage3:
-                if (stages[2] != null)
+                if (stages[2] != null)                      //If there is an instruction in stage 3
                 {
-                    if (EU.success == false)
+                    if (EU.success == false)                //If it has not been worked on yet
                     {
-                        stages[2].stage3Start = cycleCount;
-                        EU.execute(ref registers, ref dataMemory, ref alu, ref IM, ref stages[2], ref config);        //EXECUTE - Execute the instruction
-                        stages[2].stage = 3;
+                        stages[2].stage3Start = cycleCount; //Set starting cycle
+                        EU.execute(ref registers, ref dataMemory, ref alu, ref IM, ref stages[2], ref config);        //EXECUTE - Execute the instruction in stage 3
+                        stages[2].stage = 3;                 //set stage
                     }
                     else
-                        stages[2].cycleControl--;
+                        stages[2].cycleControl--;           //If not done processing, decrement a cycle
 
-                    if (stages[2].cycleControl == 0)
+                    if (stages[2].cycleControl == 0)        //If done, the instruction is no longer in progress
                         EU.inProgress = false;
 
                 }
 
-                if(stages[1] != null && !CU.inProgress)
+                if(stages[1] != null && !CU.inProgress)     //If stage 2 has an instruction and it has already been processed
                 {
-                    if (stages[1].cycleControl == 0)
+                    if (stages[1].cycleControl == 0)        //Check and make sure it is finished it's required cycles
                     {
-                        if (!EU.occupied)
+                        if (!EU.occupied)                   //If stage 3 is not occupied, send the instruction in stage 2 to stage 3
                         {
-                            CU.success = false;
-                            stages[1].stage2End = cycleCount - 1;
-                            stages[2] = stages[1];
-                            stages[1] = null;
-                            CU.occupied = false;
-                            EU.occupied = true;
-                            goto stage3;
+                            CU.success = false;              //Reset success status
+                            stages[1].stage2End = cycleCount - 1;   //set ending cycle
+                            stages[2] = stages[1];                  //Send to stage 3
+                            stages[1] = null;                       //Clear stage 3
+                            CU.occupied = false;                    //Stage 2 no longer occupied
+                            EU.occupied = true;                     //Stage 3 is now occupied
+                            goto stage3;                            //Repeat stage 3 to execute that new instruction
                         }
                     }
                 }
@@ -221,34 +222,33 @@ namespace ISA_GUI
                 
 
                 stage2:
-                if (stages[1] != null && cycleCount > 1)
+                if (stages[1] != null && cycleCount > 1)            //If there is an instruction in stage 2
                 {
 
-                    if (CU.success == false)
+                    if (CU.success == false)                        //If it has not been worked on yet
                     {
-                        stages[1].stage2Start = cycleCount;
-                        CU.decode(ref IM, ref stages[1], ref config);      //DECODE - Decode the instruction
-                        stages[1].stage = 2;
+                        stages[1].stage2Start = cycleCount; //Set starting cycle
+                        CU.decode(ref IM, ref stages[1], ref config);      //DECODE - Decode the instruction in stage 2
+                        stages[1].stage = 2;                //set stage
                     }
                     else
-                        stages[1].cycleControl--;
+                        stages[1].cycleControl--;            //If not done processing, decrement a cycle
 
-                    if (stages[1].cycleControl == 0)
+                    if (stages[1].cycleControl == 0)         //If done processing, no longer in progress
                         CU.inProgress = false;
                 }
-                if(stages[0] != null && !fetch.inProgress)
+                if(stages[0] != null && !fetch.inProgress)  //If stage 1 has an instruction and it has already been processed
                 {
-                    if (stages[0].cycleControl == 0)
+                    if (stages[0].cycleControl == 0)        //Check and make sure it is finished it's required cycles
                     {
-                        fetch.inProgress = false;
-                        if (!CU.occupied)
+                        if (!CU.occupied)                   //If stage 2 is not occupied, send the instruction in stage 1 to stage 2
                         {
-                            stages[0].stage1End = cycleCount - 1;
-                            fetch.success = false;
-                            stages[1] = stages[0];
-                            stages[0] = null;
-                            fetch.occupied = false;
-                            CU.occupied = true;
+                            stages[0].stage1End = cycleCount - 1;   //set ending cycle
+                            fetch.success = false;                  //reset stage 1
+                            stages[1] = stages[0];                  //Send to stage 2
+                            stages[0] = null;                       //clear stage 1
+                            fetch.occupied = false;                 //Stage 1 no longer occupied
+                            CU.occupied = true;                     //Stage 2 is now occupied
                             goto stage2;
                         }
                     }
@@ -256,19 +256,19 @@ namespace ISA_GUI
 
                 //end stage 2
                 
-                if (stages[0] == null)
+                if (stages[0] == null)              //if no instruction present
                 {
-                    stages[0] = fetch.getNextInstruction(ref registers, ref IM, ref config);        //FETCH - get the next instruction
-                    stages[0].stage1Start = cycleCount;
-                    if (stages[0].cycleControl == 0)
-                        fetch.inProgress = false;
+                    stages[0] = fetch.getNextInstruction(ref registers, ref IM, ref config);        //FETCH - get the next instruction and place in stage 1
+                    stages[0].stage1Start = cycleCount;     //set cycle start
+                    if (stages[0].cycleControl == 0)        //If processed
+                        fetch.inProgress = false;           //No longer in progress
                     continue;
                 }
 
                 //end stage 1
 
 
-            } while (!halted && !stepThrough);
+            } while (!halted && !stepThrough);  //If not halted and not in step through mode
 
             return;                         
         }
@@ -397,7 +397,6 @@ namespace ISA_GUI
 
         }
 
-        //NEEDS TO BE UPDATED//
         /**
         * Method Name: buildDecodedString <br>
         * Method Purpose: Appends to the decoded instruction string to include the current instruction

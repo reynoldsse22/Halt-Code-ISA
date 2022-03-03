@@ -43,6 +43,18 @@ namespace ISA_GUI
 
 		}
 
+		/**
+		 * Method Name: writeToReg <br>
+		 * Method Purpose: Passes the instruction and the configuration file along with the registers in order to write the previously calculated result to
+		 * the appropriate register
+		 * 
+		 * <br>
+		 * Date created: 3/2/22 <br>
+		 * <hr>
+		 *   @param  RegisterFil registers
+		 *   @param  Instruction instruction
+		 *   @param ConfigCycle config
+		 */
 		public void writeToReg(RegisterFile registers, ref Instruction instruction, ref ConfigCycle config)
         {
 			inProgress = true;
@@ -86,6 +98,7 @@ namespace ISA_GUI
 				case 14:
 					break;
 				case 15:
+					//MOV
 					if (!instruction.isFloat)
 						registers.intRegisters[instruction.destinationReg] = instruction.intResult;
 					else
@@ -95,6 +108,7 @@ namespace ISA_GUI
 				case 17:
 				case 18:
 				case 19:
+					//Shifting
 					registers.intRegisters[instruction.destinationReg] = instruction.intResult;
 					break;
 				case 20:
@@ -105,6 +119,7 @@ namespace ISA_GUI
 				case 25:
 				case 26:
 				case 27:
+					//ALU instructions
 					if (!instruction.isFloat)
 						registers.intRegisters[instruction.destinationReg] = instruction.intResult;
 					else
