@@ -127,7 +127,6 @@ namespace ISA_GUI
 					break;
 			}
 			success = true;
-			instruction.cycleControl--;
         }
 
     }

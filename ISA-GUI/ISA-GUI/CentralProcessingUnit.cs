@@ -127,17 +127,17 @@ namespace ISA_GUI
                         WR.writeToReg(registers, ref stages[4], ref config);        //WRITE TO REGISTER FILE - execute that instruction in stage 5
                         stages[4].stage = 5;                                        //set stage
                     }
-                    else
-                        stages[4].cycleControl--;      //If not done processing, decrement a cycle
 
-                    if (stages[4].cycleControl == 0)    //If done, the instruction is no longer in progress
+                    stages[4].cycleControl--;      //If not done processing, decrement a cycle
+
+                    if (stages[4].cycleControl <= 0)    //If done, the instruction is no longer in progress
                         WR.inProgress = false;
 
                 }
 
                 if (stages[3] != null && !AM.inProgress)    //If stage 4 has an instruction and it has already been processed
                 {
-                    if (stages[3].cycleControl == 0)        //Check and make sure it is finished it's required cycles
+                    if (stages[3].cycleControl <= 0)        //Check and make sure it is finished it's required cycles
                     {
                         if (!WR.occupied)                   //If stage 5 is not occupied, send the instruction in stage 4 to stage 5
                         {
@@ -161,16 +161,16 @@ namespace ISA_GUI
                         AM.accessMemory(ref dataMemory, ref registers, ref stages[3], ref config);      //ACCESS MEMORY - execute that instruction in stage 4
                         stages[3].stage = 4;                //set stage
                     }
-                    else
-                        stages[3].cycleControl--;           //If not done processing, decrement a cycle
 
-                    if (stages[3].cycleControl == 0)        //If done, the instruction is no longer in progress
+                    stages[3].cycleControl--;           //If not done processing, decrement a cycle
+
+                    if (stages[3].cycleControl <= 0)        //If done, the instruction is no longer in progress
                         AM.inProgress = false;
                 }
 
                 if (stages[2] != null && !EU.inProgress)    //If stage 3 has an instruction and it has already been processed
                 {
-                    if (stages[2].cycleControl == 0)        //Check and make sure it is finished it's required cycles
+                    if (stages[2].cycleControl <= 0)        //Check and make sure it is finished it's required cycles
                     {
                         if (!AM.occupied)                   //If stage 4 is not occupied, send the instruction in stage 3 to stage 4
                         {
@@ -194,17 +194,17 @@ namespace ISA_GUI
                         EU.execute(ref registers, ref dataMemory, ref alu, ref IM, ref stages[2], ref config);        //EXECUTE - Execute the instruction in stage 3
                         stages[2].stage = 3;                 //set stage
                     }
-                    else
-                        stages[2].cycleControl--;           //If not done processing, decrement a cycle
-
-                    if (stages[2].cycleControl == 0)        //If done, the instruction is no longer in progress
+                    
+                    stages[2].cycleControl--;           //If not done processing, decrement a cycle
+                    if (stages[2].cycleControl <= 0)        //If done, the instruction is no longer in progress
                         EU.inProgress = false;
+                        
 
                 }
 
                 if(stages[1] != null && !CU.inProgress)     //If stage 2 has an instruction and it has already been processed
                 {
-                    if (stages[1].cycleControl == 0)        //Check and make sure it is finished it's required cycles
+                    if (stages[1].cycleControl <= 0)        //Check and make sure it is finished it's required cycles
                     {
                         if (!EU.occupied)                   //If stage 3 is not occupied, send the instruction in stage 2 to stage 3
                         {
@@ -231,15 +231,14 @@ namespace ISA_GUI
                         CU.decode(ref IM, ref stages[1], ref config);      //DECODE - Decode the instruction in stage 2
                         stages[1].stage = 2;                //set stage
                     }
-                    else
-                        stages[1].cycleControl--;            //If not done processing, decrement a cycle
 
-                    if (stages[1].cycleControl == 0)         //If done processing, no longer in progress
+                    stages[1].cycleControl--;                //If not done processing, decrement a cycle
+                    if (stages[1].cycleControl <= 0)         //If done processing, no longer in progress
                         CU.inProgress = false;
                 }
                 if(stages[0] != null && !fetch.inProgress)  //If stage 1 has an instruction and it has already been processed
                 {
-                    if (stages[0].cycleControl == 0)        //Check and make sure it is finished it's required cycles
+                    if (stages[0].cycleControl <= 0)        //Check and make sure it is finished it's required cycles
                     {
                         if (!CU.occupied)                   //If stage 2 is not occupied, send the instruction in stage 1 to stage 2
                         {
@@ -260,7 +259,8 @@ namespace ISA_GUI
                 {
                     stages[0] = fetch.getNextInstruction(ref registers, ref IM, ref config);        //FETCH - get the next instruction and place in stage 1
                     stages[0].stage1Start = cycleCount;     //set cycle start
-                    if (stages[0].cycleControl == 0)        //If processed
+                    stages[0].cycleControl--;                //If not done processing, decrement a cycle
+                    if (stages[0].cycleControl <= 0)        //If processed
                         fetch.inProgress = false;           //No longer in progress
                     continue;
                 }
@@ -394,11 +394,13 @@ namespace ISA_GUI
 
             if(instruct.opcode >= 9)
             {
-                if(instruct.instrFlag == 1)
+                if (instruct.instrFlag == 1)
 
                     updatedAssembly = "f." + updatedAssembly;
-                else
-                    updatedAssembly = "s." + updatedAssembly;
+                else if (instruct.instrFlag == 2)
+                    updatedAssembly += 's';
+                else if (instruct.instrFlag == 3)
+                    updatedAssembly = "f." + updatedAssembly + 's';
             }
             instruct.assembly1 = updatedAssembly;
             assemblyString.Append(updatedAssembly + "\t" + first + second + third + "\n");
@@ -483,60 +485,7 @@ namespace ISA_GUI
 
         public void buildPipelineString(ref StringBuilder pipelineString, ref Instruction instruction)
         {
-            int opcode = instruction.opcode;
-            int r1 = instruction.r1;
-            int r2 = instruction.r2;
-            int r3 = instruction.r3;
-            int address = instruction.address;
-            int instrFlag = instruction.instrFlag;
-            string instrType = instruction.instrType;
-            //If any of these variables is negative then they are not used in the current intruction and will be printed as N/A
-            string r1Str, r2Str, r3Str, addressStr;
-            //checks to see if the register is  a float or not
-            string ifFloat1, ifFloat2, ifFloat3;
             string stage1, stage2, stage3, stage4, stage5;
-            if (r1 >= 7)
-                ifFloat1 = "f";
-            else
-                ifFloat1 = "r";
-
-            if (r2 >= 7)
-                ifFloat2 = "f";
-            else
-                ifFloat2 = "r";
-
-            if (r3 >= 7)
-                ifFloat3 = "f";
-            else
-                ifFloat3 = "r";
-            //end of check for float reg's
-            if (r1 == -1)
-            {
-                r1Str = "";
-                ifFloat1 = "";
-            }   
-            else
-                r1Str = r1.ToString("X");
-
-            if (r2 == -1)
-            {
-                r2Str = "";
-                ifFloat2 = "";
-            }
-            else
-                r2Str = r2.ToString("X");
-            if (r3 == -1)
-            {
-                r3Str = "";
-                ifFloat3 = "";
-            }
-                
-            else
-                r3Str = r3.ToString("X");
-            if (address == -1)
-                addressStr = "";
-            else
-                addressStr = address.ToString("X");
 
             if (instruction.stage1Start == instruction.stage1End)
                 stage1 = instruction.stage1Start.ToString();
@@ -563,16 +512,11 @@ namespace ISA_GUI
             else
                 stage5 = instruction.stage5Start.ToString() + " - " + instruction.stage5End.ToString();
 
-            string output = (string.Format("\n{0, 6} {1,14} {2, 6} {3, 8} {4, 8} {5, 7} {6, 9}",
-                            instruction.assembly1.PadRight(6),instruction.assembly2.PadRight(14), stage1.PadLeft(6), stage2.PadLeft(8), stage3.PadLeft(8), stage4.PadLeft(7), stage5.PadLeft(9)));
+            string output = (string.Format("\n{0, 7} {1,13} {2, 6} {3, 8} {4, 8} {5, 7} {6, 9}",
+                            instruction.assembly1.PadRight(7),instruction.assembly2.PadRight(13), stage1.PadLeft(6), stage2.PadLeft(8), stage3.PadLeft(8), stage4.PadLeft(7), stage5.PadLeft(9)));
 
             pipelineString.Append(output);
 
-          //  pipelineString.Append(instructions[opcode] +" "+ ifFloat1+r1Str + ", " +ifFloat2+r2Str + ", " + ifFloat3 +r3Str + "  " + instruction.stage1Start +" - " + instruction.stage1End +
-          //      "     " + instruction.stage2Start + " - " + instruction.stage2End + "      " + instruction.stage3Start + " - " + instruction.stage3End + "     "+ instruction.stage4Start + " - " + 
-          //      instruction.stage4End + "    " + instruction.stage5Start + " - " + instruction.stage5End +
-          //       "\n");
-            
         }
     }
 }

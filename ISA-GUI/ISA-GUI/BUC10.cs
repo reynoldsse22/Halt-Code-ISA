@@ -39,7 +39,7 @@ namespace ISA_GUI
         StringBuilder assemblyOutput = new StringBuilder();                     //Mutable string for the assembly instructions
         StringBuilder pipelineOutput = new StringBuilder(                       //Mutable string for the pipeline output
             "   Team: Beaudry, Farmer, Ortiz, Reynolds\n" +
-            "Project: Pipeline ISA Implementation\n" +
+            "Project: Static Pipeline ISA Implementation\n" +
             "---------------------------------------------------------------\n\n");
         StringBuilder decodedString = new StringBuilder(                        //Mutable string for the decoded instructions
             "Program  Inst Inst Instruct                            Address/\n" +
@@ -240,7 +240,7 @@ namespace ISA_GUI
             pipelineOutput.Clear();
             pipelineOutput.Append(
             "   Team: Beaudry, Farmer, Ortiz, Reynolds\n" +
-            "Project: Pipeline ISA Implementation\n" +
+            "Project: Static Pipeline ISA Implementation\n" +
             "---------------------------------------------------------------\n\n");
 
             pipelineOutput.Append(

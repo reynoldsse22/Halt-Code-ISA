@@ -67,7 +67,6 @@ namespace ISA_GUI
             instruction.binInstruction[1] = IM.instructions[IM.ProgramCounter++];
             instruction.binInstruction[2] = IM.instructions[IM.ProgramCounter++];
             IM.CurrentInstruction = (instruction.binInstruction[2] + (instruction.binInstruction[1] << 8)+ (instruction.binInstruction[0] << 16));
-            instruction.cycleControl--;
             success = true;
             inProgress = false;
             return instruction;

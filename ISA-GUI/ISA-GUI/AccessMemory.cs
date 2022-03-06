@@ -100,7 +100,6 @@ namespace ISA_GUI
 					instruction.cycleControl = config.calcAddress;
 					break;
 			}
-			instruction.cycleControl--;
 			success = true;
         }
 

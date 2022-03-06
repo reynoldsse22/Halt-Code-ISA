@@ -207,7 +207,6 @@ namespace ISA_GUI
             instruction.instrFlag = instrFlag;
             instruction.address = address;
             instruction.instrType = instrType;
-            instruction.cycleControl--;
             success = true;
             return;
         }
