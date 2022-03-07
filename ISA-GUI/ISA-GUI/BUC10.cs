@@ -71,6 +71,7 @@ namespace ISA_GUI
 		 */
         private void BUC10_Load(object sender, EventArgs e)
         {
+            StartPosition = FormStartPosition.CenterScreen;
             clearProgram();     //On load, initialize all GUI elements and values to their starting value
             stage1Text.SelectionAlignment = HorizontalAlignment.Center;
             stage2Text.SelectionAlignment = HorizontalAlignment.Center;
@@ -630,6 +631,15 @@ namespace ISA_GUI
             toolTip1.Show("Reset", resetButton);
         }
 
+        private void configButton_Click(object sender, EventArgs e)
+        {
+            using (Configurations configWindow = new Configurations(config))
+            {
+                configWindow.ShowDialog();
+
+                config = configWindow.getConfig();
+            }
+        }
     }
 
 }

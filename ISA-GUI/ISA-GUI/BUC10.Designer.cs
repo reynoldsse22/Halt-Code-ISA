@@ -135,6 +135,7 @@
             this.label34 = new System.Windows.Forms.Label();
             this.label35 = new System.Windows.Forms.Label();
             this.label36 = new System.Windows.Forms.Label();
+            this.configButton = new System.Windows.Forms.Button();
             this.Output.SuspendLayout();
             this.pipelineTab.SuspendLayout();
             this.sourceCodeBox.SuspendLayout();
@@ -173,7 +174,7 @@
             this.ZFlagBox.BackColor = System.Drawing.SystemColors.Menu;
             this.ZFlagBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ZFlagBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ZFlagBox.Location = new System.Drawing.Point(1376, 35);
+            this.ZFlagBox.Location = new System.Drawing.Point(452, 37);
             this.ZFlagBox.Name = "ZFlagBox";
             this.ZFlagBox.ReadOnly = true;
             this.ZFlagBox.Size = new System.Drawing.Size(25, 25);
@@ -185,7 +186,7 @@
             this.cFlagBox.BackColor = System.Drawing.SystemColors.Menu;
             this.cFlagBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.cFlagBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cFlagBox.Location = new System.Drawing.Point(1438, 35);
+            this.cFlagBox.Location = new System.Drawing.Point(514, 37);
             this.cFlagBox.Name = "cFlagBox";
             this.cFlagBox.ReadOnly = true;
             this.cFlagBox.Size = new System.Drawing.Size(25, 25);
@@ -339,7 +340,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(1358, 42);
+            this.label19.Location = new System.Drawing.Point(434, 44);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(14, 13);
             this.label19.TabIndex = 25;
@@ -348,7 +349,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(1420, 42);
+            this.label21.Location = new System.Drawing.Point(496, 44);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(14, 13);
             this.label21.TabIndex = 27;
@@ -1067,7 +1068,7 @@
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(1398, 17);
+            this.label25.Location = new System.Drawing.Point(474, 19);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(65, 13);
             this.label25.TabIndex = 80;
@@ -1280,12 +1281,24 @@
             this.label36.TabIndex = 101;
             this.label36.Text = "Dependencies";
             // 
+            // configButton
+            // 
+            this.configButton.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.configButton.Location = new System.Drawing.Point(1317, 17);
+            this.configButton.Name = "configButton";
+            this.configButton.Size = new System.Drawing.Size(145, 39);
+            this.configButton.TabIndex = 102;
+            this.configButton.Text = "Configurations";
+            this.configButton.UseVisualStyleBackColor = false;
+            this.configButton.Click += new System.EventHandler(this.configButton_Click);
+            // 
             // BUC10
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1475, 814);
+            this.Controls.Add(this.configButton);
             this.Controls.Add(this.label36);
             this.Controls.Add(this.label35);
             this.Controls.Add(this.label34);
@@ -1507,6 +1520,7 @@
         private System.Windows.Forms.Label label34;
         private System.Windows.Forms.Label label35;
         private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.Button configButton;
     }
 }
 

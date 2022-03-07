@@ -22,7 +22,7 @@ namespace ISA_GUI
 	* Date created: 2/28/21 <br>
 	* @author Samuel Reynolds
 	*/
-	internal class ConfigCycle
+	public class ConfigCycle
     {
 		public int fetch, memAccess, regAccess, load_store, intALU, flAddSub, flMult, flDiv, calcAddress;
 
