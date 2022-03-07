@@ -35,6 +35,8 @@ namespace ISA_GUI
         public AccessMemory AM;
         public int cycleCount;
         public Instruction stall = new Instruction();
+        public int totalHazard, structuralHazard, dataHazard, controlHazard, RAW, WAR, WAW;
+        public int totalCyclesStalled, fetchStalled, decodeStalled, executeStalled, accessMemStalled, writeRegStalled;
         static string[] instructions = {"HALT",
                                 "NOP",
                                 "BR",
@@ -84,6 +86,19 @@ namespace ISA_GUI
             AM = new AccessMemory();
             WR = new WriteResult();
             cycleCount = 0;
+            totalCyclesStalled = 0;
+            fetchStalled = 0;
+            decodeStalled = 0;
+            executeStalled = 0;
+            accessMemStalled = 0;
+            writeRegStalled = 0;
+            totalHazard = 0;
+            structuralHazard = 0;
+            dataHazard = 0;
+            controlHazard = 0;
+            WAR = 0;
+            RAW = 0;
+            WAW = 0;
         }
 
         public void runCycle(List<string> input, bool stepThrough, ref StringBuilder assemblyString, ref StringBuilder decodedString,
@@ -100,8 +115,8 @@ namespace ISA_GUI
             do                  //run once, and if the run button was pressed, keep looping until halted
             {
                 cycleCount++;   //increase cycle count
-
-                if (stages[4] != null && !WR.inProgress)        //if there is an instruction in stage 5 AND the instruction is done inside this stage
+                 
+                if (stages[4] != null)        //if there is an instruction in stage 5 AND the instruction is done inside this stage
                 {
                     if (stages[4].cycleControl == 0)            //if the instruction is done executing in this stage
                     {
@@ -123,7 +138,6 @@ namespace ISA_GUI
                 {
                     if (WR.success == false)            //If it has not been worked on yet
                     {
-                        stages[4].stage5Start = cycleCount;     //Set starting cycle
                         WR.writeToReg(registers, ref stages[4], ref config);        //WRITE TO REGISTER FILE - execute that instruction in stage 5
                         stages[4].stage = 5;                                        //set stage
                     }
@@ -135,7 +149,7 @@ namespace ISA_GUI
 
                 }
 
-                if (stages[3] != null && !AM.inProgress)    //If stage 4 has an instruction and it has already been processed
+                if (stages[3] != null)    //If stage 4 has an instruction and it has already been processed
                 {
                     if (stages[3].cycleControl <= 0)        //Check and make sure it is finished it's required cycles
                     {
@@ -147,8 +161,16 @@ namespace ISA_GUI
                             stages[3] = null;                       //Clear stage 4
                             AM.occupied = false;                    //Stage 4 no longer occupied
                             WR.occupied = true;                     //Stage 5 is now occupied
+                            stages[4].stage5Start = cycleCount;     //Set starting cycle
                             goto stage5;                            //Repeat stage 5 to execute that new instruction
                         }
+                        else if(WR.success)
+                        {
+                            accessMemStalled++;
+                            totalCyclesStalled++;
+                            structuralHazard++;
+                        }
+
                     }
                 }
 
@@ -157,7 +179,6 @@ namespace ISA_GUI
                 {
                     if (AM.success == false)                //If it has not been worked on yet
                     {
-                        stages[3].stage4Start = cycleCount; //Set starting cycle
                         AM.accessMemory(ref dataMemory, ref registers, ref stages[3], ref config);      //ACCESS MEMORY - execute that instruction in stage 4
                         stages[3].stage = 4;                //set stage
                     }
@@ -168,11 +189,11 @@ namespace ISA_GUI
                         AM.inProgress = false;
                 }
 
-                if (stages[2] != null && !EU.inProgress)    //If stage 3 has an instruction and it has already been processed
+                if (stages[2] != null)    //If stage 3 has an instruction and it has already been processed
                 {
                     if (stages[2].cycleControl <= 0)        //Check and make sure it is finished it's required cycles
                     {
-                        if (!AM.occupied)                   //If stage 4 is not occupied, send the instruction in stage 3 to stage 4
+                        if (!AM.occupied && !EU.hazardDetected)                   //If stage 4 is not occupied, send the instruction in stage 3 to stage 4
                         {
                             EU.success = false;                //Reset success status
                             stages[2].stage3End = cycleCount - 1;   //set ending cycle
@@ -180,7 +201,15 @@ namespace ISA_GUI
                             stages[2] = null;                       //Clear state 3
                             EU.occupied = false;                    //Stage 3 no longer occupied
                             AM.occupied = true;                     //Stage 4 is now occupied
+                            stages[3].stage4Start = cycleCount;     //Set starting cycle
                             goto stage4;                            //Repeat stage 4 to execute that new instruction
+                        }
+                        else if (AM.occupied)
+                        {
+                            executeStalled++;
+                            totalCyclesStalled++;
+                            if(AM.success)
+                                structuralHazard++;
                         }
                     }
                 }
@@ -188,9 +217,16 @@ namespace ISA_GUI
             stage3:
                 if (stages[2] != null)                      //If there is an instruction in stage 3
                 {
+                    if(EU.hazardDetected)
+                    {
+                        executeStalled++;
+                        totalCyclesStalled ++;
+                    }
                     if (EU.success == false)                //If it has not been worked on yet
                     {
-                        stages[2].stage3Start = cycleCount; //Set starting cycle
+                        EU.hazardDetected = stage3DetectHazard(ref stages);
+                        if (EU.hazardDetected)
+                            goto stage2;
                         EU.execute(ref registers, ref dataMemory, ref alu, ref IM, ref stages[2], ref config);        //EXECUTE - Execute the instruction in stage 3
                         stages[2].stage = 3;                 //set stage
                     }
@@ -206,7 +242,7 @@ namespace ISA_GUI
                 {
                     if (stages[1].cycleControl <= 0)        //Check and make sure it is finished it's required cycles
                     {
-                        if (!EU.occupied)                   //If stage 3 is not occupied, send the instruction in stage 2 to stage 3
+                        if (!EU.occupied && !CU.hazardDetected)                   //If stage 3 is not occupied, send the instruction in stage 2 to stage 3
                         {
                             CU.success = false;              //Reset success status
                             stages[1].stage2End = cycleCount - 1;   //set ending cycle
@@ -214,7 +250,13 @@ namespace ISA_GUI
                             stages[1] = null;                       //Clear stage 3
                             CU.occupied = false;                    //Stage 2 no longer occupied
                             EU.occupied = true;                     //Stage 3 is now occupied
+                            stages[2].stage3Start = cycleCount;     //Set starting cycle
                             goto stage3;                            //Repeat stage 3 to execute that new instruction
+                        }
+                        else if(EU.occupied)
+                        {
+                            if(EU.success)
+                                structuralHazard++;
                         }
                     }
                 }
@@ -224,10 +266,12 @@ namespace ISA_GUI
                 stage2:
                 if (stages[1] != null && cycleCount > 1)            //If there is an instruction in stage 2
                 {
-
                     if (CU.success == false)                        //If it has not been worked on yet
                     {
-                        stages[1].stage2Start = cycleCount; //Set starting cycle
+                        CU.hazardDetected = stage2DetectHazard(ref stages);
+                        if (CU.hazardDetected)
+                            goto stage1;
+
                         CU.decode(ref IM, ref stages[1], ref config);      //DECODE - Decode the instruction in stage 2
                         stages[1].stage = 2;                //set stage
                     }
@@ -248,13 +292,21 @@ namespace ISA_GUI
                             stages[0] = null;                       //clear stage 1
                             fetch.occupied = false;                 //Stage 1 no longer occupied
                             CU.occupied = true;                     //Stage 2 is now occupied
+                            stages[1].stage2Start = cycleCount;     //Set starting cycle
                             goto stage2;
+                        }
+                        else if(CU.occupied)
+                        {
+                            decodeStalled++;
+                            totalCyclesStalled++;
+                            if(CU.success)
+                                structuralHazard++;
                         }
                     }
                 }
-
                 //end stage 2
-                
+
+                stage1:
                 if (stages[0] == null)              //if no instruction present
                 {
                     stages[0] = fetch.getNextInstruction(ref registers, ref IM, ref config);        //FETCH - get the next instruction and place in stage 1
@@ -263,6 +315,11 @@ namespace ISA_GUI
                     if (stages[0].cycleControl <= 0)        //If processed
                         fetch.inProgress = false;           //No longer in progress
                     continue;
+                }
+                else
+                {
+                    fetchStalled++;
+                    totalCyclesStalled++;
                 }
 
                 //end stage 1
@@ -415,13 +472,8 @@ namespace ISA_GUI
         * <br>
         * Date created: 2/19/22 <br>
         * <hr>
-        *   @param  StringBuilder assemblyString
-        *   @param  int opcode
-        *   @param  int r1
-        *   @param  int r2
-        *   @param  int r3
-        *   @param  int address
-        *   @param  string instrType
+        *   @param  StringBuilder decodedString
+        *   @param Instruction instruction
         */
         public void buildDecodedString(ref StringBuilder decodedString, Instruction instruction)
         {
@@ -482,7 +534,16 @@ namespace ISA_GUI
             }
         }
 
-
+        /**
+        * Method Name: buildPipelineString <br>
+        * Method Purpose: Builds the pipeline output for the instruction across all 5 stages
+        * 
+        * <br>
+        * Date created: 3/02/22 <br>
+        * <hr>
+        *   @param  StringBuilder pipelineString
+        *   @param  Instruction instruction
+        */
         public void buildPipelineString(ref StringBuilder pipelineString, ref Instruction instruction)
         {
             string stage1, stage2, stage3, stage4, stage5;
@@ -518,5 +579,201 @@ namespace ISA_GUI
             pipelineString.Append(output);
 
         }
+
+
+        public bool stage2DetectHazard(ref Instruction[] stages)
+        {
+            bool isThereHazard = false;
+            switch (stages[1].opcode)
+            {
+                case 9:
+                    if (stages[3] == null)
+                        goto endMethod;
+                    if ((stages[1].isFloat ^ stages[3].isFloat) == false)
+                    {
+                        if (stages[3].r3 == 0 || stages[3].destinationReg == 0)
+                        {
+                            goto setRAW;
+                        }
+                    }
+                    break;
+                case 10:
+                    if(stages[3] == null)
+                        goto endMethod;
+                    if ((stages[1].isFloat ^ stages[3].isFloat) == false)
+                    {
+                        if (stages[3].r3 == 0 || stages[3].destinationReg == 0)
+                        {
+                            goto setRAW;
+                        }
+                    }
+                    break;
+
+                case 13:
+                    if(stages[4] == null)
+                        goto endMethod;
+                    //Compare Immediate
+                    if ((stages[1].isFloat ^ stages[4].isFloat) == false)
+                    {
+                        if(stages[1].r1 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
+                        {
+                            goto setRAW;
+                        }
+                    }
+                    break;
+                case 14:
+                    if (stages[4] == null)
+                        goto endMethod;
+                    if ((stages[1].isFloat ^ stages[4].isFloat) == false)
+                    {
+                        if (stages[1].r1 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
+                        {
+                            goto setRAW;
+                        }
+                        if (stages[1].r2 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
+                        {
+                            goto setRAW;
+                        }
+                    }
+                    break;
+                case 15:
+                    if (stages[4] == null)
+                        goto endMethod;
+                    if ((stages[1].isFloat ^ stages[4].isFloat) == false)
+                    {
+                        if (stages[1].r3 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
+                        {
+                            goto setRAW;
+                        }
+                    }
+                    break;
+                case 16:
+                case 17:
+                case 18:
+                case 19:
+                case 20:
+                case 21:
+                case 22:
+                case 23:
+                case 24:
+                case 25:
+                case 26:
+                    if (stages[4] == null)
+                        goto endMethod;
+                    if ((stages[1].isFloat ^ stages[4].isFloat) == false)
+                    {
+                        if (stages[1].r1 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
+                        {
+                            goto setRAW;
+                        }
+                        if (stages[1].r2 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
+                        {
+                            goto setRAW;
+                        }
+                    }
+                    break;
+                case 27:
+                    if (stages[4] == null)
+                        goto endMethod;
+                    if (stages[1].r1 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
+                    {
+                        goto setRAW;
+                    }
+                    break;
+
+            }
+
+            goto endMethod;
+
+            setRAW:
+                isThereHazard = true;
+                totalHazard++;
+                dataHazard++;
+                RAW++;
+
+
+            endMethod:
+                return isThereHazard;
+        }
+
+        public bool stage3DetectHazard(ref Instruction[] stages)
+        {
+            bool isThereHazard = false;
+            switch (stages[2].opcode)
+            {
+                case 13:
+                    if (stages[4] == null)
+                        goto endMethod;
+                    //Compare Immediate
+                    if ((stages[2].isFloat ^ stages[4].isFloat) == false)
+                    {
+                        if (stages[2].r1 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
+                        {
+                            goto setRAW;
+                        }
+                    }
+                    break;
+                case 14:
+                case 15:
+                    if ((stages[2].isFloat ^ stages[4].isFloat) == false)
+                    {
+                        if (stages[2].r1 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
+                        {
+                            goto setRAW;
+                        }
+                        if (stages[2].r2 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
+                        {
+                            goto setRAW;
+                        }
+                    }
+                    break;
+                case 16:
+                case 17:
+                case 18:
+                case 19:
+                case 20:
+                case 21:
+                case 22:
+                case 23:
+                case 24:
+                case 25:
+                case 26:
+                    if (stages[4] == null)
+                        goto endMethod;
+                    if ((stages[2].isFloat ^ stages[4].isFloat) == false)
+                    {
+                        if (stages[2].r1 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14))
+                        {
+                            goto setRAW;
+                        }
+                        if (stages[2].r2 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14))
+                        {
+                            goto setRAW;
+                        }
+                    }
+                    break;
+                case 27:
+                    if (stages[4] == null)
+                        goto endMethod;
+                    if (stages[2].r1 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14))
+                    {
+                        goto setRAW;
+                    }
+                    break;
+
+            }
+
+            goto endMethod;
+
+            setRAW:
+                isThereHazard = true;
+                totalHazard++;
+                dataHazard++;
+                RAW++;
+
+            endMethod:
+                return isThereHazard;
+        }
+
     }
 }

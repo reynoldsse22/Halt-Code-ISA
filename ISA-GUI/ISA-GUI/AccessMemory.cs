@@ -24,10 +24,10 @@ namespace ISA_GUI
 	*/
 	internal class AccessMemory
     {
-		Instruction currentInstruction;
 		public bool occupied;
 		public bool success;
 		public bool inProgress;
+		public bool hazardDetected;
 
 		/**
 	    * Method Name: AccessMemory <br>
@@ -42,7 +42,7 @@ namespace ISA_GUI
 			occupied = false;
 			success = false;
 			inProgress = false;
-
+			hazardDetected = false;
 		}
 
 		/**
@@ -61,7 +61,8 @@ namespace ISA_GUI
         {
 			inProgress = true;
 			occupied = true;
-			switch(instruction.opcode)
+			hazardDetected = false;
+			switch (instruction.opcode)
             {
 				case 9:
 					instruction.cycleControl = config.memAccess;
@@ -70,6 +71,7 @@ namespace ISA_GUI
 						instruction.intResult = memory.MainMemory[instruction.address] << 16;            //Loads the MSB value from the address in memory to r0
 						instruction.intResult += (memory.MainMemory[instruction.address + 1] << 8);      //Loads the TSB value from the address in memory to r0
 						instruction.intResult += (memory.MainMemory[instruction.address + 2]);           //Loads the LSB value from the address in memory to r0
+						registers.intRegisters[0] = instruction.intResult;
 					}
                     else
                     {
@@ -78,6 +80,7 @@ namespace ISA_GUI
 						memoryFloat[2] = (byte)(memory.MainMemory[instruction.address + 1]);                       //Loads the TSB value from the address in memory to f0
 						memoryFloat[1] = (byte)(memory.MainMemory[instruction.address + 2]);                       //Loads the LSB value from the address in memory to f0
 						instruction.floatResult = System.BitConverter.ToSingle(memoryFloat, 0);
+						registers.floatRegisters[0] = instruction.floatResult;
 					}
 					break;
 				case 10:

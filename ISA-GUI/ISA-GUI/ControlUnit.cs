@@ -32,6 +32,7 @@ namespace ISA_GUI
         public  bool occupied;
         public bool success;
         public bool inProgress;
+        public bool hazardDetected;
 
         /**
 	    * Method Name: ControlUnit <br>
@@ -50,6 +51,7 @@ namespace ISA_GUI
             occupied = false;
             success = false;
             inProgress = false;
+            hazardDetected = false;
         }
 
         /**
@@ -67,6 +69,7 @@ namespace ISA_GUI
         {
             inProgress = true;
             occupied = true;
+            hazardDetected = false;
             instruction.cycleControl = config.regAccess;
             int opcode = instruction.opcode;
             int r1 = instruction.r1;

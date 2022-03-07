@@ -27,6 +27,7 @@ namespace ISA_GUI
         public bool occupied;
         public bool success;
         public bool inProgress;
+        public bool hazardDetected;
         /**
 	    * Method Name: Fetch <br>
 	    * Method Purpose: Class constructor
@@ -40,6 +41,7 @@ namespace ISA_GUI
             occupied = false;
             success = false;
             inProgress = false;
+            hazardDetected = false;
         }
 
         /**
@@ -57,6 +59,7 @@ namespace ISA_GUI
         {
             occupied = true;
             inProgress = true;
+            hazardDetected = false;
             Instruction instruction = new Instruction();
             if ((IM.ProgramCounter + 3) > IM.instructions.Count)
                 return instruction;

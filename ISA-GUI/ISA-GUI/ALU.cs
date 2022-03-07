@@ -250,7 +250,7 @@ namespace ISA_GUI
                     else
                     {
                         instruction.cycleControl = config.flDiv;
-                        instruction.floatResult = (int)registers.floatRegisters[r1] / (int)registers.floatRegisters[r2];
+                        instruction.floatResult = registers.floatRegisters[r1] / registers.floatRegisters[r2];
                         if (instruction.floatResult > registers.floatRegisters[r1] && ASPR == 1)
                             carry = true;
                         if (instruction.floatResult == 0 && ASPR == 1)

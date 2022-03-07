@@ -27,6 +27,7 @@ namespace ISA_GUI
         public bool occupied;
         public bool success;
         public bool inProgress;
+        public bool hazardDetected;
         /**
 	    * Method Name: ExecutionUnit <br>
 	    * Method Purpose: Class constructor
@@ -40,7 +41,7 @@ namespace ISA_GUI
             occupied = false;
             success = false;
             inProgress = false;
-
+            hazardDetected = false;
         }
 
         /**
@@ -66,6 +67,7 @@ namespace ISA_GUI
         {
             inProgress = true;
             occupied = true;
+            hazardDetected = false;
             int opcode = instruction.opcode;
             int r1 = instruction.r1;
             int r2 = instruction.r2;
