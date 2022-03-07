@@ -389,7 +389,7 @@ namespace ISA_GUI
             int instrFlag = instruction.instrFlag;
             string instrType = instruction.instrType;
             string registerString = "r";
-            if (instrFlag == 1)
+            if (instrFlag == 2 || instrFlag == 3)
             {
                 registerString = "f";
             }
@@ -469,10 +469,9 @@ namespace ISA_GUI
 
             if(instruct.opcode >= 9)
             {
-                if (instruct.instrFlag == 1)
-
+                if (instruct.instrFlag == 2)
                     updatedAssembly = "f." + updatedAssembly;
-                else if (instruct.instrFlag == 2)
+                else if (instruct.instrFlag == 1)
                     updatedAssembly += 's';
                 else if (instruct.instrFlag == 3)
                     updatedAssembly = "f." + updatedAssembly + 's';
