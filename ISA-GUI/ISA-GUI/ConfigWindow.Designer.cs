@@ -50,6 +50,10 @@
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.applyChangesButton = new System.Windows.Forms.Button();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.predictionBox = new System.Windows.Forms.ComboBox();
+            this.forwardingBox = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.fetchConfigValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.memAccessValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.regAccessValue)).BeginInit();
@@ -399,7 +403,7 @@
             // applyChangesButton
             // 
             this.applyChangesButton.BackColor = System.Drawing.SystemColors.Window;
-            this.applyChangesButton.Location = new System.Drawing.Point(112, 437);
+            this.applyChangesButton.Location = new System.Drawing.Point(103, 534);
             this.applyChangesButton.Name = "applyChangesButton";
             this.applyChangesButton.Size = new System.Drawing.Size(152, 46);
             this.applyChangesButton.TabIndex = 20;
@@ -407,11 +411,63 @@
             this.applyChangesButton.UseVisualStyleBackColor = false;
             this.applyChangesButton.Click += new System.EventHandler(this.applyChangesButton_Click);
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label12.Location = new System.Drawing.Point(13, 442);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(270, 20);
+            this.label12.TabIndex = 22;
+            this.label12.Text = "Branch Prediction..................................";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label13.Location = new System.Drawing.Point(13, 482);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(271, 20);
+            this.label13.TabIndex = 24;
+            this.label13.Text = "Pipeline Forwarding...............................";
+            // 
+            // predictionBox
+            // 
+            this.predictionBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.predictionBox.FormattingEnabled = true;
+            this.predictionBox.Items.AddRange(new object[] {
+            "Off",
+            "On"});
+            this.predictionBox.Location = new System.Drawing.Point(283, 434);
+            this.predictionBox.Name = "predictionBox";
+            this.predictionBox.Size = new System.Drawing.Size(82, 28);
+            this.predictionBox.TabIndex = 27;
+            // 
+            // forwardingBox
+            // 
+            this.forwardingBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.forwardingBox.FormattingEnabled = true;
+            this.forwardingBox.Items.AddRange(new object[] {
+            "Off",
+            "On"});
+            this.forwardingBox.Location = new System.Drawing.Point(283, 474);
+            this.forwardingBox.Name = "forwardingBox";
+            this.forwardingBox.Size = new System.Drawing.Size(82, 28);
+            this.forwardingBox.TabIndex = 28;
+            // 
             // Configurations
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(377, 504);
+            this.ClientSize = new System.Drawing.Size(377, 601);
+            this.Controls.Add(this.forwardingBox);
+            this.Controls.Add(this.predictionBox);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.label12);
             this.Controls.Add(this.applyChangesButton);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label10);
@@ -473,5 +529,9 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Button applyChangesButton;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.ComboBox predictionBox;
+        private System.Windows.Forms.ComboBox forwardingBox;
     }
 }

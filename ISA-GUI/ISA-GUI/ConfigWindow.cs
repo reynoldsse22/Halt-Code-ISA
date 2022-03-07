@@ -25,7 +25,17 @@ namespace ISA_GUI
             flAddSubValue.Value = config.flAddSub;
             flMultValue.Value = config.flMult;
             flDivValue.Value = config.flDiv;
-            calcAddressValue.Value = config.calcAddress;    
+            calcAddressValue.Value = config.calcAddress;
+
+            if (config.predictionSet)
+                predictionBox.SelectedIndex = 1;
+            else
+                predictionBox.SelectedIndex = 0;
+
+            if (config.forwardingSet)
+                forwardingBox.SelectedIndex = 1;
+            else
+                forwardingBox.SelectedIndex = 0;
 
         }
 
@@ -45,6 +55,18 @@ namespace ISA_GUI
             configurations.flAddSub = (int)flAddSubValue.Value;
             configurations.flMult = (int)flMultValue.Value;
             configurations.calcAddress = (int)calcAddressValue.Value;
+
+            if (predictionBox.SelectedIndex == 0)
+                configurations.predictionSet = false;
+            else
+                configurations.predictionSet = true;
+
+            if (forwardingBox.SelectedIndex == 0)
+                configurations.forwardingSet = false;
+            else
+                configurations.forwardingSet = true;
+
+
             Dispose();
         }
 

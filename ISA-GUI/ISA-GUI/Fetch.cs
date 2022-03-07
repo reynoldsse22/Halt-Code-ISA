@@ -55,7 +55,7 @@ namespace ISA_GUI
 		 *   @param  InstructionMemory IM
 		 *   @param  ConfigCycle config
 		 */
-        public Instruction getNextInstruction(ref RegisterFile registers, ref InstructionMemory IM, ref ConfigCycle config)
+        public Instruction getNextInstruction(ref RegisterFile registers, ref InstructionMemory IM, ref ConfigCycle config, ref Instruction[] stages, bool branchTaken, bool predictionSet)
         {
             occupied = true;
             inProgress = true;
@@ -64,11 +64,30 @@ namespace ISA_GUI
             if ((IM.ProgramCounter + 3) > IM.instructions.Count)
                 return instruction;
 
-            instruction.cycleControl = config.fetch;
+            // BRANCH PREDICTION
+            if(predictionSet && stages[1] != null)
+            {
+                if(stages[1].opcode >= 2 && stages[1].opcode <= 9)
+                {
+                    if(branchTaken)
+                    {
+                        instruction.programCounterValue = stages[1].address;
+                        instruction.binInstruction[0] = IM.instructions[stages[1].address];
+                        instruction.binInstruction[1] = IM.instructions[stages[1].address + 1];
+                        instruction.binInstruction[2] = IM.instructions[stages[1].address + 2];
+                        goto finishMethod;
+                    }
+                }
+            }
+            
+
             instruction.programCounterValue = IM.ProgramCounter;
             instruction.binInstruction[0] = IM.instructions[IM.ProgramCounter++];
             instruction.binInstruction[1] = IM.instructions[IM.ProgramCounter++];
             instruction.binInstruction[2] = IM.instructions[IM.ProgramCounter++];
+
+        finishMethod:
+            instruction.cycleControl = config.fetch;
             IM.CurrentInstruction = (instruction.binInstruction[2] + (instruction.binInstruction[1] << 8)+ (instruction.binInstruction[0] << 16));
             success = true;
             inProgress = false;

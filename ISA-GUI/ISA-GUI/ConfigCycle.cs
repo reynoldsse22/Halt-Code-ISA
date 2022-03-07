@@ -25,6 +25,8 @@ namespace ISA_GUI
 	public class ConfigCycle
     {
 		public int fetch, memAccess, regAccess, load_store, intALU, flAddSub, flMult, flDiv, calcAddress;
+		public bool predictionSet;
+		public bool forwardingSet;
 
 		/**
 	    * Method Name: ConfigCycle <br>
@@ -45,6 +47,8 @@ namespace ISA_GUI
 			flMult = 5;
 			flDiv = 10;
 			calcAddress = 1;
+			predictionSet = false;
+			forwardingSet = false;
         }
     }
 }

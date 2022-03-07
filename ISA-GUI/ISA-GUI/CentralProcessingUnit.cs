@@ -37,6 +37,7 @@ namespace ISA_GUI
         public Instruction stall = new Instruction();
         public int totalHazard, structuralHazard, dataHazard, controlHazard, RAW, WAR, WAW;
         public int totalCyclesStalled, fetchStalled, decodeStalled, executeStalled, accessMemStalled, writeRegStalled;
+        public bool lastBranchDecision;
         static string[] instructions = {"HALT",
                                 "NOP",
                                 "BR",
@@ -99,8 +100,17 @@ namespace ISA_GUI
             WAR = 0;
             RAW = 0;
             WAW = 0;
+            lastBranchDecision = false;
         }
 
+        /**
+	    * Method Name: runCycle <br>
+	    * Method Purpose: Runs the program through the pipeline by one cycle if in stepthrough-mode and all the way through in run mode.
+	    * 
+	    * <hr>
+	    * Date created: 2/19/21 <br>
+	    * @author Samuel Reynolds
+	    */
         public void runCycle(List<string> input, bool stepThrough, ref StringBuilder assemblyString, ref StringBuilder decodedString,
                 ref StringBuilder pipelineString, ref bool halted, ref ConfigCycle config, ref Instruction[] stages)
         {
@@ -227,8 +237,13 @@ namespace ISA_GUI
                         EU.hazardDetected = stage3DetectHazard(ref stages);
                         if (EU.hazardDetected)
                             goto stage2;
-                        EU.execute(ref registers, ref dataMemory, ref alu, ref IM, ref stages[2], ref config);        //EXECUTE - Execute the instruction in stage 3
+                        EU.execute(ref registers, ref dataMemory, ref alu, ref IM, ref stages[2], ref config, ref lastBranchDecision);   //EXECUTE - Execute the instruction in stage 3
                         stages[2].stage = 3;                 //set stage
+                        if(detectControlHazard(ref stages))
+                        {
+                            stages[1] = null;
+                            stages[0] = null;
+                        }
                     }
                     
                     stages[2].cycleControl--;           //If not done processing, decrement a cycle
@@ -309,7 +324,7 @@ namespace ISA_GUI
                 stage1:
                 if (stages[0] == null)              //if no instruction present
                 {
-                    stages[0] = fetch.getNextInstruction(ref registers, ref IM, ref config);        //FETCH - get the next instruction and place in stage 1
+                    stages[0] = fetch.getNextInstruction(ref registers, ref IM, ref config, ref stages, lastBranchDecision, config.predictionSet);        //FETCH - get the next instruction and place in stage 1
                     stages[0].stage1Start = cycleCount;     //set cycle start
                     stages[0].cycleControl--;                //If not done processing, decrement a cycle
                     if (stages[0].cycleControl <= 0)        //If processed
@@ -775,5 +790,32 @@ namespace ISA_GUI
                 return isThereHazard;
         }
 
+
+        public bool detectControlHazard(ref Instruction[] stages)
+        {
+            if(stages[2].opcode >= 2 && stages[2].opcode <= 8)
+            {
+                if(stages[1] != null)
+                {
+                    if (stages[2].address != stages[1].programCounterValue)
+                    {
+                        totalHazard++;
+                        controlHazard++;
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (stages[2].address != stages[0].programCounterValue)
+                    {
+                        totalHazard++;
+                        controlHazard++;
+                        return true;
+                    }
+                }
+                
+            }
+            return false;
+        }
     }
 }
