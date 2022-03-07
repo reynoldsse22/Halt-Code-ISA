@@ -62,7 +62,9 @@ namespace ISA_GUI
             hazardDetected = false;
             Instruction instruction = new Instruction();
             if ((IM.ProgramCounter + 3) > IM.instructions.Count)
-                return instruction;
+                return null;
+
+            
 
             // BRANCH PREDICTION
             if(predictionSet && stages[1] != null)

@@ -325,6 +325,9 @@ namespace ISA_GUI
                 if (stages[0] == null)              //if no instruction present
                 {
                     stages[0] = fetch.getNextInstruction(ref registers, ref IM, ref config, ref stages, lastBranchDecision, config.predictionSet);        //FETCH - get the next instruction and place in stage 1
+                    if (stages[0] == null)
+                        continue;
+
                     stages[0].stage1Start = cycleCount;     //set cycle start
                     stages[0].cycleControl--;                //If not done processing, decrement a cycle
                     if (stages[0].cycleControl <= 0)        //If processed
@@ -730,6 +733,8 @@ namespace ISA_GUI
                     break;
                 case 14:
                 case 15:
+                    if (stages[4] == null)
+                        goto endMethod;
                     if ((stages[2].isFloat ^ stages[4].isFloat) == false)
                     {
                         if (stages[2].r1 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)

@@ -73,7 +73,7 @@ namespace ISA_GUI
                     if (!instruction.isFloat)
                     {
                         instruction.cycleControl = config.intALU;
-                        int compare = (address - registers.intRegisters[r1]);
+                        int compare = (address - registers.intRegisters[r3]);
                         if (compare > address && ASPR == 1)
                             carry = true;
                         if (compare == 0 && ASPR == 1)
@@ -82,7 +82,7 @@ namespace ISA_GUI
                     else
                     {
                         instruction.cycleControl = config.flAddSub;
-                        float compare = (address - registers.floatRegisters[r1]);
+                        float compare = (address - registers.floatRegisters[r3]);
                         if (compare > address && ASPR == 1)
                             carry = true;
                         if (compare == 0 && ASPR == 1)
