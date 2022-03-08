@@ -27,6 +27,7 @@ namespace ISA_GUI
         public bool occupied;
         public bool success;
         public bool inProgress;
+        public bool hazardDetected;
         /**
 	    * Method Name: ExecutionUnit <br>
 	    * Method Purpose: Class constructor
@@ -40,7 +41,7 @@ namespace ISA_GUI
             occupied = false;
             success = false;
             inProgress = false;
-
+            hazardDetected = false;
         }
 
         /**
@@ -62,10 +63,11 @@ namespace ISA_GUI
 		 *   @param  int instrFlag
 		 */
         public void execute(ref RegisterFile registers, ref DataMemory memory, ref ALU alu, ref InstructionMemory IM, 
-                ref Instruction instruction, ref ConfigCycle config)
+                ref Instruction instruction, ref ConfigCycle config, ref bool branchTaken)
         {
             inProgress = true;
             occupied = true;
+            hazardDetected = false;
             int opcode = instruction.opcode;
             int r1 = instruction.r1;
             int r2 = instruction.r2;
@@ -88,36 +90,67 @@ namespace ISA_GUI
                 case 2:
                     instruction.cycleControl = config.calcAddress;
                     IM.ProgramCounter = address;                            //Move the branching address into the program counter/instruction pointer
+                    branchTaken = true;
                     break;
                 case 3:
                     instruction.cycleControl = config.calcAddress;
                     if ((registers.ASPR & 2) == 0)
+                    {
                         IM.ProgramCounter = address;                        //Move the BNE address into the program counter/instruction pointer
+                        branchTaken = true;
+                    }
+                    else
+                        branchTaken = false;
                     break;
                 case 4:
                     instruction.cycleControl = config.calcAddress;
                     if ((registers.ASPR & 2) == 1)
+                    {
                         IM.ProgramCounter = address;                        //Move the BEQ address into the program counter/instruction pointer
+                        branchTaken = true;
+                    }
+                    else
+                        branchTaken = false;
                     break;
                 case 5:
                     instruction.cycleControl = config.calcAddress;
                     if ((registers.ASPR & 1) == 1 && (registers.ASPR & 1) == 0)
+                    {
                         IM.ProgramCounter = address;                        //Move the BLT address into the program counter/instruction pointer
+                        branchTaken = true;
+                    }
+                    else
+                        branchTaken = false;
                     break;
                 case 6:
                     instruction.cycleControl = config.calcAddress;
                     if ((registers.ASPR & 2) == 1 || (registers.ASPR & 1) == 1)
+                    {
                         IM.ProgramCounter = address;                        //Move the BLE address into the program counter/instruction pointer
+                        branchTaken = true;
+                    }
+                    else
+                        branchTaken = false;
                     break;
                 case 7:
                     instruction.cycleControl = config.calcAddress;
                     if ((registers.ASPR & 2) == 0 && (registers.ASPR & 1) == 0)
+                    {
                         IM.ProgramCounter = address;                        //Move the BGT address into the program counter/instruction pointer
+                        branchTaken = true;
+                    }
+                    else
+                        branchTaken = false;
                     break;
                 case 8:
                     instruction.cycleControl = config.calcAddress;
                     if (((registers.ASPR & 2) == 0 || (registers.ASPR & 1) == 0) || ((registers.ASPR & 2) == 1 || (registers.ASPR & 1) == 0))
+                    {
                         IM.ProgramCounter = address;                        //Move the BGE address into the program counter/instruction pointer
+                        branchTaken = true;
+                    }
+                    else
+                        branchTaken = false;
                     break;
 
                 //MEMORY INSTRUCTIONS
@@ -159,11 +192,14 @@ namespace ISA_GUI
                 case 21:
                 case 22:
                 case 23:
+                case 24:
+                case 25:
+                case 26:
+                case 27:
                     alu.execute(ref registers, ref memory, ref alu, ref IM, ref instruction, ref config);    //Transfer to the ALU
                     break;
             }
             success = true;
-            instruction.cycleControl--;
             return;
         }
     }

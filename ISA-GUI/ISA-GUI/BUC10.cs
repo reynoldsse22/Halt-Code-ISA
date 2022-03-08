@@ -39,7 +39,7 @@ namespace ISA_GUI
         StringBuilder assemblyOutput = new StringBuilder();                     //Mutable string for the assembly instructions
         StringBuilder pipelineOutput = new StringBuilder(                       //Mutable string for the pipeline output
             "   Team: Beaudry, Farmer, Ortiz, Reynolds\n" +
-            "Project: Pipeline ISA Implementation\n" +
+            "Project: Static Pipeline ISA Implementation\n" +
             "---------------------------------------------------------------\n\n");
         StringBuilder decodedString = new StringBuilder(                        //Mutable string for the decoded instructions
             "Program  Inst Inst Instruct                            Address/\n" +
@@ -71,6 +71,7 @@ namespace ISA_GUI
 		 */
         private void BUC10_Load(object sender, EventArgs e)
         {
+            StartPosition = FormStartPosition.CenterScreen;
             clearProgram();     //On load, initialize all GUI elements and values to their starting value
             stage1Text.SelectionAlignment = HorizontalAlignment.Center;
             stage2Text.SelectionAlignment = HorizontalAlignment.Center;
@@ -240,13 +241,13 @@ namespace ISA_GUI
             pipelineOutput.Clear();
             pipelineOutput.Append(
             "   Team: Beaudry, Farmer, Ortiz, Reynolds\n" +
-            "Project: Pipeline ISA Implementation\n" +
+            "Project: Static Pipeline ISA Implementation\n" +
             "---------------------------------------------------------------\n\n");
 
             pipelineOutput.Append(
-                "                      Inst.   Decode/ Execute/  Access  Write To\n" +
-                "     Instruction      Fetch  Read Reg Calc Adr  Memory  Register\n" +
-                "--------------------- ------ -------- -------- ------- ---------");
+                "                       Inst.   Decode/ Execute/  Access  Write To\n" +
+                "     Instruction       Fetch  Read Reg Calc Adr  Memory  Register\n" +
+                "--------------------- ------- -------- -------- ------- ---------");
             assemblyOutput.Clear();
 
             cpu.IM.ProgramCounter = 0;
@@ -328,6 +329,19 @@ namespace ISA_GUI
                 stages[i] = null;
 
             cpu.cycleCount = 0;
+            cpu.WAR = 0;
+            cpu.WAW = 0;
+            cpu.RAW = 0;
+            cpu.totalCyclesStalled = 0;
+            cpu.fetchStalled = 0;
+            cpu.decodeStalled = 0;
+            cpu.executeStalled = 0;
+            cpu.accessMemStalled = 0;
+            cpu.writeRegStalled = 0;
+            cpu.dataHazard = 0;
+            cpu.controlHazard = 0;
+            cpu.structuralHazard = 0;
+            cpu.totalHazard = 0;
             stage1Text.Text = "";
             stage2Text.Text = "";
             stage3Text.Text = "";
@@ -437,6 +451,30 @@ namespace ISA_GUI
             statistics.Append(String.Format("Arithmetic & logic instructions: {0}, {1}%\n", cpu.CU.ALUInstructionCount, Math.Round((double)cpu.CU.ALUInstructionCount / totalInst * 100, 2)));
             statistics.Append(String.Format("Memory instructions:             {0}, {1}%\n", cpu.CU.memoryInstructionCount, Math.Round((double)cpu.CU.memoryInstructionCount / totalInst * 100, 2)));
 
+            statistics.Append("\n\nPipeline Statistics\n");
+            statistics.Append("------------------\n");
+            statistics.Append(String.Format("Total Cycles:           {0}\n", cpu.cycleCount - 1));
+            statistics.Append("\nHazards\n");
+            statistics.Append("-------\n");
+            statistics.Append(String.Format("structural:             {0}\n", cpu.structuralHazard));
+            statistics.Append(String.Format("data:                   {0}\n", cpu.dataHazard));
+            statistics.Append(String.Format("control:                {0}\n", cpu.controlHazard));
+            statistics.Append(String.Format("Total:                  {0}\n\n", cpu.structuralHazard + cpu.dataHazard + cpu.controlHazard));
+            statistics.Append("Dependencies\n");
+            statistics.Append("------------\n");
+            statistics.Append(String.Format("read-after-write:       {0}\n", cpu.RAW));
+            statistics.Append(String.Format("write-after-read:       {0}\n", cpu.WAR));
+            statistics.Append(String.Format("write-after-write:      {0}\n", cpu.WAW));
+            statistics.Append(String.Format("Total:                  {0}\n\n", (cpu.RAW + cpu.WAR + cpu.WAW)));
+            statistics.Append("Cycles Stalled\n");
+            statistics.Append("--------------\n");
+            statistics.Append(String.Format("instruction fetch:      {0}\n", cpu.fetchStalled));
+            statistics.Append(String.Format("decode / read reg:      {0}\n", cpu.decodeStalled));
+            statistics.Append(String.Format("execute / calc address: {0}\n", cpu.executeStalled));
+            statistics.Append(String.Format("read / write memory:    {0}\n", cpu.accessMemStalled));
+            statistics.Append(String.Format("write register:         {0}\n", cpu.writeRegStalled));
+            statistics.Append(String.Format("Total:                  {0}\n\n", cpu.totalCyclesStalled));
+
             StatsTextBox.Text = statistics.ToString();
         }
 
@@ -453,33 +491,51 @@ namespace ISA_GUI
         {
             int instructionHex;
 
-                if(stages[0] != null)
-                {
-                    instructionHex = (stages[0].binInstruction[2] + (stages[0].binInstruction[1] << 8) + (stages[0].binInstruction[0] << 16));
-                    stage1Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
-                }
-                if (stages[1] != null)
-                {
-                    instructionHex = (stages[1].binInstruction[2] + (stages[1].binInstruction[1] << 8) + (stages[1].binInstruction[0] << 16));
-                    stage2Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
+            if (stages[0] != null)
+            {
+                instructionHex = (stages[0].binInstruction[2] + (stages[0].binInstruction[1] << 8) + (stages[0].binInstruction[0] << 16));
+                stage1Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
             }
-                if (stages[2] != null)
-                {
-                    instructionHex = (stages[2].binInstruction[2] + (stages[2].binInstruction[1] << 8) + (stages[2].binInstruction[0] << 16));
-                    stage3Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
+            else
+                stage1Text.Text = "";
+            if (stages[1] != null)
+            {
+                instructionHex = (stages[1].binInstruction[2] + (stages[1].binInstruction[1] << 8) + (stages[1].binInstruction[0] << 16));
+                stage2Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
             }
-                if (stages[3] != null)
-                {
-                    instructionHex = (stages[3].binInstruction[2] + (stages[3].binInstruction[1] << 8) + (stages[3].binInstruction[0] << 16));
-                    stage4Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
+            else
+                stage2Text.Text = "";
+            if (stages[2] != null)
+            {
+                instructionHex = (stages[2].binInstruction[2] + (stages[2].binInstruction[1] << 8) + (stages[2].binInstruction[0] << 16));
+                stage3Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
             }
-                if (stages[4] != null)
-                {
-                    instructionHex = (stages[4].binInstruction[2] + (stages[4].binInstruction[1] << 8) + (stages[4].binInstruction[0] << 16));
-                    stage5Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
+            else
+                stage3Text.Text = "";
+            if (stages[3] != null)
+            {
+                instructionHex = (stages[3].binInstruction[2] + (stages[3].binInstruction[1] << 8) + (stages[3].binInstruction[0] << 16));
+                stage4Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
             }
-            
-            
+            else
+                stage4Text.Text = "";
+            if (stages[4] != null)
+            {
+                instructionHex = (stages[4].binInstruction[2] + (stages[4].binInstruction[1] << 8) + (stages[4].binInstruction[0] << 16));
+                stage5Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
+            }
+            else
+                stage5Text.Text = "";
+
+            stage1StalledText.Text = cpu.fetchStalled.ToString();
+            stage2StalledText.Text = cpu.decodeStalled.ToString();
+            stage3StalledText.Text = cpu.executeStalled.ToString();
+            stage4StalledText.Text = cpu.accessMemStalled.ToString();
+            stage5StalledText.Text = cpu.writeRegStalled.ToString();
+
+            rawText.Text = cpu.RAW.ToString();
+            warText.Text = cpu.WAR.ToString();  
+            wawText.Text = cpu.WAW.ToString();
         }
 
         
@@ -573,6 +629,16 @@ namespace ISA_GUI
         private void resetButton_MouseHover(object sender, EventArgs e)
         {
             toolTip1.Show("Reset", resetButton);
+        }
+
+        private void configButton_Click(object sender, EventArgs e)
+        {
+            using (Configurations configWindow = new Configurations(config))
+            {
+                configWindow.ShowDialog();
+
+                config = configWindow.getConfig();
+            }
         }
     }
 
