@@ -79,10 +79,6 @@ namespace ISA_GUI
                         instruction.binInstruction[2] = IM.instructions[stages[1].address + 2];
                         goto finishMethod;
                     }
-                    else
-                    {
-
-                    }
                 }
             }
             
