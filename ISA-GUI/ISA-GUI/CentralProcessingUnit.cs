@@ -239,14 +239,8 @@ namespace ISA_GUI
                             goto stage3Bubble;
                         EU.execute(ref registers, ref dataMemory, ref alu, ref IM, ref stages[2], ref config, ref lastBranchDecision);   //EXECUTE - Execute the instruction in stage 3
                         stages[2].stage = 3;                 //set stage
-                        if(detectControlHazard(ref stages))
-                        {
-                            if(lastBranchDecision)
-                            {
-                                stages[1] = null;
-                                stages[0] = null;
-                            }
-                        }
+                        detectControlHazard(ref stages);
+                        
                     }
                     
                     stages[2].cycleControl--;           //If not done processing, decrement a cycle
@@ -908,6 +902,7 @@ namespace ISA_GUI
 
         public bool detectControlHazard(ref Instruction[] stages)
         {
+            bool hazard = false;
             if(stages[2].opcode >= 2 && stages[2].opcode <= 8)
             {
                 if (stages[1] != null)
@@ -916,20 +911,31 @@ namespace ISA_GUI
                     {
                         totalHazard++;
                         controlHazard++;
-                        return true;
+                        if (lastBranchDecision)
+                        {
+                            stages[1] = null;
+                            stages[0] = null;
+                        }
+                        hazard = true;
                     }
                 }
                 else if(stages[0] != null)
                 {
-                    if (stages[2].address != (stages[0].programCounterValue + 3))
+                    if (stages[2].address != (stages[0].programCounterValue))
                     {
                         totalHazard++;
                         controlHazard++;
-                        return true;
+                        if (lastBranchDecision)
+                        {
+                            stages[1] = null;
+                            stages[0] = null;
+                        }
+                        hazard = true;
                     }
                 }
+
             }
-            return false;
+            return hazard;
         }
     }
 }

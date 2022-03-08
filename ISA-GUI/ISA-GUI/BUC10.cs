@@ -459,7 +459,7 @@ namespace ISA_GUI
             statistics.Append(String.Format("structural:             {0}\n", cpu.structuralHazard));
             statistics.Append(String.Format("data:                   {0}\n", cpu.dataHazard));
             statistics.Append(String.Format("control:                {0}\n", cpu.controlHazard));
-            statistics.Append(String.Format("Total:                  {0}\n\n", cpu.totalHazard));
+            statistics.Append(String.Format("Total:                  {0}\n\n", cpu.structuralHazard + cpu.dataHazard + cpu.controlHazard));
             statistics.Append("Dependencies\n");
             statistics.Append("------------\n");
             statistics.Append(String.Format("read-after-write:       {0}\n", cpu.RAW));
