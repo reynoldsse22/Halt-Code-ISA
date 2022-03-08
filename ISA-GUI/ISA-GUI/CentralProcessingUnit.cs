@@ -907,33 +907,42 @@ namespace ISA_GUI
             {
                 if (stages[1] != null)
                 {
-                    if (stages[2].address != stages[1].programCounterValue)
+                    if (lastBranchDecision && stages[2].address != (stages[1].programCounterValue))
                     {
                         totalHazard++;
                         controlHazard++;
-                        if (lastBranchDecision)
-                        {
-                            stages[1] = null;
-                            stages[0] = null;
-                        }
+                        stages[1] = null;
+                        stages[0] = null;
+                        hazard = true;
+                    }
+                    else if (!lastBranchDecision && stages[2].address != (stages[1].programCounterValue))
+                    {
+                        totalHazard++;
+                        controlHazard++;
+                        stages[1] = null;
+                        stages[0] = null;
                         hazard = true;
                     }
                 }
                 else if(stages[0] != null)
                 {
-                    if (stages[2].address != (stages[0].programCounterValue))
+                    if (lastBranchDecision && stages[2].address != (stages[0].programCounterValue))
                     {
                         totalHazard++;
                         controlHazard++;
-                        if (lastBranchDecision)
-                        {
-                            stages[1] = null;
-                            stages[0] = null;
-                        }
+                        stages[1] = null;
+                        stages[0] = null;
+                        hazard = true;
+                    }
+                    else if(!lastBranchDecision && stages[2].address == (stages[0].programCounterValue))
+                    {
+                        totalHazard++;
+                        controlHazard++;
+                        stages[1] = null;
+                        stages[0] = null;
                         hazard = true;
                     }
                 }
-
             }
             return hazard;
         }

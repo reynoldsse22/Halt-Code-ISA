@@ -64,8 +64,6 @@ namespace ISA_GUI
             if ((IM.ProgramCounter + 3) > IM.instructions.Count)
                 return null;
 
-            
-
             // BRANCH PREDICTION
             if(predictionSet && stages[1] != null)
             {
@@ -80,8 +78,8 @@ namespace ISA_GUI
                         goto finishMethod;
                     }
                 }
+              //  IM.ProgramCounter += 3;
             }
-            
 
             instruction.programCounterValue = IM.ProgramCounter;
             instruction.binInstruction[0] = IM.instructions[IM.ProgramCounter++];
