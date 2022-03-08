@@ -33,34 +33,6 @@ namespace ISA_GUI
         public bool success;
         public bool inProgress;
         public bool hazardDetected;
-        static string[] instructions = {"HALT",
-                                "NOP",
-                                "BR",
-                                "BRNE",
-                                "BREQ",
-                                "BRLT",
-                                "BRLE",
-                                "BRGT",
-                                "BRGE",
-                                "LDWM",
-                                "STWM",
-                                "LDWM",
-                                "LDHH",
-                                "CMPI",
-                                "CMPR",
-                                "MOV",
-                                "ASL",
-                                "ASR",
-                                "LSL",
-                                "LSR",
-                                "ADD",
-                                "SUB",
-                                "MULT",
-                                "DIV",
-                                "AND",
-                                "OR",
-                                "XOR",
-                                "NOT"};
 
         /**
 	    * Method Name: ControlUnit <br>

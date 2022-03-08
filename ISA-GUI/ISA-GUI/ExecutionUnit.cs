@@ -81,11 +81,10 @@ namespace ISA_GUI
             { 
                 //CONTROL INSTRUCTIONS
                 case 0:
-                    instruction.cycleControl = config.calcAddress;
-                    instruction.cycleControl--;
+                    instruction.cycleControl = 1;
                     return;                                     //HALT
                 case 1:
-                    instruction.cycleControl = 0;
+                    instruction.cycleControl = 1;
                     return;                                     //No Operation
                 case 2:
                     instruction.cycleControl = config.calcAddress;
@@ -174,7 +173,7 @@ namespace ISA_GUI
                     alu.execute(ref registers, ref memory, ref alu, ref IM, ref instruction, ref config);
                     break;
                 case 15:
-                    instruction.cycleControl = config.calcAddress;
+                    instruction.cycleControl = config.regAccess;
                     instruction.destinationReg = r3;
                     if (!instruction.isFloat)
                         instruction.intResult = registers.intRegisters[r2];

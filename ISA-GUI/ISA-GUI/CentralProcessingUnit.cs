@@ -49,7 +49,7 @@ namespace ISA_GUI
                                 "BRGE",
                                 "LDWM",
                                 "STWM",
-                                "LDWM",
+                                "LDHL",
                                 "LDHH",
                                 "CMPI",
                                 "CMPR",
@@ -237,7 +237,8 @@ namespace ISA_GUI
                         EU.hazardDetected = stage3DetectHazard(ref stages);
                         if (EU.hazardDetected)
                             goto stage3Bubble;
-                        EU.execute(ref registers, ref dataMemory, ref alu, ref IM, ref stages[2], ref config, ref lastBranchDecision);   //EXECUTE - Execute the instruction in stage 3
+                        if(!EU.inProgress)
+                            EU.execute(ref registers, ref dataMemory, ref alu, ref IM, ref stages[2], ref config, ref lastBranchDecision);   //EXECUTE - Execute the instruction in stage 3
                         stages[2].stage = 3;                 //set stage
                         detectControlHazard(ref stages);
                         
