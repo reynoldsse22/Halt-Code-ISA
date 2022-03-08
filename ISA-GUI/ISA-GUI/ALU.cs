@@ -93,7 +93,7 @@ namespace ISA_GUI
                     //Compare Registers
                     if (!instruction.isFloat)
                     {
-                        instruction.cycleControl = config.calcAddress;
+                        instruction.cycleControl = config.intALU;
                         int compare = (registers.intRegisters[r1] - registers.intRegisters[r2]);
                         if (compare > address && ASPR == 1)
                             carry = true;

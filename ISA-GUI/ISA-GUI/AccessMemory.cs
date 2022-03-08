@@ -100,7 +100,7 @@ namespace ISA_GUI
 					}
 					break;
 				default:
-					instruction.cycleControl = config.calcAddress;
+					instruction.cycleControl = 1;
 					break;
 			}
 			success = true;

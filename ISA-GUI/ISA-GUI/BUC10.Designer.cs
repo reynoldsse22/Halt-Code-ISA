@@ -1226,7 +1226,7 @@
             this.warText.BackColor = System.Drawing.SystemColors.Menu;
             this.warText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.warText.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.warText.Location = new System.Drawing.Point(625, 644);
+            this.warText.Location = new System.Drawing.Point(625, 643);
             this.warText.Name = "warText";
             this.warText.ReadOnly = true;
             this.warText.Size = new System.Drawing.Size(51, 25);
