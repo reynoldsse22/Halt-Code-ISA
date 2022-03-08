@@ -71,7 +71,7 @@ namespace ISA_GUI
                 {
                     if(branchTaken)
                     {
-                        if (stages[2].address == IM.ProgramCounter)
+                        if (stages[2].address == IM.ProgramCounter) //if next instruction already in pipeline, increment the program counter by three to get next instruction
                         {
                             IM.ProgramCounter += 3;
                             goto getNext;
@@ -83,7 +83,6 @@ namespace ISA_GUI
                         goto finishMethod;
                     }
                 }
-              //  IM.ProgramCounter += 3;
             }
 
             getNext:
@@ -92,11 +91,10 @@ namespace ISA_GUI
             instruction.binInstruction[1] = IM.instructions[IM.ProgramCounter++];
             instruction.binInstruction[2] = IM.instructions[IM.ProgramCounter++];
 
-        finishMethod:
+            finishMethod:
             instruction.cycleControl = config.fetch;
             IM.CurrentInstruction = (instruction.binInstruction[2] + (instruction.binInstruction[1] << 8)+ (instruction.binInstruction[0] << 16));
             success = true;
-            inProgress = false;
             return instruction;
         }
     }

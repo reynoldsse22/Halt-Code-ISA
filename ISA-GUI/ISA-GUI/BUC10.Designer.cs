@@ -860,7 +860,7 @@
             this.objectCodeBox.Padding = new System.Windows.Forms.Padding(3);
             this.objectCodeBox.Size = new System.Drawing.Size(549, 190);
             this.objectCodeBox.TabIndex = 0;
-            this.objectCodeBox.Text = "Object Code";
+            this.objectCodeBox.Text = "Disassembler";
             this.objectCodeBox.UseVisualStyleBackColor = true;
             // 
             // InputBox

@@ -631,6 +631,16 @@ namespace ISA_GUI
             toolTip1.Show("Reset", resetButton);
         }
 
+        /**
+		 * Method Name: configButton_Click <br>
+		 * Method Purpose: Brings up the configuration window and gets the user changes
+		 * 
+		 * <br>
+		 * Date created: 3/6/22 <br>
+		 * <hr>
+		 *   @param  object sender
+		 *   @param  EventArgs e
+		 */
         private void configButton_Click(object sender, EventArgs e)
         {
             using (Configurations configWindow = new Configurations(config))
