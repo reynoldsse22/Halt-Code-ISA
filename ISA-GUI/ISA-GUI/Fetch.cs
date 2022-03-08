@@ -64,15 +64,18 @@ namespace ISA_GUI
             if ((IM.ProgramCounter + 3) > IM.instructions.Count)
                 return null;
 
-            
-
             // BRANCH PREDICTION
-            if(predictionSet && stages[1] != null)
+            if(predictionSet && stages[1] != null && stages[2] != null)
             {
-                if(stages[1].opcode >= 2 && stages[1].opcode <= 9)
+                if((stages[1].opcode >= 2 && stages[1].opcode <= 9) || (stages[2].opcode >= 2 && stages[2].opcode <= 9))
                 {
                     if(branchTaken)
                     {
+                        if (stages[2].address == IM.ProgramCounter) //if next instruction already in pipeline, increment the program counter by three to get next instruction
+                        {
+                            IM.ProgramCounter += 3;
+                            goto getNext;
+                        } 
                         instruction.programCounterValue = stages[1].address;
                         instruction.binInstruction[0] = IM.instructions[stages[1].address];
                         instruction.binInstruction[1] = IM.instructions[stages[1].address + 1];
@@ -81,18 +84,17 @@ namespace ISA_GUI
                     }
                 }
             }
-            
 
+            getNext:
             instruction.programCounterValue = IM.ProgramCounter;
             instruction.binInstruction[0] = IM.instructions[IM.ProgramCounter++];
             instruction.binInstruction[1] = IM.instructions[IM.ProgramCounter++];
             instruction.binInstruction[2] = IM.instructions[IM.ProgramCounter++];
 
-        finishMethod:
+            finishMethod:
             instruction.cycleControl = config.fetch;
             IM.CurrentInstruction = (instruction.binInstruction[2] + (instruction.binInstruction[1] << 8)+ (instruction.binInstruction[0] << 16));
             success = true;
-            inProgress = false;
             return instruction;
         }
     }

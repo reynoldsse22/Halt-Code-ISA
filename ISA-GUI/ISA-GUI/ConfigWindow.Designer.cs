@@ -54,6 +54,7 @@
             this.label13 = new System.Windows.Forms.Label();
             this.predictionBox = new System.Windows.Forms.ComboBox();
             this.forwardingBox = new System.Windows.Forms.ComboBox();
+            this.resetButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.fetchConfigValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.memAccessValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.regAccessValue)).BeginInit();
@@ -403,7 +404,7 @@
             // applyChangesButton
             // 
             this.applyChangesButton.BackColor = System.Drawing.SystemColors.Window;
-            this.applyChangesButton.Location = new System.Drawing.Point(103, 534);
+            this.applyChangesButton.Location = new System.Drawing.Point(213, 532);
             this.applyChangesButton.Name = "applyChangesButton";
             this.applyChangesButton.Size = new System.Drawing.Size(152, 46);
             this.applyChangesButton.TabIndex = 20;
@@ -459,11 +460,23 @@
             this.forwardingBox.Size = new System.Drawing.Size(82, 28);
             this.forwardingBox.TabIndex = 28;
             // 
+            // resetButton
+            // 
+            this.resetButton.BackColor = System.Drawing.SystemColors.Window;
+            this.resetButton.Location = new System.Drawing.Point(17, 532);
+            this.resetButton.Name = "resetButton";
+            this.resetButton.Size = new System.Drawing.Size(152, 46);
+            this.resetButton.TabIndex = 29;
+            this.resetButton.Text = "Reset";
+            this.resetButton.UseVisualStyleBackColor = false;
+            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
+            // 
             // Configurations
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(377, 601);
+            this.Controls.Add(this.resetButton);
             this.Controls.Add(this.forwardingBox);
             this.Controls.Add(this.predictionBox);
             this.Controls.Add(this.label13);
@@ -533,5 +546,6 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.ComboBox predictionBox;
         private System.Windows.Forms.ComboBox forwardingBox;
+        private System.Windows.Forms.Button resetButton;
     }
 }

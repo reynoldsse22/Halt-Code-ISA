@@ -330,12 +330,16 @@ namespace ISA_GUI
                         continue;
 
                     stages[0].stage1Start = cycleCount;     //set cycle start
+                   
                     stages[0].cycleControl--;                //If not done processing, decrement a cycle
                     if (stages[0].cycleControl <= 0)        //If processed
                         fetch.inProgress = false;           //No longer in progress
+
                     continue;
                 }
-                
+                stages[0].cycleControl--;                //If not done processing, decrement a cycle
+                if (stages[0].cycleControl <= 0)        //If processed
+                    fetch.inProgress = false;           //No longer in progress
 
                 //end stage 1
 
@@ -592,16 +596,25 @@ namespace ISA_GUI
 
         }
 
-
+        /**
+        * Method Name: stage2DetectHazard <br>
+        * Method Purpose: Detects data hazards in the pipeline for stage 2
+        * 
+        * <br>
+        * Date created: 3/6/22 <br>
+        * <hr>
+        *   @param  Instruction[] stages
+        */
         public bool stage2DetectHazard(ref Instruction[] stages)
         {
             bool isThereHazard = false;
             switch (stages[1].opcode)
             {
                 case 9:
+                    //Load from memory
                     if (stages[3] == null)
                         goto endMethod;
-                    if ((stages[1].isFloat ^ stages[3].isFloat) == false)
+                    if ((stages[1].isFloat ^ stages[3].isFloat) == false)//either both are float or both are integer instructions
                     {
                         if (stages[3].r3 == 0 || stages[3].destinationReg == 0)
                         {
@@ -610,9 +623,10 @@ namespace ISA_GUI
                     }
                     break;
                 case 10:
+                    //Store into memory
                     if(stages[3] == null)
                         goto endMethod;
-                    if ((stages[1].isFloat ^ stages[3].isFloat) == false)
+                    if ((stages[1].isFloat ^ stages[3].isFloat) == false)//either both are float or both are integer instructions
                     {
                         if (stages[3].r3 == 0 || stages[3].destinationReg == 0)
                         {
@@ -622,10 +636,10 @@ namespace ISA_GUI
                     break;
 
                 case 13:
+                    //COmpare Immediate
                     if(stages[4] == null)
                         goto case13NextCheck;
-                    //Compare Immediate
-                    if ((stages[1].isFloat ^ stages[4].isFloat) == false)
+                    if ((stages[1].isFloat ^ stages[4].isFloat) == false)//either both are float or both are integer instructions
                     {
                         if(stages[1].r1 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
                         {
@@ -635,8 +649,7 @@ namespace ISA_GUI
                     case13NextCheck:
                     if (stages[3] == null)
                         goto endMethod;
-                    //Compare Immediate
-                    if ((stages[1].isFloat ^ stages[3].isFloat) == false)
+                    if ((stages[1].isFloat ^ stages[3].isFloat) == false)//either both are float or both are integer instructions
                     {
                         if (stages[1].r1 == stages[3].destinationReg && ((stages[3].opcode >= 9 && stages[3].opcode <= 12) || stages[3].opcode >= 14) && stages[3].opcode != 10)
                         {
@@ -645,9 +658,10 @@ namespace ISA_GUI
                     }
                     break;
                 case 14:
+                    //Compare registers
                     if (stages[4] == null)
                         goto case14NextCheck;
-                    if ((stages[1].isFloat ^ stages[4].isFloat) == false)
+                    if ((stages[1].isFloat ^ stages[4].isFloat) == false)//either both are float or both are integer instructions
                     {
                         if (stages[1].r1 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
                         {
@@ -661,7 +675,7 @@ namespace ISA_GUI
                     case14NextCheck:
                     if (stages[3] == null)
                         goto endMethod;
-                    if ((stages[1].isFloat ^ stages[3].isFloat) == false)
+                    if ((stages[1].isFloat ^ stages[3].isFloat) == false)//either both are float or both are integer instructions
                     {
                         if (stages[1].r1 == stages[3].destinationReg && ((stages[3].opcode >= 9 && stages[3].opcode <= 12) || stages[3].opcode >= 14) && stages[3].opcode != 10)
                         {
@@ -674,9 +688,10 @@ namespace ISA_GUI
                     }
                     break;
                 case 15:
+                    //MOV reg to reg
                     if (stages[4] == null)
                         goto case15NextCheck;
-                    if ((stages[1].isFloat ^ stages[4].isFloat) == false)
+                    if ((stages[1].isFloat ^ stages[4].isFloat) == false)//either both are float or both are integer instructions
                     {
                         if (stages[1].r3 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
                         {
@@ -686,7 +701,7 @@ namespace ISA_GUI
                     case15NextCheck:
                     if (stages[3] == null)
                         goto endMethod;
-                    if ((stages[1].isFloat ^ stages[3].isFloat) == false)
+                    if ((stages[1].isFloat ^ stages[3].isFloat) == false) //either both are float or both are integer instructions
                     {
                         if (stages[1].r3 == stages[3].destinationReg && ((stages[3].opcode >= 9 && stages[3].opcode <= 12) || stages[3].opcode >= 14) && stages[3].opcode != 10)
                         {
@@ -705,9 +720,10 @@ namespace ISA_GUI
                 case 24:
                 case 25:
                 case 26:
+                    //ALU instructions
                     if (stages[4] == null)
                         goto case26NextCheck;
-                    if ((stages[1].isFloat ^ stages[4].isFloat) == false)
+                    if ((stages[1].isFloat ^ stages[4].isFloat) == false) //either both are float or both are integer instructions
                     {
                         if (stages[1].r1 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
                         {
@@ -721,7 +737,7 @@ namespace ISA_GUI
                     case26NextCheck:
                     if (stages[3] == null)
                         goto endMethod;
-                    if ((stages[1].isFloat ^ stages[3].isFloat) == false)
+                    if ((stages[1].isFloat ^ stages[3].isFloat) == false)//either both are float or both are integer instructions
                     {
                         if (stages[1].r1 == stages[3].destinationReg && ((stages[3].opcode >= 9 && stages[3].opcode <= 12) || stages[3].opcode >= 14) && stages[3].opcode != 10)
                         {
@@ -734,6 +750,7 @@ namespace ISA_GUI
                     }
                     break;
                 case 27:
+                    //NOT instruction
                     if (stages[4] == null)
                         goto case27NextCheck;
                     if (stages[1].r2 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
@@ -770,6 +787,16 @@ namespace ISA_GUI
                 return isThereHazard;
         }
 
+
+        /**
+       * Method Name: stage3DetectHazard <br>
+       * Method Purpose: Detects data hazards in the pipeline for stage 3
+       * 
+       * <br>
+       * Date created: 3/6/22 <br>
+       * <hr>
+       *   @param  Instruction[] stages
+       */
         public bool stage3DetectHazard(ref Instruction[] stages)
         {
             bool isThereHazard = false;
@@ -779,7 +806,7 @@ namespace ISA_GUI
                     if (stages[4] == null)
                         goto case13CheckNext;
                     //Compare Immediate
-                    if ((stages[2].isFloat ^ stages[4].isFloat) == false)
+                    if ((stages[2].isFloat ^ stages[4].isFloat) == false)//either both are float or both are integer instructions
                     {
                         if (stages[2].r1 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
                         {
@@ -790,8 +817,7 @@ namespace ISA_GUI
                     case13CheckNext:
                     if (stages[3] == null)
                         goto endMethod;
-                    //Compare Immediate
-                    if ((stages[2].isFloat ^ stages[3].isFloat) == false)
+                    if ((stages[2].isFloat ^ stages[3].isFloat) == false)//either both are float or both are integer instructions
                     {
                         if (stages[2].r1 == stages[3].destinationReg && ((stages[3].opcode >= 9 && stages[3].opcode <= 12) || stages[3].opcode >= 14) && stages[3].opcode != 10)
                         {
@@ -803,7 +829,7 @@ namespace ISA_GUI
                 case 15:
                     if (stages[4] == null)
                         goto case15NextCheck;
-                    if ((stages[2].isFloat ^ stages[4].isFloat) == false)
+                    if ((stages[2].isFloat ^ stages[4].isFloat) == false)//either both are float or both are integer instructions
                     {
                         if (stages[2].r2 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
                         {
@@ -817,7 +843,7 @@ namespace ISA_GUI
                     case15NextCheck:
                     if (stages[3] == null)
                         goto endMethod;
-                    if ((stages[2].isFloat ^ stages[3].isFloat) == false)
+                    if ((stages[2].isFloat ^ stages[3].isFloat) == false)//either both are float or both are integer instructions
                     {
                         if (stages[2].r2 == stages[3].destinationReg && ((stages[3].opcode >= 9 && stages[3].opcode <= 12) || stages[3].opcode >= 14) && stages[3].opcode != 10)
                         {
@@ -842,7 +868,7 @@ namespace ISA_GUI
                 case 26:
                     if (stages[4] == null)
                         goto case26NextCheck;
-                    if ((stages[2].isFloat ^ stages[4].isFloat) == false)
+                    if ((stages[2].isFloat ^ stages[4].isFloat) == false)//either both are float or both are integer instructions
                     {
                         if (stages[2].r1 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14))
                         {
@@ -856,7 +882,7 @@ namespace ISA_GUI
                     case26NextCheck:
                     if (stages[3] == null)
                         goto endMethod;
-                    if ((stages[2].isFloat ^ stages[3].isFloat) == false)
+                    if ((stages[2].isFloat ^ stages[3].isFloat) == false)//either both are float or both are integer instructions
                     {
                         if (stages[2].r1 == stages[3].destinationReg && ((stages[3].opcode >= 9 && stages[3].opcode <= 12) || stages[3].opcode >= 14))
                         {
@@ -899,7 +925,15 @@ namespace ISA_GUI
                 return isThereHazard;
         }
 
-
+        /**
+       * Method Name: detectControlHazard <br>
+       * Method Purpose: Detects control hazards and if the pipeline needs to be flushed
+       * 
+       * <br>
+       * Date created: 3/7/22 <br>
+       * <hr>
+       *   @param  Instruction[] stages
+       */
         public bool detectControlHazard(ref Instruction[] stages)
         {
             bool hazard = false;
@@ -907,33 +941,42 @@ namespace ISA_GUI
             {
                 if (stages[1] != null)
                 {
-                    if (stages[2].address != stages[1].programCounterValue)
+                    if (lastBranchDecision && stages[2].address != (stages[1].programCounterValue))
                     {
                         totalHazard++;
                         controlHazard++;
-                        if (lastBranchDecision)
-                        {
-                            stages[1] = null;
-                            stages[0] = null;
-                        }
+                        stages[1] = null;
+                        stages[0] = null;
+                        hazard = true;
+                    }
+                    else if (!lastBranchDecision && stages[2].address != (stages[1].programCounterValue))
+                    {
+                        totalHazard++;
+                        controlHazard++;
+                        stages[1] = null;
+                        stages[0] = null;
                         hazard = true;
                     }
                 }
                 else if(stages[0] != null)
                 {
-                    if (stages[2].address != (stages[0].programCounterValue))
+                    if (lastBranchDecision && stages[2].address != (stages[0].programCounterValue))
                     {
                         totalHazard++;
                         controlHazard++;
-                        if (lastBranchDecision)
-                        {
-                            stages[1] = null;
-                            stages[0] = null;
-                        }
+                        stages[1] = null;
+                        stages[0] = null;
+                        hazard = true;
+                    }
+                    else if(!lastBranchDecision && stages[2].address == (stages[0].programCounterValue))
+                    {
+                        totalHazard++;
+                        controlHazard++;
+                        stages[1] = null;
+                        stages[0] = null;
                         hazard = true;
                     }
                 }
-
             }
             return hazard;
         }
