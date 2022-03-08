@@ -149,9 +149,11 @@ namespace ISA_GUI
             flMultValue.Value = 5;
             flDivValue.Value = 10;
             calcAddressValue.Value = 1;
+            forwardingBox.SelectedIndex = 0;
+            predictionBox.SelectedIndex = 0;
+
             configurations.predictionSet = false;
             configurations.forwardingSet = false;
-
             configurations.fetch = (int)fetchConfigValue.Value;
             configurations.memAccess = (int)memAccessValue.Value;
             configurations.regAccess = (int)regAccessValue.Value;
@@ -161,17 +163,6 @@ namespace ISA_GUI
             configurations.flMult = (int)flMultValue.Value;
             configurations.flDiv = (int)flDivValue.Value;
             configurations.calcAddress = (int)calcAddressValue.Value;
-
-            if (predictionBox.SelectedIndex == 0)
-                configurations.predictionSet = false;
-            else
-                configurations.predictionSet = true;
-
-            if (forwardingBox.SelectedIndex == 0)
-                configurations.forwardingSet = false;
-            else
-                configurations.forwardingSet = true;
-
         }
     }
 }
