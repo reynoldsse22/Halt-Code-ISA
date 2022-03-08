@@ -230,19 +230,22 @@ namespace ISA_GUI
                     if(EU.hazardDetected)
                     {
                         executeStalled++;
-                        totalCyclesStalled ++;
+                        totalCyclesStalled++;
                     }
                     if (EU.success == false)                //If it has not been worked on yet
                     {
                         EU.hazardDetected = stage3DetectHazard(ref stages);
                         if (EU.hazardDetected)
-                            goto stage2;
+                            goto stage3Bubble;
                         EU.execute(ref registers, ref dataMemory, ref alu, ref IM, ref stages[2], ref config, ref lastBranchDecision);   //EXECUTE - Execute the instruction in stage 3
                         stages[2].stage = 3;                 //set stage
                         if(detectControlHazard(ref stages))
                         {
-                            stages[1] = null;
-                            stages[0] = null;
+                            if(lastBranchDecision)
+                            {
+                                stages[1] = null;
+                                stages[0] = null;
+                            }
                         }
                     }
                     
@@ -252,7 +255,7 @@ namespace ISA_GUI
                         
 
                 }
-
+            stage3Bubble:
                 if(stages[1] != null && !CU.inProgress)     //If stage 2 has an instruction and it has already been processed
                 {
                     if (stages[1].cycleControl <= 0)        //Check and make sure it is finished it's required cycles
@@ -270,7 +273,9 @@ namespace ISA_GUI
                         }
                         else if(EU.occupied)
                         {
-                            if(EU.success)
+                            decodeStalled++;
+                            totalCyclesStalled++;
+                            if (EU.success)
                                 structuralHazard++;
                         }
                     }
@@ -285,7 +290,7 @@ namespace ISA_GUI
                     {
                         CU.hazardDetected = stage2DetectHazard(ref stages);
                         if (CU.hazardDetected)
-                            goto stage1;
+                            goto stage2Bubble;
 
                         CU.decode(ref IM, ref stages[1], ref config);      //DECODE - Decode the instruction in stage 2
                         stages[1].stage = 2;                //set stage
@@ -295,6 +300,8 @@ namespace ISA_GUI
                     if (stages[1].cycleControl <= 0)         //If done processing, no longer in progress
                         CU.inProgress = false;
                 }
+
+                stage2Bubble:
                 if(stages[0] != null && !fetch.inProgress)  //If stage 1 has an instruction and it has already been processed
                 {
                     if (stages[0].cycleControl <= 0)        //Check and make sure it is finished it's required cycles
@@ -312,7 +319,7 @@ namespace ISA_GUI
                         }
                         else if(CU.occupied)
                         {
-                            decodeStalled++;
+                            fetchStalled++;
                             totalCyclesStalled++;
                             if(CU.success)
                                 structuralHazard++;
@@ -334,11 +341,7 @@ namespace ISA_GUI
                         fetch.inProgress = false;           //No longer in progress
                     continue;
                 }
-                else
-                {
-                    fetchStalled++;
-                    totalCyclesStalled++;
-                }
+                
 
                 //end stage 1
 
@@ -459,8 +462,6 @@ namespace ISA_GUI
         public void appendAssemblyString(ref StringBuilder assemblyString, string instruction, string first, string second, string third, ref Instruction instruct)
         {
             string updatedAssembly = instruction.ToUpper();
-            if ((IM.ProgramCounter / 3) < CU.instructionsProcessed) //if the program counter is referencing an instruction we have already processed - Don't need the assembly syntax
-                return;
 
             if (second != "")
                 first += ",";
@@ -568,30 +569,30 @@ namespace ISA_GUI
             if (instruction.stage1Start == instruction.stage1End)
                 stage1 = instruction.stage1Start.ToString();
             else
-                stage1 = instruction.stage1Start.ToString() + " - " + instruction.stage1End.ToString();
+                stage1 = instruction.stage1Start.ToString() + "-" + instruction.stage1End.ToString();
 
             if (instruction.stage2Start == instruction.stage2End)
                 stage2 = instruction.stage2Start.ToString();
             else
-                stage2 = instruction.stage2Start.ToString() + " - " + instruction.stage2End.ToString();
+                stage2 = instruction.stage2Start.ToString() + "-" + instruction.stage2End.ToString();
 
             if (instruction.stage3Start == instruction.stage3End)
                 stage3 = instruction.stage3Start.ToString();
             else
-                stage3 = instruction.stage3Start.ToString() + " - " + instruction.stage3End.ToString();
+                stage3 = instruction.stage3Start.ToString() + "-" + instruction.stage3End.ToString();
 
             if (instruction.stage4Start == instruction.stage4End)
                 stage4 = instruction.stage4Start.ToString();
             else
-                stage4 = instruction.stage4Start.ToString() + " - " + instruction.stage4End.ToString();
+                stage4 = instruction.stage4Start.ToString() + "-" + instruction.stage4End.ToString();
 
             if (instruction.stage5Start == instruction.stage5End)
                 stage5 = instruction.stage5Start.ToString();
             else
-                stage5 = instruction.stage5Start.ToString() + " - " + instruction.stage5End.ToString();
+                stage5 = instruction.stage5Start.ToString() + "-" + instruction.stage5End.ToString();
 
-            string output = (string.Format("\n{0, 7} {1,13} {2, 6} {3, 8} {4, 8} {5, 7} {6, 9}",
-                            instruction.assembly1.PadRight(7),instruction.assembly2.PadRight(13), stage1.PadLeft(6), stage2.PadLeft(8), stage3.PadLeft(8), stage4.PadLeft(7), stage5.PadLeft(9)));
+            string output = (string.Format("\n{0, 7} {1,13} {2, 7} {3, 8} {4, 8} {5, 7} {6, 9}",
+                            instruction.assembly1.PadRight(7),instruction.assembly2.PadRight(13), stage1.PadLeft(7), stage2.PadLeft(8), stage3.PadLeft(8), stage4.PadLeft(7), stage5.PadLeft(9)));
 
             pipelineString.Append(output);
 
@@ -628,7 +629,7 @@ namespace ISA_GUI
 
                 case 13:
                     if(stages[4] == null)
-                        goto endMethod;
+                        goto case13NextCheck;
                     //Compare Immediate
                     if ((stages[1].isFloat ^ stages[4].isFloat) == false)
                     {
@@ -637,10 +638,21 @@ namespace ISA_GUI
                             goto setRAW;
                         }
                     }
+                    case13NextCheck:
+                    if (stages[3] == null)
+                        goto endMethod;
+                    //Compare Immediate
+                    if ((stages[1].isFloat ^ stages[3].isFloat) == false)
+                    {
+                        if (stages[1].r1 == stages[3].destinationReg && ((stages[3].opcode >= 9 && stages[3].opcode <= 12) || stages[3].opcode >= 14) && stages[3].opcode != 10)
+                        {
+                            goto setRAW;
+                        }
+                    }
                     break;
                 case 14:
                     if (stages[4] == null)
-                        goto endMethod;
+                        goto case14NextCheck;
                     if ((stages[1].isFloat ^ stages[4].isFloat) == false)
                     {
                         if (stages[1].r1 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
@@ -652,13 +664,37 @@ namespace ISA_GUI
                             goto setRAW;
                         }
                     }
+                    case14NextCheck:
+                    if (stages[3] == null)
+                        goto endMethod;
+                    if ((stages[1].isFloat ^ stages[3].isFloat) == false)
+                    {
+                        if (stages[1].r1 == stages[3].destinationReg && ((stages[3].opcode >= 9 && stages[3].opcode <= 12) || stages[3].opcode >= 14) && stages[3].opcode != 10)
+                        {
+                            goto setRAW;
+                        }
+                        if (stages[1].r2 == stages[3].destinationReg && ((stages[3].opcode >= 9 && stages[3].opcode <= 12) || stages[3].opcode >= 14) && stages[3].opcode != 10)
+                        {
+                            goto setRAW;
+                        }
+                    }
                     break;
                 case 15:
                     if (stages[4] == null)
-                        goto endMethod;
+                        goto case15NextCheck;
                     if ((stages[1].isFloat ^ stages[4].isFloat) == false)
                     {
                         if (stages[1].r3 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
+                        {
+                            goto setRAW;
+                        }
+                    }
+                    case15NextCheck:
+                    if (stages[3] == null)
+                        goto endMethod;
+                    if ((stages[1].isFloat ^ stages[3].isFloat) == false)
+                    {
+                        if (stages[1].r3 == stages[3].destinationReg && ((stages[3].opcode >= 9 && stages[3].opcode <= 12) || stages[3].opcode >= 14) && stages[3].opcode != 10)
                         {
                             goto setRAW;
                         }
@@ -676,7 +712,7 @@ namespace ISA_GUI
                 case 25:
                 case 26:
                     if (stages[4] == null)
-                        goto endMethod;
+                        goto case26NextCheck;
                     if ((stages[1].isFloat ^ stages[4].isFloat) == false)
                     {
                         if (stages[1].r1 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
@@ -688,18 +724,46 @@ namespace ISA_GUI
                             goto setRAW;
                         }
                     }
+                    case26NextCheck:
+                    if (stages[3] == null)
+                        goto endMethod;
+                    if ((stages[1].isFloat ^ stages[3].isFloat) == false)
+                    {
+                        if (stages[1].r1 == stages[3].destinationReg && ((stages[3].opcode >= 9 && stages[3].opcode <= 12) || stages[3].opcode >= 14) && stages[3].opcode != 10)
+                        {
+                            goto setRAW;
+                        }
+                        if (stages[1].r2 == stages[3].destinationReg && ((stages[3].opcode >= 9 && stages[3].opcode <= 12) || stages[3].opcode >= 14) && stages[3].opcode != 10)
+                        {
+                            goto setRAW;
+                        }
+                    }
                     break;
                 case 27:
                     if (stages[4] == null)
+                        goto case27NextCheck;
+                    if (stages[1].r2 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
+                    {
+                        goto setRAW;
+                    }
+                    if (stages[1].r3 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
+                    {
+                        goto setRAW;
+                    }
+                    case27NextCheck:
+                    if (stages[3] == null)
                         goto endMethod;
-                    if (stages[1].r1 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
+                    if (stages[1].r2 == stages[3].destinationReg && ((stages[3].opcode >= 9 && stages[3].opcode <= 12) || stages[3].opcode >= 14) && stages[3].opcode != 10)
+                    {
+                        goto setRAW;
+                    }
+                    if (stages[1].r3 == stages[3].destinationReg && ((stages[3].opcode >= 9 && stages[3].opcode <= 12) || stages[3].opcode >= 14) && stages[3].opcode != 10)
                     {
                         goto setRAW;
                     }
                     break;
 
             }
-
             goto endMethod;
 
             setRAW:
@@ -707,7 +771,6 @@ namespace ISA_GUI
                 totalHazard++;
                 dataHazard++;
                 RAW++;
-
 
             endMethod:
                 return isThereHazard;
@@ -720,7 +783,7 @@ namespace ISA_GUI
             {
                 case 13:
                     if (stages[4] == null)
-                        goto endMethod;
+                        goto case13CheckNext;
                     //Compare Immediate
                     if ((stages[2].isFloat ^ stages[4].isFloat) == false)
                     {
@@ -729,18 +792,44 @@ namespace ISA_GUI
                             goto setRAW;
                         }
                     }
+
+                    case13CheckNext:
+                    if (stages[3] == null)
+                        goto endMethod;
+                    //Compare Immediate
+                    if ((stages[2].isFloat ^ stages[3].isFloat) == false)
+                    {
+                        if (stages[2].r1 == stages[3].destinationReg && ((stages[3].opcode >= 9 && stages[3].opcode <= 12) || stages[3].opcode >= 14) && stages[3].opcode != 10)
+                        {
+                            goto setRAW;
+                        }
+                    }
                     break;
                 case 14:
                 case 15:
                     if (stages[4] == null)
-                        goto endMethod;
+                        goto case15NextCheck;
                     if ((stages[2].isFloat ^ stages[4].isFloat) == false)
                     {
-                        if (stages[2].r1 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
+                        if (stages[2].r2 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
                         {
                             goto setRAW;
                         }
-                        if (stages[2].r2 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
+                        if (stages[2].r3 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14) && stages[4].opcode != 10)
+                        {
+                            goto setRAW;
+                        }
+                    }
+                    case15NextCheck:
+                    if (stages[3] == null)
+                        goto endMethod;
+                    if ((stages[2].isFloat ^ stages[3].isFloat) == false)
+                    {
+                        if (stages[2].r2 == stages[3].destinationReg && ((stages[3].opcode >= 9 && stages[3].opcode <= 12) || stages[3].opcode >= 14) && stages[3].opcode != 10)
+                        {
+                            goto setRAW;
+                        }
+                        if (stages[2].r3 == stages[3].destinationReg && ((stages[3].opcode >= 9 && stages[3].opcode <= 12) || stages[3].opcode >= 14) && stages[3].opcode != 10)
                         {
                             goto setRAW;
                         }
@@ -758,7 +847,7 @@ namespace ISA_GUI
                 case 25:
                 case 26:
                     if (stages[4] == null)
-                        goto endMethod;
+                        goto case26NextCheck;
                     if ((stages[2].isFloat ^ stages[4].isFloat) == false)
                     {
                         if (stages[2].r1 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14))
@@ -770,11 +859,33 @@ namespace ISA_GUI
                             goto setRAW;
                         }
                     }
+                    case26NextCheck:
+                    if (stages[3] == null)
+                        goto endMethod;
+                    if ((stages[2].isFloat ^ stages[3].isFloat) == false)
+                    {
+                        if (stages[2].r1 == stages[3].destinationReg && ((stages[3].opcode >= 9 && stages[3].opcode <= 12) || stages[3].opcode >= 14))
+                        {
+                            goto setRAW;
+                        }
+                        if (stages[2].r2 == stages[3].destinationReg && ((stages[3].opcode >= 9 && stages[3].opcode <= 12) || stages[3].opcode >= 14))
+                        {
+                            goto setRAW;
+                        }
+                    }
                     break;
                 case 27:
                     if (stages[4] == null)
-                        goto endMethod;
+                        goto case27NextCheck;
                     if (stages[2].r1 == stages[4].destinationReg && ((stages[4].opcode >= 9 && stages[4].opcode <= 12) || stages[4].opcode >= 14))
+                    {
+                        goto setRAW;
+                    }
+
+                    case27NextCheck:
+                    if (stages[3] == null)
+                        goto endMethod;
+                    if (stages[2].r1 == stages[3].destinationReg && ((stages[3].opcode >= 9 && stages[3].opcode <= 12) || stages[3].opcode >= 14))
                     {
                         goto setRAW;
                     }
@@ -799,7 +910,7 @@ namespace ISA_GUI
         {
             if(stages[2].opcode >= 2 && stages[2].opcode <= 8)
             {
-                if(stages[1] != null)
+                if (stages[1] != null)
                 {
                     if (stages[2].address != stages[1].programCounterValue)
                     {
@@ -808,16 +919,15 @@ namespace ISA_GUI
                         return true;
                     }
                 }
-                else
+                else if(stages[0] != null)
                 {
-                    if (stages[2].address != stages[0].programCounterValue)
+                    if (stages[2].address != (stages[0].programCounterValue + 3))
                     {
                         totalHazard++;
                         controlHazard++;
                         return true;
                     }
                 }
-                
             }
             return false;
         }

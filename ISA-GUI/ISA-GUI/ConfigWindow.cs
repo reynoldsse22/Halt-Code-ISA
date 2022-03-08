@@ -54,6 +54,7 @@ namespace ISA_GUI
             configurations.intALU = (int)intALUValue.Value;
             configurations.flAddSub = (int)flAddSubValue.Value;
             configurations.flMult = (int)flMultValue.Value;
+            configurations.flDiv = (int)flDivValue.Value;
             configurations.calcAddress = (int)calcAddressValue.Value;
 
             if (predictionBox.SelectedIndex == 0)

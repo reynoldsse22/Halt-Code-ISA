@@ -245,9 +245,9 @@ namespace ISA_GUI
             "---------------------------------------------------------------\n\n");
 
             pipelineOutput.Append(
-                "                      Inst.   Decode/ Execute/  Access  Write To\n" +
-                "     Instruction      Fetch  Read Reg Calc Adr  Memory  Register\n" +
-                "--------------------- ------ -------- -------- ------- ---------");
+                "                       Inst.   Decode/ Execute/  Access  Write To\n" +
+                "     Instruction       Fetch  Read Reg Calc Adr  Memory  Register\n" +
+                "--------------------- ------- -------- -------- ------- ---------");
             assemblyOutput.Clear();
 
             cpu.IM.ProgramCounter = 0;
