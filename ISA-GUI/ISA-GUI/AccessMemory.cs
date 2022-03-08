@@ -87,8 +87,8 @@ namespace ISA_GUI
 					instruction.cycleControl = config.memAccess;
 					if (!instruction.isFloat)
                     {
-						memory.MainMemory[instruction.address] = (byte)(registers.intRegisters[0] & 16711680);      //Stores the MSB value of r0 at the address in memory
-						memory.MainMemory[instruction.address + 1] = (byte)(registers.intRegisters[0] & 65280);     //Stores the TSB value of r0 at the address in memory
+						memory.MainMemory[instruction.address] = (byte)((registers.intRegisters[0] & 16711680) >> 16);      //Stores the MSB value of r0 at the address in memory
+						memory.MainMemory[instruction.address + 1] = (byte)((registers.intRegisters[0] & 65280) >> 8);     //Stores the TSB value of r0 at the address in memory
 						memory.MainMemory[instruction.address + 2] = (byte)(registers.intRegisters[0] & 255);       //Stores the LSB value of r0 at the address in memory
 					}
                     else

@@ -192,6 +192,10 @@ namespace ISA_GUI
                 case 21:
                 case 22:
                 case 23:
+                case 24:
+                case 25:
+                case 26:
+                case 27:
                     alu.execute(ref registers, ref memory, ref alu, ref IM, ref instruction, ref config);    //Transfer to the ALU
                     break;
             }
