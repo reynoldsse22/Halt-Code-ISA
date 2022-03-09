@@ -57,11 +57,6 @@ namespace ISA_GUI
             else
                 predictionBox.SelectedIndex = 0;
 
-            if (configurations.forwardingSet)
-                forwardingBox.SelectedIndex = 1;
-            else
-                forwardingBox.SelectedIndex = 0;
-
         }
 
         /**
@@ -106,10 +101,6 @@ namespace ISA_GUI
             else
                 configurations.predictionSet = true;
 
-            if (forwardingBox.SelectedIndex == 0)
-                configurations.forwardingSet = false;
-            else
-                configurations.forwardingSet = true;
 
 
             Dispose();
@@ -149,7 +140,6 @@ namespace ISA_GUI
             flMultValue.Value = 5;
             flDivValue.Value = 10;
             calcAddressValue.Value = 1;
-            forwardingBox.SelectedIndex = 0;
             predictionBox.SelectedIndex = 0;
 
             configurations.predictionSet = false;
