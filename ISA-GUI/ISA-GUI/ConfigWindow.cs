@@ -52,6 +52,18 @@ namespace ISA_GUI
             flDivValue.Value = configurations.flDiv;
             calcAddressValue.Value = configurations.calcAddress;
 
+            if(configurations.dynamicPipelineSet)
+            {
+                staticCheckbox.Checked = false;
+                dynamicCheckbox.Checked = true;
+            }
+            else
+            {
+                staticCheckbox.Checked = true;
+                dynamicCheckbox.Checked = false;
+            }
+
+
             if (configurations.predictionSet)
                 predictionBox.SelectedIndex = 1;
             else
@@ -95,6 +107,11 @@ namespace ISA_GUI
             configurations.flMult = (int)flMultValue.Value;
             configurations.flDiv = (int)flDivValue.Value;
             configurations.calcAddress = (int)calcAddressValue.Value;
+
+            if (staticCheckbox.Checked)
+                configurations.dynamicPipelineSet = false;
+            else
+                configurations.dynamicPipelineSet = true;
 
             if (predictionBox.SelectedIndex == 0)
                 configurations.predictionSet = false;
@@ -153,6 +170,26 @@ namespace ISA_GUI
             configurations.flMult = (int)flMultValue.Value;
             configurations.flDiv = (int)flDivValue.Value;
             configurations.calcAddress = (int)calcAddressValue.Value;
+            staticCheckbox.Checked = true;
+            dynamicCheckbox.Checked = false;
+        }
+
+        private void staticCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if(staticCheckbox.Checked)
+                dynamicCheckbox.Checked = false;
+            else
+            {
+                dynamicCheckbox.Checked = true;
+            }
+        }
+
+        private void dynamicCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (dynamicCheckbox.Checked)
+                staticCheckbox.Checked = false;
+            else
+                staticCheckbox.Checked = true;
         }
     }
 }

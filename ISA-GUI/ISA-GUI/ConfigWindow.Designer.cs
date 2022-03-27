@@ -53,6 +53,8 @@
             this.label12 = new System.Windows.Forms.Label();
             this.predictionBox = new System.Windows.Forms.ComboBox();
             this.resetButton = new System.Windows.Forms.Button();
+            this.staticCheckbox = new System.Windows.Forms.CheckBox();
+            this.dynamicCheckbox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.fetchConfigValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.memAccessValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.regAccessValue)).BeginInit();
@@ -402,7 +404,7 @@
             // applyChangesButton
             // 
             this.applyChangesButton.BackColor = System.Drawing.SystemColors.Window;
-            this.applyChangesButton.Location = new System.Drawing.Point(213, 481);
+            this.applyChangesButton.Location = new System.Drawing.Point(213, 531);
             this.applyChangesButton.Name = "applyChangesButton";
             this.applyChangesButton.Size = new System.Drawing.Size(152, 46);
             this.applyChangesButton.TabIndex = 20;
@@ -416,7 +418,7 @@
             this.label12.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label12.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label12.Location = new System.Drawing.Point(13, 442);
+            this.label12.Location = new System.Drawing.Point(13, 440);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(270, 20);
             this.label12.TabIndex = 22;
@@ -429,7 +431,7 @@
             this.predictionBox.Items.AddRange(new object[] {
             "Off",
             "On"});
-            this.predictionBox.Location = new System.Drawing.Point(283, 434);
+            this.predictionBox.Location = new System.Drawing.Point(283, 432);
             this.predictionBox.Name = "predictionBox";
             this.predictionBox.Size = new System.Drawing.Size(82, 28);
             this.predictionBox.TabIndex = 27;
@@ -437,7 +439,7 @@
             // resetButton
             // 
             this.resetButton.BackColor = System.Drawing.SystemColors.Window;
-            this.resetButton.Location = new System.Drawing.Point(17, 481);
+            this.resetButton.Location = new System.Drawing.Point(17, 531);
             this.resetButton.Name = "resetButton";
             this.resetButton.Size = new System.Drawing.Size(152, 46);
             this.resetButton.TabIndex = 29;
@@ -445,11 +447,37 @@
             this.resetButton.UseVisualStyleBackColor = false;
             this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
             // 
+            // staticCheckbox
+            // 
+            this.staticCheckbox.AutoSize = true;
+            this.staticCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.staticCheckbox.Location = new System.Drawing.Point(44, 484);
+            this.staticCheckbox.Name = "staticCheckbox";
+            this.staticCheckbox.Size = new System.Drawing.Size(128, 24);
+            this.staticCheckbox.TabIndex = 32;
+            this.staticCheckbox.Text = "Static Pipeline";
+            this.staticCheckbox.UseVisualStyleBackColor = true;
+            this.staticCheckbox.CheckedChanged += new System.EventHandler(this.staticCheckbox_CheckedChanged);
+            // 
+            // dynamicCheckbox
+            // 
+            this.dynamicCheckbox.AutoSize = true;
+            this.dynamicCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dynamicCheckbox.Location = new System.Drawing.Point(183, 484);
+            this.dynamicCheckbox.Name = "dynamicCheckbox";
+            this.dynamicCheckbox.Size = new System.Drawing.Size(148, 24);
+            this.dynamicCheckbox.TabIndex = 33;
+            this.dynamicCheckbox.Text = "Dynamic Pipeline";
+            this.dynamicCheckbox.UseVisualStyleBackColor = true;
+            this.dynamicCheckbox.CheckedChanged += new System.EventHandler(this.dynamicCheckbox_CheckedChanged);
+            // 
             // Configurations
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(377, 547);
+            this.ClientSize = new System.Drawing.Size(380, 610);
+            this.Controls.Add(this.dynamicCheckbox);
+            this.Controls.Add(this.staticCheckbox);
             this.Controls.Add(this.resetButton);
             this.Controls.Add(this.predictionBox);
             this.Controls.Add(this.label12);
@@ -517,5 +545,7 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ComboBox predictionBox;
         private System.Windows.Forms.Button resetButton;
+        private System.Windows.Forms.CheckBox staticCheckbox;
+        private System.Windows.Forms.CheckBox dynamicCheckbox;
     }
 }

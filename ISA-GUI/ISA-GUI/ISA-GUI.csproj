@@ -57,6 +57,7 @@
     </Compile>
     <Compile Include="DataMemory.cs" />
     <Compile Include="ControlUnit.cs" />
+    <Compile Include="DynamicPipeline.cs" />
     <Compile Include="ExecutionUnit.cs" />
     <Compile Include="Fetch.cs" />
     <Compile Include="Instruction.cs" />
@@ -68,6 +69,7 @@
       <DependentUpon>BUC10.cs</DependentUpon>
     </Compile>
     <Compile Include="CentralProcessingUnit.cs" />
+    <Compile Include="Printer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -76,6 +78,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RegisterFile.cs" />
+    <Compile Include="StaticPipeline.cs" />
     <Compile Include="WriteResult.cs" />
     <EmbeddedResource Include="BUC10.resx">
       <DependentUpon>BUC10.cs</DependentUpon>

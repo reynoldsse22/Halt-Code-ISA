@@ -71,7 +71,7 @@ namespace ISA_GUI
 		 */
         private void BUC10_Load(object sender, EventArgs e)
         {
-            StartPosition = FormStartPosition.CenterScreen;
+            CenterToScreen();
             clearProgram();     //On load, initialize all GUI elements and values to their starting value
             stage1Text.SelectionAlignment = HorizontalAlignment.Center;
             stage2Text.SelectionAlignment = HorizontalAlignment.Center;
@@ -79,6 +79,7 @@ namespace ISA_GUI
             stage4Text.SelectionAlignment = HorizontalAlignment.Center;
             stage5Text.SelectionAlignment = HorizontalAlignment.Center;
             currentCycleText.SelectionAlignment = HorizontalAlignment.Center;
+            programSpeedBar.Value = config.programSpeed;
         }
 
         /**
@@ -98,7 +99,15 @@ namespace ISA_GUI
             try
             {
                 program = getInput();       //get the input from the user
-                cpu.runCycle(program, false, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config, ref stages);      //Run the program all the way through. Stepthrough flag is false
+                if (!config.dynamicPipelineSet)
+                {
+                    while(!halted)
+                    {
+                        cpu.runStaticPipeline(program, false, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config, ref stages);      //Run the program all the way through. Stepthrough flag is false
+                    }
+                }
+                else
+                    return;//ELSE STATEMENT FOR DYNAMIC PIPELINE GOES HERE
             }
             catch (Exception)  //Catch any errors when getting input from user or decoding invalid instructions
             {
@@ -138,7 +147,10 @@ namespace ISA_GUI
                 try
                 {
                     List<string> program = getInput();      //get instructions from user
-                    cpu.runCycle(program, true, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config, ref stages);      //Run the program one cycle at a time. Stepthrough flag is true
+                    if (!config.dynamicPipelineSet)
+                        cpu.runStaticPipeline(program, true, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config, ref stages);      //Run the program one cycle at a time. Stepthrough flag is true
+                    else
+                        return;//ELSE STATEMENT FOR DYNAMIC PIPELINE GOES HERE
                     updateGUI();        //update the GUI
                 }
                 catch (Exception)       //Catch any errors when getting input from user or decoding invalid instructions
@@ -155,7 +167,10 @@ namespace ISA_GUI
             {
                 try
                 {
-                    cpu.runCycle(program, true, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config, ref stages);      //Run the program one cycle at a time. Stepthrough flag is true
+                    if (!config.dynamicPipelineSet)
+                        cpu.runStaticPipeline(program, true, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config, ref stages);      //Run the program one cycle at a time. Stepthrough flag is true
+                    else
+                        return;//ELSE STATEMENT FOR DYNAMIC PIPELINE GOES HERE
                 }
                 catch (Exception)       //Catch any errors when getting input from user or decoding invalid instructions
                 {
@@ -253,14 +268,18 @@ namespace ISA_GUI
             cpu.IM.ProgramCounter = 0;
             cpu.IM.CurrentInstruction = 0;
             cpu.IM.instructions.Clear();
-            cpu.CU.instructionsProcessed = 0;
-            cpu.CU.totalInstructions = 0;
-            cpu.CU.ALUInstructionCount = 0;
-            cpu.CU.memoryInstructionCount = 0;
-            cpu.CU.controlInstructionCount = 0;
+
+            
+            cpu.SP.CU.instructionsProcessed = 0;
+            cpu.SP.CU.totalInstructions = 0;
+            cpu.SP.CU.ALUInstructionCount = 0;
+            cpu.SP.CU.memoryInstructionCount = 0;
+            cpu.SP.CU.controlInstructionCount = 0;
+            
+            
             StatsTextBox.Text = "";
             currentCycleText.SelectionAlignment = HorizontalAlignment.Center;
-            resetPipeline();
+            resetStaticPipeline();
             clearRegandMem();
             updateGUI();
         }
@@ -295,24 +314,24 @@ namespace ISA_GUI
 		 * Date created: 3/2/22 <br>
 		 * <hr>
 		 */
-        private void resetPipeline()
+        private void resetStaticPipeline()
         {
-            cpu.fetch.inProgress = false;
-            cpu.fetch.occupied = false;
-            cpu.fetch.success = false;
-            cpu.CU.inProgress = false;
-            cpu.CU.occupied = false;
-            cpu.CU.success = false;
-            cpu.EU.inProgress = false;
-            cpu.EU.occupied = false;
-            cpu.EU.success = false;
-            cpu.AM.inProgress = false;
-            cpu.AM.occupied = false;
-            cpu.AM.success = false;
-            cpu.WR.inProgress = false;
-            cpu.WR.occupied = false;
-            cpu.WR.success = false;
-            cpu.cycleCount = 0;
+            cpu.SP.fetch.inProgress = false;
+            cpu.SP.fetch.occupied = false;
+            cpu.SP.fetch.success = false;
+            cpu.SP.CU.inProgress = false;
+            cpu.SP.CU.occupied = false;
+            cpu.SP.CU.success = false;
+            cpu.SP.EU.inProgress = false;
+            cpu.SP.EU.occupied = false;
+            cpu.SP.EU.success = false;
+            cpu.SP.AM.inProgress = false;
+            cpu.SP.AM.occupied = false;
+            cpu.SP.AM.success = false;
+            cpu.SP.WR.inProgress = false;
+            cpu.SP.WR.occupied = false;
+            cpu.SP.WR.success = false;
+            cpu.SP.cycleCount = 0;
         }
 
         /**
@@ -328,20 +347,20 @@ namespace ISA_GUI
             for(int i = 0; i<5; i++)    
                 stages[i] = null;
 
-            cpu.cycleCount = 0;
-            cpu.WAR = 0;
-            cpu.WAW = 0;
-            cpu.RAW = 0;
-            cpu.totalCyclesStalled = 0;
-            cpu.fetchStalled = 0;
-            cpu.decodeStalled = 0;
-            cpu.executeStalled = 0;
-            cpu.accessMemStalled = 0;
-            cpu.writeRegStalled = 0;
-            cpu.dataHazard = 0;
-            cpu.controlHazard = 0;
-            cpu.structuralHazard = 0;
-            cpu.totalHazard = 0;
+            cpu.SP.cycleCount = 0;
+            cpu.SP.WAR = 0;
+            cpu.SP.WAW = 0;
+            cpu.SP.RAW = 0;
+            cpu.SP.totalCyclesStalled = 0;
+            cpu.SP.fetchStalled = 0;
+            cpu.SP.decodeStalled = 0;
+            cpu.SP.executeStalled = 0;
+            cpu.SP.accessMemStalled = 0;
+            cpu.SP.writeRegStalled = 0;
+            cpu.SP.dataHazard = 0;
+            cpu.SP.controlHazard = 0;
+            cpu.SP.structuralHazard = 0;
+            cpu.SP.totalHazard = 0;
             stage1Text.Text = "";
             stage2Text.Text = "";
             stage3Text.Text = "";
@@ -363,7 +382,11 @@ namespace ISA_GUI
             setRegisters();
             setStatistics();
             setMemoryBox();
-            currentCycleText.Text = cpu.cycleCount.ToString();
+            if(!config.dynamicPipelineSet)
+            {
+                currentCycleText.Text = cpu.SP.cycleCount.ToString();
+
+            }
             AssemblerListingTextBox.Text = decodedString.ToString();
             AssemblyTextBox.Text = assemblyOutput.ToString();
             pipelineTextBox.Text = pipelineOutput.ToString();
@@ -440,41 +463,45 @@ namespace ISA_GUI
 		 */
         private void setStatistics()
         {
-            int totalInst = cpu.CU.totalInstructions;
-            if (totalInst == 0)
-                return;
             StringBuilder statistics = new StringBuilder("");
-            statistics.Append("Summary Statistics\n");
-            statistics.Append("------------------\n");
-            statistics.Append(String.Format("Total instructions:              {0}\n", totalInst));                       //since we always go by 2's total instructions was pretty simple
-            statistics.Append(String.Format("Control instructions:            {0}, {1}%\n", cpu.CU.controlInstructionCount, Math.Round((double)cpu.CU.controlInstructionCount / totalInst * 100, 2)));
-            statistics.Append(String.Format("Arithmetic & logic instructions: {0}, {1}%\n", cpu.CU.ALUInstructionCount, Math.Round((double)cpu.CU.ALUInstructionCount / totalInst * 100, 2)));
-            statistics.Append(String.Format("Memory instructions:             {0}, {1}%\n", cpu.CU.memoryInstructionCount, Math.Round((double)cpu.CU.memoryInstructionCount / totalInst * 100, 2)));
 
-            statistics.Append("\n\nPipeline Statistics\n");
-            statistics.Append("------------------\n");
-            statistics.Append(String.Format("Total Cycles:           {0}\n", cpu.cycleCount - 1));
-            statistics.Append("\nHazards\n");
-            statistics.Append("-------\n");
-            statistics.Append(String.Format("structural:             {0}\n", cpu.structuralHazard));
-            statistics.Append(String.Format("data:                   {0}\n", cpu.dataHazard));
-            statistics.Append(String.Format("control:                {0}\n", cpu.controlHazard));
-            statistics.Append(String.Format("Total:                  {0}\n\n", cpu.structuralHazard + cpu.dataHazard + cpu.controlHazard));
-            statistics.Append("Dependencies\n");
-            statistics.Append("------------\n");
-            statistics.Append(String.Format("read-after-write:       {0}\n", cpu.RAW));
-            statistics.Append(String.Format("write-after-read:       {0}\n", cpu.WAR));
-            statistics.Append(String.Format("write-after-write:      {0}\n", cpu.WAW));
-            statistics.Append(String.Format("Total:                  {0}\n\n", (cpu.RAW + cpu.WAR + cpu.WAW)));
-            statistics.Append("Cycles Stalled\n");
-            statistics.Append("--------------\n");
-            statistics.Append(String.Format("instruction fetch:      {0}\n", cpu.fetchStalled));
-            statistics.Append(String.Format("decode / read reg:      {0}\n", cpu.decodeStalled));
-            statistics.Append(String.Format("execute / calc address: {0}\n", cpu.executeStalled));
-            statistics.Append(String.Format("read / write memory:    {0}\n", cpu.accessMemStalled));
-            statistics.Append(String.Format("write register:         {0}\n", cpu.writeRegStalled));
-            statistics.Append(String.Format("Total:                  {0}\n\n", cpu.totalCyclesStalled));
+            if (!config.dynamicPipelineSet)
+            {
+                int totalInst = cpu.SP.CU.totalInstructions;
+                if (totalInst == 0)
+                    return;
+                statistics.Append("Summary Statistics\n");
+                statistics.Append("------------------\n");
+                statistics.Append(String.Format("Total instructions:              {0}\n", totalInst));                       //since we always go by 2's total instructions was pretty simple
+                statistics.Append(String.Format("Control instructions:            {0}, {1}%\n", cpu.SP.CU.controlInstructionCount, Math.Round((double)cpu.SP.CU.controlInstructionCount / totalInst * 100, 2)));
+                statistics.Append(String.Format("Arithmetic & logic instructions: {0}, {1}%\n", cpu.SP.CU.ALUInstructionCount, Math.Round((double)cpu.SP.CU.ALUInstructionCount / totalInst * 100, 2)));
+                statistics.Append(String.Format("Memory instructions:             {0}, {1}%\n", cpu.SP.CU.memoryInstructionCount, Math.Round((double)cpu.SP.CU.memoryInstructionCount / totalInst * 100, 2)));
 
+                statistics.Append("\n\nPipeline Statistics\n");
+                statistics.Append("------------------\n");
+                statistics.Append(String.Format("Total Cycles:           {0}\n", cpu.SP.cycleCount - 1));
+                statistics.Append("\nHazards\n");
+                statistics.Append("-------\n");
+                statistics.Append(String.Format("structural:             {0}\n", cpu.SP.structuralHazard));
+                statistics.Append(String.Format("data:                   {0}\n", cpu.SP.dataHazard));
+                statistics.Append(String.Format("control:                {0}\n", cpu.SP.controlHazard));
+                statistics.Append(String.Format("Total:                  {0}\n\n", cpu.SP.structuralHazard + cpu.SP.dataHazard + cpu.SP.controlHazard));
+                statistics.Append("Dependencies\n");
+                statistics.Append("------------\n");
+                statistics.Append(String.Format("read-after-write:       {0}\n", cpu.SP.RAW));
+                statistics.Append(String.Format("write-after-read:       {0}\n", cpu.SP.WAR));
+                statistics.Append(String.Format("write-after-write:      {0}\n", cpu.SP.WAW));
+                statistics.Append(String.Format("Total:                  {0}\n\n", (cpu.SP.RAW + cpu.SP.WAR + cpu.SP.WAW)));
+                statistics.Append("Cycles Stalled\n");
+                statistics.Append("--------------\n");
+                statistics.Append(String.Format("instruction fetch:      {0}\n", cpu.SP.fetchStalled));
+                statistics.Append(String.Format("decode / read reg:      {0}\n", cpu.SP.decodeStalled));
+                statistics.Append(String.Format("execute / calc address: {0}\n", cpu.SP.executeStalled));
+                statistics.Append(String.Format("read / write memory:    {0}\n", cpu.SP.accessMemStalled));
+                statistics.Append(String.Format("write register:         {0}\n", cpu.SP.writeRegStalled));
+                statistics.Append(String.Format("Total:                  {0}\n\n", cpu.SP.totalCyclesStalled));
+            }
+            
             StatsTextBox.Text = statistics.ToString();
         }
 
@@ -527,15 +554,19 @@ namespace ISA_GUI
             else
                 stage5Text.Text = "";
 
-            stage1StalledText.Text = cpu.fetchStalled.ToString();
-            stage2StalledText.Text = cpu.decodeStalled.ToString();
-            stage3StalledText.Text = cpu.executeStalled.ToString();
-            stage4StalledText.Text = cpu.accessMemStalled.ToString();
-            stage5StalledText.Text = cpu.writeRegStalled.ToString();
+            if(!config.dynamicPipelineSet)
+            {
+                stage1StalledText.Text = cpu.SP.fetchStalled.ToString();
+                stage2StalledText.Text = cpu.SP.decodeStalled.ToString();
+                stage3StalledText.Text = cpu.SP.executeStalled.ToString();
+                stage4StalledText.Text = cpu.SP.accessMemStalled.ToString();
+                stage5StalledText.Text = cpu.SP.writeRegStalled.ToString();
 
-            rawText.Text = cpu.RAW.ToString();
-            warText.Text = cpu.WAR.ToString();  
-            wawText.Text = cpu.WAW.ToString();
+                rawText.Text = cpu.SP.RAW.ToString();
+                warText.Text = cpu.SP.WAR.ToString();
+                wawText.Text = cpu.SP.WAW.ToString();
+            }
+           
         }
 
         
@@ -584,6 +615,18 @@ namespace ISA_GUI
             }
 
             MemoryText.Text = line.ToString();
+        }
+
+
+        private void delayProgram(int delayTime)
+        {
+            var waitTime = new TimeSpan(0, 0, 0, 0, delayTime * 100);
+            var waitUntil = DateTime.Now + waitTime;
+            int i = 0;
+            while (DateTime.Now <= waitUntil)
+            {
+                i += 1;
+            }
         }
 
         /**
@@ -645,10 +688,16 @@ namespace ISA_GUI
         {
             using (Configurations configWindow = new Configurations(config))
             {
+                configWindow.StartPosition = FormStartPosition.CenterParent;
                 configWindow.ShowDialog();
 
                 config = configWindow.getConfig();
             }
+        }
+
+        private void programSpeedBar_ValueChanged(object sender, EventArgs e)
+        {
+            config.programSpeed = programSpeedBar.Value;
         }
     }
 

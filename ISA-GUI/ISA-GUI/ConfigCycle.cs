@@ -24,9 +24,10 @@ namespace ISA_GUI
 	*/
 	public class ConfigCycle
     {
-		public int fetch, memAccess, regAccess, load_store, intALU, flAddSub, flMult, flDiv, calcAddress;
+		public int fetch, memAccess, regAccess, load_store, intALU, flAddSub, flMult, flDiv, calcAddress, programSpeed;
 		public bool predictionSet;
 		public bool forwardingSet;
+		public bool dynamicPipelineSet;
 
 		/**
 	    * Method Name: ConfigCycle <br>
@@ -38,6 +39,7 @@ namespace ISA_GUI
 	    */
 		public ConfigCycle()
         {
+			programSpeed = 0;
 			fetch = 1;
 			memAccess = 3;
 			regAccess = 1;
@@ -49,6 +51,7 @@ namespace ISA_GUI
 			calcAddress = 1;
 			predictionSet = false;
 			forwardingSet = false;
+			dynamicPipelineSet = false;
         }
     }
 }

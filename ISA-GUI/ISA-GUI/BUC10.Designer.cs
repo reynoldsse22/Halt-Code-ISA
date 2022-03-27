@@ -136,6 +136,8 @@
             this.label35 = new System.Windows.Forms.Label();
             this.label36 = new System.Windows.Forms.Label();
             this.configButton = new System.Windows.Forms.Button();
+            this.programSpeedBar = new System.Windows.Forms.TrackBar();
+            this.label38 = new System.Windows.Forms.Label();
             this.Output.SuspendLayout();
             this.pipelineTab.SuspendLayout();
             this.sourceCodeBox.SuspendLayout();
@@ -146,6 +148,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.resetButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stepthroughButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.RunButton)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.programSpeedBar)).BeginInit();
             this.SuspendLayout();
             // 
             // CPU
@@ -1292,12 +1295,32 @@
             this.configButton.UseVisualStyleBackColor = false;
             this.configButton.Click += new System.EventHandler(this.configButton_Click);
             // 
+            // programSpeedBar
+            // 
+            this.programSpeedBar.Location = new System.Drawing.Point(217, 35);
+            this.programSpeedBar.Name = "programSpeedBar";
+            this.programSpeedBar.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.programSpeedBar.Size = new System.Drawing.Size(172, 45);
+            this.programSpeedBar.TabIndex = 103;
+            this.programSpeedBar.ValueChanged += new System.EventHandler(this.programSpeedBar_ValueChanged);
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(277, 19);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(61, 13);
+            this.label38.TabIndex = 105;
+            this.label38.Text = "Run Speed";
+            // 
             // BUC10
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1491, 814);
+            this.Controls.Add(this.label38);
+            this.Controls.Add(this.programSpeedBar);
             this.Controls.Add(this.configButton);
             this.Controls.Add(this.label36);
             this.Controls.Add(this.label35);
@@ -1409,6 +1432,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.resetButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stepthroughButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.RunButton)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.programSpeedBar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1521,6 +1545,8 @@
         private System.Windows.Forms.Label label35;
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.Button configButton;
+        private System.Windows.Forms.TrackBar programSpeedBar;
+        private System.Windows.Forms.Label label38;
     }
 }
 
