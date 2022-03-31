@@ -78,6 +78,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RegisterFile.cs" />
+    <Compile Include="ReservationStation.cs" />
     <Compile Include="StaticPipeline.cs" />
     <Compile Include="WriteResult.cs" />
     <EmbeddedResource Include="BUC10.resx">
