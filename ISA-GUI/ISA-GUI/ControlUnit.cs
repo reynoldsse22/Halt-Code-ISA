@@ -53,24 +53,38 @@ namespace ISA_GUI
             inProgress = false;
             hazardDetected = false;
         }
-
         /**
-		 * Method Name: decode <br>
-		 * Method Purpose: Decodes the current instruction and splits up its opcode/operands/address/values
-		 * 
-		 * <br>
-		 * Date created: 2/19/22 <br>
-		 * <hr>
-		 *   @param  InstructionMemory IM
-		 *   @param  Instruction instruction
-		 *   @param  ConfigCycle config
-		 */
+        * Method Name: decode <br>
+        * Method Purpose: Decodes the current instruction and splits up its opcode/operands/address/values
+        * 
+        * <br>
+        * Date created: 2/19/22 <br>
+        * <hr>
+        *   @param  InstructionMemory IM
+        *   @param  Instruction instruction
+        *   @param  ConfigCycle config
+        */
         public void decode(ref InstructionMemory IM, ref Instruction instruction, ref ConfigCycle config)
+        {
+            instruction.cycleControl = config.regAccess;    
+            decode(ref IM, ref instruction);
+        }
+        /**
+        * Method Name: decode <br>
+        * Method Purpose: Decodes the current instruction and splits up its opcode/operands/address/values
+        * 
+        * <br>
+        * Date created: 2/19/22 <br>
+        * <hr>
+        *   @param  InstructionMemory IM
+        *   @param  Instruction instruction
+        *   @param  ConfigCycle config
+        */
+        public void decode(ref InstructionMemory IM, ref Instruction instruction)   //For assembling machine code for Dynamic Pipline
         {
             inProgress = true;
             occupied = true;
             hazardDetected = false;
-            instruction.cycleControl = config.regAccess;
             int opcode = instruction.opcode;
             int r1 = instruction.r1;
             int r2 = instruction.r2;

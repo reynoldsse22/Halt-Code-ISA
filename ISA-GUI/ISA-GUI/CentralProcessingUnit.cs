@@ -30,6 +30,7 @@ namespace ISA_GUI
         public InstructionMemory IM;
         public StaticPipeline SP;
         public DynamicPipeline DP;
+
         public int cycleCount;
         public Instruction stall = new Instruction();
         public int totalHazard, structuralHazard, dataHazard, controlHazard, RAW, WAR, WAW;
@@ -80,6 +81,7 @@ namespace ISA_GUI
             IM = new InstructionMemory();
             SP = new StaticPipeline();
             DP = new DynamicPipeline();
+
             cycleCount = 0;
             totalCyclesStalled = 0;
             fetchStalled = 0;
@@ -109,15 +111,21 @@ namespace ISA_GUI
             SP.runCycle(input, stepThrough, ref assemblyString, ref decodedString, ref pipelineString, ref halted, ref config, ref stages, ref IM, ref registers, ref dataMemory);
         }
 
-        public void runDynamicPipeline()
+        public void runDynamicPipeline(List<string> input, bool stepThrough, ref StringBuilder assemblyString, ref StringBuilder decodedString,
+                ref StringBuilder pipelingString, ref bool halted, ref ConfigCycle config)
         {
+            if(IM.instructions.Count == 0) //IMPLEMENTATION SOLEY TO GET ASSEMBLY TO WORK. *SUBJECT TO CHANGE
+            {
+                IM.setInstructionSize(input.Count);
+                storeProgramInMemory(input);
+            }
+            DP.runCycle(input, stepThrough, ref assemblyString, ref decodedString, ref pipelingString, ref halted, ref config, ref IM, ref registers, ref dataMemory);
 
         }
 
-
         /**
         * Method Name: storeProgramInMemory <br>
-        * Method Purpose: Stores teh instruction in main memory as well as the instruction memory functional unit
+        * Method Purpose: Stores the instruction in main memory as well as the instruction memory functional unit
         * 
         * <br>
         * Date created: 2/19/22 <br>

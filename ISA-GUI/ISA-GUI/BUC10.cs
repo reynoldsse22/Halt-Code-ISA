@@ -101,13 +101,20 @@ namespace ISA_GUI
                 program = getInput();       //get the input from the user
                 if (!config.dynamicPipelineSet)
                 {
-                    while(!halted)
+                    while (!halted)
                     {
                         cpu.runStaticPipeline(program, false, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config, ref stages);      //Run the program all the way through. Stepthrough flag is false
                     }
                 }
                 else
-                    return;//ELSE STATEMENT FOR DYNAMIC PIPELINE GOES HERE
+                {
+                    while (!halted)
+                    {
+
+                        cpu.runDynamicPipeline(program, false, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config); //Calling Dynamic Pipeline
+                    }
+                    //return;//ELSE STATEMENT FOR DYNAMIC PIPELINE GOES HERE
+                }
             }
             catch (Exception)  //Catch any errors when getting input from user or decoding invalid instructions
             {
