@@ -48,6 +48,13 @@
   <ItemGroup>
     <Compile Include="AccessMemory.cs" />
     <Compile Include="ALU.cs" />
+    <Compile Include="BitwiseOPFU.cs" />
+    <Compile Include="FloatAddFU.cs" />
+    <Compile Include="FloatDivFU.cs" />
+    <Compile Include="FloatMultFU.cs" />
+    <Compile Include="FloatSubFU.cs" />
+    <Compile Include="IntAddFU.cs" />
+    <Compile Include="CommonDataBus.cs" />
     <Compile Include="ConfigCycle.cs" />
     <Compile Include="ConfigWindow.cs">
       <SubType>Form</SubType>
@@ -69,6 +76,9 @@
       <DependentUpon>BUC10.cs</DependentUpon>
     </Compile>
     <Compile Include="CentralProcessingUnit.cs" />
+    <Compile Include="IntDivFU.cs" />
+    <Compile Include="IntMultFU.cs" />
+    <Compile Include="IntSubFU.cs" />
     <Compile Include="Printer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -78,6 +88,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RegisterFile.cs" />
+    <Compile Include="ReorderBuffer.cs" />
     <Compile Include="ReservationStation.cs" />
     <Compile Include="StaticPipeline.cs" />
     <Compile Include="WriteResult.cs" />

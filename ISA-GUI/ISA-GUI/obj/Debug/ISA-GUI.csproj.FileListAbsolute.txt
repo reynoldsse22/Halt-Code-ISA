@@ -66,3 +66,4 @@ C:\Users\reynoldsse\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Debug\ISA
 C:\Users\reynoldsse\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Debug\ISA-GUI.csproj.CoreCompileInputs.cache
 C:\Users\reynoldsse\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Debug\ISA-GUI.exe
 C:\Users\reynoldsse\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Debug\ISA-GUI.pdb
+C:\Users\kfarm\OneDrive\Desktop\all things\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Debug\ISA_GUI.Configurations.resources

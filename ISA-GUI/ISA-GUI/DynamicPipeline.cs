@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
+using System.Threading;
 
 namespace ISA_GUI
 {
@@ -12,6 +14,38 @@ namespace ISA_GUI
         ControlUnit CU;
         Printer print;
         List<Instruction> instructionQueue;
+        public ALU alu;
+        public ExecutionUnit EU;
+        public WriteResult WR;
+        public AccessMemory AM;
+        public Printer printer;
+        public int cycleCount;
+        public Instruction stall = new Instruction();
+        public CommonDataBus CommonDataBus;
+        public IntAddFU intAddFu;
+        public IntSubFU intSubFu;
+        public IntMultFU intMultFu;
+        public IntDivFU intDivFu;
+        public FloatAddFU floatAddFu;
+        public FloatSubFU floatSubFu;
+        public FloatMultFU floatMultFu;
+        public FloatDivFU floatDivFu;
+        public BitwiseOPFU bitwiseOPFU;
+        public ReservationStation intAddRS;
+        public ReservationStation intSubRS;
+        public ReservationStation intMultRS;
+        public ReservationStation intDivRS;
+        public ReservationStation floatAddRS;
+        public ReservationStation floatSubRS;
+        public ReservationStation floatMultRS;
+        public ReservationStation floatDivRS;
+        public ReservationStation bitwiseOPRS;
+
+        public int totalHazard, structuralHazard, dataHazard, controlHazard, RAW, WAR, WAW;
+        public int totalCyclesStalled;
+        public bool lastBranchDecision;
+        //private Timer timer;
+
 
 
         /// <summary>Initializes a new instance of the <see cref="DynamicPipeline" /> class.</summary>
@@ -21,6 +55,41 @@ namespace ISA_GUI
             CU = new ControlUnit();
             print = new Printer();
             instructionQueue = new List<Instruction>();
+            alu = new ALU();
+            CU = new ControlUnit();
+            EU = new ExecutionUnit();
+            AM = new AccessMemory();
+            WR = new WriteResult();
+            CommonDataBus= new CommonDataBus();
+            intAddFu = new IntAddFU();  
+            intSubFu = new IntSubFU();
+            intMultFu = new IntMultFU();
+            intDivFu = new IntDivFU();
+            floatAddFu = new FloatAddFU();
+            floatSubFu = new FloatSubFU();
+            floatMultFu = new FloatMultFU();
+            floatDivFu = new FloatDivFU();
+            bitwiseOPFU = new BitwiseOPFU();
+            intAddRS = new ReservationStation("intAddRS");
+            intSubRS = new ReservationStation("intSubRS");
+            intMultRS = new ReservationStation("intMultRS");
+            intDivRS = new ReservationStation("intDivRS");
+            floatAddRS = new ReservationStation("floatAddRS");
+            floatSubRS = new ReservationStation("floatSubRS");
+            floatMultRS = new ReservationStation("floatMultRS");
+            floatDivRS = new ReservationStation("floatDivRS");
+            bitwiseOPRS = new ReservationStation("bitwiseOPRS");
+            cycleCount = 0;
+            totalCyclesStalled = 0;
+            totalHazard = 0;
+            structuralHazard = 0;
+            dataHazard = 0;
+            controlHazard = 0;
+            WAR = 0;
+            RAW = 0;
+            WAW = 0;
+            lastBranchDecision = false;
+           // timer = new Timer();
         }
 
         /// <summary>Runs the cycle.</summary>
@@ -38,6 +107,7 @@ namespace ISA_GUI
         {
             generateAssembly(ref assemblyString, IM);       //Populates instructionQueue and writes out assembly
             halted = true; //For testing purposes
+
         }
 
         /// <summary>Generates the assembly.</summary>
