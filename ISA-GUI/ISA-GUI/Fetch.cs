@@ -97,5 +97,31 @@ namespace ISA_GUI
             success = true;
             return instruction;
         }
+        /**
+		 * Method Name: getNextInstruction <br>
+		 * Method Purpose: Goes to the instruction memory unit and fetches the next instruction (2 bytes), solely used to get the next instruction
+		 * 
+		 * <br>
+		 * Date created: 2/19/22 <br>
+		 * <hr>
+		 *   @param  RegisterFile register
+		 *   @param  InstructionMemory IM
+		 *   @param  ConfigCycle config
+		 */
+        public Instruction getNextInstruction(ref InstructionMemory IM)
+        {
+            occupied = true;
+            inProgress = true;
+            hazardDetected = false;
+            Instruction instruction = new Instruction();
+            if ((IM.ProgramCounter + 3) > IM.instructions.Count)
+                return null;
+            instruction.programCounterValue = IM.ProgramCounter;
+            instruction.binInstruction[0] = IM.instructions[IM.ProgramCounter++];
+            instruction.binInstruction[1] = IM.instructions[IM.ProgramCounter++];
+            instruction.binInstruction[2] = IM.instructions[IM.ProgramCounter++];
+
+            return instruction;
+        }
     }
 }
