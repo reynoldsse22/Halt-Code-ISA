@@ -84,24 +84,14 @@
             this.cirHex = new System.Windows.Forms.RichTextBox();
             this.pcDec = new System.Windows.Forms.RichTextBox();
             this.pcHex = new System.Windows.Forms.RichTextBox();
-            this.Output = new System.Windows.Forms.TabControl();
-            this.pipelineTab = new System.Windows.Forms.TabPage();
-            this.pipelineTextBox = new System.Windows.Forms.RichTextBox();
-            this.sourceCodeBox = new System.Windows.Forms.TabPage();
-            this.AssemblerListingTextBox = new System.Windows.Forms.RichTextBox();
-            this.AssemblyTab = new System.Windows.Forms.TabPage();
-            this.AssemblyTextBox = new System.Windows.Forms.RichTextBox();
-            this.summaryStatsBox = new System.Windows.Forms.TabPage();
-            this.StatsTextBox = new System.Windows.Forms.RichTextBox();
             this.objectCode = new System.Windows.Forms.TabControl();
             this.objectCodeBox = new System.Windows.Forms.TabPage();
             this.InputBox = new System.Windows.Forms.RichTextBox();
+            this.assemblerPage = new System.Windows.Forms.TabPage();
+            this.assemblerTextBox = new System.Windows.Forms.RichTextBox();
             this.f6Dec = new System.Windows.Forms.RichTextBox();
             this.f6Hex = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.resetButton = new System.Windows.Forms.PictureBox();
-            this.stepthroughButton = new System.Windows.Forms.PictureBox();
-            this.RunButton = new System.Windows.Forms.PictureBox();
             this.pipelineLabel = new System.Windows.Forms.Label();
             this.stage2Text = new System.Windows.Forms.RichTextBox();
             this.stage1Text = new System.Windows.Forms.RichTextBox();
@@ -138,17 +128,29 @@
             this.configButton = new System.Windows.Forms.Button();
             this.programSpeedBar = new System.Windows.Forms.TrackBar();
             this.label38 = new System.Windows.Forms.Label();
-            this.Output.SuspendLayout();
-            this.pipelineTab.SuspendLayout();
-            this.sourceCodeBox.SuspendLayout();
-            this.AssemblyTab.SuspendLayout();
-            this.summaryStatsBox.SuspendLayout();
+            this.buildButton = new System.Windows.Forms.PictureBox();
+            this.resetButton = new System.Windows.Forms.PictureBox();
+            this.stepthroughButton = new System.Windows.Forms.PictureBox();
+            this.RunButton = new System.Windows.Forms.PictureBox();
+            this.summaryStatsBox = new System.Windows.Forms.TabPage();
+            this.StatsTextBox = new System.Windows.Forms.RichTextBox();
+            this.sourceCodeBox = new System.Windows.Forms.TabPage();
+            this.AssemblerListingTextBox = new System.Windows.Forms.RichTextBox();
+            this.pipelineTab = new System.Windows.Forms.TabPage();
+            this.pipelineTextBox = new System.Windows.Forms.RichTextBox();
+            this.Output = new System.Windows.Forms.TabControl();
             this.objectCode.SuspendLayout();
             this.objectCodeBox.SuspendLayout();
+            this.assemblerPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.programSpeedBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.buildButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.resetButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stepthroughButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.RunButton)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.programSpeedBar)).BeginInit();
+            this.summaryStatsBox.SuspendLayout();
+            this.sourceCodeBox.SuspendLayout();
+            this.pipelineTab.SuspendLayout();
+            this.Output.SuspendLayout();
             this.SuspendLayout();
             // 
             // CPU
@@ -742,117 +744,14 @@
             this.pcHex.TabIndex = 58;
             this.pcHex.Text = "";
             // 
-            // Output
-            // 
-            this.Output.Controls.Add(this.pipelineTab);
-            this.Output.Controls.Add(this.sourceCodeBox);
-            this.Output.Controls.Add(this.AssemblyTab);
-            this.Output.Controls.Add(this.summaryStatsBox);
-            this.Output.Location = new System.Drawing.Point(13, 299);
-            this.Output.Name = "Output";
-            this.Output.SelectedIndex = 0;
-            this.Output.Size = new System.Drawing.Size(557, 503);
-            this.Output.TabIndex = 61;
-            // 
-            // pipelineTab
-            // 
-            this.pipelineTab.Controls.Add(this.pipelineTextBox);
-            this.pipelineTab.Location = new System.Drawing.Point(4, 22);
-            this.pipelineTab.Name = "pipelineTab";
-            this.pipelineTab.Padding = new System.Windows.Forms.Padding(3);
-            this.pipelineTab.Size = new System.Drawing.Size(549, 477);
-            this.pipelineTab.TabIndex = 3;
-            this.pipelineTab.Text = "Pipeline Statistics";
-            this.pipelineTab.UseVisualStyleBackColor = true;
-            // 
-            // pipelineTextBox
-            // 
-            this.pipelineTextBox.BackColor = System.Drawing.SystemColors.Window;
-            this.pipelineTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.pipelineTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pipelineTextBox.Location = new System.Drawing.Point(3, 5);
-            this.pipelineTextBox.Name = "pipelineTextBox";
-            this.pipelineTextBox.ReadOnly = true;
-            this.pipelineTextBox.Size = new System.Drawing.Size(543, 469);
-            this.pipelineTextBox.TabIndex = 2;
-            this.pipelineTextBox.Text = "";
-            // 
-            // sourceCodeBox
-            // 
-            this.sourceCodeBox.Controls.Add(this.AssemblerListingTextBox);
-            this.sourceCodeBox.Location = new System.Drawing.Point(4, 22);
-            this.sourceCodeBox.Name = "sourceCodeBox";
-            this.sourceCodeBox.Padding = new System.Windows.Forms.Padding(3);
-            this.sourceCodeBox.Size = new System.Drawing.Size(549, 477);
-            this.sourceCodeBox.TabIndex = 0;
-            this.sourceCodeBox.Text = "Assembler Listing";
-            this.sourceCodeBox.UseVisualStyleBackColor = true;
-            // 
-            // AssemblerListingTextBox
-            // 
-            this.AssemblerListingTextBox.BackColor = System.Drawing.SystemColors.Window;
-            this.AssemblerListingTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.AssemblerListingTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AssemblerListingTextBox.Location = new System.Drawing.Point(0, 5);
-            this.AssemblerListingTextBox.Name = "AssemblerListingTextBox";
-            this.AssemblerListingTextBox.ReadOnly = true;
-            this.AssemblerListingTextBox.Size = new System.Drawing.Size(549, 469);
-            this.AssemblerListingTextBox.TabIndex = 0;
-            this.AssemblerListingTextBox.Text = "";
-            // 
-            // AssemblyTab
-            // 
-            this.AssemblyTab.Controls.Add(this.AssemblyTextBox);
-            this.AssemblyTab.Location = new System.Drawing.Point(4, 22);
-            this.AssemblyTab.Name = "AssemblyTab";
-            this.AssemblyTab.Padding = new System.Windows.Forms.Padding(3);
-            this.AssemblyTab.Size = new System.Drawing.Size(549, 477);
-            this.AssemblyTab.TabIndex = 2;
-            this.AssemblyTab.Text = "Assembly";
-            this.AssemblyTab.UseVisualStyleBackColor = true;
-            // 
-            // AssemblyTextBox
-            // 
-            this.AssemblyTextBox.BackColor = System.Drawing.SystemColors.Window;
-            this.AssemblyTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.AssemblyTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AssemblyTextBox.Location = new System.Drawing.Point(0, 5);
-            this.AssemblyTextBox.Name = "AssemblyTextBox";
-            this.AssemblyTextBox.ReadOnly = true;
-            this.AssemblyTextBox.Size = new System.Drawing.Size(546, 469);
-            this.AssemblyTextBox.TabIndex = 1;
-            this.AssemblyTextBox.Text = "";
-            // 
-            // summaryStatsBox
-            // 
-            this.summaryStatsBox.Controls.Add(this.StatsTextBox);
-            this.summaryStatsBox.Location = new System.Drawing.Point(4, 22);
-            this.summaryStatsBox.Name = "summaryStatsBox";
-            this.summaryStatsBox.Padding = new System.Windows.Forms.Padding(3);
-            this.summaryStatsBox.Size = new System.Drawing.Size(549, 477);
-            this.summaryStatsBox.TabIndex = 1;
-            this.summaryStatsBox.Text = "Summary Statistics";
-            this.summaryStatsBox.UseVisualStyleBackColor = true;
-            // 
-            // StatsTextBox
-            // 
-            this.StatsTextBox.BackColor = System.Drawing.SystemColors.Window;
-            this.StatsTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.StatsTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StatsTextBox.Location = new System.Drawing.Point(2, 5);
-            this.StatsTextBox.Name = "StatsTextBox";
-            this.StatsTextBox.ReadOnly = true;
-            this.StatsTextBox.Size = new System.Drawing.Size(544, 469);
-            this.StatsTextBox.TabIndex = 1;
-            this.StatsTextBox.Text = "";
-            // 
             // objectCode
             // 
             this.objectCode.Controls.Add(this.objectCodeBox);
-            this.objectCode.Location = new System.Drawing.Point(13, 64);
+            this.objectCode.Controls.Add(this.assemblerPage);
+            this.objectCode.Location = new System.Drawing.Point(9, 64);
             this.objectCode.Name = "objectCode";
             this.objectCode.SelectedIndex = 0;
-            this.objectCode.Size = new System.Drawing.Size(557, 216);
+            this.objectCode.Size = new System.Drawing.Size(557, 376);
             this.objectCode.TabIndex = 62;
             // 
             // objectCodeBox
@@ -861,7 +760,7 @@
             this.objectCodeBox.Location = new System.Drawing.Point(4, 22);
             this.objectCodeBox.Name = "objectCodeBox";
             this.objectCodeBox.Padding = new System.Windows.Forms.Padding(3);
-            this.objectCodeBox.Size = new System.Drawing.Size(549, 190);
+            this.objectCodeBox.Size = new System.Drawing.Size(549, 350);
             this.objectCodeBox.TabIndex = 0;
             this.objectCodeBox.Text = "Disassembler";
             this.objectCodeBox.UseVisualStyleBackColor = true;
@@ -872,9 +771,30 @@
             this.InputBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.InputBox.Location = new System.Drawing.Point(2, 5);
             this.InputBox.Name = "InputBox";
-            this.InputBox.Size = new System.Drawing.Size(544, 182);
+            this.InputBox.Size = new System.Drawing.Size(544, 342);
             this.InputBox.TabIndex = 0;
             this.InputBox.Text = "";
+            // 
+            // assemblerPage
+            // 
+            this.assemblerPage.Controls.Add(this.assemblerTextBox);
+            this.assemblerPage.Location = new System.Drawing.Point(4, 22);
+            this.assemblerPage.Name = "assemblerPage";
+            this.assemblerPage.Padding = new System.Windows.Forms.Padding(3);
+            this.assemblerPage.Size = new System.Drawing.Size(549, 350);
+            this.assemblerPage.TabIndex = 1;
+            this.assemblerPage.Text = "Assembler";
+            this.assemblerPage.UseVisualStyleBackColor = true;
+            // 
+            // assemblerTextBox
+            // 
+            this.assemblerTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.assemblerTextBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.assemblerTextBox.Location = new System.Drawing.Point(0, 4);
+            this.assemblerTextBox.Name = "assemblerTextBox";
+            this.assemblerTextBox.Size = new System.Drawing.Size(546, 343);
+            this.assemblerTextBox.TabIndex = 1;
+            this.assemblerTextBox.Text = "";
             // 
             // f6Dec
             // 
@@ -908,45 +828,6 @@
             this.label1.Size = new System.Drawing.Size(19, 13);
             this.label1.TabIndex = 65;
             this.label1.Text = "F6";
-            // 
-            // resetButton
-            // 
-            this.resetButton.ErrorImage = global::ISA_GUI.Properties.Resources.icons8_restart_48;
-            this.resetButton.Image = global::ISA_GUI.Properties.Resources.icons8_restart_48;
-            this.resetButton.InitialImage = global::ISA_GUI.Properties.Resources.icons8_restart_48;
-            this.resetButton.Location = new System.Drawing.Point(129, 8);
-            this.resetButton.Name = "resetButton";
-            this.resetButton.Size = new System.Drawing.Size(52, 52);
-            this.resetButton.TabIndex = 68;
-            this.resetButton.TabStop = false;
-            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
-            this.resetButton.MouseHover += new System.EventHandler(this.resetButton_MouseHover);
-            // 
-            // stepthroughButton
-            // 
-            this.stepthroughButton.ErrorImage = global::ISA_GUI.Properties.Resources.icons8_tracking_footstep_isolated_on_a_white_background_48;
-            this.stepthroughButton.Image = global::ISA_GUI.Properties.Resources.icons8_tracking_footstep_isolated_on_a_white_background_48;
-            this.stepthroughButton.InitialImage = global::ISA_GUI.Properties.Resources.icons8_tracking_footstep_isolated_on_a_white_background_48;
-            this.stepthroughButton.Location = new System.Drawing.Point(71, 8);
-            this.stepthroughButton.Name = "stepthroughButton";
-            this.stepthroughButton.Size = new System.Drawing.Size(52, 52);
-            this.stepthroughButton.TabIndex = 64;
-            this.stepthroughButton.TabStop = false;
-            this.stepthroughButton.Click += new System.EventHandler(this.stepthroughButton_Click);
-            this.stepthroughButton.MouseHover += new System.EventHandler(this.stepthroughButton_MouseHover);
-            // 
-            // RunButton
-            // 
-            this.RunButton.ErrorImage = global::ISA_GUI.Properties.Resources.Play2;
-            this.RunButton.Image = global::ISA_GUI.Properties.Resources.Play2;
-            this.RunButton.InitialImage = global::ISA_GUI.Properties.Resources.Play2;
-            this.RunButton.Location = new System.Drawing.Point(13, 8);
-            this.RunButton.Name = "RunButton";
-            this.RunButton.Size = new System.Drawing.Size(52, 52);
-            this.RunButton.TabIndex = 63;
-            this.RunButton.TabStop = false;
-            this.RunButton.Click += new System.EventHandler(this.runButton_Click);
-            this.RunButton.MouseHover += new System.EventHandler(this.RunButton_MouseHover);
             // 
             // pipelineLabel
             // 
@@ -1297,7 +1178,7 @@
             // 
             // programSpeedBar
             // 
-            this.programSpeedBar.Location = new System.Drawing.Point(217, 35);
+            this.programSpeedBar.Location = new System.Drawing.Point(894, 27);
             this.programSpeedBar.Name = "programSpeedBar";
             this.programSpeedBar.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.programSpeedBar.Size = new System.Drawing.Size(172, 45);
@@ -1307,11 +1188,142 @@
             // label38
             // 
             this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(277, 19);
+            this.label38.Location = new System.Drawing.Point(954, 11);
             this.label38.Name = "label38";
             this.label38.Size = new System.Drawing.Size(61, 13);
             this.label38.TabIndex = 105;
             this.label38.Text = "Run Speed";
+            // 
+            // buildButton
+            // 
+            this.buildButton.ErrorImage = global::ISA_GUI.Properties.Resources.icons8_hammer_48;
+            this.buildButton.Image = global::ISA_GUI.Properties.Resources.icons8_hammer_48;
+            this.buildButton.InitialImage = global::ISA_GUI.Properties.Resources.hammer;
+            this.buildButton.Location = new System.Drawing.Point(13, 8);
+            this.buildButton.Name = "buildButton";
+            this.buildButton.Size = new System.Drawing.Size(52, 52);
+            this.buildButton.TabIndex = 106;
+            this.buildButton.TabStop = false;
+            this.buildButton.Click += new System.EventHandler(this.buildButton_Click);
+            // 
+            // resetButton
+            // 
+            this.resetButton.ErrorImage = global::ISA_GUI.Properties.Resources.icons8_restart_48;
+            this.resetButton.Image = global::ISA_GUI.Properties.Resources.icons8_restart_48;
+            this.resetButton.InitialImage = global::ISA_GUI.Properties.Resources.icons8_restart_48;
+            this.resetButton.Location = new System.Drawing.Point(187, 8);
+            this.resetButton.Name = "resetButton";
+            this.resetButton.Size = new System.Drawing.Size(52, 52);
+            this.resetButton.TabIndex = 68;
+            this.resetButton.TabStop = false;
+            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
+            this.resetButton.MouseHover += new System.EventHandler(this.resetButton_MouseHover);
+            // 
+            // stepthroughButton
+            // 
+            this.stepthroughButton.ErrorImage = global::ISA_GUI.Properties.Resources.icons8_tracking_footstep_isolated_on_a_white_background_48;
+            this.stepthroughButton.Image = global::ISA_GUI.Properties.Resources.icons8_tracking_footstep_isolated_on_a_white_background_48;
+            this.stepthroughButton.InitialImage = global::ISA_GUI.Properties.Resources.icons8_tracking_footstep_isolated_on_a_white_background_48;
+            this.stepthroughButton.Location = new System.Drawing.Point(129, 8);
+            this.stepthroughButton.Name = "stepthroughButton";
+            this.stepthroughButton.Size = new System.Drawing.Size(52, 52);
+            this.stepthroughButton.TabIndex = 64;
+            this.stepthroughButton.TabStop = false;
+            this.stepthroughButton.Click += new System.EventHandler(this.stepthroughButton_Click);
+            this.stepthroughButton.MouseHover += new System.EventHandler(this.stepthroughButton_MouseHover);
+            // 
+            // RunButton
+            // 
+            this.RunButton.ErrorImage = global::ISA_GUI.Properties.Resources.Play2;
+            this.RunButton.Image = global::ISA_GUI.Properties.Resources.Play2;
+            this.RunButton.InitialImage = global::ISA_GUI.Properties.Resources.Play2;
+            this.RunButton.Location = new System.Drawing.Point(71, 8);
+            this.RunButton.Name = "RunButton";
+            this.RunButton.Size = new System.Drawing.Size(52, 52);
+            this.RunButton.TabIndex = 63;
+            this.RunButton.TabStop = false;
+            this.RunButton.Click += new System.EventHandler(this.runButton_Click);
+            this.RunButton.MouseHover += new System.EventHandler(this.RunButton_MouseHover);
+            // 
+            // summaryStatsBox
+            // 
+            this.summaryStatsBox.Controls.Add(this.StatsTextBox);
+            this.summaryStatsBox.Location = new System.Drawing.Point(4, 22);
+            this.summaryStatsBox.Name = "summaryStatsBox";
+            this.summaryStatsBox.Padding = new System.Windows.Forms.Padding(3);
+            this.summaryStatsBox.Size = new System.Drawing.Size(549, 324);
+            this.summaryStatsBox.TabIndex = 1;
+            this.summaryStatsBox.Text = "Summary Statistics";
+            this.summaryStatsBox.UseVisualStyleBackColor = true;
+            // 
+            // StatsTextBox
+            // 
+            this.StatsTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.StatsTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.StatsTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StatsTextBox.Location = new System.Drawing.Point(2, 5);
+            this.StatsTextBox.Name = "StatsTextBox";
+            this.StatsTextBox.ReadOnly = true;
+            this.StatsTextBox.Size = new System.Drawing.Size(544, 469);
+            this.StatsTextBox.TabIndex = 1;
+            this.StatsTextBox.Text = "";
+            // 
+            // sourceCodeBox
+            // 
+            this.sourceCodeBox.Controls.Add(this.AssemblerListingTextBox);
+            this.sourceCodeBox.Location = new System.Drawing.Point(4, 22);
+            this.sourceCodeBox.Name = "sourceCodeBox";
+            this.sourceCodeBox.Padding = new System.Windows.Forms.Padding(3);
+            this.sourceCodeBox.Size = new System.Drawing.Size(549, 324);
+            this.sourceCodeBox.TabIndex = 0;
+            this.sourceCodeBox.Text = "Assembler Listing";
+            this.sourceCodeBox.UseVisualStyleBackColor = true;
+            // 
+            // AssemblerListingTextBox
+            // 
+            this.AssemblerListingTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.AssemblerListingTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.AssemblerListingTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AssemblerListingTextBox.Location = new System.Drawing.Point(0, 5);
+            this.AssemblerListingTextBox.Name = "AssemblerListingTextBox";
+            this.AssemblerListingTextBox.ReadOnly = true;
+            this.AssemblerListingTextBox.Size = new System.Drawing.Size(549, 469);
+            this.AssemblerListingTextBox.TabIndex = 0;
+            this.AssemblerListingTextBox.Text = "";
+            // 
+            // pipelineTab
+            // 
+            this.pipelineTab.Controls.Add(this.pipelineTextBox);
+            this.pipelineTab.Location = new System.Drawing.Point(4, 22);
+            this.pipelineTab.Name = "pipelineTab";
+            this.pipelineTab.Padding = new System.Windows.Forms.Padding(3);
+            this.pipelineTab.Size = new System.Drawing.Size(549, 324);
+            this.pipelineTab.TabIndex = 3;
+            this.pipelineTab.Text = "Pipeline Statistics";
+            this.pipelineTab.UseVisualStyleBackColor = true;
+            // 
+            // pipelineTextBox
+            // 
+            this.pipelineTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.pipelineTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.pipelineTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pipelineTextBox.Location = new System.Drawing.Point(3, 3);
+            this.pipelineTextBox.Name = "pipelineTextBox";
+            this.pipelineTextBox.ReadOnly = true;
+            this.pipelineTextBox.Size = new System.Drawing.Size(543, 471);
+            this.pipelineTextBox.TabIndex = 2;
+            this.pipelineTextBox.Text = "";
+            // 
+            // Output
+            // 
+            this.Output.Controls.Add(this.pipelineTab);
+            this.Output.Controls.Add(this.sourceCodeBox);
+            this.Output.Controls.Add(this.summaryStatsBox);
+            this.Output.Location = new System.Drawing.Point(9, 454);
+            this.Output.Name = "Output";
+            this.Output.SelectedIndex = 0;
+            this.Output.Size = new System.Drawing.Size(557, 350);
+            this.Output.TabIndex = 61;
             // 
             // BUC10
             // 
@@ -1319,6 +1331,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1491, 814);
+            this.Controls.Add(this.buildButton);
             this.Controls.Add(this.label38);
             this.Controls.Add(this.programSpeedBar);
             this.Controls.Add(this.configButton);
@@ -1422,17 +1435,18 @@
             this.Name = "BUC10";
             this.Text = "BUC/10";
             this.Load += new System.EventHandler(this.BUC10_Load);
-            this.Output.ResumeLayout(false);
-            this.pipelineTab.ResumeLayout(false);
-            this.sourceCodeBox.ResumeLayout(false);
-            this.AssemblyTab.ResumeLayout(false);
-            this.summaryStatsBox.ResumeLayout(false);
             this.objectCode.ResumeLayout(false);
             this.objectCodeBox.ResumeLayout(false);
+            this.assemblerPage.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.programSpeedBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.buildButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.resetButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stepthroughButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.RunButton)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.programSpeedBar)).EndInit();
+            this.summaryStatsBox.ResumeLayout(false);
+            this.sourceCodeBox.ResumeLayout(false);
+            this.pipelineTab.ResumeLayout(false);
+            this.Output.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1493,20 +1507,11 @@
         private System.Windows.Forms.RichTextBox cirHex;
         private System.Windows.Forms.RichTextBox pcDec;
         private System.Windows.Forms.RichTextBox pcHex;
-        private System.Windows.Forms.TabControl Output;
-        private System.Windows.Forms.TabPage sourceCodeBox;
-        private System.Windows.Forms.TabPage summaryStatsBox;
         private System.Windows.Forms.TabControl objectCode;
         private System.Windows.Forms.PictureBox RunButton;
         public System.Windows.Forms.TabPage objectCodeBox;
         private System.Windows.Forms.RichTextBox InputBox;
-        private System.Windows.Forms.RichTextBox AssemblerListingTextBox;
-        private System.Windows.Forms.RichTextBox StatsTextBox;
-        private System.Windows.Forms.TabPage AssemblyTab;
-        private System.Windows.Forms.RichTextBox AssemblyTextBox;
         private System.Windows.Forms.PictureBox stepthroughButton;
-        private System.Windows.Forms.TabPage pipelineTab;
-        private System.Windows.Forms.RichTextBox pipelineTextBox;
         private System.Windows.Forms.RichTextBox f6Dec;
         private System.Windows.Forms.RichTextBox f6Hex;
         private System.Windows.Forms.Label label1;
@@ -1547,6 +1552,16 @@
         private System.Windows.Forms.Button configButton;
         private System.Windows.Forms.TrackBar programSpeedBar;
         private System.Windows.Forms.Label label38;
+        private System.Windows.Forms.TabPage assemblerPage;
+        private System.Windows.Forms.RichTextBox assemblerTextBox;
+        private System.Windows.Forms.PictureBox buildButton;
+        private System.Windows.Forms.TabPage summaryStatsBox;
+        private System.Windows.Forms.RichTextBox StatsTextBox;
+        private System.Windows.Forms.TabPage sourceCodeBox;
+        private System.Windows.Forms.RichTextBox AssemblerListingTextBox;
+        private System.Windows.Forms.TabPage pipelineTab;
+        private System.Windows.Forms.RichTextBox pipelineTextBox;
+        private System.Windows.Forms.TabControl Output;
     }
 }
 

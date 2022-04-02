@@ -68,7 +68,7 @@ namespace ISA_GUI
             switch (opcode) //switch on the opcode value
             {
                 case 0:
-                    appendAssemblyString(ref assemblyString, "STOP", "", "", "", ref instruction); //HALT
+                    appendAssemblyString(ref assemblyString, "HALT", "", "", "", ref instruction); //HALT
                     break;
                 case 1:
                     appendAssemblyString(ref assemblyString, "NOP", "", "", "", ref instruction); //NOP
@@ -142,14 +142,13 @@ namespace ISA_GUI
                 if (instruct.instrFlag == 2)
                     updatedAssembly = "f." + updatedAssembly;
                 else if (instruct.instrFlag == 1)
-                    updatedAssembly += 's';
+                    updatedAssembly += ".s";
                 else if (instruct.instrFlag == 3)
                     updatedAssembly = "f." + updatedAssembly + 's';
             }
             instruct.assembly1 = updatedAssembly;
-            assemblyString.Append(updatedAssembly + "\t" + first + second + third + "\n");
+            assemblyString.Append(updatedAssembly + " " + first + second + third + "\n");
             instruct.assembly2 = first + second + third;
-
         }
 
         /**

@@ -51,7 +51,7 @@ namespace ISA_GUI
 			calcAddress = 1;
 			predictionSet = false;
 			forwardingSet = false;
-			dynamicPipelineSet = false;
+			dynamicPipelineSet = true;
         }
     }
 }

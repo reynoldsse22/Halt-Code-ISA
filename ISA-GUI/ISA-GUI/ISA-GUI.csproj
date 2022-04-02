@@ -48,7 +48,9 @@
   <ItemGroup>
     <Compile Include="AccessMemory.cs" />
     <Compile Include="ALU.cs" />
+    <Compile Include="Assembler.cs" />
     <Compile Include="BitwiseOPFU.cs" />
+    <Compile Include="Disassembler.cs" />
     <Compile Include="FloatAddFU.cs" />
     <Compile Include="FloatDivFU.cs" />
     <Compile Include="FloatMultFU.cs" />
@@ -139,6 +141,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icons8-restart-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\hammer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-hammer-48.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
