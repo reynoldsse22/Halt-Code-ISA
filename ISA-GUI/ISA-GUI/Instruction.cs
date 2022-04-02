@@ -26,7 +26,7 @@ namespace ISA_GUI
 	{
 		public byte[] binInstruction = new byte[3];
 		public int programCounterValue, opcode, r1, r2, r3, address, destinationReg, instrFlag, stage, cycleControl, intResult;
-		public int stage1Start, stage1End, stage2Start, stage2End, stage3Start, stage3End, stage4Start, stage4End, stage5Start, stage5End;
+		public int stage1Start, stage1End, stage2Start, stage2End, stage3Start, stage3End, stage4Start, stage4End, stage5Start, stage5End, cycle;
 		public float floatResult;
 		public string instrType;
 		public bool isFloat;
