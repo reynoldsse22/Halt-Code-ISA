@@ -33,6 +33,8 @@ namespace ISA_GUI
     {
         CentralProcessingUnit cpu = new CentralProcessingUnit();                //The CPU
         ConfigCycle config = new ConfigCycle();                                 //The configuration file
+        Assembler assembler = new Assembler();
+        Disassembler disassembler = new Disassembler();
         bool halted = true;                                                     //Determines if the program has been halted yet
         List<string> program;                                                   //Holds the user inputted instructions
         Instruction[] stages = new Instruction[5];
@@ -98,7 +100,14 @@ namespace ISA_GUI
             halted = false;         //Set loop control variable to false since this a fresh run of the program
             try
             {
-                program = getInput();       //get the input from the user
+                if (objectCode.SelectedTab == objectCodeBox)
+                {
+                    List<string> program = getMachineCode();      //get instructions from user
+                }
+                else
+                {
+                    List<string> program = getAssembly();      //get instructions from user
+                }
                 if (!config.dynamicPipelineSet)
                 {
                     while (!halted)
@@ -122,7 +131,7 @@ namespace ISA_GUI
                 AssemblerListingTextBox.Text = message;
                 StatsTextBox.Text = message;
                 pipelineTextBox.Text = message;
-                AssemblyTextBox.Text = message;
+                assemblerTextBox.Text = message;
                 halted = true;
                 return;
             }
@@ -153,7 +162,14 @@ namespace ISA_GUI
                 halted = false;            
                 try
                 {
-                    List<string> program = getInput();      //get instructions from user
+                    if (objectCode.SelectedTab == objectCodeBox)
+                    {
+                        List<string> program = getMachineCode();      //get instructions from user
+                    }
+                    else
+                    {
+                        List<string> program = getAssembly();      //get instructions from user
+                    }
                     if (!config.dynamicPipelineSet)
                         cpu.runStaticPipeline(program, true, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config, ref stages);      //Run the program one cycle at a time. Stepthrough flag is true
                     else
@@ -185,7 +201,7 @@ namespace ISA_GUI
                     AssemblerListingTextBox.Text = message;
                     StatsTextBox.Text = message;
                     pipelineTextBox.Text = message;
-                    AssemblyTextBox.Text = message;
+                    assemblerTextBox.Text = message;
                     halted = true;
                     return;
                 }
@@ -220,9 +236,10 @@ namespace ISA_GUI
 		 * <hr>
 		 * Return: program - a list of three byte instructions
 		 */
-        private List<string> getInput()
+        private List<string> getMachineCode()
         {
             program = new List<string>();
+            string assembly = "";
             string pr = "";
             try
             {
@@ -241,8 +258,60 @@ namespace ISA_GUI
             {
                 throw new Exception(ex.Message);
             }
+
+            assembly = disassembler.Disassemble(program);
+            assemblerTextBox.Text = assembly;
             return program;
         }
+
+        /**
+		 * Method Name: getInput <br>
+		 * Method Purpose: Gets the instructions from the user and splits it on the space
+		 * 
+		 * <br>
+		 * Date created: 2/19/22 <br>
+		 * <hr>
+		 * Return: program - a list of three byte instructions
+		 */
+        private List<string> getAssembly()
+        {
+            List<string> assembly = new List<string>();
+            program = new List<string>();
+            string pr = "";
+            string machineOutput = "";
+            try
+            {
+                if (!assemblerTextBox.Text.Equals(""))                               //If the input is null, throw an exception
+                {
+                    pr = assemblerTextBox.Text;
+                    assembly = pr.Split('\n').ToList();                        //Splits the given program into different instructions
+                }
+                else
+                {
+                    throw new Exception("Invalid Instruction!");
+                }
+
+                program = assembler.Assemble(assembly);
+
+                for(int x = 0; x < program.Count; x++)
+                {
+                    if (x == 0)
+                        machineOutput += program[x];
+                    else
+                        machineOutput += ' ' + program[x];
+                }
+                InputBox.Text = machineOutput;
+            }
+            catch (Exception)                                        //If any error in parsing, catch exception and pass to the parent
+            {
+                throw new Exception("Invalid Instruction!");
+            }
+            return program;
+        }
+
+
+        
+
 
         /**
 		 * Method Name: clearProgram <br>
@@ -395,7 +464,6 @@ namespace ISA_GUI
 
             }
             AssemblerListingTextBox.Text = decodedString.ToString();
-            AssemblyTextBox.Text = assemblyOutput.ToString();
             pipelineTextBox.Text = pipelineOutput.ToString();
         }
 
@@ -706,6 +774,19 @@ namespace ISA_GUI
         {
             config.programSpeed = programSpeedBar.Value;
         }
+
+        private void buildButton_Click(object sender, EventArgs e)
+        {
+            if (objectCode.SelectedTab == objectCodeBox)
+            {
+                List<string> program = getMachineCode();      //get instructions from user
+            }
+            else
+            {
+                List<string> program = getAssembly();      //get instructions from user
+            }
+        }
+
     }
 
 }
