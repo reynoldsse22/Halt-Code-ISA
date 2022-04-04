@@ -36,7 +36,7 @@ namespace ISA_GUI
 	    */
 		public CommonDataBus()
 		{
-			Dictionary<string, string> CDB = new Dictionary<string, string>();
+			CDB = new Dictionary<string, string>();
 			index = new Dictionary<int, int>();
 		}
 	}

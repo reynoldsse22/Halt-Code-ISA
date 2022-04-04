@@ -22,7 +22,7 @@ namespace ISA_GUI
 	* Date created: 4/2/22 <br>
 	* @author Samuel Reynolds, Nick Farmer, Carlos Ortiz, & Brandon Beaudry	
 	*/
-	internal class MemoryUnitFU
+	internal class MemoryUnit
 	{
 		public Instruction instruction;
 		/**
@@ -33,7 +33,7 @@ namespace ISA_GUI
 	    * Date created: 4/2/22 <br>
 	    * @author Samuel Reynolds, Nick Farmer, Carlos Ortiz, & Brandon Beaudry	
 	    */
-		public MemoryUnitFU()
+		public MemoryUnit()
 		{
 
 		}
