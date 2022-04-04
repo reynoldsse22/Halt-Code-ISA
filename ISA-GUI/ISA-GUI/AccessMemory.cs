@@ -119,12 +119,12 @@ namespace ISA_GUI
 		 *   @param Instruction instruction
 		 *   @param	ConfigCycle config
 		 */
-		public void accessMemoryDynamic(ref DataMemory memory, ref RegisterFile registers, Instruction instruction, ref ConfigCycle config, out string result, ref ReservationStation load_buffer)
+		public void accessMemoryDynamic(ref DataMemory memory, ref RegisterFile registers, Instruction instruction, ref ConfigCycle config, 
+			out string result, ref ReservationStation load_buffer, out int intASPR)
 		{
 			result = "";
-			inProgress = true;
-			occupied = true;
-			hazardDetected = false;
+			intASPR = 0;
+			int ASPR = instruction.instrFlag & 1;
 			if(!load_buffer.instruction.executionInProgress && !load_buffer.instruction.doneExecuting)
             {
 				load_buffer.instruction.cycleControl = config.load;
@@ -140,7 +140,9 @@ namespace ISA_GUI
 						load_buffer.instruction.intResult += (memory.MainMemory[load_buffer.instruction.address + 1] << 8);      //Loads the TSB value from the address in memory to r0
 						load_buffer.instruction.intResult += (memory.MainMemory[load_buffer.instruction.address + 2]);           //Loads the LSB value from the address in memory to r0
 						result = load_buffer.instruction.intResult.ToString();
-						if(load_buffer.instruction.cycleControl == 0)
+						if (int.Parse(result) == 0 && ASPR == 1)
+							intASPR = 1;
+						if (load_buffer.instruction.cycleControl == 0)
                         {
 							load_buffer.instruction.executionInProgress = false;
 							load_buffer.instruction.doneExecuting = true;
@@ -155,6 +157,8 @@ namespace ISA_GUI
 						memoryFloat[1] = (byte)(memory.MainMemory[load_buffer.instruction.address + 2]);                       //Loads the LSB value from the address in memory to f0
 						load_buffer.instruction.floatResult = System.BitConverter.ToSingle(memoryFloat, 0);
 						result = load_buffer.instruction.floatResult.ToString();
+						if (float.Parse(result) == 0f && ASPR == 1)
+							intASPR = 1;
 						if (load_buffer.instruction.cycleControl == 0)
 						{
 							load_buffer.instruction.executionInProgress = false;
@@ -167,6 +171,7 @@ namespace ISA_GUI
                     {
 						load_buffer.instruction.executionInProgress = true;
 						result = load_buffer.instruction.address.ToString();
+						
 						if (load_buffer.instruction.cycleControl == 0)
 						{
 							load_buffer.instruction.executionInProgress = false;
@@ -183,6 +188,10 @@ namespace ISA_GUI
 						floatArray[2] = (byte)((load_buffer.instruction.address >> 8) & 15);    //get first 4 bits by shifting right 8 times and ANDing with 0xF to get only those 4
 						floatArray[3] = 0x00;                           //first byte is 0 because we don't use them 
 						result = System.BitConverter.ToSingle(floatArray, 0).ToString();
+						if (float.Parse(result) == 0f && ASPR == 1)
+							intASPR = 1;
+						if (int.Parse(result) == 0 && ASPR == 1)
+							intASPR = 1;
 						if (load_buffer.instruction.cycleControl == 0)
 						{
 							load_buffer.instruction.executionInProgress = false;
@@ -195,6 +204,8 @@ namespace ISA_GUI
                     {
 						load_buffer.instruction.executionInProgress = true;
 						result = (load_buffer.instruction.iOperand1 + (load_buffer.instruction.address << 12)).ToString();
+						if (int.Parse(result) == 0 && ASPR == 1)
+							intASPR = 1;
 						if (load_buffer.instruction.cycleControl == 0)
 						{
 							load_buffer.instruction.executionInProgress = false;
@@ -214,6 +225,8 @@ namespace ISA_GUI
 																										  //the second 4 are found by ORing with the old array
 						floatArray[3] = (byte)((load_buffer.instruction.address >> 4) & 255);   //get first byte by shifting right 4 and ANDing with 0xFF
 						result = System.BitConverter.ToSingle(floatArray, 0).ToString();
+						if (float.Parse(result) == 0f && ASPR == 1)
+							intASPR = 1;
 						if (load_buffer.instruction.cycleControl == 0)
 						{
 							load_buffer.instruction.executionInProgress = false;

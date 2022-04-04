@@ -25,7 +25,8 @@ namespace ISA_GUI
 	*/
 	internal class ReorderBuffer
 	{
-
+		public List<Instruction> reorderBuffer;
+		public int reorderIndex;
 		/**
 	    * Method Name: ReorderBuffer <br>
 	    * Method Purpose: Class constructor
@@ -36,9 +37,36 @@ namespace ISA_GUI
 	    */
 		public ReorderBuffer()
 		{
-			Instruction[] ReorderBuffer = new Instruction[9];
-
+			reorderBuffer = new List<Instruction>();
+			reorderIndex = 1;
 		}
+
+
+		public void addToReorderBuffer(Instruction inst, ref ConfigCycle config)
+        {
+			if (reorderBuffer.Count == config.reorderbuffersize)
+				throw new Exception();
+			else
+				reorderBuffer.Add(inst);
+			return;
+        }
+
+		public int checkCommit(Instruction inst, ref WriteResult WR, ref DataMemory memory, ref bool branchTaken, ref InstructionMemory IM, 
+			ref RegisterFile registers, ref bool halted, ref CommonDataBus CDB)
+        {
+			if(reorderIndex == inst.ID)
+            {
+				WR.commit(ref registers, ref inst, ref memory, ref halted, ref IM, ref branchTaken);
+				return removeFromReorderBuffer(ref inst, ref CDB);
+            }
+			return -1;
+        }
+
+        public int removeFromReorderBuffer(ref Instruction instruction, ref CommonDataBus CDB)
+        {
+			return instruction.ID;
+        }
+
 	}
 }
 
