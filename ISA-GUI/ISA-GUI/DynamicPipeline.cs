@@ -154,13 +154,13 @@ namespace ISA_GUI
                             {
                                 reorderBufferDelay++;
                             }
-                            reorderBuffer.checkCommit(inst, ref WR);
-
-
+                            int instructionIndex = reorderBuffer.checkCommit(inst, ref WR, ref dataMemory, ref lastBranchDecision, ref IM, ref registers, ref halted, ref commonDataBus);
+                            detectControlHazard(instructionIndex);
                             break;
                         //Store the answer and corresponding reservation name into the data bus
                         case 4:
                             WR.writeToCDB(inst, ref commonDataBus, in inst.result);
+                            inst.stage = 5;
                             break;
 
                         //This should be where the Write Result and Memory Read stages will be held
@@ -186,9 +186,9 @@ namespace ISA_GUI
                                 if (inst.opcode == 0 || inst.opcode == 1)
                                     inst.stage = 5;
                                 else if (inst.opcode == 9 || inst.opcode == 11 || inst.opcode == 12)
-                                    inst.stage = 4;
+                                    inst.stage = 3;
                                 else
-                                    inst.stage = 5;
+                                    inst.stage = 4;
                             }
                             break;
                         //Populates reservationStations
@@ -455,7 +455,8 @@ namespace ISA_GUI
                     if (intAddFu.instruction == null) 
                     {
                         intAddFu.instruction = intAddRS.instruction;
-                        intAddRS = null;
+                        intAddRS.instruction = null;
+                        intAddRS.Busy = false;
                         return;
                     }
                     break;
@@ -463,7 +464,8 @@ namespace ISA_GUI
                     if (intSubFu.instruction == null)
                     {
                         intSubFu.instruction = intSubRS.instruction;
-                        intSubRS = null;
+                        intSubRS.instruction = null;
+                        intSubRS.Busy = false;
                         return;
                     }
                     break;
@@ -471,7 +473,8 @@ namespace ISA_GUI
                     if (intMultFu.instruction == null)
                     {
                         intMultFu.instruction = intMultRS.instruction;
-                        intMultRS = null;
+                        intMultRS.instruction = null;
+                        intMultRS.Busy = false;
                         return;
                     }
                     break;
@@ -479,7 +482,8 @@ namespace ISA_GUI
                     if (intDivFu.instruction == null)
                     {
                         intDivFu.instruction = intDivRS.instruction;
-                        intDivRS = null;
+                        intDivRS.instruction = null;
+                        intDivRS.Busy = false;
                         return;
                     }
                     break;
@@ -487,7 +491,8 @@ namespace ISA_GUI
                     if (floatAddFu.instruction == null)
                     {
                         floatAddFu.instruction = floatAddRS.instruction;
-                        floatAddRS = null;
+                        floatAddRS.instruction = null;
+                        floatAddRS.Busy = false;
                         return;
                     }
                     break;
@@ -495,7 +500,8 @@ namespace ISA_GUI
                     if (floatSubFu.instruction == null)
                     {
                         floatSubFu.instruction = floatSubRS.instruction;
-                        floatSubRS = null;
+                        floatSubRS.instruction = null;
+                        floatSubRS.Busy = false;
                         return;
                     }
                     break;
@@ -503,7 +509,8 @@ namespace ISA_GUI
                     if (floatMultFu.instruction == null)
                     {
                         floatMultFu.instruction = floatMultRS.instruction;
-                        floatMultRS = null;
+                        floatMultRS.instruction = null;
+                        floatMultRS.Busy = false;
                         return;
                     }
                     break;
@@ -511,7 +518,8 @@ namespace ISA_GUI
                     if (floatDivFu.instruction == null)
                     {
                         floatDivFu.instruction = floatDivRS.instruction;
-                        floatDivRS = null;
+                        floatDivRS.instruction = null;
+                        floatDivRS.Busy = false;
                         return;
                     }
                     break;
@@ -519,7 +527,8 @@ namespace ISA_GUI
                     if (bitwiseOPFu.instruction == null)
                     {
                         bitwiseOPFu.instruction = bitwiseOPRS.instruction;
-                        bitwiseOPRS = null;
+                        bitwiseOPRS.instruction = null;
+                        bitwiseOPRS.Busy = false;
                         return;
                     }
                     break;
@@ -527,7 +536,8 @@ namespace ISA_GUI
                     if (memoryUnitFu.instruction == null)
                     {
                         memoryUnitFu.instruction = load_storeBuffer.instruction;
-                        load_storeBuffer = null;
+                        load_storeBuffer.instruction = null;
+                        load_storeBuffer.Busy = false;
                         return;
                     }
                     break;
@@ -535,7 +545,8 @@ namespace ISA_GUI
                     if (branchFu.instruction == null)
                     {
                         branchFu.instruction = branchOPS.instruction;
-                        branchOPS = null;
+                        branchOPS.instruction = null;
+                        branchOPS.Busy = false;
                         return;
                     }
                     break;
@@ -543,7 +554,8 @@ namespace ISA_GUI
                     if (shiftFu.instruction == null)
                     {
                         shiftFu.instruction = shiftOPS.instruction;
-                        shiftOPS = null;
+                        shiftOPS.instruction = null;
+                        shiftOPS.Busy = false;
                         return;
                     }
                     break;
@@ -1369,6 +1381,66 @@ namespace ISA_GUI
             throw new NotImplementedException();
         }
 
+
+        /**
+      * Method Name: detectControlHazard <br>
+      * Method Purpose: Detects control hazards and if the pipeline needs to be flushed
+      * 
+      * <br>
+      * Date created: 3/7/22 <br>
+      * <hr>
+      *   @param  Instruction[] stages
+      */
+        public void detectControlHazard(int id)
+        {
+            if (id == -1)
+                return;
+            if ((instructionsInFlight[(id - 1)].programCounterValue != instructionsInFlight[id].address) && lastBranchDecision == true)
+            {
+                instructionID = id + 1;
+                instructionsInFlight.Clear();
+                instructionQueue.Clear();
+                intAddFu.instruction = null;
+                intSubFu.instruction = null;
+                intMultFu.instruction = null;
+                intDivFu.instruction = null;
+                floatAddFu.instruction = null;
+                floatSubFu.instruction = null;
+                floatMultFu.instruction = null;
+                floatDivFu.instruction = null;
+                bitwiseOPFu.instruction = null;
+                memoryUnitFu.instruction = null;
+                branchFu.instruction = null;
+                shiftFu.instruction = null;
+                intAddRS.instruction = null;
+                intSubRS.instruction = null;
+                intMultRS.instruction = null;
+                intDivRS.instruction = null;
+                floatAddRS.instruction = null;
+                floatSubRS.instruction = null;
+                floatMultRS.instruction = null;
+                floatDivRS.instruction = null;
+                bitwiseOPRS.instruction = null;
+                load_storeBuffer.instruction = null;
+                branchOPS.instruction = null;
+                shiftOPS.instruction = null;
+
+                intAddRS.Busy = false;
+                intSubRS.Busy = false;
+                intMultRS.Busy = false;
+                intDivRS.Busy = false;
+                floatAddRS.Busy = false;
+                floatSubRS.Busy = false;
+                floatMultRS.Busy = false;
+                floatDivRS.Busy = false;
+                bitwiseOPRS.Busy = false;
+                load_storeBuffer.Busy = false;
+                branchOPS.Busy = false;
+                shiftOPS.Busy = false;
+
+            }
+            return;
+        }
 
         /// <summary>Generates the assembly.</summary>
         /// <param name="IM">The instruction memory</param>
