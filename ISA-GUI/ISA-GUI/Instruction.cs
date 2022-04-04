@@ -35,7 +35,7 @@ namespace ISA_GUI
 		public int iOperand1, iOperand2, iOperand3;
 		public float fOperand1, fOperand2, fOperand3;
 		public bool isFloat, executionInProgress, doneExecuting;
-		public string assembly1;
+		public string assembly1, result;
 		public string assembly2;
 		/**
 	    * Method Name: Instruction <br>

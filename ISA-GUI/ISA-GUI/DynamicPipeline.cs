@@ -22,7 +22,7 @@ namespace ISA_GUI
         public Printer printer;
         public int cycleCount;
         public Instruction stall = new Instruction();
-        public CommonDataBus CommonDataBus;
+        public CommonDataBus commonDataBus;
         public IntAddFU intAddFu;
         public IntSubFU intSubFu;
         public IntMultFU intMultFu;
@@ -31,10 +31,10 @@ namespace ISA_GUI
         public FloatSubFU floatSubFu;
         public FloatMultFU floatMultFu;
         public FloatDivFU floatDivFu;
-        public BitwiseOPFU bitwiseOPFU;
-        public MemoryUnit memoryUnitFU;
-        public BranchFU branchFU;
-        public ShiftFU shiftFU;
+        public BitwiseOPFU bitwiseOPFu;
+        public MemoryUnit memoryUnitFu;
+        public BranchFU branchFu;
+        public ShiftFU shiftFu;
         public ReservationStation intAddRS;
         public ReservationStation intSubRS;
         public ReservationStation intMultRS;
@@ -68,7 +68,7 @@ namespace ISA_GUI
             EU = new ExecutionUnit();
             AM = new AccessMemory();
             WR = new WriteResult();
-            CommonDataBus = new CommonDataBus();
+            commonDataBus = new CommonDataBus();
             intAddFu = new IntAddFU();
             intSubFu = new IntSubFU();
             intMultFu = new IntMultFU();
@@ -77,9 +77,9 @@ namespace ISA_GUI
             floatSubFu = new FloatSubFU();
             floatMultFu = new FloatMultFU();
             floatDivFu = new FloatDivFU();
-            bitwiseOPFU = new BitwiseOPFU();
-            memoryUnitFU = new MemoryUnit();
-            branchFU = new BranchFU();
+            bitwiseOPFu = new BitwiseOPFU();
+            memoryUnitFu = new MemoryUnit();
+            branchFu = new BranchFU();
             intAddRS = new ReservationStation("intAddRS");
             intSubRS = new ReservationStation("intSubRS");
             intMultRS = new ReservationStation("intMultRS");
@@ -146,12 +146,13 @@ namespace ISA_GUI
                             break;
                         //Store the answer and corresponding reservation name into the data bus
                         case 4:
-
+                            WR.writeToCDB(inst, ref commonDataBus, in inst.result);
                             break;
 
                         //This should be where the Write Result and Memory Read stages will be held
                         case 3:
                             AM.accessMemoryDynamic(ref dataMemory, ref registers, inst, ref config, out result, ref load_storeBuffer);
+                            inst.result = result;
                             if(load_storeBuffer.instruction.doneExecuting)
                             {
                                 inst.stage = 4;
@@ -163,8 +164,8 @@ namespace ISA_GUI
                         //Execute within the functional unit
                         case 2:
                             doneExecuting = execute(inst, ref registers, ref dataMemory, ref IM, ref config, ref alu, ref lastBranchDecision, ref result);
-
-                            if(doneExecuting)
+                            inst.result = result;
+                            if (doneExecuting)
                             {
                                 if (inst.opcode == 0 || inst.opcode == 1)
                                     inst.stage = 5;
@@ -226,7 +227,7 @@ namespace ISA_GUI
                 return false;
             }
 
-            bool dependencies = checkDependencies(ref instruction, ref CommonDataBus, ref registers);
+            bool dependencies = checkDependencies(ref instruction, ref commonDataBus, ref registers);
             if(dependencies)
             {
                 return false;
@@ -354,62 +355,62 @@ namespace ISA_GUI
                     }
                     break;
                 case 9:
-                    if (!bitwiseOPFU.instruction.executionInProgress && !bitwiseOPFU.instruction.doneExecuting)
+                    if (!bitwiseOPFu.instruction.executionInProgress && !bitwiseOPFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref bitwiseOPFU.instruction, ref config, ref branchTaken, out result);
-                        bitwiseOPFU.instruction.executionInProgress = true;
-                        bitwiseOPFU.instruction.cycleControl--;
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref bitwiseOPFu.instruction, ref config, ref branchTaken, out result);
+                        bitwiseOPFu.instruction.executionInProgress = true;
+                        bitwiseOPFu.instruction.cycleControl--;
                     }
                     else
-                        bitwiseOPFU.instruction.cycleControl--;
-                    if (bitwiseOPFU.instruction.cycleControl == 0)
+                        bitwiseOPFu.instruction.cycleControl--;
+                    if (bitwiseOPFu.instruction.cycleControl == 0)
                     {
-                        bitwiseOPFU.instruction.doneExecuting = true;
+                        bitwiseOPFu.instruction.doneExecuting = true;
                         return true;
                     }
                     break;
                 case 10:
-                    if (!memoryUnitFU.instruction.executionInProgress && !memoryUnitFU.instruction.doneExecuting)
+                    if (!memoryUnitFu.instruction.executionInProgress && !memoryUnitFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref memoryUnitFU.instruction, ref config, ref branchTaken, out result);
-                        memoryUnitFU.instruction.executionInProgress = true;
-                        memoryUnitFU.instruction.cycleControl--;
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref memoryUnitFu.instruction, ref config, ref branchTaken, out result);
+                        memoryUnitFu.instruction.executionInProgress = true;
+                        memoryUnitFu.instruction.cycleControl--;
                     }
                     else
-                        memoryUnitFU.instruction.cycleControl--;
-                    if (memoryUnitFU.instruction.cycleControl == 0)
+                        memoryUnitFu.instruction.cycleControl--;
+                    if (memoryUnitFu.instruction.cycleControl == 0)
                     {
-                        memoryUnitFU.instruction.doneExecuting = true;
+                        memoryUnitFu.instruction.doneExecuting = true;
                         return true;
                     }
                     break;
                 case 11:
-                    if (!branchFU.instruction.executionInProgress && !branchFU.instruction.doneExecuting)
+                    if (!branchFu.instruction.executionInProgress && !branchFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref branchFU.instruction, ref config, ref branchTaken, out result);
-                        branchFU.instruction.executionInProgress = true;
-                        branchFU.instruction.cycleControl--;
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref branchFu.instruction, ref config, ref branchTaken, out result);
+                        branchFu.instruction.executionInProgress = true;
+                        branchFu.instruction.cycleControl--;
                     }
                     else
-                        branchFU.instruction.cycleControl--;
-                    if (branchFU.instruction.cycleControl == 0)
+                        branchFu.instruction.cycleControl--;
+                    if (branchFu.instruction.cycleControl == 0)
                     {
-                        branchFU.instruction.doneExecuting = true;
+                        branchFu.instruction.doneExecuting = true;
                         return true;
                     }
                     break;
                 case 12:
-                    if (!shiftFU.instruction.executionInProgress && !shiftFU.instruction.doneExecuting)
+                    if (!shiftFu.instruction.executionInProgress && !shiftFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref shiftFU.instruction, ref config, ref branchTaken, out result);
-                        shiftFU.instruction.executionInProgress = true;
-                        shiftFU.instruction.cycleControl--;
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref shiftFu.instruction, ref config, ref branchTaken, out result);
+                        shiftFu.instruction.executionInProgress = true;
+                        shiftFu.instruction.cycleControl--;
                     }
                     else
-                        shiftFU.instruction.cycleControl--;
-                    if (shiftFU.instruction.cycleControl == 0)
+                        shiftFu.instruction.cycleControl--;
+                    if (shiftFu.instruction.cycleControl == 0)
                     {
-                        shiftFU.instruction.doneExecuting = true;
+                        shiftFu.instruction.doneExecuting = true;
                         return true;
                     }
                     break;
@@ -486,33 +487,33 @@ namespace ISA_GUI
                     }
                     break;
                 case 9:
-                    if (bitwiseOPFU.instruction == null)
+                    if (bitwiseOPFu.instruction == null)
                     {
-                        bitwiseOPFU.instruction = bitwiseOPRS.instruction;
+                        bitwiseOPFu.instruction = bitwiseOPRS.instruction;
                         bitwiseOPRS = null;
                         return;
                     }
                     break;
                 case 10:
-                    if (memoryUnitFU.instruction == null)
+                    if (memoryUnitFu.instruction == null)
                     {
-                        memoryUnitFU.instruction = load_storeBuffer.instruction;
+                        memoryUnitFu.instruction = load_storeBuffer.instruction;
                         load_storeBuffer = null;
                         return;
                     }
                     break;
                 case 11:
-                    if (branchFU.instruction == null)
+                    if (branchFu.instruction == null)
                     {
-                        branchFU.instruction = branchOPS.instruction;
+                        branchFu.instruction = branchOPS.instruction;
                         branchOPS = null;
                         return;
                     }
                     break;
                 case 12:
-                    if (shiftFU.instruction == null)
+                    if (shiftFu.instruction == null)
                     {
-                        shiftFU.instruction = shiftOPS.instruction;
+                        shiftFu.instruction = shiftOPS.instruction;
                         shiftOPS = null;
                         return;
                     }
@@ -529,10 +530,10 @@ namespace ISA_GUI
                 case 12:
                     if (instruction.isFloat)
                     {
-                        if (memoryUnitFU.instruction.fOp1 != "")
+                        if (memoryUnitFu.instruction.fOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(memoryUnitFU.instruction.fOp1))
-                                memoryUnitFU.instruction.fOperand1 = float.Parse(CDB.CDB[memoryUnitFU.instruction.fOp1]);
+                            if (CDB.CDB.ContainsKey(memoryUnitFu.instruction.fOp1))
+                                memoryUnitFu.instruction.fOperand1 = float.Parse(CDB.CDB[memoryUnitFu.instruction.fOp1]);
                             else
                             {
                                 trueDependenceDelay++;
@@ -540,14 +541,14 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            memoryUnitFU.instruction.fOperand1 = registers.floatRegisters[0];
+                            memoryUnitFu.instruction.fOperand1 = registers.floatRegisters[0];
                     }
                     else
                     {
-                        if (memoryUnitFU.instruction.iOp1 != "")
+                        if (memoryUnitFu.instruction.iOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(memoryUnitFU.instruction.iOp1))
-                                memoryUnitFU.instruction.iOperand1 = int.Parse(CDB.CDB[memoryUnitFU.instruction.iOp1]);
+                            if (CDB.CDB.ContainsKey(memoryUnitFu.instruction.iOp1))
+                                memoryUnitFu.instruction.iOperand1 = int.Parse(CDB.CDB[memoryUnitFu.instruction.iOp1]);
                             else
                             {
                                 trueDependenceDelay++;
@@ -555,7 +556,7 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            memoryUnitFU.instruction.iOperand1 = registers.intRegisters[0];
+                            memoryUnitFu.instruction.iOperand1 = registers.intRegisters[0];
                     }
                     break;
                 case 13:
@@ -679,10 +680,10 @@ namespace ISA_GUI
                 case 17:
                 case 18:
                 case 19:
-                    if (shiftFU.instruction.iOp1 != "")
+                    if (shiftFu.instruction.iOp1 != "")
                     {
-                        if (CDB.CDB.ContainsKey(shiftFU.instruction.iOp1))
-                            shiftFU.instruction.iOperand1 = int.Parse(CDB.CDB[shiftFU.instruction.iOp1]);
+                        if (CDB.CDB.ContainsKey(shiftFu.instruction.iOp1))
+                            shiftFu.instruction.iOperand1 = int.Parse(CDB.CDB[shiftFu.instruction.iOp1]);
                         else
                         {
                             trueDependenceDelay++;
@@ -690,11 +691,11 @@ namespace ISA_GUI
                         }
                     }
                     else
-                        shiftFU.instruction.iOperand2 = registers.intRegisters[shiftFU.instruction.r1];
-                    if (shiftFU.instruction.iOp2 != "")
+                        shiftFu.instruction.iOperand2 = registers.intRegisters[shiftFu.instruction.r1];
+                    if (shiftFu.instruction.iOp2 != "")
                     {
-                        if (CDB.CDB.ContainsKey(shiftFU.instruction.iOp2))
-                            shiftFU.instruction.iOperand2 = int.Parse(CDB.CDB[shiftFU.instruction.iOp2]);
+                        if (CDB.CDB.ContainsKey(shiftFu.instruction.iOp2))
+                            shiftFu.instruction.iOperand2 = int.Parse(CDB.CDB[shiftFu.instruction.iOp2]);
                         else
                         {
                             trueDependenceDelay++;
@@ -702,7 +703,7 @@ namespace ISA_GUI
                         }
                     }
                     else
-                        shiftFU.instruction.iOperand2 = registers.intRegisters[shiftFU.instruction.r2];
+                        shiftFu.instruction.iOperand2 = registers.intRegisters[shiftFu.instruction.r2];
                     break;
                 case 20:
                     if (instruction.isFloat)
@@ -931,10 +932,10 @@ namespace ISA_GUI
                 case 24:
                 case 25:
                 case 26:
-                    if (bitwiseOPFU.instruction.iOp1 != "")
+                    if (bitwiseOPFu.instruction.iOp1 != "")
                     {
-                        if (CDB.CDB.ContainsKey(bitwiseOPFU.instruction.iOp1))
-                            bitwiseOPFU.instruction.iOperand1 = int.Parse(CDB.CDB[bitwiseOPFU.instruction.iOp1]);
+                        if (CDB.CDB.ContainsKey(bitwiseOPFu.instruction.iOp1))
+                            bitwiseOPFu.instruction.iOperand1 = int.Parse(CDB.CDB[bitwiseOPFu.instruction.iOp1]);
                         else
                         {
                             trueDependenceDelay++;
@@ -942,11 +943,11 @@ namespace ISA_GUI
                         }
                     }
                     else
-                        bitwiseOPFU.instruction.iOperand2 = registers.intRegisters[bitwiseOPFU.instruction.r1];
-                    if (bitwiseOPFU.instruction.iOp2 != "")
+                        bitwiseOPFu.instruction.iOperand2 = registers.intRegisters[bitwiseOPFu.instruction.r1];
+                    if (bitwiseOPFu.instruction.iOp2 != "")
                     {
-                        if (CDB.CDB.ContainsKey(bitwiseOPFU.instruction.iOp2))
-                            bitwiseOPFU.instruction.iOperand2 = int.Parse(CDB.CDB[bitwiseOPFU.instruction.iOp2]);
+                        if (CDB.CDB.ContainsKey(bitwiseOPFu.instruction.iOp2))
+                            bitwiseOPFu.instruction.iOperand2 = int.Parse(CDB.CDB[bitwiseOPFu.instruction.iOp2]);
                         else
                         {
                             trueDependenceDelay++;
@@ -954,13 +955,13 @@ namespace ISA_GUI
                         }
                     }
                     else
-                        bitwiseOPFU.instruction.iOperand2 = registers.intRegisters[bitwiseOPFU.instruction.r2];
+                        bitwiseOPFu.instruction.iOperand2 = registers.intRegisters[bitwiseOPFu.instruction.r2];
                     break;
                 case 27:
-                    if (bitwiseOPFU.instruction.iOp1 != "")
+                    if (bitwiseOPFu.instruction.iOp1 != "")
                     {
-                        if (CDB.CDB.ContainsKey(bitwiseOPFU.instruction.iOp1))
-                            bitwiseOPFU.instruction.iOperand1 = int.Parse(CDB.CDB[bitwiseOPFU.instruction.iOp1]);
+                        if (CDB.CDB.ContainsKey(bitwiseOPFu.instruction.iOp1))
+                            bitwiseOPFu.instruction.iOperand1 = int.Parse(CDB.CDB[bitwiseOPFu.instruction.iOp1]);
                         else
                         {
                             trueDependenceDelay++;
@@ -968,7 +969,7 @@ namespace ISA_GUI
                         }
                     }
                     else
-                        bitwiseOPFU.instruction.iOperand1 = registers.intRegisters[bitwiseOPFU.instruction.r1];
+                        bitwiseOPFu.instruction.iOperand1 = registers.intRegisters[bitwiseOPFu.instruction.r1];
                     break;
             }
             return false;

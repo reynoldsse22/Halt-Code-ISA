@@ -131,5 +131,60 @@ namespace ISA_GUI
 			success = true;
         }
 
-    }
+
+		/**
+		 * Method Name: writeToReg <br>
+		 * Method Purpose: Passes the instruction and the configuration file along with the registers in order to write the previously calculated result to
+		 * the appropriate register
+		 * 
+		 * <br>
+		 * Date created: 3/2/22 <br>
+		 * <hr>
+		 *   @param  RegisterFil registers
+		 *   @param  Instruction instruction
+		 *   @param ConfigCycle config
+		 */
+		public void writeToCDB(Instruction instruction, ref CommonDataBus CDB, in string result)
+		{
+			switch (instruction.functionalUnitID)
+			{
+				case 1:
+					CDB.CDB.Add("intAddFu", result);
+					break;
+				case 2:
+					CDB.CDB.Add("intSubFu", result);
+					break;
+				case 3:
+					CDB.CDB.Add("intMultFu", result);
+					break;
+				case 4:
+					CDB.CDB.Add("intDivFu", result);
+					break;
+				case 5:
+					CDB.CDB.Add("floatAddFu", result);
+					break;
+				case 6:
+					CDB.CDB.Add("floatSubFu", result);
+					break;
+				case 7:
+					CDB.CDB.Add("floatMultFu", result);
+					break;
+				case 8:
+					CDB.CDB.Add("floatDivFu", result);
+					break;
+				case 9:
+					CDB.CDB.Add("floatSubFu", result);
+					break;
+				case 10:
+					CDB.CDB.Add("bitwiseOPFu", result);
+					break;
+				case 11:
+					CDB.CDB.Add("memoryUnitFu", result);
+					break;
+				case 12:
+					CDB.CDB.Add("shiftFu", result);
+					break;
+			}
+		}
+	}
 }
