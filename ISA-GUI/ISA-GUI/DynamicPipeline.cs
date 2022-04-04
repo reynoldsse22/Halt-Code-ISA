@@ -64,6 +64,7 @@ namespace ISA_GUI
             CU = new ControlUnit();
             print = new Printer();
             instructionQueue = new Queue<Instruction>();
+            instructionsInFlight = new List<Instruction>();
             alu = new ALU();
             CU = new ControlUnit();
             EU = new ExecutionUnit();
@@ -119,7 +120,8 @@ namespace ISA_GUI
         /// <param name="assemblyString">The assembly string.</param>
         /// <param name="decodedString">The decoded string.</param>
         /// <param name="pipelingString">The pipeling string.</param>
-        /// <param name="halted">if set to <c>true</c> [halted].</param>
+        /// <param name="halted">if set to <c>true</c> [halted].</param>	
+
         /// <param name="config">The configuration.</param>
         /// <param name="IM">The im.</param>
         /// <param name="registers">The registers.</param>
@@ -128,10 +130,12 @@ namespace ISA_GUI
         {
             do
             {
+                cycleCount++;
                 if(halted)
                 {
                     return;
                 }
+
                 string result = "";
                 int instASPR = 0;
                 if (instructionQueue.Count == 0)
@@ -139,8 +143,12 @@ namespace ISA_GUI
                     fillInstructionQueue(ref IM);
                 }
 
+               
+                fetchFromInstructionQueue();
+                
+
                 //Put the instructions into the reservation station. This should be the first cycle of the pipeline
-                foreach (Instruction inst in instructionQueue) //Will run through instruction queue, instruction will bne take off the queue once commited
+                foreach (Instruction inst in instructionsInFlight) //Will run through instruction queue, instruction will bne take off the queue once commited
                 {
                     switch (inst.stage) //Instuction will hold which cycle it's in
                     {
@@ -170,10 +178,10 @@ namespace ISA_GUI
 
                         //This should be where the Write Result and Memory Read stages will be held
                         case 3:
-                            AM.accessMemoryDynamic(ref dataMemory, ref registers, inst, ref config, out result, ref load_storeBuffer, out instASPR);
+                            AM.accessMemoryDynamic(ref dataMemory, ref registers, inst, ref config, out result, ref memoryUnitFu, out instASPR);
                             inst.result = result;
                             inst.ASPR = instASPR;
-                            if(load_storeBuffer.instruction.doneExecuting)
+                            if(memoryUnitFu.instruction.doneExecuting)
                             {
                                 inst.stage = 4;
                             }
@@ -198,7 +206,29 @@ namespace ISA_GUI
                             break;
                         //Populates reservationStations
                         case 1:
-                            fetchFromInstructionQueue();
+                            Instruction fetchInstruction = new Instruction();
+                            fetchInstruction = decode(inst, ref IM, ref config);
+                            inst.opcode = fetchInstruction.opcode; 
+                            inst.r1 = fetchInstruction.r1;
+                            inst.r2 = fetchInstruction.r2;
+                            inst.r3 = fetchInstruction.r3;
+                            inst.programCounterValue = fetchInstruction.programCounterValue;
+                            inst.isFloat = fetchInstruction.isFloat;
+                            inst.address = fetchInstruction.address;
+                            inst.ASPR = fetchInstruction.ASPR;
+                            inst.destinationReg = fetchInstruction.destinationReg;
+                            inst.binInstruction = fetchInstruction.binInstruction;
+                            inst.cycle = fetchInstruction.cycle;
+                            inst.cycleControl = fetchInstruction.cycleControl;
+                            inst.ID = fetchInstruction.ID;
+                            inst.stage = fetchInstruction.stage;
+                            inst.iOp1 = fetchInstruction.iOp1;
+                            inst.iOp2 = fetchInstruction.iOp2;
+                            inst.iOp3 = fetchInstruction.iOp3;
+                            inst.fOp1 = fetchInstruction.fOp1;
+                            inst.fOp2 = fetchInstruction.fOp2;
+                            inst.fOp3 = fetchInstruction.fOp3;
+
                             try
                             {
                                 inst.functionalUnitID = populateReservationStation(inst, ref registers);
@@ -213,8 +243,8 @@ namespace ISA_GUI
                     }
                 }
 
-                generateAssembly(ref assemblyString, IM);       //Populates instructionQueue and writes out assembly
-                halted = true; //For testing purposes
+                //generateAssembly(ref assemblyString, IM);       //Populates instructionQueue and writes out assembly
+                //halted = true; //For testing purposes
             } while (!halted && !stepThrough);
         }
 
@@ -224,9 +254,17 @@ namespace ISA_GUI
             for(int i = 0; i < 10; i++)
             {
                 fetchInstruction = new Instruction();
-                fetchInstruction = fetch.getNextInstruction(ref IM);
-                fetchInstruction.ID = instructionID++;
-                instructionQueue.Enqueue(fetchInstruction);
+                try
+                {
+                    fetchInstruction = fetch.getNextInstruction(ref IM);
+                    fetchInstruction.ID = instructionID++;
+                    fetchInstruction.stage = 1;
+                    instructionQueue.Enqueue(fetchInstruction);
+                }
+                catch(Exception)
+                {
+                    return;
+                }
             }
         }
 
@@ -235,7 +273,11 @@ namespace ISA_GUI
             instructionsInFlight.Add(instructionQueue.Dequeue());
         }
 
-
+        private Instruction decode(Instruction instruction, ref InstructionMemory IM, ref ConfigCycle config)
+        {
+            CU.decode(ref IM, ref instruction, ref config);
+            return instruction;
+        }
         
         private bool execute(Instruction instruction, ref RegisterFile registers,ref DataMemory memory, 
             ref InstructionMemory IM, ref ConfigCycle config, ref ALU alu, ref bool branchTaken, ref string result, ref int intASPR)
@@ -412,7 +454,6 @@ namespace ISA_GUI
                     if (memoryUnitFu.instruction.cycleControl == 0)
                     {
                         memoryUnitFu.instruction.doneExecuting = true;
-                        memoryUnitFu.instruction = null;
                         return true;
                     }
                     break;

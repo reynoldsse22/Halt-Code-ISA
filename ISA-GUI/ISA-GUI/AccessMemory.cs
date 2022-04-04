@@ -120,7 +120,7 @@ namespace ISA_GUI
 		 *   @param	ConfigCycle config
 		 */
 		public void accessMemoryDynamic(ref DataMemory memory, ref RegisterFile registers, Instruction instruction, ref ConfigCycle config, 
-			out string result, ref ReservationStation load_buffer, out int intASPR)
+			out string result, ref MemoryUnit load_buffer, out int intASPR)
 		{
 			result = "";
 			intASPR = 0;

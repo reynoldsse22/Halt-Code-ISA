@@ -1,0 +1,6 @@
+C:\Users\reynoldsse\OneDrive - East Tennessee State University\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Release\ISA-GUI.csproj.SuggestedBindingRedirects.cache
+C:\Users\reynoldsse\OneDrive - East Tennessee State University\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Release\ISA_GUI.BUC10.resources
+C:\Users\reynoldsse\OneDrive - East Tennessee State University\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Release\ISA_GUI.Configurations.resources
+C:\Users\reynoldsse\OneDrive - East Tennessee State University\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Release\ISA_GUI.Properties.Resources.resources
+C:\Users\reynoldsse\OneDrive - East Tennessee State University\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Release\ISA-GUI.csproj.GenerateResource.cache
+C:\Users\reynoldsse\OneDrive - East Tennessee State University\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Release\ISA-GUI.csproj.CoreCompileInputs.cache
