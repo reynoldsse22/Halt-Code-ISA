@@ -762,8 +762,8 @@
             // 
             // objectCode
             // 
-            this.objectCode.Controls.Add(this.objectCodeBox);
             this.objectCode.Controls.Add(this.assemblerPage);
+            this.objectCode.Controls.Add(this.objectCodeBox);
             this.objectCode.Location = new System.Drawing.Point(9, 64);
             this.objectCode.Name = "objectCode";
             this.objectCode.SelectedIndex = 0;
