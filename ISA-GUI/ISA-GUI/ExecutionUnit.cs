@@ -204,8 +204,9 @@ namespace ISA_GUI
 
 
         public void executeDynamic(ref RegisterFile registers, ref DataMemory memory, ref ALU alu, ref InstructionMemory IM,
-                ref Instruction instruction, ref ConfigCycle config, ref bool branchTaken, ref string result)
+                ref Instruction instruction, ref ConfigCycle config, ref bool branchTaken, out string result)
         {
+            result = "";
             inProgress = true;
             occupied = true;
             hazardDetected = false;
@@ -228,12 +229,12 @@ namespace ISA_GUI
                     instruction.cycleControl = 1;
                     return;                                     //No Operation
                 case 2:
-                    instruction.cycleControl = config.calcAddress;
+                    instruction.cycleControl = config.effAddress;
                     IM.ProgramCounter = address;                            //Move the branching address into the program counter/instruction pointer
                     branchTaken = true;
                     break;
                 case 3:
-                    instruction.cycleControl = config.calcAddress;
+                    instruction.cycleControl = config.effAddress;
                     if ((registers.ASPR & 2) == 0)
                     {
                         IM.ProgramCounter = address;                        //Move the BNE address into the program counter/instruction pointer
@@ -243,7 +244,7 @@ namespace ISA_GUI
                         branchTaken = false;
                     break;
                 case 4:
-                    instruction.cycleControl = config.calcAddress;
+                    instruction.cycleControl = config.effAddress;
                     if ((registers.ASPR & 2) == 1)
                     {
                         IM.ProgramCounter = address;                        //Move the BEQ address into the program counter/instruction pointer
@@ -253,7 +254,7 @@ namespace ISA_GUI
                         branchTaken = false;
                     break;
                 case 5:
-                    instruction.cycleControl = config.calcAddress;
+                    instruction.cycleControl = config.effAddress;
                     if ((registers.ASPR & 1) == 1 && (registers.ASPR & 1) == 0)
                     {
                         IM.ProgramCounter = address;                        //Move the BLT address into the program counter/instruction pointer
@@ -263,7 +264,7 @@ namespace ISA_GUI
                         branchTaken = false;
                     break;
                 case 6:
-                    instruction.cycleControl = config.calcAddress;
+                    instruction.cycleControl = config.effAddress;
                     if ((registers.ASPR & 2) == 1 || (registers.ASPR & 1) == 1)
                     {
                         IM.ProgramCounter = address;                        //Move the BLE address into the program counter/instruction pointer
@@ -273,7 +274,7 @@ namespace ISA_GUI
                         branchTaken = false;
                     break;
                 case 7:
-                    instruction.cycleControl = config.calcAddress;
+                    instruction.cycleControl = config.effAddress;
                     if ((registers.ASPR & 2) == 0 && (registers.ASPR & 1) == 0)
                     {
                         IM.ProgramCounter = address;                        //Move the BGT address into the program counter/instruction pointer
@@ -283,7 +284,7 @@ namespace ISA_GUI
                         branchTaken = false;
                     break;
                 case 8:
-                    instruction.cycleControl = config.calcAddress;
+                    instruction.cycleControl = config.effAddress;
                     if (((registers.ASPR & 2) == 0 || (registers.ASPR & 1) == 0) || ((registers.ASPR & 2) == 1 || (registers.ASPR & 1) == 0))
                     {
                         IM.ProgramCounter = address;                        //Move the BGE address into the program counter/instruction pointer
@@ -295,18 +296,26 @@ namespace ISA_GUI
 
                 //MEMORY INSTRUCTIONS
                 case 9:
-                    instruction.cycleControl = config.load;
+                    instruction.cycleControl = config.effAddress;
                     instruction.destinationReg = 0;
                     break;
                 case 10:
                     instruction.cycleControl = config.store;
+                    if (!instruction.isFloat)
+                    {
+                        result = instruction.fOperand1.ToString();
+                    }
+                    else
+                    {
+                        result = instruction.iOperand1.ToString();
+                    }
                     break;
                 case 11:
-                    instruction.cycleControl = config.load;
+                    instruction.cycleControl = config.effAddress;
                     instruction.destinationReg = r3;
                     break;
                 case 12:
-                    instruction.cycleControl = config.load;
+                    instruction.cycleControl = config.effAddress;
                     instruction.destinationReg = r3;
                     break;
                 case 13:
@@ -336,7 +345,7 @@ namespace ISA_GUI
                 case 25:
                 case 26:
                 case 27:
-                    alu.execute(ref registers, ref memory, ref alu, ref IM, ref instruction, ref config);    //Transfer to the ALU
+                    alu.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref instruction, ref config, out result);    //Transfer to the ALU
                     break;
             }
             success = true;

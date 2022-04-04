@@ -106,5 +106,123 @@ namespace ISA_GUI
 			success = true;
         }
 
+
+		/**
+		 * Method Name: accessMemory <br>
+		 * Method Purpose: Sets the stage for accessing and writing to main memory
+		 * 
+		 * <br>
+		 * Date created: 3/2/22 <br>
+		 * <hr>
+		 *   @param  DataMemory memory
+		 *   @param  RegisterFile registers
+		 *   @param Instruction instruction
+		 *   @param	ConfigCycle config
+		 */
+		public void accessMemoryDynamic(ref DataMemory memory, ref RegisterFile registers, Instruction instruction, ref ConfigCycle config, out string result, ref ReservationStation load_buffer)
+		{
+			result = "";
+			inProgress = true;
+			occupied = true;
+			hazardDetected = false;
+			if(!load_buffer.instruction.executionInProgress && !load_buffer.instruction.doneExecuting)
+            {
+				load_buffer.instruction.cycleControl = config.load;
+			}
+			load_buffer.instruction.cycleControl--;
+			switch (instruction.opcode)
+			{
+				case 9:
+					if (!instruction.isFloat)
+					{
+						load_buffer.instruction.executionInProgress = true;
+						load_buffer.instruction.intResult = memory.MainMemory[load_buffer.instruction.address] << 16;            //Loads the MSB value from the address in memory to r0
+						load_buffer.instruction.intResult += (memory.MainMemory[load_buffer.instruction.address + 1] << 8);      //Loads the TSB value from the address in memory to r0
+						load_buffer.instruction.intResult += (memory.MainMemory[load_buffer.instruction.address + 2]);           //Loads the LSB value from the address in memory to r0
+						result = load_buffer.instruction.intResult.ToString();
+						if(load_buffer.instruction.cycleControl == 0)
+                        {
+							load_buffer.instruction.executionInProgress = false;
+							load_buffer.instruction.doneExecuting = true;
+						}
+					}
+					else
+					{
+						load_buffer.instruction.executionInProgress = true;
+						byte[] memoryFloat = new byte[4];
+						memoryFloat[3] = (byte)(memory.MainMemory[load_buffer.instruction.address]);                           //Loads the MSB value from the address in memory to f0
+						memoryFloat[2] = (byte)(memory.MainMemory[load_buffer.instruction.address + 1]);                       //Loads the TSB value from the address in memory to f0
+						memoryFloat[1] = (byte)(memory.MainMemory[load_buffer.instruction.address + 2]);                       //Loads the LSB value from the address in memory to f0
+						load_buffer.instruction.floatResult = System.BitConverter.ToSingle(memoryFloat, 0);
+						result = load_buffer.instruction.floatResult.ToString();
+						if (load_buffer.instruction.cycleControl == 0)
+						{
+							load_buffer.instruction.executionInProgress = false;
+							load_buffer.instruction.doneExecuting = true;
+						}
+					}
+					break;
+				case 11:
+					if (!instruction.isFloat)
+                    {
+						load_buffer.instruction.executionInProgress = true;
+						result = load_buffer.instruction.address.ToString();
+						if (load_buffer.instruction.cycleControl == 0)
+						{
+							load_buffer.instruction.executionInProgress = false;
+							load_buffer.instruction.doneExecuting = true;
+						}
+					}
+					else
+					{
+						load_buffer.instruction.executionInProgress = true;
+						byte[] floatArray = new byte[4];                //create a new array of 4 bytes to convert the low address to float
+																		//Must be read in back to front because BitConverter reads the first element of array as LSB
+						floatArray[0] = 0x00;                           //last byte is 0 because we don't use it
+						floatArray[1] = (byte)(load_buffer.instruction.address & 255);          //1 byte
+						floatArray[2] = (byte)((load_buffer.instruction.address >> 8) & 15);    //get first 4 bits by shifting right 8 times and ANDing with 0xF to get only those 4
+						floatArray[3] = 0x00;                           //first byte is 0 because we don't use them 
+						result = System.BitConverter.ToSingle(floatArray, 0).ToString();
+						if (load_buffer.instruction.cycleControl == 0)
+						{
+							load_buffer.instruction.executionInProgress = false;
+							load_buffer.instruction.doneExecuting = true;
+						}
+					}
+					break;
+				case 12:
+					if (!instruction.isFloat)
+                    {
+						load_buffer.instruction.executionInProgress = true;
+						result = (load_buffer.instruction.iOperand1 + (load_buffer.instruction.address << 12)).ToString();
+						if (load_buffer.instruction.cycleControl == 0)
+						{
+							load_buffer.instruction.executionInProgress = false;
+							load_buffer.instruction.doneExecuting = true;
+						}
+					}
+					else
+					{
+						load_buffer.instruction.executionInProgress = true;
+						byte[] backArray = System.BitConverter.GetBytes(load_buffer.instruction.fOperand1);      //old 12 bytes of array
+						byte[] floatArray = new byte[4];                //create a new array of 4 bytes to convert the low address to float
+																		//Must be read in back to front because BitConverter reads the first element of array as LSB
+						floatArray[0] = 0x00;                           //last byte is 0 because we don't use it
+						floatArray[1] = backArray[1];                   //the old elements are returned to their former spot
+						floatArray[2] = (byte)(((load_buffer.instruction.address & 15) << 4) | (int)backArray[2]);    //get first of 4 bits by ANDing with the address by 0xF
+																										  //and shifting left 4 (should be in form 0x_0)
+																										  //the second 4 are found by ORing with the old array
+						floatArray[3] = (byte)((load_buffer.instruction.address >> 4) & 255);   //get first byte by shifting right 4 and ANDing with 0xFF
+						result = System.BitConverter.ToSingle(floatArray, 0).ToString();
+						if (load_buffer.instruction.cycleControl == 0)
+						{
+							load_buffer.instruction.executionInProgress = false;
+							load_buffer.instruction.doneExecuting = true;
+						}
+					}
+					break;
+			}
+		}
+
 	}
 }

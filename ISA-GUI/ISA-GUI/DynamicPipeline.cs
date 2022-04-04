@@ -144,15 +144,18 @@ namespace ISA_GUI
                         case 5:
 
                             break;
-
+                        //Store the answer and corresponding reservation name into the data bus
                         case 4:
 
                             break;
 
-                        //Store the answer and corresponding reservation name into the data bus
                         //This should be where the Write Result and Memory Read stages will be held
                         case 3:
-
+                            AM.accessMemoryDynamic(ref dataMemory, ref registers, inst, ref config, out result, ref load_storeBuffer);
+                            if(load_storeBuffer.instruction.doneExecuting)
+                            {
+                                inst.stage = 4;
+                            }
                             break;
 
                         //Send the instruction to its corresponding functional unit as long as there are no structural harzards present
@@ -233,7 +236,7 @@ namespace ISA_GUI
                 case 1:
                     if(!intAddFu.instruction.executionInProgress && !intAddFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intAddFu.instruction, ref config, ref branchTaken, ref result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intAddFu.instruction, ref config, ref branchTaken, out result);
                         intAddFu.instruction.executionInProgress = true;
                         intAddFu.instruction.cycleControl--;
                     }
@@ -248,7 +251,7 @@ namespace ISA_GUI
                 case 2:
                     if (!intSubFu.instruction.executionInProgress && !intSubFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intSubFu.instruction, ref config, ref branchTaken, ref result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intSubFu.instruction, ref config, ref branchTaken, out result);
                         intSubFu.instruction.executionInProgress = true;
                         intSubFu.instruction.cycleControl--;
                     }
@@ -263,7 +266,7 @@ namespace ISA_GUI
                 case 3:
                     if (!intMultFu.instruction.executionInProgress && !intMultFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intMultFu.instruction, ref config, ref branchTaken, ref result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intMultFu.instruction, ref config, ref branchTaken, out result);
                         intMultFu.instruction.executionInProgress = true;
                         intMultFu.instruction.cycleControl--;
                     }
@@ -278,7 +281,7 @@ namespace ISA_GUI
                 case 4:
                     if (!intDivFu.instruction.executionInProgress && !intDivFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intDivFu.instruction, ref config, ref branchTaken, ref result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intDivFu.instruction, ref config, ref branchTaken, out result);
                         intDivFu.instruction.executionInProgress = true;
                         intDivFu.instruction.cycleControl--;
                     }
@@ -293,7 +296,7 @@ namespace ISA_GUI
                 case 5:
                     if (!floatAddFu.instruction.executionInProgress && !floatAddFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatAddFu.instruction, ref config, ref branchTaken, ref result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatAddFu.instruction, ref config, ref branchTaken, out result);
                         floatAddFu.instruction.executionInProgress = true;
                         floatAddFu.instruction.cycleControl--;
                     }
@@ -308,7 +311,7 @@ namespace ISA_GUI
                 case 6:
                     if (!floatSubFu.instruction.executionInProgress && !floatSubFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatSubFu.instruction, ref config, ref branchTaken, ref result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatSubFu.instruction, ref config, ref branchTaken, out result);
                         floatSubFu.instruction.executionInProgress = true;
                         floatSubFu.instruction.cycleControl--;
                     }
@@ -323,7 +326,7 @@ namespace ISA_GUI
                 case 7:
                     if (!floatMultFu.instruction.executionInProgress && !floatMultFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatMultFu.instruction, ref config, ref branchTaken, ref result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatMultFu.instruction, ref config, ref branchTaken, out result);
                         floatMultFu.instruction.executionInProgress = true;
                         floatMultFu.instruction.cycleControl--;
                     }
@@ -338,7 +341,7 @@ namespace ISA_GUI
                 case 8:
                     if (!floatDivFu.instruction.executionInProgress && !floatDivFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatDivFu.instruction, ref config, ref branchTaken, ref result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatDivFu.instruction, ref config, ref branchTaken, out result);
                         floatDivFu.instruction.executionInProgress = true;
                         floatDivFu.instruction.cycleControl--;
                     }
@@ -353,7 +356,7 @@ namespace ISA_GUI
                 case 9:
                     if (!bitwiseOPFU.instruction.executionInProgress && !bitwiseOPFU.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref bitwiseOPFU.instruction, ref config, ref branchTaken, ref result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref bitwiseOPFU.instruction, ref config, ref branchTaken, out result);
                         bitwiseOPFU.instruction.executionInProgress = true;
                         bitwiseOPFU.instruction.cycleControl--;
                     }
@@ -368,7 +371,7 @@ namespace ISA_GUI
                 case 10:
                     if (!memoryUnitFU.instruction.executionInProgress && !memoryUnitFU.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref memoryUnitFU.instruction, ref config, ref branchTaken, ref result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref memoryUnitFU.instruction, ref config, ref branchTaken, out result);
                         memoryUnitFU.instruction.executionInProgress = true;
                         memoryUnitFU.instruction.cycleControl--;
                     }
@@ -383,7 +386,7 @@ namespace ISA_GUI
                 case 11:
                     if (!branchFU.instruction.executionInProgress && !branchFU.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref branchFU.instruction, ref config, ref branchTaken, ref result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref branchFU.instruction, ref config, ref branchTaken, out result);
                         branchFU.instruction.executionInProgress = true;
                         branchFU.instruction.cycleControl--;
                     }
@@ -398,7 +401,7 @@ namespace ISA_GUI
                 case 12:
                     if (!shiftFU.instruction.executionInProgress && !shiftFU.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref shiftFU.instruction, ref config, ref branchTaken, ref result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref shiftFU.instruction, ref config, ref branchTaken, out result);
                         shiftFU.instruction.executionInProgress = true;
                         shiftFU.instruction.cycleControl--;
                     }
