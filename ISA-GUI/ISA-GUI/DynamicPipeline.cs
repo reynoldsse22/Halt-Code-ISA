@@ -246,6 +246,7 @@ namespace ISA_GUI
                     if (intAddFu.instruction.cycleControl == 0)
                     {
                         intAddFu.instruction.doneExecuting = true;
+                        intAddFu.instruction = null;
                         return true;
                     }
                     break;
@@ -261,6 +262,7 @@ namespace ISA_GUI
                     if (intSubFu.instruction.cycleControl == 0)
                     {
                         intSubFu.instruction.doneExecuting = true;
+                        intSubFu.instruction = null;
                         return true;
                     }
                     break;
@@ -276,6 +278,7 @@ namespace ISA_GUI
                     if (intMultFu.instruction.cycleControl == 0)
                     {
                         intMultFu.instruction.doneExecuting = true;
+                        intMultFu.instruction = null;
                         return true;
                     }
                     break;
@@ -291,6 +294,7 @@ namespace ISA_GUI
                     if (intDivFu.instruction.cycleControl == 0)
                     {
                         intDivFu.instruction.doneExecuting = true;
+                        intDivFu.instruction = null;
                         return true;
                     }
                     break;
@@ -306,6 +310,7 @@ namespace ISA_GUI
                     if (floatAddFu.instruction.cycleControl == 0)
                     {
                         floatAddFu.instruction.doneExecuting = true;
+                        floatAddFu.instruction = null;
                         return true;
                     }
                     break;
@@ -321,6 +326,7 @@ namespace ISA_GUI
                     if (floatSubFu.instruction.cycleControl == 0)
                     {
                         floatSubFu.instruction.doneExecuting = true;
+                        floatSubFu.instruction = null;
                         return true;
                     }
                     break;
@@ -336,6 +342,7 @@ namespace ISA_GUI
                     if (floatMultFu.instruction.cycleControl == 0)
                     {
                         floatMultFu.instruction.doneExecuting = true;
+                        floatMultFu.instruction = null;
                         return true;
                     }
                     break;
@@ -351,6 +358,7 @@ namespace ISA_GUI
                     if (floatDivFu.instruction.cycleControl == 0)
                     {
                         floatDivFu.instruction.doneExecuting = true;
+                        floatDivFu.instruction = null;
                         return true;
                     }
                     break;
@@ -366,6 +374,7 @@ namespace ISA_GUI
                     if (bitwiseOPFu.instruction.cycleControl == 0)
                     {
                         bitwiseOPFu.instruction.doneExecuting = true;
+                        bitwiseOPFu.instruction = null;
                         return true;
                     }
                     break;
@@ -381,6 +390,7 @@ namespace ISA_GUI
                     if (memoryUnitFu.instruction.cycleControl == 0)
                     {
                         memoryUnitFu.instruction.doneExecuting = true;
+                        memoryUnitFu.instruction = null;
                         return true;
                     }
                     break;
@@ -396,6 +406,7 @@ namespace ISA_GUI
                     if (branchFu.instruction.cycleControl == 0)
                     {
                         branchFu.instruction.doneExecuting = true;
+                        branchFu.instruction = null;
                         return true;
                     }
                     break;
@@ -411,6 +422,7 @@ namespace ISA_GUI
                     if (shiftFu.instruction.cycleControl == 0)
                     {
                         shiftFu.instruction.doneExecuting = true;
+                        shiftFu.instruction = null;
                         return true;
                     }
                     break;
@@ -973,12 +985,6 @@ namespace ISA_GUI
                     break;
             }
             return false;
-        }
-
-
-        private void stage3(Instruction instruction)
-        {
-
         }
 
 

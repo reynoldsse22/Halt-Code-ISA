@@ -25,8 +25,6 @@ namespace ISA_GUI
 	*/
 	internal class ReorderBuffer
 	{
-		bool hasEverything;					//used maybe to see if instruction in the reorderBuffer is good to leave
-
 
 		/**
 	    * Method Name: ReorderBuffer <br>
