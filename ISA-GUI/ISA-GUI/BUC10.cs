@@ -81,7 +81,6 @@ namespace ISA_GUI
             stage4Text.SelectionAlignment = HorizontalAlignment.Center;
             stage5Text.SelectionAlignment = HorizontalAlignment.Center;
             currentCycleText.SelectionAlignment = HorizontalAlignment.Center;
-            programSpeedBar.Value = config.programSpeed;
         }
 
         /**
@@ -477,22 +476,6 @@ namespace ISA_GUI
 		 */
         private void setRegisters()
         {
-            //Initialize the hexidecimal text field to 0
-            //Pad left ensures that the value will be 4 digits.
-            r0Hex.Text = "0x" + cpu.registers.intRegisters[0].ToString("X").PadLeft(6, '0');
-            r1Hex.Text = "0x" + cpu.registers.intRegisters[1].ToString("X").PadLeft(6, '0');
-            r2Hex.Text = "0x" + cpu.registers.intRegisters[2].ToString("X").PadLeft(6, '0');
-            r3Hex.Text = "0x" + cpu.registers.intRegisters[3].ToString("X").PadLeft(6, '0');
-            r4Hex.Text = "0x" + cpu.registers.intRegisters[4].ToString("X").PadLeft(6, '0');
-            r5Hex.Text = "0x" + cpu.registers.intRegisters[5].ToString("X").PadLeft(6, '0');
-            r6Hex.Text = "0x" + cpu.registers.intRegisters[6].ToString("X").PadLeft(6, '0');
-            f0Hex.Text = "0x" + (BitConverter.ToString(BitConverter.GetBytes(cpu.registers.floatRegisters[0]))).PadLeft(6, '0').Replace("-", "").Remove(0,2);
-            f1Hex.Text = "0x" + (BitConverter.ToString(BitConverter.GetBytes(cpu.registers.floatRegisters[1]))).PadLeft(6, '0').Replace("-", "").Remove(0,2);
-            f2Hex.Text = "0x" + (BitConverter.ToString(BitConverter.GetBytes(cpu.registers.floatRegisters[2]))).PadLeft(6, '0').Replace("-", "").Remove(0, 2);
-            f3Hex.Text = "0x" + (BitConverter.ToString(BitConverter.GetBytes(cpu.registers.floatRegisters[3]))).PadLeft(6, '0').Replace("-", "").Remove(0, 2);
-            f4Hex.Text = "0x" + (BitConverter.ToString(BitConverter.GetBytes(cpu.registers.floatRegisters[4]))).PadLeft(6, '0').Replace("-", "").Remove(0, 2);
-            f5Hex.Text = "0x" + (BitConverter.ToString(BitConverter.GetBytes(cpu.registers.floatRegisters[5]))).PadLeft(6, '0').Replace("-", "").Remove(0, 2);
-            f6Hex.Text = "0x" + (BitConverter.ToString(BitConverter.GetBytes(cpu.registers.floatRegisters[6]))).PadLeft(6, '0').Replace("-", "").Remove(0, 2);
             asprHex.Text = "0x" + cpu.registers.ASPR.ToString("X").PadLeft(6, '0');
             cirHex.Text = "0x" + cpu.IM.CurrentInstruction.ToString("X").PadLeft(6, '0');
             pcHex.Text = "0x" + cpu.IM.ProgramCounter.ToString("X").PadLeft(6, '0');
@@ -505,6 +488,16 @@ namespace ISA_GUI
             r4Dec.Text = cpu.registers.intRegisters[4].ToString();
             r5Dec.Text = cpu.registers.intRegisters[5].ToString();
             r6Dec.Text = cpu.registers.intRegisters[6].ToString();
+            r7Dec.Text = cpu.registers.intRegisters[7].ToString();
+            r8Dec.Text = cpu.registers.intRegisters[8].ToString();
+            r9Dec.Text = cpu.registers.intRegisters[9].ToString();
+            r10Dec.Text = cpu.registers.intRegisters[10].ToString();
+            r11Dec.Text = cpu.registers.intRegisters[11].ToString();
+            r12Dec.Text = cpu.registers.intRegisters[12].ToString();
+            r13Dec.Text = cpu.registers.intRegisters[13].ToString();
+            r14Dec.Text = cpu.registers.intRegisters[14].ToString();
+            r15Dec.Text = cpu.registers.intRegisters[15].ToString();
+
             f0Dec.Text = cpu.registers.floatRegisters[0].ToString();
             f1Dec.Text = cpu.registers.floatRegisters[1].ToString();
             f2Dec.Text = cpu.registers.floatRegisters[2].ToString();
@@ -512,9 +505,15 @@ namespace ISA_GUI
             f4Dec.Text = cpu.registers.floatRegisters[4].ToString();
             f5Dec.Text = cpu.registers.floatRegisters[5].ToString();
             f6Dec.Text = cpu.registers.floatRegisters[6].ToString();
-            asprDec.Text = cpu.registers.ASPR.ToString();
-            cirDec.Text = cpu.IM.CurrentInstruction.ToString();
-            pcDec.Text = cpu.IM.ProgramCounter.ToString();
+            f7Dec.Text = cpu.registers.floatRegisters[7].ToString();
+            f8Dec.Text = cpu.registers.floatRegisters[8].ToString();
+            f9Dec.Text = cpu.registers.floatRegisters[9].ToString();
+            f10Dec.Text = cpu.registers.floatRegisters[10].ToString();
+            f11Dec.Text = cpu.registers.floatRegisters[11].ToString();
+            f12Dec.Text = cpu.registers.floatRegisters[12].ToString();
+            f13Dec.Text = cpu.registers.floatRegisters[13].ToString();
+            f14Dec.Text = cpu.registers.floatRegisters[14].ToString();
+            f15Dec.Text = cpu.registers.floatRegisters[15].ToString();
 
             //Initialize the Z and C flags based on the ASPR register
             if ((cpu.registers.ASPR & 2) == 2)
@@ -768,11 +767,6 @@ namespace ISA_GUI
 
                 config = configWindow.getConfig();
             }
-        }
-
-        private void programSpeedBar_ValueChanged(object sender, EventArgs e)
-        {
-            config.programSpeed = programSpeedBar.Value;
         }
 
         private void buildButton_Click(object sender, EventArgs e)

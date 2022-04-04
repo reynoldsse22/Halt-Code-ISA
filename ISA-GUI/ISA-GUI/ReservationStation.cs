@@ -25,8 +25,8 @@ namespace ISA_GUI
             instruction = new Instruction();
             Vk = 0;
             Vj = 0;
-            Qk = "";
-            Qj = "";
+            Qk = "0";
+            Qj = "0";
             Address = 0;
         }
 

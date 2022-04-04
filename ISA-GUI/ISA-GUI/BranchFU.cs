@@ -1,10 +1,10 @@
-﻿// ---------------------------------------------------------------------------
-// File name: CommonDataBus.cs
+﻿﻿// ---------------------------------------------------------------------------
+// File name: BranchFU.cs
 // Project name: ISA-GUI
 // ---------------------------------------------------------------------------
 // Creators: Samuel Reynolds, Nick Farmer, Carlos Ortiz, & Brandon Beaudry						
 // Course-Section: CSCI 4717-201
-// Creation Date: 4/1/22		
+// Creation Date: 4/2/22		
 // ---------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
@@ -15,30 +15,27 @@ using System.Threading.Tasks;
 namespace ISA_GUI
 {
 	/**
-	* Class Name: Instruction <br>
-	* Class Purpose: Dictates the format of an instruction
+	* Class Name: BranchFU <br>
+	* Class Purpose: 
 	* 
 	* <hr>
-	* Date created: 4/1/22 <br>
+	* Date created: 4/2/22 <br>
 	* @author Samuel Reynolds, Nick Farmer, Carlos Ortiz, & Brandon Beaudry	
 	*/
-	internal class CommonDataBus
+	internal class BranchFU
 	{
-		public Dictionary<string, string> CDB;
-		public Dictionary<int, int> index;
+		public Instruction instruction;
 		/**
-	    * Method Name: CommonDataBus <br>
+	    * Method Name: BranchFU <br>
 	    * Method Purpose: Class constructor
 	    * 
 	    * <hr>
-	    * Date created: 4/1/22 <br>
+	    * Date created: 4/2/22 <br>
 	    * @author Samuel Reynolds, Nick Farmer, Carlos Ortiz, & Brandon Beaudry	
 	    */
-		public CommonDataBus()
+		public BranchFU()
 		{
-			Dictionary<string, string> CDB = new Dictionary<string, string>();
-			index = new Dictionary<int, int>();
+
 		}
 	}
 }
-

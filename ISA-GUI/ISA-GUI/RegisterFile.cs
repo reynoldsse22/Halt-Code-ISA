@@ -24,8 +24,10 @@ namespace ISA_GUI
 	*/
     internal class RegisterFile
     {
-        public int[] intRegisters = new int[7];     //16 16-bit registers
-		public float[] floatRegisters = new float[7];
+        public int[] intRegisters = new int[16];     //16 16-bit registers
+		public float[] floatRegisters = new float[16];
+		public string[] intQi = new string[16];
+		public string[] floatQi = new string[16];
 		public int ASPR;
 
 		/**
@@ -38,6 +40,11 @@ namespace ISA_GUI
 	    */
 		public RegisterFile()
         {
+			for(int i = 0; i < 16; i++)
+            {
+				intQi[i] = "0";
+				floatQi[i] = "0";
+            }
             //Initialize registers
             Array.Clear(intRegisters, 0, intRegisters.Length);
 			Array.Clear(floatRegisters, 0, floatRegisters.Length);

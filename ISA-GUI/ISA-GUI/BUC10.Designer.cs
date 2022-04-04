@@ -52,45 +52,43 @@
             this.label17 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
-            this.r0Hex = new System.Windows.Forms.RichTextBox();
-            this.r0Dec = new System.Windows.Forms.RichTextBox();
-            this.r1Dec = new System.Windows.Forms.RichTextBox();
-            this.r1Hex = new System.Windows.Forms.RichTextBox();
-            this.r2Dec = new System.Windows.Forms.RichTextBox();
-            this.r2Hex = new System.Windows.Forms.RichTextBox();
             this.r3Dec = new System.Windows.Forms.RichTextBox();
-            this.r3Hex = new System.Windows.Forms.RichTextBox();
-            this.r4Dec = new System.Windows.Forms.RichTextBox();
-            this.r4Hex = new System.Windows.Forms.RichTextBox();
-            this.r5Dec = new System.Windows.Forms.RichTextBox();
-            this.r5Hex = new System.Windows.Forms.RichTextBox();
-            this.r6Dec = new System.Windows.Forms.RichTextBox();
-            this.r6Hex = new System.Windows.Forms.RichTextBox();
-            this.f0Dec = new System.Windows.Forms.RichTextBox();
-            this.f0Hex = new System.Windows.Forms.RichTextBox();
-            this.f1Dec = new System.Windows.Forms.RichTextBox();
-            this.f1Hex = new System.Windows.Forms.RichTextBox();
-            this.f2Dec = new System.Windows.Forms.RichTextBox();
-            this.f2Hex = new System.Windows.Forms.RichTextBox();
             this.f3Dec = new System.Windows.Forms.RichTextBox();
-            this.f3Hex = new System.Windows.Forms.RichTextBox();
             this.f4Dec = new System.Windows.Forms.RichTextBox();
-            this.f4Hex = new System.Windows.Forms.RichTextBox();
+            this.r4Dec = new System.Windows.Forms.RichTextBox();
             this.f5Dec = new System.Windows.Forms.RichTextBox();
-            this.f5Hex = new System.Windows.Forms.RichTextBox();
-            this.asprDec = new System.Windows.Forms.RichTextBox();
+            this.r5Dec = new System.Windows.Forms.RichTextBox();
+            this.f6Dec = new System.Windows.Forms.RichTextBox();
+            this.r6Dec = new System.Windows.Forms.RichTextBox();
+            this.f7Dec = new System.Windows.Forms.RichTextBox();
+            this.r7Dec = new System.Windows.Forms.RichTextBox();
+            this.f8Dec = new System.Windows.Forms.RichTextBox();
+            this.r8Dec = new System.Windows.Forms.RichTextBox();
+            this.f9Dec = new System.Windows.Forms.RichTextBox();
+            this.r9Dec = new System.Windows.Forms.RichTextBox();
+            this.f10Dec = new System.Windows.Forms.RichTextBox();
+            this.r10Dec = new System.Windows.Forms.RichTextBox();
+            this.f11Dec = new System.Windows.Forms.RichTextBox();
+            this.r11Dec = new System.Windows.Forms.RichTextBox();
+            this.f12Dec = new System.Windows.Forms.RichTextBox();
+            this.r12Dec = new System.Windows.Forms.RichTextBox();
+            this.f13Dec = new System.Windows.Forms.RichTextBox();
+            this.r13Dec = new System.Windows.Forms.RichTextBox();
+            this.f14Dec = new System.Windows.Forms.RichTextBox();
+            this.r14Dec = new System.Windows.Forms.RichTextBox();
+            this.f15Dec = new System.Windows.Forms.RichTextBox();
+            this.r15Dec = new System.Windows.Forms.RichTextBox();
+            this.f2Dec = new System.Windows.Forms.RichTextBox();
             this.asprHex = new System.Windows.Forms.RichTextBox();
-            this.cirDec = new System.Windows.Forms.RichTextBox();
+            this.f0Dec = new System.Windows.Forms.RichTextBox();
             this.cirHex = new System.Windows.Forms.RichTextBox();
-            this.pcDec = new System.Windows.Forms.RichTextBox();
+            this.f1Dec = new System.Windows.Forms.RichTextBox();
             this.pcHex = new System.Windows.Forms.RichTextBox();
             this.objectCode = new System.Windows.Forms.TabControl();
             this.objectCodeBox = new System.Windows.Forms.TabPage();
             this.InputBox = new System.Windows.Forms.RichTextBox();
             this.assemblerPage = new System.Windows.Forms.TabPage();
             this.assemblerTextBox = new System.Windows.Forms.RichTextBox();
-            this.f6Dec = new System.Windows.Forms.RichTextBox();
-            this.f6Hex = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.pipelineLabel = new System.Windows.Forms.Label();
             this.stage2Text = new System.Windows.Forms.RichTextBox();
@@ -126,8 +124,6 @@
             this.label35 = new System.Windows.Forms.Label();
             this.label36 = new System.Windows.Forms.Label();
             this.configButton = new System.Windows.Forms.Button();
-            this.programSpeedBar = new System.Windows.Forms.TrackBar();
-            this.label38 = new System.Windows.Forms.Label();
             this.buildButton = new System.Windows.Forms.PictureBox();
             this.resetButton = new System.Windows.Forms.PictureBox();
             this.stepthroughButton = new System.Windows.Forms.PictureBox();
@@ -139,10 +135,30 @@
             this.pipelineTab = new System.Windows.Forms.TabPage();
             this.pipelineTextBox = new System.Windows.Forms.RichTextBox();
             this.Output = new System.Windows.Forms.TabControl();
+            this.r2Dec = new System.Windows.Forms.RichTextBox();
+            this.r1Dec = new System.Windows.Forms.RichTextBox();
+            this.r0Dec = new System.Windows.Forms.RichTextBox();
+            this.label37 = new System.Windows.Forms.Label();
+            this.label38 = new System.Windows.Forms.Label();
+            this.label39 = new System.Windows.Forms.Label();
+            this.label40 = new System.Windows.Forms.Label();
+            this.label41 = new System.Windows.Forms.Label();
+            this.label42 = new System.Windows.Forms.Label();
+            this.label43 = new System.Windows.Forms.Label();
+            this.label44 = new System.Windows.Forms.Label();
+            this.label45 = new System.Windows.Forms.Label();
+            this.label46 = new System.Windows.Forms.Label();
+            this.label47 = new System.Windows.Forms.Label();
+            this.label48 = new System.Windows.Forms.Label();
+            this.label49 = new System.Windows.Forms.Label();
+            this.label50 = new System.Windows.Forms.Label();
+            this.label51 = new System.Windows.Forms.Label();
+            this.label52 = new System.Windows.Forms.Label();
+            this.label53 = new System.Windows.Forms.Label();
+            this.label54 = new System.Windows.Forms.Label();
             this.objectCode.SuspendLayout();
             this.objectCodeBox.SuspendLayout();
             this.assemblerPage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.programSpeedBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.buildButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.resetButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stepthroughButton)).BeginInit();
@@ -159,9 +175,9 @@
             this.CPU.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CPU.Location = new System.Drawing.Point(720, 12);
             this.CPU.Name = "CPU";
-            this.CPU.Size = new System.Drawing.Size(50, 20);
+            this.CPU.Size = new System.Drawing.Size(45, 20);
             this.CPU.TabIndex = 0;
-            this.CPU.Text = "CPU:";
+            this.CPU.Text = "CPU";
             // 
             // MemoryText
             // 
@@ -179,7 +195,7 @@
             this.ZFlagBox.BackColor = System.Drawing.SystemColors.Menu;
             this.ZFlagBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ZFlagBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ZFlagBox.Location = new System.Drawing.Point(468, 37);
+            this.ZFlagBox.Location = new System.Drawing.Point(1134, 17);
             this.ZFlagBox.Name = "ZFlagBox";
             this.ZFlagBox.ReadOnly = true;
             this.ZFlagBox.Size = new System.Drawing.Size(25, 25);
@@ -191,7 +207,7 @@
             this.cFlagBox.BackColor = System.Drawing.SystemColors.Menu;
             this.cFlagBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.cFlagBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cFlagBox.Location = new System.Drawing.Point(530, 37);
+            this.cFlagBox.Location = new System.Drawing.Point(1172, 17);
             this.cFlagBox.Name = "cFlagBox";
             this.cFlagBox.ReadOnly = true;
             this.cFlagBox.Size = new System.Drawing.Size(25, 25);
@@ -201,7 +217,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(591, 134);
+            this.label2.Location = new System.Drawing.Point(591, 48);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(21, 13);
             this.label2.TabIndex = 8;
@@ -210,7 +226,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(591, 165);
+            this.label3.Location = new System.Drawing.Point(591, 75);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(21, 13);
             this.label3.TabIndex = 9;
@@ -219,7 +235,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(591, 198);
+            this.label4.Location = new System.Drawing.Point(591, 104);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(21, 13);
             this.label4.TabIndex = 10;
@@ -228,7 +244,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(591, 229);
+            this.label5.Location = new System.Drawing.Point(591, 134);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(21, 13);
             this.label5.TabIndex = 11;
@@ -237,7 +253,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(591, 261);
+            this.label6.Location = new System.Drawing.Point(591, 165);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(21, 13);
             this.label6.TabIndex = 12;
@@ -246,7 +262,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(591, 291);
+            this.label7.Location = new System.Drawing.Point(591, 198);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(21, 13);
             this.label7.TabIndex = 13;
@@ -255,7 +271,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(591, 322);
+            this.label8.Location = new System.Drawing.Point(590, 229);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(21, 13);
             this.label8.TabIndex = 14;
@@ -264,61 +280,61 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(591, 356);
+            this.label9.Location = new System.Drawing.Point(591, 260);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(19, 13);
+            this.label9.Size = new System.Drawing.Size(21, 13);
             this.label9.TabIndex = 15;
-            this.label9.Text = "F0";
+            this.label9.Text = "R7";
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(591, 389);
+            this.label10.Location = new System.Drawing.Point(593, 291);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(19, 13);
+            this.label10.Size = new System.Drawing.Size(21, 13);
             this.label10.TabIndex = 16;
-            this.label10.Text = "F1";
+            this.label10.Text = "R8";
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(591, 420);
+            this.label11.Location = new System.Drawing.Point(593, 323);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(19, 13);
+            this.label11.Size = new System.Drawing.Size(21, 13);
             this.label11.TabIndex = 17;
-            this.label11.Text = "F2";
+            this.label11.Text = "R9";
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(591, 452);
+            this.label12.Location = new System.Drawing.Point(588, 357);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(19, 13);
+            this.label12.Size = new System.Drawing.Size(27, 13);
             this.label12.TabIndex = 18;
-            this.label12.Text = "F3";
+            this.label12.Text = "R10";
             // 
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(591, 482);
+            this.label13.Location = new System.Drawing.Point(588, 387);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(19, 13);
+            this.label13.Size = new System.Drawing.Size(27, 13);
             this.label13.TabIndex = 19;
-            this.label13.Text = "F4";
+            this.label13.Text = "R11";
             // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(591, 513);
+            this.label14.Location = new System.Drawing.Point(588, 420);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(19, 13);
+            this.label14.Size = new System.Drawing.Size(27, 13);
             this.label14.TabIndex = 20;
-            this.label14.Text = "F5";
+            this.label14.Text = "R12";
             // 
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(577, 104);
+            this.label15.Location = new System.Drawing.Point(1043, 53);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(36, 13);
             this.label15.TabIndex = 21;
@@ -327,7 +343,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(588, 47);
+            this.label16.Location = new System.Drawing.Point(899, 23);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(25, 13);
             this.label16.TabIndex = 22;
@@ -336,7 +352,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(591, 76);
+            this.label17.Location = new System.Drawing.Point(902, 52);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(21, 13);
             this.label17.TabIndex = 23;
@@ -345,7 +361,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(450, 44);
+            this.label19.Location = new System.Drawing.Point(1114, 23);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(14, 13);
             this.label19.TabIndex = 25;
@@ -354,393 +370,393 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(512, 44);
+            this.label21.Location = new System.Drawing.Point(1178, 3);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(14, 13);
             this.label21.TabIndex = 27;
             this.label21.Text = "C";
-            // 
-            // r0Hex
-            // 
-            this.r0Hex.BackColor = System.Drawing.SystemColors.Menu;
-            this.r0Hex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.r0Hex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.r0Hex.Location = new System.Drawing.Point(616, 129);
-            this.r0Hex.Name = "r0Hex";
-            this.r0Hex.ReadOnly = true;
-            this.r0Hex.Size = new System.Drawing.Size(124, 25);
-            this.r0Hex.TabIndex = 28;
-            this.r0Hex.Text = "";
-            // 
-            // r0Dec
-            // 
-            this.r0Dec.BackColor = System.Drawing.SystemColors.Menu;
-            this.r0Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.r0Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.r0Dec.Location = new System.Drawing.Point(744, 129);
-            this.r0Dec.Name = "r0Dec";
-            this.r0Dec.ReadOnly = true;
-            this.r0Dec.Size = new System.Drawing.Size(124, 25);
-            this.r0Dec.TabIndex = 29;
-            this.r0Dec.Text = "";
-            // 
-            // r1Dec
-            // 
-            this.r1Dec.BackColor = System.Drawing.SystemColors.Menu;
-            this.r1Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.r1Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.r1Dec.Location = new System.Drawing.Point(744, 160);
-            this.r1Dec.Name = "r1Dec";
-            this.r1Dec.ReadOnly = true;
-            this.r1Dec.Size = new System.Drawing.Size(124, 25);
-            this.r1Dec.TabIndex = 31;
-            this.r1Dec.Text = "";
-            // 
-            // r1Hex
-            // 
-            this.r1Hex.BackColor = System.Drawing.SystemColors.Menu;
-            this.r1Hex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.r1Hex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.r1Hex.Location = new System.Drawing.Point(616, 160);
-            this.r1Hex.Name = "r1Hex";
-            this.r1Hex.ReadOnly = true;
-            this.r1Hex.Size = new System.Drawing.Size(124, 25);
-            this.r1Hex.TabIndex = 30;
-            this.r1Hex.Text = "";
-            // 
-            // r2Dec
-            // 
-            this.r2Dec.BackColor = System.Drawing.SystemColors.Menu;
-            this.r2Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.r2Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.r2Dec.Location = new System.Drawing.Point(744, 193);
-            this.r2Dec.Name = "r2Dec";
-            this.r2Dec.ReadOnly = true;
-            this.r2Dec.Size = new System.Drawing.Size(124, 25);
-            this.r2Dec.TabIndex = 33;
-            this.r2Dec.Text = "";
-            // 
-            // r2Hex
-            // 
-            this.r2Hex.BackColor = System.Drawing.SystemColors.Menu;
-            this.r2Hex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.r2Hex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.r2Hex.Location = new System.Drawing.Point(616, 193);
-            this.r2Hex.Name = "r2Hex";
-            this.r2Hex.ReadOnly = true;
-            this.r2Hex.Size = new System.Drawing.Size(124, 25);
-            this.r2Hex.TabIndex = 32;
-            this.r2Hex.Text = "";
             // 
             // r3Dec
             // 
             this.r3Dec.BackColor = System.Drawing.SystemColors.Menu;
             this.r3Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.r3Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.r3Dec.Location = new System.Drawing.Point(744, 224);
+            this.r3Dec.Location = new System.Drawing.Point(616, 129);
             this.r3Dec.Name = "r3Dec";
             this.r3Dec.ReadOnly = true;
-            this.r3Dec.Size = new System.Drawing.Size(124, 25);
-            this.r3Dec.TabIndex = 35;
+            this.r3Dec.Size = new System.Drawing.Size(109, 25);
+            this.r3Dec.TabIndex = 28;
             this.r3Dec.Text = "";
-            // 
-            // r3Hex
-            // 
-            this.r3Hex.BackColor = System.Drawing.SystemColors.Menu;
-            this.r3Hex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.r3Hex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.r3Hex.Location = new System.Drawing.Point(616, 224);
-            this.r3Hex.Name = "r3Hex";
-            this.r3Hex.ReadOnly = true;
-            this.r3Hex.Size = new System.Drawing.Size(124, 25);
-            this.r3Hex.TabIndex = 34;
-            this.r3Hex.Text = "";
-            // 
-            // r4Dec
-            // 
-            this.r4Dec.BackColor = System.Drawing.SystemColors.Menu;
-            this.r4Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.r4Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.r4Dec.Location = new System.Drawing.Point(744, 255);
-            this.r4Dec.Name = "r4Dec";
-            this.r4Dec.ReadOnly = true;
-            this.r4Dec.Size = new System.Drawing.Size(124, 25);
-            this.r4Dec.TabIndex = 37;
-            this.r4Dec.Text = "";
-            // 
-            // r4Hex
-            // 
-            this.r4Hex.BackColor = System.Drawing.SystemColors.Menu;
-            this.r4Hex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.r4Hex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.r4Hex.Location = new System.Drawing.Point(616, 255);
-            this.r4Hex.Name = "r4Hex";
-            this.r4Hex.ReadOnly = true;
-            this.r4Hex.Size = new System.Drawing.Size(124, 25);
-            this.r4Hex.TabIndex = 36;
-            this.r4Hex.Text = "";
-            // 
-            // r5Dec
-            // 
-            this.r5Dec.BackColor = System.Drawing.SystemColors.Menu;
-            this.r5Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.r5Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.r5Dec.Location = new System.Drawing.Point(744, 286);
-            this.r5Dec.Name = "r5Dec";
-            this.r5Dec.ReadOnly = true;
-            this.r5Dec.Size = new System.Drawing.Size(124, 25);
-            this.r5Dec.TabIndex = 39;
-            this.r5Dec.Text = "";
-            // 
-            // r5Hex
-            // 
-            this.r5Hex.BackColor = System.Drawing.SystemColors.Menu;
-            this.r5Hex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.r5Hex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.r5Hex.Location = new System.Drawing.Point(616, 286);
-            this.r5Hex.Name = "r5Hex";
-            this.r5Hex.ReadOnly = true;
-            this.r5Hex.Size = new System.Drawing.Size(124, 25);
-            this.r5Hex.TabIndex = 38;
-            this.r5Hex.Text = "";
-            // 
-            // r6Dec
-            // 
-            this.r6Dec.BackColor = System.Drawing.SystemColors.Menu;
-            this.r6Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.r6Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.r6Dec.Location = new System.Drawing.Point(744, 317);
-            this.r6Dec.Name = "r6Dec";
-            this.r6Dec.ReadOnly = true;
-            this.r6Dec.Size = new System.Drawing.Size(124, 25);
-            this.r6Dec.TabIndex = 41;
-            this.r6Dec.Text = "";
-            // 
-            // r6Hex
-            // 
-            this.r6Hex.BackColor = System.Drawing.SystemColors.Menu;
-            this.r6Hex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.r6Hex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.r6Hex.Location = new System.Drawing.Point(616, 317);
-            this.r6Hex.Name = "r6Hex";
-            this.r6Hex.ReadOnly = true;
-            this.r6Hex.Size = new System.Drawing.Size(124, 25);
-            this.r6Hex.TabIndex = 40;
-            this.r6Hex.Text = "";
-            // 
-            // f0Dec
-            // 
-            this.f0Dec.BackColor = System.Drawing.SystemColors.Menu;
-            this.f0Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.f0Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.f0Dec.Location = new System.Drawing.Point(744, 351);
-            this.f0Dec.Name = "f0Dec";
-            this.f0Dec.ReadOnly = true;
-            this.f0Dec.Size = new System.Drawing.Size(124, 25);
-            this.f0Dec.TabIndex = 43;
-            this.f0Dec.Text = "";
-            // 
-            // f0Hex
-            // 
-            this.f0Hex.BackColor = System.Drawing.SystemColors.Menu;
-            this.f0Hex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.f0Hex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.f0Hex.Location = new System.Drawing.Point(616, 351);
-            this.f0Hex.Name = "f0Hex";
-            this.f0Hex.ReadOnly = true;
-            this.f0Hex.Size = new System.Drawing.Size(124, 25);
-            this.f0Hex.TabIndex = 42;
-            this.f0Hex.Text = "";
-            // 
-            // f1Dec
-            // 
-            this.f1Dec.BackColor = System.Drawing.SystemColors.Menu;
-            this.f1Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.f1Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.f1Dec.Location = new System.Drawing.Point(744, 382);
-            this.f1Dec.Name = "f1Dec";
-            this.f1Dec.ReadOnly = true;
-            this.f1Dec.Size = new System.Drawing.Size(124, 25);
-            this.f1Dec.TabIndex = 45;
-            this.f1Dec.Text = "";
-            // 
-            // f1Hex
-            // 
-            this.f1Hex.BackColor = System.Drawing.SystemColors.Menu;
-            this.f1Hex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.f1Hex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.f1Hex.Location = new System.Drawing.Point(616, 382);
-            this.f1Hex.Name = "f1Hex";
-            this.f1Hex.ReadOnly = true;
-            this.f1Hex.Size = new System.Drawing.Size(124, 25);
-            this.f1Hex.TabIndex = 44;
-            this.f1Hex.Text = "";
-            // 
-            // f2Dec
-            // 
-            this.f2Dec.BackColor = System.Drawing.SystemColors.Menu;
-            this.f2Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.f2Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.f2Dec.Location = new System.Drawing.Point(744, 415);
-            this.f2Dec.Name = "f2Dec";
-            this.f2Dec.ReadOnly = true;
-            this.f2Dec.Size = new System.Drawing.Size(124, 25);
-            this.f2Dec.TabIndex = 47;
-            this.f2Dec.Text = "";
-            // 
-            // f2Hex
-            // 
-            this.f2Hex.BackColor = System.Drawing.SystemColors.Menu;
-            this.f2Hex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.f2Hex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.f2Hex.Location = new System.Drawing.Point(616, 415);
-            this.f2Hex.Name = "f2Hex";
-            this.f2Hex.ReadOnly = true;
-            this.f2Hex.Size = new System.Drawing.Size(124, 25);
-            this.f2Hex.TabIndex = 46;
-            this.f2Hex.Text = "";
             // 
             // f3Dec
             // 
             this.f3Dec.BackColor = System.Drawing.SystemColors.Menu;
             this.f3Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.f3Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.f3Dec.Location = new System.Drawing.Point(744, 446);
+            this.f3Dec.Location = new System.Drawing.Point(759, 129);
             this.f3Dec.Name = "f3Dec";
             this.f3Dec.ReadOnly = true;
-            this.f3Dec.Size = new System.Drawing.Size(124, 25);
-            this.f3Dec.TabIndex = 49;
+            this.f3Dec.Size = new System.Drawing.Size(109, 25);
+            this.f3Dec.TabIndex = 29;
             this.f3Dec.Text = "";
-            // 
-            // f3Hex
-            // 
-            this.f3Hex.BackColor = System.Drawing.SystemColors.Menu;
-            this.f3Hex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.f3Hex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.f3Hex.Location = new System.Drawing.Point(616, 446);
-            this.f3Hex.Name = "f3Hex";
-            this.f3Hex.ReadOnly = true;
-            this.f3Hex.Size = new System.Drawing.Size(124, 25);
-            this.f3Hex.TabIndex = 48;
-            this.f3Hex.Text = "";
             // 
             // f4Dec
             // 
             this.f4Dec.BackColor = System.Drawing.SystemColors.Menu;
             this.f4Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.f4Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.f4Dec.Location = new System.Drawing.Point(744, 477);
+            this.f4Dec.Location = new System.Drawing.Point(759, 160);
             this.f4Dec.Name = "f4Dec";
             this.f4Dec.ReadOnly = true;
-            this.f4Dec.Size = new System.Drawing.Size(124, 25);
-            this.f4Dec.TabIndex = 51;
+            this.f4Dec.Size = new System.Drawing.Size(109, 25);
+            this.f4Dec.TabIndex = 31;
             this.f4Dec.Text = "";
             // 
-            // f4Hex
+            // r4Dec
             // 
-            this.f4Hex.BackColor = System.Drawing.SystemColors.Menu;
-            this.f4Hex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.f4Hex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.f4Hex.Location = new System.Drawing.Point(616, 477);
-            this.f4Hex.Name = "f4Hex";
-            this.f4Hex.ReadOnly = true;
-            this.f4Hex.Size = new System.Drawing.Size(124, 25);
-            this.f4Hex.TabIndex = 50;
-            this.f4Hex.Text = "";
+            this.r4Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.r4Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.r4Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.r4Dec.Location = new System.Drawing.Point(616, 160);
+            this.r4Dec.Name = "r4Dec";
+            this.r4Dec.ReadOnly = true;
+            this.r4Dec.Size = new System.Drawing.Size(109, 25);
+            this.r4Dec.TabIndex = 30;
+            this.r4Dec.Text = "";
             // 
             // f5Dec
             // 
             this.f5Dec.BackColor = System.Drawing.SystemColors.Menu;
             this.f5Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.f5Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.f5Dec.Location = new System.Drawing.Point(744, 508);
+            this.f5Dec.Location = new System.Drawing.Point(759, 193);
             this.f5Dec.Name = "f5Dec";
             this.f5Dec.ReadOnly = true;
-            this.f5Dec.Size = new System.Drawing.Size(124, 25);
-            this.f5Dec.TabIndex = 53;
+            this.f5Dec.Size = new System.Drawing.Size(109, 25);
+            this.f5Dec.TabIndex = 33;
             this.f5Dec.Text = "";
             // 
-            // f5Hex
+            // r5Dec
             // 
-            this.f5Hex.BackColor = System.Drawing.SystemColors.Menu;
-            this.f5Hex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.f5Hex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.f5Hex.Location = new System.Drawing.Point(616, 508);
-            this.f5Hex.Name = "f5Hex";
-            this.f5Hex.ReadOnly = true;
-            this.f5Hex.Size = new System.Drawing.Size(124, 25);
-            this.f5Hex.TabIndex = 52;
-            this.f5Hex.Text = "";
+            this.r5Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.r5Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.r5Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.r5Dec.Location = new System.Drawing.Point(616, 193);
+            this.r5Dec.Name = "r5Dec";
+            this.r5Dec.ReadOnly = true;
+            this.r5Dec.Size = new System.Drawing.Size(109, 25);
+            this.r5Dec.TabIndex = 32;
+            this.r5Dec.Text = "";
             // 
-            // asprDec
+            // f6Dec
             // 
-            this.asprDec.BackColor = System.Drawing.SystemColors.Menu;
-            this.asprDec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.asprDec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.asprDec.Location = new System.Drawing.Point(744, 99);
-            this.asprDec.Name = "asprDec";
-            this.asprDec.ReadOnly = true;
-            this.asprDec.Size = new System.Drawing.Size(124, 25);
-            this.asprDec.TabIndex = 55;
-            this.asprDec.Text = "";
+            this.f6Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.f6Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.f6Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.f6Dec.Location = new System.Drawing.Point(759, 224);
+            this.f6Dec.Name = "f6Dec";
+            this.f6Dec.ReadOnly = true;
+            this.f6Dec.Size = new System.Drawing.Size(109, 25);
+            this.f6Dec.TabIndex = 35;
+            this.f6Dec.Text = "";
+            // 
+            // r6Dec
+            // 
+            this.r6Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.r6Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.r6Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.r6Dec.Location = new System.Drawing.Point(616, 224);
+            this.r6Dec.Name = "r6Dec";
+            this.r6Dec.ReadOnly = true;
+            this.r6Dec.Size = new System.Drawing.Size(109, 25);
+            this.r6Dec.TabIndex = 34;
+            this.r6Dec.Text = "";
+            // 
+            // f7Dec
+            // 
+            this.f7Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.f7Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.f7Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.f7Dec.Location = new System.Drawing.Point(759, 255);
+            this.f7Dec.Name = "f7Dec";
+            this.f7Dec.ReadOnly = true;
+            this.f7Dec.Size = new System.Drawing.Size(109, 25);
+            this.f7Dec.TabIndex = 37;
+            this.f7Dec.Text = "";
+            // 
+            // r7Dec
+            // 
+            this.r7Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.r7Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.r7Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.r7Dec.Location = new System.Drawing.Point(616, 255);
+            this.r7Dec.Name = "r7Dec";
+            this.r7Dec.ReadOnly = true;
+            this.r7Dec.Size = new System.Drawing.Size(109, 25);
+            this.r7Dec.TabIndex = 36;
+            this.r7Dec.Text = "";
+            // 
+            // f8Dec
+            // 
+            this.f8Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.f8Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.f8Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.f8Dec.Location = new System.Drawing.Point(759, 286);
+            this.f8Dec.Name = "f8Dec";
+            this.f8Dec.ReadOnly = true;
+            this.f8Dec.Size = new System.Drawing.Size(109, 25);
+            this.f8Dec.TabIndex = 39;
+            this.f8Dec.Text = "";
+            // 
+            // r8Dec
+            // 
+            this.r8Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.r8Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.r8Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.r8Dec.Location = new System.Drawing.Point(616, 286);
+            this.r8Dec.Name = "r8Dec";
+            this.r8Dec.ReadOnly = true;
+            this.r8Dec.Size = new System.Drawing.Size(109, 25);
+            this.r8Dec.TabIndex = 38;
+            this.r8Dec.Text = "";
+            // 
+            // f9Dec
+            // 
+            this.f9Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.f9Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.f9Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.f9Dec.Location = new System.Drawing.Point(759, 317);
+            this.f9Dec.Name = "f9Dec";
+            this.f9Dec.ReadOnly = true;
+            this.f9Dec.Size = new System.Drawing.Size(109, 25);
+            this.f9Dec.TabIndex = 41;
+            this.f9Dec.Text = "";
+            // 
+            // r9Dec
+            // 
+            this.r9Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.r9Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.r9Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.r9Dec.Location = new System.Drawing.Point(616, 317);
+            this.r9Dec.Name = "r9Dec";
+            this.r9Dec.ReadOnly = true;
+            this.r9Dec.Size = new System.Drawing.Size(109, 25);
+            this.r9Dec.TabIndex = 40;
+            this.r9Dec.Text = "";
+            // 
+            // f10Dec
+            // 
+            this.f10Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.f10Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.f10Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.f10Dec.Location = new System.Drawing.Point(759, 351);
+            this.f10Dec.Name = "f10Dec";
+            this.f10Dec.ReadOnly = true;
+            this.f10Dec.Size = new System.Drawing.Size(109, 25);
+            this.f10Dec.TabIndex = 43;
+            this.f10Dec.Text = "";
+            // 
+            // r10Dec
+            // 
+            this.r10Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.r10Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.r10Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.r10Dec.Location = new System.Drawing.Point(616, 351);
+            this.r10Dec.Name = "r10Dec";
+            this.r10Dec.ReadOnly = true;
+            this.r10Dec.Size = new System.Drawing.Size(109, 25);
+            this.r10Dec.TabIndex = 42;
+            this.r10Dec.Text = "";
+            // 
+            // f11Dec
+            // 
+            this.f11Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.f11Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.f11Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.f11Dec.Location = new System.Drawing.Point(759, 382);
+            this.f11Dec.Name = "f11Dec";
+            this.f11Dec.ReadOnly = true;
+            this.f11Dec.Size = new System.Drawing.Size(109, 25);
+            this.f11Dec.TabIndex = 45;
+            this.f11Dec.Text = "";
+            // 
+            // r11Dec
+            // 
+            this.r11Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.r11Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.r11Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.r11Dec.Location = new System.Drawing.Point(616, 382);
+            this.r11Dec.Name = "r11Dec";
+            this.r11Dec.ReadOnly = true;
+            this.r11Dec.Size = new System.Drawing.Size(109, 25);
+            this.r11Dec.TabIndex = 44;
+            this.r11Dec.Text = "";
+            // 
+            // f12Dec
+            // 
+            this.f12Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.f12Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.f12Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.f12Dec.Location = new System.Drawing.Point(759, 415);
+            this.f12Dec.Name = "f12Dec";
+            this.f12Dec.ReadOnly = true;
+            this.f12Dec.Size = new System.Drawing.Size(109, 25);
+            this.f12Dec.TabIndex = 47;
+            this.f12Dec.Text = "";
+            // 
+            // r12Dec
+            // 
+            this.r12Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.r12Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.r12Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.r12Dec.Location = new System.Drawing.Point(616, 415);
+            this.r12Dec.Name = "r12Dec";
+            this.r12Dec.ReadOnly = true;
+            this.r12Dec.Size = new System.Drawing.Size(109, 25);
+            this.r12Dec.TabIndex = 46;
+            this.r12Dec.Text = "";
+            // 
+            // f13Dec
+            // 
+            this.f13Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.f13Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.f13Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.f13Dec.Location = new System.Drawing.Point(759, 446);
+            this.f13Dec.Name = "f13Dec";
+            this.f13Dec.ReadOnly = true;
+            this.f13Dec.Size = new System.Drawing.Size(109, 25);
+            this.f13Dec.TabIndex = 49;
+            this.f13Dec.Text = "";
+            // 
+            // r13Dec
+            // 
+            this.r13Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.r13Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.r13Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.r13Dec.Location = new System.Drawing.Point(616, 446);
+            this.r13Dec.Name = "r13Dec";
+            this.r13Dec.ReadOnly = true;
+            this.r13Dec.Size = new System.Drawing.Size(109, 25);
+            this.r13Dec.TabIndex = 48;
+            this.r13Dec.Text = "";
+            // 
+            // f14Dec
+            // 
+            this.f14Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.f14Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.f14Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.f14Dec.Location = new System.Drawing.Point(759, 477);
+            this.f14Dec.Name = "f14Dec";
+            this.f14Dec.ReadOnly = true;
+            this.f14Dec.Size = new System.Drawing.Size(109, 25);
+            this.f14Dec.TabIndex = 51;
+            this.f14Dec.Text = "";
+            // 
+            // r14Dec
+            // 
+            this.r14Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.r14Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.r14Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.r14Dec.Location = new System.Drawing.Point(616, 477);
+            this.r14Dec.Name = "r14Dec";
+            this.r14Dec.ReadOnly = true;
+            this.r14Dec.Size = new System.Drawing.Size(109, 25);
+            this.r14Dec.TabIndex = 50;
+            this.r14Dec.Text = "";
+            // 
+            // f15Dec
+            // 
+            this.f15Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.f15Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.f15Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.f15Dec.Location = new System.Drawing.Point(759, 508);
+            this.f15Dec.Name = "f15Dec";
+            this.f15Dec.ReadOnly = true;
+            this.f15Dec.Size = new System.Drawing.Size(109, 25);
+            this.f15Dec.TabIndex = 53;
+            this.f15Dec.Text = "";
+            // 
+            // r15Dec
+            // 
+            this.r15Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.r15Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.r15Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.r15Dec.Location = new System.Drawing.Point(616, 508);
+            this.r15Dec.Name = "r15Dec";
+            this.r15Dec.ReadOnly = true;
+            this.r15Dec.Size = new System.Drawing.Size(109, 25);
+            this.r15Dec.TabIndex = 52;
+            this.r15Dec.Text = "";
+            // 
+            // f2Dec
+            // 
+            this.f2Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.f2Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.f2Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.f2Dec.Location = new System.Drawing.Point(759, 99);
+            this.f2Dec.Name = "f2Dec";
+            this.f2Dec.ReadOnly = true;
+            this.f2Dec.Size = new System.Drawing.Size(109, 25);
+            this.f2Dec.TabIndex = 55;
+            this.f2Dec.Text = "";
             // 
             // asprHex
             // 
             this.asprHex.BackColor = System.Drawing.SystemColors.Menu;
             this.asprHex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.asprHex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.asprHex.Location = new System.Drawing.Point(616, 99);
+            this.asprHex.Location = new System.Drawing.Point(1088, 46);
             this.asprHex.Name = "asprHex";
             this.asprHex.ReadOnly = true;
-            this.asprHex.Size = new System.Drawing.Size(124, 25);
+            this.asprHex.Size = new System.Drawing.Size(109, 25);
             this.asprHex.TabIndex = 54;
             this.asprHex.Text = "";
             // 
-            // cirDec
+            // f0Dec
             // 
-            this.cirDec.BackColor = System.Drawing.SystemColors.Menu;
-            this.cirDec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.cirDec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cirDec.Location = new System.Drawing.Point(744, 42);
-            this.cirDec.Name = "cirDec";
-            this.cirDec.ReadOnly = true;
-            this.cirDec.Size = new System.Drawing.Size(124, 25);
-            this.cirDec.TabIndex = 57;
-            this.cirDec.Text = "";
+            this.f0Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.f0Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.f0Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.f0Dec.Location = new System.Drawing.Point(759, 41);
+            this.f0Dec.Name = "f0Dec";
+            this.f0Dec.ReadOnly = true;
+            this.f0Dec.Size = new System.Drawing.Size(109, 25);
+            this.f0Dec.TabIndex = 57;
+            this.f0Dec.Text = "";
             // 
             // cirHex
             // 
             this.cirHex.BackColor = System.Drawing.SystemColors.Menu;
             this.cirHex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.cirHex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cirHex.Location = new System.Drawing.Point(616, 42);
+            this.cirHex.Location = new System.Drawing.Point(927, 18);
             this.cirHex.Name = "cirHex";
             this.cirHex.ReadOnly = true;
-            this.cirHex.Size = new System.Drawing.Size(124, 25);
+            this.cirHex.Size = new System.Drawing.Size(109, 25);
             this.cirHex.TabIndex = 56;
             this.cirHex.Text = "";
             // 
-            // pcDec
+            // f1Dec
             // 
-            this.pcDec.BackColor = System.Drawing.SystemColors.Menu;
-            this.pcDec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pcDec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pcDec.Location = new System.Drawing.Point(744, 72);
-            this.pcDec.Name = "pcDec";
-            this.pcDec.ReadOnly = true;
-            this.pcDec.Size = new System.Drawing.Size(124, 25);
-            this.pcDec.TabIndex = 59;
-            this.pcDec.Text = "";
+            this.f1Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.f1Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.f1Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.f1Dec.Location = new System.Drawing.Point(759, 70);
+            this.f1Dec.Name = "f1Dec";
+            this.f1Dec.ReadOnly = true;
+            this.f1Dec.Size = new System.Drawing.Size(109, 25);
+            this.f1Dec.TabIndex = 59;
+            this.f1Dec.Text = "";
             // 
             // pcHex
             // 
             this.pcHex.BackColor = System.Drawing.SystemColors.Menu;
             this.pcHex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pcHex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pcHex.Location = new System.Drawing.Point(616, 72);
+            this.pcHex.Location = new System.Drawing.Point(927, 48);
             this.pcHex.Name = "pcHex";
             this.pcHex.ReadOnly = true;
-            this.pcHex.Size = new System.Drawing.Size(124, 25);
+            this.pcHex.Size = new System.Drawing.Size(109, 25);
             this.pcHex.TabIndex = 58;
             this.pcHex.Text = "";
             // 
@@ -796,38 +812,14 @@
             this.assemblerTextBox.TabIndex = 1;
             this.assemblerTextBox.Text = "";
             // 
-            // f6Dec
-            // 
-            this.f6Dec.BackColor = System.Drawing.SystemColors.Menu;
-            this.f6Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.f6Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.f6Dec.Location = new System.Drawing.Point(744, 539);
-            this.f6Dec.Name = "f6Dec";
-            this.f6Dec.ReadOnly = true;
-            this.f6Dec.Size = new System.Drawing.Size(124, 25);
-            this.f6Dec.TabIndex = 67;
-            this.f6Dec.Text = "";
-            // 
-            // f6Hex
-            // 
-            this.f6Hex.BackColor = System.Drawing.SystemColors.Menu;
-            this.f6Hex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.f6Hex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.f6Hex.Location = new System.Drawing.Point(616, 539);
-            this.f6Hex.Name = "f6Hex";
-            this.f6Hex.ReadOnly = true;
-            this.f6Hex.Size = new System.Drawing.Size(124, 25);
-            this.f6Hex.TabIndex = 66;
-            this.f6Hex.Text = "";
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(591, 544);
+            this.label1.Location = new System.Drawing.Point(588, 451);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(19, 13);
+            this.label1.Size = new System.Drawing.Size(27, 13);
             this.label1.TabIndex = 65;
-            this.label1.Text = "F6";
+            this.label1.Text = "R13";
             // 
             // pipelineLabel
             // 
@@ -952,7 +944,7 @@
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(490, 19);
+            this.label25.Location = new System.Drawing.Point(1043, 23);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(65, 13);
             this.label25.TabIndex = 80;
@@ -1176,24 +1168,6 @@
             this.configButton.UseVisualStyleBackColor = false;
             this.configButton.Click += new System.EventHandler(this.configButton_Click);
             // 
-            // programSpeedBar
-            // 
-            this.programSpeedBar.Location = new System.Drawing.Point(894, 27);
-            this.programSpeedBar.Name = "programSpeedBar";
-            this.programSpeedBar.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.programSpeedBar.Size = new System.Drawing.Size(172, 45);
-            this.programSpeedBar.TabIndex = 103;
-            this.programSpeedBar.ValueChanged += new System.EventHandler(this.programSpeedBar_ValueChanged);
-            // 
-            // label38
-            // 
-            this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(954, 11);
-            this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(61, 13);
-            this.label38.TabIndex = 105;
-            this.label38.Text = "Run Speed";
-            // 
             // buildButton
             // 
             this.buildButton.ErrorImage = global::ISA_GUI.Properties.Resources.icons8_hammer_48;
@@ -1325,15 +1299,232 @@
             this.Output.Size = new System.Drawing.Size(557, 350);
             this.Output.TabIndex = 61;
             // 
+            // r2Dec
+            // 
+            this.r2Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.r2Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.r2Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.r2Dec.Location = new System.Drawing.Point(616, 99);
+            this.r2Dec.Name = "r2Dec";
+            this.r2Dec.ReadOnly = true;
+            this.r2Dec.Size = new System.Drawing.Size(109, 25);
+            this.r2Dec.TabIndex = 107;
+            this.r2Dec.Text = "";
+            // 
+            // r1Dec
+            // 
+            this.r1Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.r1Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.r1Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.r1Dec.Location = new System.Drawing.Point(616, 70);
+            this.r1Dec.Name = "r1Dec";
+            this.r1Dec.ReadOnly = true;
+            this.r1Dec.Size = new System.Drawing.Size(109, 25);
+            this.r1Dec.TabIndex = 108;
+            this.r1Dec.Text = "";
+            // 
+            // r0Dec
+            // 
+            this.r0Dec.BackColor = System.Drawing.SystemColors.Menu;
+            this.r0Dec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.r0Dec.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.r0Dec.Location = new System.Drawing.Point(616, 41);
+            this.r0Dec.Name = "r0Dec";
+            this.r0Dec.ReadOnly = true;
+            this.r0Dec.Size = new System.Drawing.Size(109, 25);
+            this.r0Dec.TabIndex = 109;
+            this.r0Dec.Text = "";
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Location = new System.Drawing.Point(588, 482);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(27, 13);
+            this.label37.TabIndex = 110;
+            this.label37.Text = "R14";
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(587, 513);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(27, 13);
+            this.label38.TabIndex = 111;
+            this.label38.Text = "R15";
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Location = new System.Drawing.Point(739, 47);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(19, 13);
+            this.label39.TabIndex = 112;
+            this.label39.Text = "F0";
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.Location = new System.Drawing.Point(739, 76);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(19, 13);
+            this.label40.TabIndex = 113;
+            this.label40.Text = "F1";
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Location = new System.Drawing.Point(739, 105);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(19, 13);
+            this.label41.TabIndex = 114;
+            this.label41.Text = "F2";
+            // 
+            // label42
+            // 
+            this.label42.AutoSize = true;
+            this.label42.Location = new System.Drawing.Point(739, 135);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(19, 13);
+            this.label42.TabIndex = 115;
+            this.label42.Text = "F3";
+            // 
+            // label43
+            // 
+            this.label43.AutoSize = true;
+            this.label43.Location = new System.Drawing.Point(739, 166);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(19, 13);
+            this.label43.TabIndex = 116;
+            this.label43.Text = "F4";
+            // 
+            // label44
+            // 
+            this.label44.AutoSize = true;
+            this.label44.Location = new System.Drawing.Point(739, 199);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(19, 13);
+            this.label44.TabIndex = 117;
+            this.label44.Text = "F5";
+            // 
+            // label45
+            // 
+            this.label45.AutoSize = true;
+            this.label45.Location = new System.Drawing.Point(739, 230);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(19, 13);
+            this.label45.TabIndex = 118;
+            this.label45.Text = "F6";
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Location = new System.Drawing.Point(739, 261);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(19, 13);
+            this.label46.TabIndex = 119;
+            this.label46.Text = "F7";
+            // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Location = new System.Drawing.Point(739, 292);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(19, 13);
+            this.label47.TabIndex = 120;
+            this.label47.Text = "F8";
+            // 
+            // label48
+            // 
+            this.label48.AutoSize = true;
+            this.label48.Location = new System.Drawing.Point(739, 323);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(19, 13);
+            this.label48.TabIndex = 121;
+            this.label48.Text = "F9";
+            // 
+            // label49
+            // 
+            this.label49.AutoSize = true;
+            this.label49.Location = new System.Drawing.Point(734, 356);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(25, 13);
+            this.label49.TabIndex = 122;
+            this.label49.Text = "F10";
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(734, 387);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(25, 13);
+            this.label50.TabIndex = 123;
+            this.label50.Text = "F11";
+            // 
+            // label51
+            // 
+            this.label51.AutoSize = true;
+            this.label51.Location = new System.Drawing.Point(733, 420);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(25, 13);
+            this.label51.TabIndex = 124;
+            this.label51.Text = "F12";
+            // 
+            // label52
+            // 
+            this.label52.AutoSize = true;
+            this.label52.Location = new System.Drawing.Point(734, 451);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(25, 13);
+            this.label52.TabIndex = 125;
+            this.label52.Text = "F13";
+            // 
+            // label53
+            // 
+            this.label53.AutoSize = true;
+            this.label53.Location = new System.Drawing.Point(734, 482);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(25, 13);
+            this.label53.TabIndex = 126;
+            this.label53.Text = "F14";
+            // 
+            // label54
+            // 
+            this.label54.AutoSize = true;
+            this.label54.Location = new System.Drawing.Point(733, 513);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(25, 13);
+            this.label54.TabIndex = 127;
+            this.label54.Text = "F15";
+            // 
             // BUC10
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1491, 814);
-            this.Controls.Add(this.buildButton);
+            this.Controls.Add(this.label54);
+            this.Controls.Add(this.label53);
+            this.Controls.Add(this.label52);
+            this.Controls.Add(this.label51);
+            this.Controls.Add(this.label50);
+            this.Controls.Add(this.label49);
+            this.Controls.Add(this.label48);
+            this.Controls.Add(this.label47);
+            this.Controls.Add(this.label46);
+            this.Controls.Add(this.label45);
+            this.Controls.Add(this.label44);
+            this.Controls.Add(this.label43);
+            this.Controls.Add(this.label42);
+            this.Controls.Add(this.label41);
+            this.Controls.Add(this.label40);
+            this.Controls.Add(this.label39);
             this.Controls.Add(this.label38);
-            this.Controls.Add(this.programSpeedBar);
+            this.Controls.Add(this.label37);
+            this.Controls.Add(this.r0Dec);
+            this.Controls.Add(this.r1Dec);
+            this.Controls.Add(this.r2Dec);
+            this.Controls.Add(this.buildButton);
             this.Controls.Add(this.configButton);
             this.Controls.Add(this.label36);
             this.Controls.Add(this.label35);
@@ -1368,45 +1559,43 @@
             this.Controls.Add(this.stage1Text);
             this.Controls.Add(this.pipelineLabel);
             this.Controls.Add(this.resetButton);
-            this.Controls.Add(this.f6Dec);
-            this.Controls.Add(this.f6Hex);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.stepthroughButton);
             this.Controls.Add(this.RunButton);
             this.Controls.Add(this.objectCode);
             this.Controls.Add(this.Output);
-            this.Controls.Add(this.pcDec);
-            this.Controls.Add(this.pcHex);
-            this.Controls.Add(this.cirDec);
-            this.Controls.Add(this.cirHex);
-            this.Controls.Add(this.asprDec);
-            this.Controls.Add(this.asprHex);
-            this.Controls.Add(this.f5Dec);
-            this.Controls.Add(this.f5Hex);
-            this.Controls.Add(this.f4Dec);
-            this.Controls.Add(this.f4Hex);
-            this.Controls.Add(this.f3Dec);
-            this.Controls.Add(this.f3Hex);
-            this.Controls.Add(this.f2Dec);
-            this.Controls.Add(this.f2Hex);
             this.Controls.Add(this.f1Dec);
-            this.Controls.Add(this.f1Hex);
+            this.Controls.Add(this.pcHex);
             this.Controls.Add(this.f0Dec);
-            this.Controls.Add(this.f0Hex);
+            this.Controls.Add(this.cirHex);
+            this.Controls.Add(this.f2Dec);
+            this.Controls.Add(this.asprHex);
+            this.Controls.Add(this.f15Dec);
+            this.Controls.Add(this.r15Dec);
+            this.Controls.Add(this.f14Dec);
+            this.Controls.Add(this.r14Dec);
+            this.Controls.Add(this.f13Dec);
+            this.Controls.Add(this.r13Dec);
+            this.Controls.Add(this.f12Dec);
+            this.Controls.Add(this.r12Dec);
+            this.Controls.Add(this.f11Dec);
+            this.Controls.Add(this.r11Dec);
+            this.Controls.Add(this.f10Dec);
+            this.Controls.Add(this.r10Dec);
+            this.Controls.Add(this.f9Dec);
+            this.Controls.Add(this.r9Dec);
+            this.Controls.Add(this.f8Dec);
+            this.Controls.Add(this.r8Dec);
+            this.Controls.Add(this.f7Dec);
+            this.Controls.Add(this.r7Dec);
+            this.Controls.Add(this.f6Dec);
             this.Controls.Add(this.r6Dec);
-            this.Controls.Add(this.r6Hex);
+            this.Controls.Add(this.f5Dec);
             this.Controls.Add(this.r5Dec);
-            this.Controls.Add(this.r5Hex);
+            this.Controls.Add(this.f4Dec);
             this.Controls.Add(this.r4Dec);
-            this.Controls.Add(this.r4Hex);
+            this.Controls.Add(this.f3Dec);
             this.Controls.Add(this.r3Dec);
-            this.Controls.Add(this.r3Hex);
-            this.Controls.Add(this.r2Dec);
-            this.Controls.Add(this.r2Hex);
-            this.Controls.Add(this.r1Dec);
-            this.Controls.Add(this.r1Hex);
-            this.Controls.Add(this.r0Dec);
-            this.Controls.Add(this.r0Hex);
             this.Controls.Add(this.label21);
             this.Controls.Add(this.label19);
             this.Controls.Add(this.label17);
@@ -1438,7 +1627,6 @@
             this.objectCode.ResumeLayout(false);
             this.objectCodeBox.ResumeLayout(false);
             this.assemblerPage.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.programSpeedBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.buildButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.resetButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stepthroughButton)).EndInit();
@@ -1475,45 +1663,43 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.RichTextBox r0Hex;
-        private System.Windows.Forms.RichTextBox r0Dec;
-        private System.Windows.Forms.RichTextBox r1Dec;
-        private System.Windows.Forms.RichTextBox r1Hex;
-        private System.Windows.Forms.RichTextBox r2Dec;
-        private System.Windows.Forms.RichTextBox r2Hex;
         private System.Windows.Forms.RichTextBox r3Dec;
-        private System.Windows.Forms.RichTextBox r3Hex;
-        private System.Windows.Forms.RichTextBox r4Dec;
-        private System.Windows.Forms.RichTextBox r4Hex;
-        private System.Windows.Forms.RichTextBox r5Dec;
-        private System.Windows.Forms.RichTextBox r5Hex;
-        private System.Windows.Forms.RichTextBox r6Dec;
-        private System.Windows.Forms.RichTextBox r6Hex;
-        private System.Windows.Forms.RichTextBox f0Dec;
-        private System.Windows.Forms.RichTextBox f0Hex;
-        private System.Windows.Forms.RichTextBox f1Dec;
-        private System.Windows.Forms.RichTextBox f1Hex;
-        private System.Windows.Forms.RichTextBox f2Dec;
-        private System.Windows.Forms.RichTextBox f2Hex;
         private System.Windows.Forms.RichTextBox f3Dec;
-        private System.Windows.Forms.RichTextBox f3Hex;
         private System.Windows.Forms.RichTextBox f4Dec;
-        private System.Windows.Forms.RichTextBox f4Hex;
+        private System.Windows.Forms.RichTextBox r4Dec;
         private System.Windows.Forms.RichTextBox f5Dec;
-        private System.Windows.Forms.RichTextBox f5Hex;
-        private System.Windows.Forms.RichTextBox asprDec;
+        private System.Windows.Forms.RichTextBox r5Dec;
+        private System.Windows.Forms.RichTextBox f6Dec;
+        private System.Windows.Forms.RichTextBox r6Dec;
+        private System.Windows.Forms.RichTextBox f7Dec;
+        private System.Windows.Forms.RichTextBox r7Dec;
+        private System.Windows.Forms.RichTextBox f8Dec;
+        private System.Windows.Forms.RichTextBox r8Dec;
+        private System.Windows.Forms.RichTextBox f9Dec;
+        private System.Windows.Forms.RichTextBox r9Dec;
+        private System.Windows.Forms.RichTextBox f10Dec;
+        private System.Windows.Forms.RichTextBox r10Dec;
+        private System.Windows.Forms.RichTextBox f11Dec;
+        private System.Windows.Forms.RichTextBox r11Dec;
+        private System.Windows.Forms.RichTextBox f12Dec;
+        private System.Windows.Forms.RichTextBox r12Dec;
+        private System.Windows.Forms.RichTextBox f13Dec;
+        private System.Windows.Forms.RichTextBox r13Dec;
+        private System.Windows.Forms.RichTextBox f14Dec;
+        private System.Windows.Forms.RichTextBox r14Dec;
+        private System.Windows.Forms.RichTextBox f15Dec;
+        private System.Windows.Forms.RichTextBox r15Dec;
+        private System.Windows.Forms.RichTextBox f2Dec;
         private System.Windows.Forms.RichTextBox asprHex;
-        private System.Windows.Forms.RichTextBox cirDec;
+        private System.Windows.Forms.RichTextBox f0Dec;
         private System.Windows.Forms.RichTextBox cirHex;
-        private System.Windows.Forms.RichTextBox pcDec;
+        private System.Windows.Forms.RichTextBox f1Dec;
         private System.Windows.Forms.RichTextBox pcHex;
         private System.Windows.Forms.TabControl objectCode;
         private System.Windows.Forms.PictureBox RunButton;
         public System.Windows.Forms.TabPage objectCodeBox;
         private System.Windows.Forms.RichTextBox InputBox;
         private System.Windows.Forms.PictureBox stepthroughButton;
-        private System.Windows.Forms.RichTextBox f6Dec;
-        private System.Windows.Forms.RichTextBox f6Hex;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox resetButton;
         private System.Windows.Forms.Label pipelineLabel;
@@ -1550,8 +1736,6 @@
         private System.Windows.Forms.Label label35;
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.Button configButton;
-        private System.Windows.Forms.TrackBar programSpeedBar;
-        private System.Windows.Forms.Label label38;
         private System.Windows.Forms.TabPage assemblerPage;
         private System.Windows.Forms.RichTextBox assemblerTextBox;
         private System.Windows.Forms.PictureBox buildButton;
@@ -1562,6 +1746,27 @@
         private System.Windows.Forms.TabPage pipelineTab;
         private System.Windows.Forms.RichTextBox pipelineTextBox;
         private System.Windows.Forms.TabControl Output;
+        private System.Windows.Forms.RichTextBox r2Dec;
+        private System.Windows.Forms.RichTextBox r1Dec;
+        private System.Windows.Forms.RichTextBox r0Dec;
+        private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.Label label38;
+        private System.Windows.Forms.Label label39;
+        private System.Windows.Forms.Label label40;
+        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.Label label42;
+        private System.Windows.Forms.Label label43;
+        private System.Windows.Forms.Label label44;
+        private System.Windows.Forms.Label label45;
+        private System.Windows.Forms.Label label46;
+        private System.Windows.Forms.Label label47;
+        private System.Windows.Forms.Label label48;
+        private System.Windows.Forms.Label label49;
+        private System.Windows.Forms.Label label50;
+        private System.Windows.Forms.Label label51;
+        private System.Windows.Forms.Label label52;
+        private System.Windows.Forms.Label label53;
+        private System.Windows.Forms.Label label54;
     }
 }
 

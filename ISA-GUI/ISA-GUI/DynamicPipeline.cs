@@ -13,7 +13,8 @@ namespace ISA_GUI
         Fetch fetch;
         ControlUnit CU;
         Printer print;
-        List<Instruction> instructionQueue;
+        Queue<Instruction> instructionQueue;
+        List<Instruction> instructionsInFlight;
         public ALU alu;
         public ExecutionUnit EU;
         public WriteResult WR;
@@ -31,6 +32,7 @@ namespace ISA_GUI
         public FloatMultFU floatMultFu;
         public FloatDivFU floatDivFu;
         public BitwiseOPFU bitwiseOPFU;
+        public MemoryUnitFU memoryUnitFU;
         public ReservationStation intAddRS;
         public ReservationStation intSubRS;
         public ReservationStation intMultRS;
@@ -40,16 +42,15 @@ namespace ISA_GUI
         public ReservationStation floatMultRS;
         public ReservationStation floatDivRS;
         public ReservationStation bitwiseOPRS;
-        public ReservationStation loadOPRS;
-        public ReservationStation storeOPRS;
         public ReservationStation branchOPS;
         public ReservationStation shiftOPS;
+        public ReservationStation load_storeBuffer;
         public Instruction fetchInstruction;
 
         public int totalHazard, structuralHazard, dataHazard, controlHazard, RAW, WAR, WAW;
+        public int reorderBufferDelay, reservationStationDelay, trueDependenceDelay, totalDelays;
         public int totalCyclesStalled;
         public bool lastBranchDecision;
-        //private Timer timer;
 
 
 
@@ -59,14 +60,14 @@ namespace ISA_GUI
             fetch = new Fetch();
             CU = new ControlUnit();
             print = new Printer();
-            instructionQueue = new List<Instruction>();
+            instructionQueue = new Queue<Instruction>();
             alu = new ALU();
             CU = new ControlUnit();
             EU = new ExecutionUnit();
             AM = new AccessMemory();
             WR = new WriteResult();
-            CommonDataBus= new CommonDataBus();
-            intAddFu = new IntAddFU();  
+            CommonDataBus = new CommonDataBus();
+            intAddFu = new IntAddFU();
             intSubFu = new IntSubFU();
             intMultFu = new IntMultFU();
             intDivFu = new IntDivFU();
@@ -75,6 +76,7 @@ namespace ISA_GUI
             floatMultFu = new FloatMultFU();
             floatDivFu = new FloatDivFU();
             bitwiseOPFU = new BitwiseOPFU();
+            memoryUnitFU = new MemoryUnitFU();
             intAddRS = new ReservationStation("intAddRS");
             intSubRS = new ReservationStation("intSubRS");
             intMultRS = new ReservationStation("intMultRS");
@@ -84,10 +86,9 @@ namespace ISA_GUI
             floatMultRS = new ReservationStation("floatMultRS");
             floatDivRS = new ReservationStation("floatDivRS");
             bitwiseOPRS = new ReservationStation("bitwiseOPRS");
-            loadOPRS = new ReservationStation("loadOPRS");
-            storeOPRS = new ReservationStation("storeOPRS");
             branchOPS = new ReservationStation("branchOPS");        //Reservation station solely for branches\
             shiftOPS = new ReservationStation("shiftOPS");
+            load_storeBuffer = new ReservationStation("load_storeBuffer");
 
 
             fetchInstruction = new Instruction();
@@ -101,7 +102,7 @@ namespace ISA_GUI
             RAW = 0;
             WAW = 0;
             lastBranchDecision = false;
-           // timer = new Timer();
+            // timer = new Timer();
         }
 
         /// <summary>Runs the cycle.</summary>
@@ -117,60 +118,110 @@ namespace ISA_GUI
         /// <param name="dataMemory">The data memory.</param>
         public void runCycle(List<string> input, bool stepThrough, ref StringBuilder assemblyString, ref StringBuilder decodedString, ref StringBuilder pipelingString, ref bool halted, ref ConfigCycle config, ref InstructionMemory IM, ref RegisterFile registers, ref DataMemory dataMemory)
         {
-            //Fetch 1 instruction and send it to be decoded
-            fetchInstruction = fetch.getNextInstruction(ref IM);
-            //Decode instruction and add it to the instruction queue
-            CU.decode(ref IM, ref fetchInstruction);
-            fetchInstruction.cycle = 1; //Makes it start at cycle 1
-            instructionQueue.Add(fetchInstruction);
-
-            //Put the instructions into the reservation station. This should be the first cycle of the pipeline
-            foreach(Instruction inst in instructionQueue) //Will run through instruction queue, instruction will bne take off the queue once commited
-            {
-                switch (inst.cycle) //Instuction will hold which cycle it's in
-                {
-                    //Populates reservationStations
-                    case 1:
-                        populateReservationStation(inst);
-                        break;
-
-                    //Send the instruction to its corresponding functional unit as long as there are no structural harzards present
-                    //Open up reservation station to allow for more instructions to flow in
-                    //Execute within the functional unit
-                    case 2:
-
-                        break;
-
-                    //Store the answer and corresponding reservation name into the data bus
-                    //This should be where the Write Result and Memory Read stages will be held
-                    case 3:
-
-                        break;
-                    case 4:
-
-                        break;
-                    //Take instructions from the data bus and add them to the reorder buffer where instructions will be executed based on program counter
-                    case 5:
-
-                        break;
-
-                }
-            }
             
-            generateAssembly(ref assemblyString, IM);       //Populates instructionQueue and writes out assembly
-            halted = true; //For testing purposes
+
+            do
+            {
+                if (instructionQueue.Count == 0)
+                {
+                    fillInstructionQueue(ref IM);
+                }
+
+                //Put the instructions into the reservation station. This should be the first cycle of the pipeline
+                foreach (Instruction inst in instructionQueue) //Will run through instruction queue, instruction will bne take off the queue once commited
+                {
+                    switch (inst.stage) //Instuction will hold which cycle it's in
+                    {
+                        //Take instructions from the data bus and add them to the reorder buffer where instructions will be executed based on program counter
+                        case 5:
+
+                            break;
+
+                        case 4:
+
+                            break;
+
+                        //Store the answer and corresponding reservation name into the data bus
+                        //This should be where the Write Result and Memory Read stages will be held
+                        case 3:
+
+                            break;
+
+                        //Send the instruction to its corresponding functional unit as long as there are no structural harzards present
+                        //Open up reservation station to allow for more instructions to flow in
+                        //Execute within the functional unit
+                        case 2:
+
+
+                            if (inst.opcode == 0 || inst.opcode == 1)
+                                inst.stage = 5;
+                            else if (inst.opcode == 9 || inst.opcode == 11 || inst.opcode == 12)
+                                inst.stage = 4;
+                            else
+                                inst.stage = 5;
+                            break;
+                        //Populates reservationStations
+                        case 1:
+                            fetchFromInstructionQueue();
+                            try
+                            {
+                                inst.functionalUnitID = populateReservationStation(inst, ref registers);
+                                inst.stage = 2;
+                            }
+                            catch (Exception)
+                            {
+                                reservationStationDelay++;
+                            }
+                            break;
+
+                    }
+                }
+
+                generateAssembly(ref assemblyString, IM);       //Populates instructionQueue and writes out assembly
+                halted = true; //For testing purposes
+            } while (!halted && !stepThrough);
+        }
+
+
+        private void fillInstructionQueue(ref InstructionMemory IM)
+        {
+            for(int i = 0; i < 10; i++)
+            {
+                fetchInstruction = new Instruction();
+                fetchInstruction = fetch.getNextInstruction(ref IM);
+                instructionQueue.Enqueue(fetchInstruction);
+            }
+        }
+
+        private void fetchFromInstructionQueue()
+        {
+            instructionsInFlight.Add(instructionQueue.Dequeue());
+        }
+
+
+        private void stage3(Instruction instruction)
+        {
+
+        }
+
+        private void sendToFU(Instruction instruction)
+        {
+
+        }
+
+        private void checkDependencies(Instruction instruction)
+        {
 
         }
 
         //Will use the opcode and flags to figure out which reservation station the instruction needs to be in
-        private void populateReservationStation(Instruction instruction)
+        private int populateReservationStation(Instruction instruction, ref RegisterFile registers)
         {
             switch(instruction.opcode)
             {
                 case 0:
                 case 1:
-                    break;      //NOT IMPLEMENTED, NOT SURE WHERE TO PUT HALT AND NOP
-
+                    return -1;
                 case 2:         //Branch Instructions
                 case 3:
                 case 4:
@@ -180,138 +231,329 @@ namespace ISA_GUI
                 case 8:
                     if(!branchOPS.Busy)
                     {
-
-                        instruction.cycle = 2;
                         branchOPS.instruction = instruction;
                         branchOPS.Busy = true;
+                        return 11;
                         //Vj, Vk, Qj, Qk will be implemented here
                     }
                     break;
                 case 15:
-                case 10:        //Store instruction
-                    if(!storeOPRS.Busy)
+                    if (instruction.isFloat)
                     {
-                        instruction.cycle = 2;
-                        storeOPRS.instruction = instruction;
-                        storeOPRS.Busy = true;
-                        //Vj, Vk, Qj, Qk will be implemented here
+                        if (registers.floatQi[instruction.r2].Equals("0"))
+                        {
+                            instruction.fOp1 = registers.floatQi[instruction.r2];
+                        }
+                        else
+                            instruction.fOp1 = instruction.r2.ToString();
+                        if (!intSubRS.Busy)
+                        {
+                            intSubRS.instruction = instruction;
+                            intSubRS.Busy = true;
+                            return 2;
+                        }
+                    }
+                    break;
+                case 10:
+                case 12:        //Store instruction
+                    if (instruction.isFloat)
+                    {
+                        if (!load_storeBuffer.Busy)
+                        {
+                            if (registers.floatQi[0].Equals("0"))
+                            {
+                                instruction.fOp1 = registers.floatQi[0];
+                            }
+                            else
+                                instruction.fOp1 = "0";
+                            load_storeBuffer.instruction = instruction;
+                            load_storeBuffer.Busy = true;
+                            return 10;
+                            //Vj, Vk, Qj, Qk will be implemented here
+                        }
                     }
                     break;
                 case 9:         //Load Instructions
                 case 11:
-                case 12:
-                    if(!loadOPRS.Busy)
+                    if (!load_storeBuffer.Busy)
                     {
-                        instruction.cycle = 2;
-                        loadOPRS.instruction = instruction;
-                        loadOPRS.Busy = true;
+                        load_storeBuffer.instruction = instruction;
+                        load_storeBuffer.Busy = true;
+                        return 10;
                         //Vj, Vk, Qj, Qk will be implemented here
                     }
                     break;
+                
                 case 13:
                 case 14:
+                    if (instruction.isFloat)
+                    {
+                        if (registers.floatQi[instruction.r1].Equals("0"))
+                        {
+                            instruction.fOp1 = registers.floatQi[instruction.r1];
+                        }
+                        else
+                            instruction.fOp1 = instruction.r1.ToString();
+
+                        if (registers.floatQi[instruction.r2].Equals("0"))
+                        {
+                            instruction.fOp2 = registers.floatQi[instruction.r2];
+                        }
+                        else
+                            instruction.fOp2 = instruction.r1.ToString();
+                        if (!intSubRS.Busy)
+                        {
+                            intSubRS.instruction = instruction;
+                            intSubRS.Busy = true;
+                            return 2;
+                        }
+                    }
+                    break;
                 case 16:
                 case 17:
                 case 18:
                 case 19:
                     if(!shiftOPS.Busy)
                     {
-                        instruction.cycle = 2;
+                        if (registers.intQi[instruction.r1].Equals("0"))
+                        {
+                            instruction.iOp1 = registers.intQi[instruction.r1];
+                        }
+                        else
+                            instruction.iOp1 = instruction.r1.ToString();
+
+                        if (registers.intQi[instruction.r2].Equals("0"))
+                        {
+                            instruction.iOp2 = registers.intQi[instruction.r2];
+                        }
+                        else
+                            instruction.iOp2 = instruction.r1.ToString();
                         shiftOPS.instruction = instruction;
                         shiftOPS.Busy = true;
+                        return 12;
                     }
                     break;
                 case 20:            //Add instruction. Checks if it's float
-                    if((instruction.instrFlag & 2) == 0)
+                    if((instruction.isFloat))
                     {
                         if (!floatAddRS.Busy)
                         {
-                            instruction.cycle = 2;
+                            if (registers.floatQi[instruction.r1].Equals("0"))
+                            {
+                                instruction.fOp1 = registers.floatQi[instruction.r1];
+                            }
+                            else
+                                instruction.fOp1 = instruction.r1.ToString();
+
+                            if (registers.floatQi[instruction.r2].Equals("0"))
+                            {
+                                instruction.fOp2 = registers.floatQi[instruction.r2];
+                            }
+                            else
+                                instruction.fOp2 = instruction.r1.ToString();
                             floatAddRS.instruction = instruction;
                             floatAddRS.Busy = true;
+                            return 5;
                         }
                     }
                     else
                     {
                         if(!intAddRS.Busy)
                         {
-                            instruction.cycle = 2;
+                            if (registers.intQi[instruction.r1].Equals("0"))
+                            {
+                                instruction.iOp1 = registers.intQi[instruction.r1];
+                            }
+                            else
+                                instruction.iOp1 = instruction.r1.ToString();
+
+                            if (registers.intQi[instruction.r2].Equals("0"))
+                            {
+                                instruction.iOp2 = registers.intQi[instruction.r2];
+                            }
+                            else
+                                instruction.iOp2 = instruction.r1.ToString();
                             intAddRS.instruction = instruction;
                             intAddRS.Busy = true;
+                            return 1;
                         }
                     }
                     
                     break;
                 case 21:            //Sub instruction. Checks if it's float
-                    if ((instruction.instrFlag & 2) == 0)
+                    if ((instruction.isFloat))
                     {
                         if(!floatSubRS.Busy)
                         {
-                            instruction.cycle = 2;
+                            if (registers.floatQi[instruction.r1].Equals("0"))
+                            {
+                                instruction.fOp1 = registers.floatQi[instruction.r1];
+                            }
+                            else
+                                instruction.fOp1 = instruction.r1.ToString();
+
+                            if (registers.floatQi[instruction.r2].Equals("0"))
+                            {
+                                instruction.fOp2 = registers.floatQi[instruction.r2];
+                            }
+                            else
+                                instruction.fOp2 = instruction.r1.ToString();
                             floatSubRS.instruction = instruction;
                             floatSubRS.Busy = true;
+                            return 6;
                         }
                     }
                     else
                     {
                         if (!intSubRS.Busy)
                         {
-                            instruction.cycle = 2;
+                            if (registers.intQi[instruction.r1].Equals("0"))
+                            {
+                                instruction.iOp1 = registers.intQi[instruction.r1];
+                            }
+                            else
+                                instruction.iOp1 = instruction.r1.ToString();
+
+                            if (registers.intQi[instruction.r2].Equals("0"))
+                            {
+                                instruction.iOp2 = registers.intQi[instruction.r2];
+                            }
+                            else
+                                instruction.iOp2 = instruction.r1.ToString();
                             intSubRS.instruction = instruction;
                             intSubRS.Busy = true;
+                            return 2;
                         }
                     }
                     break;
                 case 22:            //Mult instructions. Checks if it's float
-                    if ((instruction.instrFlag & 2) == 0)
+                    if ((instruction.isFloat))
                     {
                         if (!floatMultRS.Busy)
                         {
-                            instruction.cycle = 2;
+                            if (registers.floatQi[instruction.r1].Equals("0"))
+                            {
+                                instruction.fOp1 = registers.floatQi[instruction.r1];
+                            }
+                            else
+                                instruction.fOp1 = instruction.r1.ToString();
+
+                            if (registers.floatQi[instruction.r2].Equals("0"))
+                            {
+                                instruction.fOp2 = registers.floatQi[instruction.r2];
+                            }
+                            else
+                                instruction.fOp2 = instruction.r1.ToString();
                             floatMultRS.instruction = instruction;
                             floatMultRS.Busy = true;
+                            return 7;
                         }
                     }
                     else
                     {
                         if (!intMultRS.Busy)
                         {
-                            instruction.cycle = 2;
+                            if (registers.intQi[instruction.r1].Equals("0"))
+                            {
+                                instruction.iOp1 = registers.intQi[instruction.r1];
+                            }
+                            else
+                                instruction.iOp1 = instruction.r1.ToString();
+
+                            if (registers.intQi[instruction.r2].Equals("0"))
+                            {
+                                instruction.iOp2 = registers.intQi[instruction.r2];
+                            }
+                            else
+                                instruction.iOp2 = instruction.r1.ToString();
                             intMultRS.instruction = instruction;
                             intMultRS.Busy = true;
+                            return 3;
                         }
                     }
                       
                     break;
                 case 23:            //Div instructions. Checks if it's float
-                    if ((instruction.instrFlag & 2) == 0)
+                    if ((instruction.isFloat))
                     {
                         if (!floatDivRS.Busy)
                         {
-                            instruction.cycle = 2;
+                            if (registers.floatQi[instruction.r1].Equals("0"))
+                            {
+                                instruction.fOp1 = registers.floatQi[instruction.r1];
+                            }
+                            else
+                                instruction.fOp1 = instruction.r1.ToString();
+
+                            if (registers.floatQi[instruction.r2].Equals("0"))
+                            {
+                                instruction.fOp2 = registers.floatQi[instruction.r2];
+                            }
+                            else
+                                instruction.fOp2 = instruction.r1.ToString();
                             floatDivRS.instruction = instruction;
                             floatDivRS.Busy = true;
+                            return 8;
                         }
                     }
                     else
                     {
                         if (!intDivRS.Busy)
                         {
-                            instruction.cycle = 2;
+                            if (registers.intQi[instruction.r1].Equals("0"))
+                            {
+                                instruction.iOp1 = registers.intQi[instruction.r1];
+                            }
+                            else
+                                instruction.iOp1 = instruction.r1.ToString();
+
+                            if (registers.intQi[instruction.r2].Equals("0"))
+                            {
+                                instruction.iOp2 = registers.intQi[instruction.r2];
+                            }
+                            else
+                                instruction.iOp2 = instruction.r1.ToString();
                             intDivRS.instruction = instruction;
                             intDivRS.Busy = true;
+                            return 4;
                         }
                     }
                     break;
                 case 24:
                 case 25:
                 case 26:
-                case 27:
-                    if (!shiftOPS.Busy)
+                    if (!bitwiseOPRS.Busy)
                     {
-                        instruction.cycle = 2;
-                        shiftOPS.instruction = instruction;
-                        shiftOPS.Busy = true;
+                        if (registers.intQi[instruction.r1].Equals("0"))
+                        {
+                            instruction.iOp1 = registers.intQi[instruction.r1];
+                        }
+                        else
+                            instruction.iOp1 = instruction.r1.ToString();
+
+                        if (registers.intQi[instruction.r2].Equals("0"))
+                        {
+                            instruction.iOp2 = registers.intQi[instruction.r2];
+                        }
+                        else
+                            instruction.iOp2 = instruction.r1.ToString();
+                        bitwiseOPRS.instruction = instruction;
+                        bitwiseOPRS.Busy = true;
+                        return 9;
+                    }
+                    break;
+                case 27:
+                    if (!bitwiseOPRS.Busy)
+                    {
+                        if (registers.intQi[instruction.r1].Equals("0"))
+                        {
+                            instruction.iOp1 = registers.intQi[instruction.r1];
+                        }
+                        else
+                            instruction.iOp1 = instruction.r1.ToString();
+                        bitwiseOPRS.instruction = instruction;
+                        bitwiseOPRS.Busy = true;
+                        return 9;
                     }
                     break;
 
