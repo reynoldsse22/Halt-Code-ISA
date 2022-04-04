@@ -149,40 +149,51 @@ namespace ISA_GUI
 			switch (instruction.functionalUnitID)
 			{
 				case 1:
+					CDB.index.Add(instruction.ID, CDB.CDB.Count);
 					CDB.CDB.Add("intAddFu", result);
-					CDB.index.Add(instruction.functionalUnitID, )
 					break;
 				case 2:
+					CDB.index.Add(instruction.ID, CDB.CDB.Count);
 					CDB.CDB.Add("intSubFu", result);
 					break;
 				case 3:
+					CDB.index.Add(instruction.ID, CDB.CDB.Count);
 					CDB.CDB.Add("intMultFu", result);
 					break;
 				case 4:
+					CDB.index.Add(instruction.ID, CDB.CDB.Count);
 					CDB.CDB.Add("intDivFu", result);
 					break;
 				case 5:
+					CDB.index.Add(instruction.ID, CDB.CDB.Count);
 					CDB.CDB.Add("floatAddFu", result);
 					break;
 				case 6:
+					CDB.index.Add(instruction.ID, CDB.CDB.Count);
 					CDB.CDB.Add("floatSubFu", result);
 					break;
 				case 7:
+					CDB.index.Add(instruction.ID, CDB.CDB.Count);
 					CDB.CDB.Add("floatMultFu", result);
 					break;
 				case 8:
+					CDB.index.Add(instruction.ID, CDB.CDB.Count);
 					CDB.CDB.Add("floatDivFu", result);
 					break;
 				case 9:
+					CDB.index.Add(instruction.ID, CDB.CDB.Count);
 					CDB.CDB.Add("floatSubFu", result);
 					break;
 				case 10:
+					CDB.index.Add(instruction.ID, CDB.CDB.Count);
 					CDB.CDB.Add("bitwiseOPFu", result);
 					break;
 				case 11:
+					CDB.index.Add(instruction.ID, CDB.CDB.Count);
 					CDB.CDB.Add("memoryUnitFu", result);
 					break;
 				case 12:
+					CDB.index.Add(instruction.ID, CDB.CDB.Count);
 					CDB.CDB.Add("shiftFu", result);
 					break;
 			}

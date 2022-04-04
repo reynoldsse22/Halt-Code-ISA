@@ -155,7 +155,12 @@ namespace ISA_GUI
                                 reorderBufferDelay++;
                             }
                             int instructionIndex = reorderBuffer.checkCommit(inst, ref WR, ref dataMemory, ref lastBranchDecision, ref IM, ref registers, ref halted, ref commonDataBus);
-                            detectControlHazard(instructionIndex);
+                            bool hazardDetected = detectControlHazard(instructionIndex);
+                            if(!hazardDetected)
+                            {
+                                int cdbIndex = commonDataBus.index[instructionIndex];
+                                commonDataBus.CDB.Remove(commonDataBus.CDB.ElementAt(cdbIndex).Key);
+                            }
                             break;
                         //Store the answer and corresponding reservation name into the data bus
                         case 4:
@@ -1391,10 +1396,10 @@ namespace ISA_GUI
       * <hr>
       *   @param  Instruction[] stages
       */
-        public void detectControlHazard(int id)
+        public bool detectControlHazard(int id)
         {
             if (id == -1)
-                return;
+                return false;
             if ((instructionsInFlight[(id - 1)].programCounterValue != instructionsInFlight[id].address) && lastBranchDecision == true)
             {
                 instructionID = id + 1;
@@ -1437,9 +1442,9 @@ namespace ISA_GUI
                 load_storeBuffer.Busy = false;
                 branchOPS.Busy = false;
                 shiftOPS.Busy = false;
-
+                return true;
             }
-            return;
+            return false;
         }
 
         /// <summary>Generates the assembly.</summary>

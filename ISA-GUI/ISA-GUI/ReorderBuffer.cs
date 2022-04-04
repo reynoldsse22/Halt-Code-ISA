@@ -57,13 +57,14 @@ namespace ISA_GUI
 			if(reorderIndex == inst.ID)
             {
 				WR.commit(ref registers, ref inst, ref memory, ref halted, ref IM, ref branchTaken);
-				return removeFromReorderBuffer(ref inst, ref CDB);
+				return removeFromReorderBuffer(inst, ref CDB);
             }
 			return -1;
         }
 
-        public int removeFromReorderBuffer(ref Instruction instruction, ref CommonDataBus CDB)
+        public int removeFromReorderBuffer(Instruction instruction, ref CommonDataBus CDB)
         {
+			reorderBuffer.RemoveAt(reorderBuffer.FindIndex(Instruction => Instruction.ID == instruction.ID));
 			return instruction.ID;
         }
 
