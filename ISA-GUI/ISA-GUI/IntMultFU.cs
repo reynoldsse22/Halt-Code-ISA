@@ -24,7 +24,7 @@ namespace ISA_GUI
 	*/
 	internal class IntMultFU
 	{
-
+		public Instruction instruction;
 		/**
 	    * Method Name: IntMultFU <br>
 	    * Method Purpose: Class constructor

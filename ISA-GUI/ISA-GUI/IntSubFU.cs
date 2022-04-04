@@ -24,7 +24,7 @@ namespace ISA_GUI
 	*/
 	internal class IntSubFU
 	{
-
+		public Instruction instruction;
 		/**
 	    * Method Name: IntSubFU <br>
 	    * Method Purpose: Class constructor

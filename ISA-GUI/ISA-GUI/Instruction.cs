@@ -34,7 +34,7 @@ namespace ISA_GUI
 		public string fOp1, fOp2, fOp3;
 		public int iOperand1, iOperand2, iOperand3;
 		public float fOperand1, fOperand2, fOperand3;
-		public bool isFloat;
+		public bool isFloat, executionInProgress, doneExecuting;
 		public string assembly1;
 		public string assembly2;
 		/**

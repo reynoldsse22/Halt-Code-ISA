@@ -33,6 +33,8 @@ namespace ISA_GUI
         public FloatDivFU floatDivFu;
         public BitwiseOPFU bitwiseOPFU;
         public MemoryUnitFU memoryUnitFU;
+        public BranchFU branchFU;
+        public ShiftFU shiftFU;
         public ReservationStation intAddRS;
         public ReservationStation intSubRS;
         public ReservationStation intMultRS;
@@ -77,6 +79,7 @@ namespace ISA_GUI
             floatDivFu = new FloatDivFU();
             bitwiseOPFU = new BitwiseOPFU();
             memoryUnitFU = new MemoryUnitFU();
+            branchFU = new BranchFU();
             intAddRS = new ReservationStation("intAddRS");
             intSubRS = new ReservationStation("intSubRS");
             intMultRS = new ReservationStation("intMultRS");
@@ -199,20 +202,350 @@ namespace ISA_GUI
         }
 
 
+        
+        private bool execute(Instruction instruction, ref RegisterFile registers,ref DataMemory memory, 
+            ref InstructionMemory IM, ref ConfigCycle config, ref ALU alu, ref bool branchTaken, ref string result)
+        {
+            try
+            {
+                sendToFU(instruction);
+            }
+            catch(Exception e)
+            {
+                return false;
+            }
+            switch (instruction.functionalUnitID)
+            {
+                case 1:
+                    if(!intAddFu.instruction.executionInProgress && !intAddFu.instruction.doneExecuting)
+                    {
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intAddFu.instruction, ref config, ref branchTaken, ref result);
+                        intAddFu.instruction.executionInProgress = true;
+                        intAddFu.instruction.cycleControl--;
+                    }
+                    else
+                        intAddFu.instruction.cycleControl--;
+                    if (intAddFu.instruction.cycleControl == 0)
+                    {
+                        intAddFu.instruction.doneExecuting = true;
+                        return true;
+                    }
+                    break;
+                case 2:
+                    if (!intSubFu.instruction.executionInProgress && !intSubFu.instruction.doneExecuting)
+                    {
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intSubFu.instruction, ref config, ref branchTaken, ref result);
+                        intSubFu.instruction.executionInProgress = true;
+                        intSubFu.instruction.cycleControl--;
+                    }
+                    else
+                        intSubFu.instruction.cycleControl--;
+                    if (intSubFu.instruction.cycleControl == 0)
+                    {
+                        intSubFu.instruction.doneExecuting = true;
+                        return true;
+                    }
+                    break;
+                case 3:
+                    if (!intMultFu.instruction.executionInProgress && !intMultFu.instruction.doneExecuting)
+                    {
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intMultFu.instruction, ref config, ref branchTaken, ref result);
+                        intMultFu.instruction.executionInProgress = true;
+                        intMultFu.instruction.cycleControl--;
+                    }
+                    else
+                        intMultFu.instruction.cycleControl--;
+                    if (intMultFu.instruction.cycleControl == 0)
+                    {
+                        intMultFu.instruction.doneExecuting = true;
+                        return true;
+                    }
+                    break;
+                case 4:
+                    if (!intDivFu.instruction.executionInProgress && !intDivFu.instruction.doneExecuting)
+                    {
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intDivFu.instruction, ref config, ref branchTaken, ref result);
+                        intDivFu.instruction.executionInProgress = true;
+                        intDivFu.instruction.cycleControl--;
+                    }
+                    else
+                        intDivFu.instruction.cycleControl--;
+                    if (intDivFu.instruction.cycleControl == 0)
+                    {
+                        intDivFu.instruction.doneExecuting = true;
+                        return true;
+                    }
+                    break;
+                case 5:
+                    if (!floatAddFu.instruction.executionInProgress && !floatAddFu.instruction.doneExecuting)
+                    {
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatAddFu.instruction, ref config, ref branchTaken, ref result);
+                        floatAddFu.instruction.executionInProgress = true;
+                        floatAddFu.instruction.cycleControl--;
+                    }
+                    else
+                        floatAddFu.instruction.cycleControl--;
+                    if (floatAddFu.instruction.cycleControl == 0)
+                    {
+                        floatAddFu.instruction.doneExecuting = true;
+                        return true;
+                    }
+                    break;
+                case 6:
+                    if (!floatSubFu.instruction.executionInProgress && !floatSubFu.instruction.doneExecuting)
+                    {
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatSubFu.instruction, ref config, ref branchTaken, ref result);
+                        floatSubFu.instruction.executionInProgress = true;
+                        floatSubFu.instruction.cycleControl--;
+                    }
+                    else
+                        floatSubFu.instruction.cycleControl--;
+                    if (floatSubFu.instruction.cycleControl == 0)
+                    {
+                        floatSubFu.instruction.doneExecuting = true;
+                        return true;
+                    }
+                    break;
+                case 7:
+                    if (!floatMultFu.instruction.executionInProgress && !floatMultFu.instruction.doneExecuting)
+                    {
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatMultFu.instruction, ref config, ref branchTaken, ref result);
+                        floatMultFu.instruction.executionInProgress = true;
+                        floatMultFu.instruction.cycleControl--;
+                    }
+                    else
+                        floatMultFu.instruction.cycleControl--;
+                    if (floatMultFu.instruction.cycleControl == 0)
+                    {
+                        floatMultFu.instruction.doneExecuting = true;
+                        return true;
+                    }
+                    break;
+                case 8:
+                    if (!floatDivFu.instruction.executionInProgress && !floatDivFu.instruction.doneExecuting)
+                    {
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatDivFu.instruction, ref config, ref branchTaken, ref result);
+                        floatDivFu.instruction.executionInProgress = true;
+                        floatDivFu.instruction.cycleControl--;
+                    }
+                    else
+                        floatDivFu.instruction.cycleControl--;
+                    if (floatDivFu.instruction.cycleControl == 0)
+                    {
+                        floatDivFu.instruction.doneExecuting = true;
+                        return true;
+                    }
+                    break;
+                case 9:
+                    if (!bitwiseOPFU.instruction.executionInProgress && !bitwiseOPFU.instruction.doneExecuting)
+                    {
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref bitwiseOPFU.instruction, ref config, ref branchTaken, ref result);
+                        bitwiseOPFU.instruction.executionInProgress = true;
+                        bitwiseOPFU.instruction.cycleControl--;
+                    }
+                    else
+                        bitwiseOPFU.instruction.cycleControl--;
+                    if (bitwiseOPFU.instruction.cycleControl == 0)
+                    {
+                        bitwiseOPFU.instruction.doneExecuting = true;
+                        return true;
+                    }
+                    break;
+                case 10:
+                    if (!memoryUnitFU.instruction.executionInProgress && !memoryUnitFU.instruction.doneExecuting)
+                    {
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref memoryUnitFU.instruction, ref config, ref branchTaken, ref result);
+                        memoryUnitFU.instruction.executionInProgress = true;
+                        memoryUnitFU.instruction.cycleControl--;
+                    }
+                    else
+                        memoryUnitFU.instruction.cycleControl--;
+                    if (memoryUnitFU.instruction.cycleControl == 0)
+                    {
+                        memoryUnitFU.instruction.doneExecuting = true;
+                        return true;
+                    }
+                    break;
+                case 11:
+                    if (!branchFU.instruction.executionInProgress && !branchFU.instruction.doneExecuting)
+                    {
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref branchFU.instruction, ref config, ref branchTaken, ref result);
+                        branchFU.instruction.executionInProgress = true;
+                        branchFU.instruction.cycleControl--;
+                    }
+                    else
+                        branchFU.instruction.cycleControl--;
+                    if (branchFU.instruction.cycleControl == 0)
+                    {
+                        branchFU.instruction.doneExecuting = true;
+                        return true;
+                    }
+                    break;
+                case 12:
+                    if (!shiftFU.instruction.executionInProgress && !shiftFU.instruction.doneExecuting)
+                    {
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref shiftFU.instruction, ref config, ref branchTaken, ref result);
+                        shiftFU.instruction.executionInProgress = true;
+                        shiftFU.instruction.cycleControl--;
+                    }
+                    else
+                        shiftFU.instruction.cycleControl--;
+                    if (shiftFU.instruction.cycleControl == 0)
+                    {
+                        shiftFU.instruction.doneExecuting = true;
+                        return true;
+                    }
+                    break;
+            }
+            return false;
+        }
+
+        private void sendToFU(Instruction instruction)
+        {
+            switch(instruction.functionalUnitID)
+            {
+                case 1:
+                    if (intAddFu.instruction == null) 
+                    {
+                        intAddFu.instruction = intAddRS.instruction;
+                        intAddRS = null;
+                        return;
+                    }
+                    break;
+                case 2:
+                    if (intSubFu.instruction == null)
+                    {
+                        intSubFu.instruction = intSubRS.instruction;
+                        intSubFu = null;
+                        return;
+                    }
+                    break;
+                case 3:
+                    if (intMultFu.instruction == null)
+                    {
+                        intMultFu.instruction = intMultRS.instruction;
+                        intMultFu = null;
+                        return;
+                    }
+                    break;
+                case 4:
+                    if (intDivFu.instruction == null)
+                    {
+                        intDivFu.instruction = intDivRS.instruction;
+                        intDivFu = null;
+                        return;
+                    }
+                    break;
+                case 5:
+                    if (floatAddFu.instruction == null)
+                    {
+                        floatAddFu.instruction = floatAddRS.instruction;
+                        floatAddFu = null;
+                        return;
+                    }
+                    break;
+                case 6:
+                    if (floatSubFu.instruction == null)
+                    {
+                        floatSubFu.instruction = floatSubRS.instruction;
+                        floatSubFu = null;
+                        return;
+                    }
+                    break;
+                case 7:
+                    if (floatMultFu.instruction == null)
+                    {
+                        floatMultFu.instruction = floatMultRS.instruction;
+                        floatMultFu = null;
+                        return;
+                    }
+                    break;
+                case 8:
+                    if (floatDivFu.instruction == null)
+                    {
+                        floatDivFu.instruction = floatDivRS.instruction;
+                        floatDivFu = null;
+                        return;
+                    }
+                    break;
+                case 9:
+                    if (bitwiseOPFU.instruction == null)
+                    {
+                        bitwiseOPFU.instruction = bitwiseOPRS.instruction;
+                        bitwiseOPFU = null;
+                        return;
+                    }
+                    break;
+                case 10:
+                    if (memoryUnitFU.instruction == null)
+                    {
+                        memoryUnitFU.instruction = load_storeBuffer.instruction;
+                        memoryUnitFU = null;
+                        return;
+                    }
+                    break;
+                case 11:
+                    if (branchFU.instruction == null)
+                    {
+                        branchFU.instruction = branchOPS.instruction;
+                        branchFU = null;
+                        return;
+                    }
+                    break;
+                case 12:
+                    if (shiftFU.instruction == null)
+                    {
+                        shiftFU.instruction = shiftOPS.instruction;
+                        shiftFU = null;
+                        return;
+                    }
+                    break;
+            }
+            throw new Exception();
+        }
+
+        private bool checkDependencies(Instruction instruction)
+        {
+            switch(instruction.opcode)
+            {
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                case 10:
+                case 11:
+                case 12:
+                case 13:
+                case 14:
+                case 15:
+                case 16:
+                case 17:
+                case 18:
+                case 19:
+                case 20:
+                case 21:
+                case 22:
+                case 23:
+                case 24:
+                case 25:
+                case 26:
+                case 27:
+                    break;
+            }
+            return true;
+        }
+
+
         private void stage3(Instruction instruction)
         {
 
         }
 
-        private void sendToFU(Instruction instruction)
-        {
-
-        }
-
-        private void checkDependencies(Instruction instruction)
-        {
-
-        }
 
         //Will use the opcode and flags to figure out which reservation station the instruction needs to be in
         private int populateReservationStation(Instruction instruction, ref RegisterFile registers)
