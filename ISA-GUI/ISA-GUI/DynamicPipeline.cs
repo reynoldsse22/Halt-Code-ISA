@@ -52,7 +52,7 @@ namespace ISA_GUI
         public int totalHazard, structuralHazard, dataHazard, controlHazard, RAW, WAR, WAW;
         public int reorderBufferDelay, reservationStationDelay, trueDependenceDelay, totalDelays;
         public int totalCyclesStalled;
-        public bool lastBranchDecision;
+        public bool lastBranchDecision, doneExecuting, executionInProgress;
 
 
 
@@ -105,6 +105,8 @@ namespace ISA_GUI
             RAW = 0;
             WAW = 0;
             lastBranchDecision = false;
+            doneExecuting = false;
+            executionInProgress = false;
             // timer = new Timer();
         }
 
@@ -121,10 +123,13 @@ namespace ISA_GUI
         /// <param name="dataMemory">The data memory.</param>
         public void runCycle(List<string> input, bool stepThrough, ref StringBuilder assemblyString, ref StringBuilder decodedString, ref StringBuilder pipelingString, ref bool halted, ref ConfigCycle config, ref InstructionMemory IM, ref RegisterFile registers, ref DataMemory dataMemory)
         {
-            
-
             do
             {
+                if(halted)
+                {
+                    return;
+                }
+                string result = "";
                 if (instructionQueue.Count == 0)
                 {
                     fillInstructionQueue(ref IM);
@@ -154,8 +159,14 @@ namespace ISA_GUI
                         //Open up reservation station to allow for more instructions to flow in
                         //Execute within the functional unit
                         case 2:
-
-
+                            try
+                            {
+                                doneExecuting = execute(inst, ref registers, ref dataMemory, ref IM, ref config, ref alu, ref lastBranchDecision, ref result);
+                            }
+                            catch
+                            {
+                                trueDependenceDelay++;
+                            }
                             if (inst.opcode == 0 || inst.opcode == 1)
                                 inst.stage = 5;
                             else if (inst.opcode == 9 || inst.opcode == 11 || inst.opcode == 12)
