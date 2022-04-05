@@ -453,6 +453,7 @@ namespace ISA_GUI
 		 */
         private void updateGUI()
         {
+            updatePipelineGUIElements();
             updatePipeline();
             setRegisters();
             setStatistics();
@@ -465,6 +466,106 @@ namespace ISA_GUI
             AssemblerListingTextBox.Text = decodedString.ToString();
             pipelineTextBox.Text = pipelineOutput.ToString();
         }
+
+        private void updatePipelineGUIElements()
+        {
+            if (config.dynamicPipelineSet)
+            {
+                dependenciesLabel.Visible = false;
+                rawLabel.Visible = false;
+                warLabel.Visible = false;
+                wawLabel.Visible = false;
+                rawText.Visible = false;
+                wawText.Visible = false;
+                warText.Visible = false;
+                stage1Label.Visible = false;
+                stage1StalledLabel.Visible = false;
+                stage1StalledText.Visible = false;
+                stage1Text.Visible = false;
+                stage2Label.Visible = false;
+                stage2StalledLabel.Visible = false;
+                stage2StalledText.Visible = false;
+                stage2Text.Visible = false;
+                stage3Label.Visible = false;
+                stage3StalledLabel.Visible = false;
+                stage3StalledText.Visible = false;
+                stage3Text.Visible = false;
+                stage4Label.Visible = false;
+                stage4StalledLabel.Visible = false;
+                stage4StalledText.Visible = false;
+                stage4Text.Visible = false;
+                stage5Label.Visible = false;
+                stage5StalledLabel.Visible = false;
+                stage5StalledText.Visible = false;
+                stage5Text.Visible = false;
+
+                delaysLabel.Visible = true;
+                rbdLabel.Visible = true;
+                rsdLabel.Visible = true;
+                tddLabel.Visible = true;
+                rbdText.Visible = true;
+                rsdText.Visible = true;
+                tddText.Visible = true;
+                instInExLabel1.Visible = true;
+                instInExLabel2.Visible = true;
+                instInExText.Visible = true;
+                instructionsInFlightLabel.Visible = true;
+                instructionInFlightText.Visible = true;
+                issueStageLabel.Visible = true;
+                issueStageText.Visible = true;
+                commitStageLabel.Visible = true;
+                commitStageText.Visible = true;
+
+            }
+            else
+            {
+                dependenciesLabel.Visible = true;
+                rawLabel.Visible = true;
+                warLabel.Visible = true;
+                wawLabel.Visible = true;
+                rawText.Visible = true;
+                wawText.Visible = true;
+                warText.Visible = true;
+                stage1Label.Visible = true;
+                stage1StalledLabel.Visible = true;
+                stage1StalledText.Visible = true;
+                stage1Text.Visible = true;
+                stage2Label.Visible = true;
+                stage2StalledLabel.Visible = true;
+                stage2StalledText.Visible = true;
+                stage2Text.Visible = true;
+                stage3Label.Visible = true;
+                stage3StalledLabel.Visible = true;
+                stage3StalledText.Visible = true;
+                stage3Text.Visible = true;
+                stage4Label.Visible = true;
+                stage4StalledLabel.Visible = true;
+                stage4StalledText.Visible = true;
+                stage4Text.Visible = true;
+                stage5Label.Visible = true;
+                stage5StalledLabel.Visible = true;
+                stage5StalledText.Visible = true;
+                stage5Text.Visible = true;
+
+                delaysLabel.Visible = false;
+                rbdLabel.Visible = false;
+                rsdLabel.Visible = false;
+                tddLabel.Visible = false;
+                rbdText.Visible = false;
+                rsdText.Visible = false;
+                tddText.Visible = false;
+                instInExLabel1.Visible = false;
+                instInExLabel2.Visible = false;
+                instInExText.Visible = false;
+                instructionsInFlightLabel.Visible = false;
+                instructionInFlightText.Visible = false;
+                issueStageLabel.Visible = false;
+                issueStageText.Visible = false;
+                commitStageLabel.Visible = false;
+                commitStageText.Visible = false;
+            }
+        }
+
 
         /**
 		 * Method Name: setRegisters <br>
@@ -766,6 +867,7 @@ namespace ISA_GUI
                 configWindow.ShowDialog();
 
                 config = configWindow.getConfig();
+                updateGUI();
             }
         }
 

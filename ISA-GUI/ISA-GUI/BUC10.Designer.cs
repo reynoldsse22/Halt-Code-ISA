@@ -85,22 +85,22 @@
             this.f1Dec = new System.Windows.Forms.RichTextBox();
             this.pcHex = new System.Windows.Forms.RichTextBox();
             this.objectCode = new System.Windows.Forms.TabControl();
-            this.objectCodeBox = new System.Windows.Forms.TabPage();
-            this.InputBox = new System.Windows.Forms.RichTextBox();
             this.assemblerPage = new System.Windows.Forms.TabPage();
             this.assemblerTextBox = new System.Windows.Forms.RichTextBox();
+            this.objectCodeBox = new System.Windows.Forms.TabPage();
+            this.InputBox = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.pipelineLabel = new System.Windows.Forms.Label();
             this.stage2Text = new System.Windows.Forms.RichTextBox();
             this.stage1Text = new System.Windows.Forms.RichTextBox();
             this.stage4Text = new System.Windows.Forms.RichTextBox();
             this.stage3Text = new System.Windows.Forms.RichTextBox();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label20 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
+            this.stage1Label = new System.Windows.Forms.Label();
+            this.stage2Label = new System.Windows.Forms.Label();
+            this.stage3Label = new System.Windows.Forms.Label();
+            this.stage4Label = new System.Windows.Forms.Label();
             this.stage5Text = new System.Windows.Forms.RichTextBox();
-            this.label24 = new System.Windows.Forms.Label();
+            this.stage5Label = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.label25 = new System.Windows.Forms.Label();
             this.currentCycleText = new System.Windows.Forms.RichTextBox();
@@ -110,19 +110,19 @@
             this.stage4StalledText = new System.Windows.Forms.RichTextBox();
             this.stage3StalledText = new System.Windows.Forms.RichTextBox();
             this.stage5StalledText = new System.Windows.Forms.RichTextBox();
-            this.label27 = new System.Windows.Forms.Label();
-            this.label28 = new System.Windows.Forms.Label();
-            this.label29 = new System.Windows.Forms.Label();
-            this.label30 = new System.Windows.Forms.Label();
-            this.label31 = new System.Windows.Forms.Label();
+            this.stage1StalledLabel = new System.Windows.Forms.Label();
+            this.stage3StalledLabel = new System.Windows.Forms.Label();
+            this.stage5StalledLabel = new System.Windows.Forms.Label();
+            this.stage2StalledLabel = new System.Windows.Forms.Label();
+            this.stage4StalledLabel = new System.Windows.Forms.Label();
             this.label32 = new System.Windows.Forms.Label();
             this.rawText = new System.Windows.Forms.RichTextBox();
             this.warText = new System.Windows.Forms.RichTextBox();
             this.wawText = new System.Windows.Forms.RichTextBox();
-            this.label33 = new System.Windows.Forms.Label();
-            this.label34 = new System.Windows.Forms.Label();
-            this.label35 = new System.Windows.Forms.Label();
-            this.label36 = new System.Windows.Forms.Label();
+            this.rawLabel = new System.Windows.Forms.Label();
+            this.warLabel = new System.Windows.Forms.Label();
+            this.wawLabel = new System.Windows.Forms.Label();
+            this.dependenciesLabel = new System.Windows.Forms.Label();
             this.configButton = new System.Windows.Forms.Button();
             this.buildButton = new System.Windows.Forms.PictureBox();
             this.resetButton = new System.Windows.Forms.PictureBox();
@@ -156,9 +156,27 @@
             this.label52 = new System.Windows.Forms.Label();
             this.label53 = new System.Windows.Forms.Label();
             this.label54 = new System.Windows.Forms.Label();
+            this.issueStageText = new System.Windows.Forms.RichTextBox();
+            this.instructionInFlightText = new System.Windows.Forms.RichTextBox();
+            this.commitStageText = new System.Windows.Forms.RichTextBox();
+            this.issueStageLabel = new System.Windows.Forms.Label();
+            this.commitStageLabel = new System.Windows.Forms.Label();
+            this.instructionsInFlightLabel = new System.Windows.Forms.Label();
+            this.tddText = new System.Windows.Forms.RichTextBox();
+            this.rsdText = new System.Windows.Forms.RichTextBox();
+            this.rbdText = new System.Windows.Forms.RichTextBox();
+            this.delaysLabel = new System.Windows.Forms.Label();
+            this.tddLabel = new System.Windows.Forms.Label();
+            this.rsdLabel = new System.Windows.Forms.Label();
+            this.rbdLabel = new System.Windows.Forms.Label();
+            this.instInExLabel1 = new System.Windows.Forms.Label();
+            this.instInExText = new System.Windows.Forms.RichTextBox();
+            this.instInExLabel2 = new System.Windows.Forms.Label();
+            this.pipelineStatsTab = new System.Windows.Forms.TabPage();
+            this.pipelineStatsTextBox = new System.Windows.Forms.RichTextBox();
             this.objectCode.SuspendLayout();
-            this.objectCodeBox.SuspendLayout();
             this.assemblerPage.SuspendLayout();
+            this.objectCodeBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.buildButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.resetButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stepthroughButton)).BeginInit();
@@ -167,6 +185,7 @@
             this.sourceCodeBox.SuspendLayout();
             this.pipelineTab.SuspendLayout();
             this.Output.SuspendLayout();
+            this.pipelineStatsTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // CPU
@@ -207,7 +226,7 @@
             this.cFlagBox.BackColor = System.Drawing.SystemColors.Menu;
             this.cFlagBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.cFlagBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cFlagBox.Location = new System.Drawing.Point(1172, 17);
+            this.cFlagBox.Location = new System.Drawing.Point(1181, 17);
             this.cFlagBox.Name = "cFlagBox";
             this.cFlagBox.ReadOnly = true;
             this.cFlagBox.Size = new System.Drawing.Size(25, 25);
@@ -334,7 +353,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(1043, 53);
+            this.label15.Location = new System.Drawing.Point(1066, 53);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(36, 13);
             this.label15.TabIndex = 21;
@@ -361,7 +380,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(1114, 23);
+            this.label19.Location = new System.Drawing.Point(1117, 24);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(14, 13);
             this.label19.TabIndex = 25;
@@ -370,7 +389,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(1178, 3);
+            this.label21.Location = new System.Drawing.Point(1165, 25);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(14, 13);
             this.label21.TabIndex = 27;
@@ -705,10 +724,10 @@
             this.asprHex.BackColor = System.Drawing.SystemColors.Menu;
             this.asprHex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.asprHex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.asprHex.Location = new System.Drawing.Point(1088, 46);
+            this.asprHex.Location = new System.Drawing.Point(1108, 46);
             this.asprHex.Name = "asprHex";
             this.asprHex.ReadOnly = true;
-            this.asprHex.Size = new System.Drawing.Size(109, 25);
+            this.asprHex.Size = new System.Drawing.Size(98, 25);
             this.asprHex.TabIndex = 54;
             this.asprHex.Text = "";
             // 
@@ -732,7 +751,7 @@
             this.cirHex.Location = new System.Drawing.Point(927, 18);
             this.cirHex.Name = "cirHex";
             this.cirHex.ReadOnly = true;
-            this.cirHex.Size = new System.Drawing.Size(109, 25);
+            this.cirHex.Size = new System.Drawing.Size(94, 25);
             this.cirHex.TabIndex = 56;
             this.cirHex.Text = "";
             // 
@@ -756,7 +775,7 @@
             this.pcHex.Location = new System.Drawing.Point(927, 48);
             this.pcHex.Name = "pcHex";
             this.pcHex.ReadOnly = true;
-            this.pcHex.Size = new System.Drawing.Size(109, 25);
+            this.pcHex.Size = new System.Drawing.Size(94, 25);
             this.pcHex.TabIndex = 58;
             this.pcHex.Text = "";
             // 
@@ -769,27 +788,6 @@
             this.objectCode.SelectedIndex = 0;
             this.objectCode.Size = new System.Drawing.Size(557, 376);
             this.objectCode.TabIndex = 62;
-            // 
-            // objectCodeBox
-            // 
-            this.objectCodeBox.Controls.Add(this.InputBox);
-            this.objectCodeBox.Location = new System.Drawing.Point(4, 22);
-            this.objectCodeBox.Name = "objectCodeBox";
-            this.objectCodeBox.Padding = new System.Windows.Forms.Padding(3);
-            this.objectCodeBox.Size = new System.Drawing.Size(549, 350);
-            this.objectCodeBox.TabIndex = 0;
-            this.objectCodeBox.Text = "Disassembler";
-            this.objectCodeBox.UseVisualStyleBackColor = true;
-            // 
-            // InputBox
-            // 
-            this.InputBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.InputBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.InputBox.Location = new System.Drawing.Point(2, 5);
-            this.InputBox.Name = "InputBox";
-            this.InputBox.Size = new System.Drawing.Size(544, 342);
-            this.InputBox.TabIndex = 0;
-            this.InputBox.Text = "";
             // 
             // assemblerPage
             // 
@@ -812,6 +810,27 @@
             this.assemblerTextBox.TabIndex = 1;
             this.assemblerTextBox.Text = "";
             // 
+            // objectCodeBox
+            // 
+            this.objectCodeBox.Controls.Add(this.InputBox);
+            this.objectCodeBox.Location = new System.Drawing.Point(4, 22);
+            this.objectCodeBox.Name = "objectCodeBox";
+            this.objectCodeBox.Padding = new System.Windows.Forms.Padding(3);
+            this.objectCodeBox.Size = new System.Drawing.Size(549, 350);
+            this.objectCodeBox.TabIndex = 0;
+            this.objectCodeBox.Text = "Disassembler";
+            this.objectCodeBox.UseVisualStyleBackColor = true;
+            // 
+            // InputBox
+            // 
+            this.InputBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.InputBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.InputBox.Location = new System.Drawing.Point(2, 5);
+            this.InputBox.Name = "InputBox";
+            this.InputBox.Size = new System.Drawing.Size(544, 342);
+            this.InputBox.TabIndex = 0;
+            this.InputBox.Text = "";
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -825,7 +844,7 @@
             // 
             this.pipelineLabel.AutoSize = true;
             this.pipelineLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pipelineLabel.Location = new System.Drawing.Point(693, 577);
+            this.pipelineLabel.Location = new System.Drawing.Point(693, 559);
             this.pipelineLabel.Name = "pipelineLabel";
             this.pipelineLabel.Size = new System.Drawing.Size(72, 20);
             this.pipelineLabel.TabIndex = 69;
@@ -836,7 +855,7 @@
             this.stage2Text.BackColor = System.Drawing.SystemColors.Menu;
             this.stage2Text.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.stage2Text.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stage2Text.Location = new System.Drawing.Point(571, 693);
+            this.stage2Text.Location = new System.Drawing.Point(569, 689);
             this.stage2Text.Name = "stage2Text";
             this.stage2Text.ReadOnly = true;
             this.stage2Text.Size = new System.Drawing.Size(105, 25);
@@ -848,7 +867,7 @@
             this.stage1Text.BackColor = System.Drawing.SystemColors.Menu;
             this.stage1Text.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.stage1Text.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stage1Text.Location = new System.Drawing.Point(735, 643);
+            this.stage1Text.Location = new System.Drawing.Point(733, 639);
             this.stage1Text.Name = "stage1Text";
             this.stage1Text.ReadOnly = true;
             this.stage1Text.Size = new System.Drawing.Size(108, 25);
@@ -860,7 +879,7 @@
             this.stage4Text.BackColor = System.Drawing.SystemColors.Menu;
             this.stage4Text.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.stage4Text.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stage4Text.Location = new System.Drawing.Point(570, 742);
+            this.stage4Text.Location = new System.Drawing.Point(568, 738);
             this.stage4Text.Name = "stage4Text";
             this.stage4Text.ReadOnly = true;
             this.stage4Text.Size = new System.Drawing.Size(105, 25);
@@ -872,79 +891,79 @@
             this.stage3Text.BackColor = System.Drawing.SystemColors.Menu;
             this.stage3Text.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.stage3Text.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stage3Text.Location = new System.Drawing.Point(735, 693);
+            this.stage3Text.Location = new System.Drawing.Point(733, 689);
             this.stage3Text.Name = "stage3Text";
             this.stage3Text.ReadOnly = true;
             this.stage3Text.Size = new System.Drawing.Size(108, 25);
             this.stage3Text.TabIndex = 72;
             this.stage3Text.Text = "";
             // 
-            // label18
+            // stage1Label
             // 
-            this.label18.AutoSize = true;
-            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label18.Location = new System.Drawing.Point(730, 625);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(95, 13);
-            this.label18.TabIndex = 74;
-            this.label18.Text = "Stage 1 - Fetch";
+            this.stage1Label.AutoSize = true;
+            this.stage1Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.stage1Label.Location = new System.Drawing.Point(728, 621);
+            this.stage1Label.Name = "stage1Label";
+            this.stage1Label.Size = new System.Drawing.Size(95, 13);
+            this.stage1Label.TabIndex = 74;
+            this.stage1Label.Text = "Stage 1 - Fetch";
             // 
-            // label20
+            // stage2Label
             // 
-            this.label20.AutoSize = true;
-            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label20.Location = new System.Drawing.Point(566, 675);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(107, 13);
-            this.label20.TabIndex = 75;
-            this.label20.Text = "Stage 2 - Decode";
+            this.stage2Label.AutoSize = true;
+            this.stage2Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.stage2Label.Location = new System.Drawing.Point(564, 671);
+            this.stage2Label.Name = "stage2Label";
+            this.stage2Label.Size = new System.Drawing.Size(107, 13);
+            this.stage2Label.TabIndex = 75;
+            this.stage2Label.Text = "Stage 2 - Decode";
             // 
-            // label22
+            // stage3Label
             // 
-            this.label22.AutoSize = true;
-            this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label22.Location = new System.Drawing.Point(728, 675);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(109, 13);
-            this.label22.TabIndex = 76;
-            this.label22.Text = "Stage 3 - Execute";
+            this.stage3Label.AutoSize = true;
+            this.stage3Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.stage3Label.Location = new System.Drawing.Point(726, 671);
+            this.stage3Label.Name = "stage3Label";
+            this.stage3Label.Size = new System.Drawing.Size(109, 13);
+            this.stage3Label.TabIndex = 76;
+            this.stage3Label.Text = "Stage 3 - Execute";
             // 
-            // label23
+            // stage4Label
             // 
-            this.label23.AutoSize = true;
-            this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label23.Location = new System.Drawing.Point(565, 724);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(106, 13);
-            this.label23.TabIndex = 77;
-            this.label23.Text = "Stage 4 - Memory";
+            this.stage4Label.AutoSize = true;
+            this.stage4Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.stage4Label.Location = new System.Drawing.Point(563, 720);
+            this.stage4Label.Name = "stage4Label";
+            this.stage4Label.Size = new System.Drawing.Size(106, 13);
+            this.stage4Label.TabIndex = 77;
+            this.stage4Label.Text = "Stage 4 - Memory";
             // 
             // stage5Text
             // 
             this.stage5Text.BackColor = System.Drawing.SystemColors.Menu;
             this.stage5Text.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.stage5Text.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stage5Text.Location = new System.Drawing.Point(734, 742);
+            this.stage5Text.Location = new System.Drawing.Point(732, 738);
             this.stage5Text.Name = "stage5Text";
             this.stage5Text.ReadOnly = true;
             this.stage5Text.Size = new System.Drawing.Size(108, 25);
             this.stage5Text.TabIndex = 78;
             this.stage5Text.Text = "";
             // 
-            // label24
+            // stage5Label
             // 
-            this.label24.AutoSize = true;
-            this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label24.Location = new System.Drawing.Point(727, 724);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(120, 13);
-            this.label24.TabIndex = 79;
-            this.label24.Text = "Stage 5 - Write Reg";
+            this.stage5Label.AutoSize = true;
+            this.stage5Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.stage5Label.Location = new System.Drawing.Point(725, 720);
+            this.stage5Label.Name = "stage5Label";
+            this.stage5Label.Size = new System.Drawing.Size(120, 13);
+            this.stage5Label.TabIndex = 79;
+            this.stage5Label.Text = "Stage 5 - Write Reg";
             // 
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(1043, 23);
+            this.label25.Location = new System.Drawing.Point(1037, 23);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(65, 13);
             this.label25.TabIndex = 80;
@@ -955,7 +974,7 @@
             this.currentCycleText.BackColor = System.Drawing.SystemColors.Menu;
             this.currentCycleText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.currentCycleText.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.currentCycleText.Location = new System.Drawing.Point(831, 577);
+            this.currentCycleText.Location = new System.Drawing.Point(831, 556);
             this.currentCycleText.Name = "currentCycleText";
             this.currentCycleText.ReadOnly = true;
             this.currentCycleText.Size = new System.Drawing.Size(55, 25);
@@ -965,7 +984,7 @@
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(788, 576);
+            this.label26.Location = new System.Drawing.Point(788, 555);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(41, 13);
             this.label26.TabIndex = 82;
@@ -976,7 +995,7 @@
             this.stage1StalledText.BackColor = System.Drawing.SystemColors.Menu;
             this.stage1StalledText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.stage1StalledText.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stage1StalledText.Location = new System.Drawing.Point(847, 643);
+            this.stage1StalledText.Location = new System.Drawing.Point(845, 639);
             this.stage1StalledText.Name = "stage1StalledText";
             this.stage1StalledText.ReadOnly = true;
             this.stage1StalledText.Size = new System.Drawing.Size(45, 25);
@@ -988,7 +1007,7 @@
             this.stage2StalledText.BackColor = System.Drawing.SystemColors.Menu;
             this.stage2StalledText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.stage2StalledText.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stage2StalledText.Location = new System.Drawing.Point(680, 693);
+            this.stage2StalledText.Location = new System.Drawing.Point(678, 689);
             this.stage2StalledText.Name = "stage2StalledText";
             this.stage2StalledText.ReadOnly = true;
             this.stage2StalledText.Size = new System.Drawing.Size(48, 25);
@@ -1000,7 +1019,7 @@
             this.stage4StalledText.BackColor = System.Drawing.SystemColors.Menu;
             this.stage4StalledText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.stage4StalledText.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stage4StalledText.Location = new System.Drawing.Point(680, 742);
+            this.stage4StalledText.Location = new System.Drawing.Point(678, 738);
             this.stage4StalledText.Name = "stage4StalledText";
             this.stage4StalledText.ReadOnly = true;
             this.stage4StalledText.Size = new System.Drawing.Size(47, 25);
@@ -1012,7 +1031,7 @@
             this.stage3StalledText.BackColor = System.Drawing.SystemColors.Menu;
             this.stage3StalledText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.stage3StalledText.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stage3StalledText.Location = new System.Drawing.Point(846, 693);
+            this.stage3StalledText.Location = new System.Drawing.Point(844, 689);
             this.stage3StalledText.Name = "stage3StalledText";
             this.stage3StalledText.ReadOnly = true;
             this.stage3StalledText.Size = new System.Drawing.Size(46, 25);
@@ -1024,62 +1043,62 @@
             this.stage5StalledText.BackColor = System.Drawing.SystemColors.Menu;
             this.stage5StalledText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.stage5StalledText.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stage5StalledText.Location = new System.Drawing.Point(846, 742);
+            this.stage5StalledText.Location = new System.Drawing.Point(844, 738);
             this.stage5StalledText.Name = "stage5StalledText";
             this.stage5StalledText.ReadOnly = true;
             this.stage5StalledText.Size = new System.Drawing.Size(46, 25);
             this.stage5StalledText.TabIndex = 88;
             this.stage5StalledText.Text = "";
             // 
-            // label27
+            // stage1StalledLabel
             // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(849, 625);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(39, 13);
-            this.label27.TabIndex = 89;
-            this.label27.Text = "Stalled";
+            this.stage1StalledLabel.AutoSize = true;
+            this.stage1StalledLabel.Location = new System.Drawing.Point(847, 621);
+            this.stage1StalledLabel.Name = "stage1StalledLabel";
+            this.stage1StalledLabel.Size = new System.Drawing.Size(39, 13);
+            this.stage1StalledLabel.TabIndex = 89;
+            this.stage1StalledLabel.Text = "Stalled";
             // 
-            // label28
+            // stage3StalledLabel
             // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(848, 677);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(39, 13);
-            this.label28.TabIndex = 90;
-            this.label28.Text = "Stalled";
+            this.stage3StalledLabel.AutoSize = true;
+            this.stage3StalledLabel.Location = new System.Drawing.Point(847, 673);
+            this.stage3StalledLabel.Name = "stage3StalledLabel";
+            this.stage3StalledLabel.Size = new System.Drawing.Size(39, 13);
+            this.stage3StalledLabel.TabIndex = 90;
+            this.stage3StalledLabel.Text = "Stalled";
             // 
-            // label29
+            // stage5StalledLabel
             // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(849, 724);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(39, 13);
-            this.label29.TabIndex = 91;
-            this.label29.Text = "Stalled";
+            this.stage5StalledLabel.AutoSize = true;
+            this.stage5StalledLabel.Location = new System.Drawing.Point(848, 720);
+            this.stage5StalledLabel.Name = "stage5StalledLabel";
+            this.stage5StalledLabel.Size = new System.Drawing.Size(39, 13);
+            this.stage5StalledLabel.TabIndex = 91;
+            this.stage5StalledLabel.Text = "Stalled";
             // 
-            // label30
+            // stage2StalledLabel
             // 
-            this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(678, 677);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(39, 13);
-            this.label30.TabIndex = 92;
-            this.label30.Text = "Stalled";
+            this.stage2StalledLabel.AutoSize = true;
+            this.stage2StalledLabel.Location = new System.Drawing.Point(682, 673);
+            this.stage2StalledLabel.Name = "stage2StalledLabel";
+            this.stage2StalledLabel.Size = new System.Drawing.Size(39, 13);
+            this.stage2StalledLabel.TabIndex = 92;
+            this.stage2StalledLabel.Text = "Stalled";
             // 
-            // label31
+            // stage4StalledLabel
             // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(679, 724);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(39, 13);
-            this.label31.TabIndex = 93;
-            this.label31.Text = "Stalled";
+            this.stage4StalledLabel.AutoSize = true;
+            this.stage4StalledLabel.Location = new System.Drawing.Point(681, 720);
+            this.stage4StalledLabel.Name = "stage4StalledLabel";
+            this.stage4StalledLabel.Size = new System.Drawing.Size(39, 13);
+            this.stage4StalledLabel.TabIndex = 93;
+            this.stage4StalledLabel.Text = "Stalled";
             // 
             // label32
             // 
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(788, 589);
+            this.label32.Location = new System.Drawing.Point(788, 568);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(33, 13);
             this.label32.TabIndex = 94;
@@ -1090,7 +1109,7 @@
             this.rawText.BackColor = System.Drawing.SystemColors.Menu;
             this.rawText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.rawText.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rawText.Location = new System.Drawing.Point(572, 643);
+            this.rawText.Location = new System.Drawing.Point(568, 639);
             this.rawText.Name = "rawText";
             this.rawText.ReadOnly = true;
             this.rawText.Size = new System.Drawing.Size(47, 25);
@@ -1102,10 +1121,10 @@
             this.warText.BackColor = System.Drawing.SystemColors.Menu;
             this.warText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.warText.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.warText.Location = new System.Drawing.Point(625, 643);
+            this.warText.Location = new System.Drawing.Point(623, 639);
             this.warText.Name = "warText";
             this.warText.ReadOnly = true;
-            this.warText.Size = new System.Drawing.Size(51, 25);
+            this.warText.Size = new System.Drawing.Size(47, 25);
             this.warText.TabIndex = 96;
             this.warText.Text = "";
             // 
@@ -1114,48 +1133,49 @@
             this.wawText.BackColor = System.Drawing.SystemColors.Menu;
             this.wawText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.wawText.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.wawText.Location = new System.Drawing.Point(682, 643);
+            this.wawText.Location = new System.Drawing.Point(678, 639);
             this.wawText.Name = "wawText";
             this.wawText.ReadOnly = true;
             this.wawText.Size = new System.Drawing.Size(47, 25);
             this.wawText.TabIndex = 97;
             this.wawText.Text = "";
             // 
-            // label33
+            // rawLabel
             // 
-            this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(578, 625);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(33, 13);
-            this.label33.TabIndex = 98;
-            this.label33.Text = "RAW";
+            this.rawLabel.AutoSize = true;
+            this.rawLabel.Location = new System.Drawing.Point(576, 621);
+            this.rawLabel.Name = "rawLabel";
+            this.rawLabel.Size = new System.Drawing.Size(33, 13);
+            this.rawLabel.TabIndex = 98;
+            this.rawLabel.Text = "RAW";
             // 
-            // label34
+            // warLabel
             // 
-            this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(633, 625);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(33, 13);
-            this.label34.TabIndex = 99;
-            this.label34.Text = "WAR";
+            this.warLabel.AutoSize = true;
+            this.warLabel.Location = new System.Drawing.Point(629, 621);
+            this.warLabel.Name = "warLabel";
+            this.warLabel.Size = new System.Drawing.Size(33, 13);
+            this.warLabel.TabIndex = 99;
+            this.warLabel.Text = "WAR";
             // 
-            // label35
+            // wawLabel
             // 
-            this.label35.AutoSize = true;
-            this.label35.Location = new System.Drawing.Point(689, 625);
-            this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(36, 13);
-            this.label35.TabIndex = 100;
-            this.label35.Text = "WAW";
+            this.wawLabel.AutoSize = true;
+            this.wawLabel.Location = new System.Drawing.Point(684, 621);
+            this.wawLabel.Name = "wawLabel";
+            this.wawLabel.Size = new System.Drawing.Size(36, 13);
+            this.wawLabel.TabIndex = 100;
+            this.wawLabel.Text = "WAW";
             // 
-            // label36
+            // dependenciesLabel
             // 
-            this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(609, 607);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(76, 13);
-            this.label36.TabIndex = 101;
-            this.label36.Text = "Dependencies";
+            this.dependenciesLabel.AutoSize = true;
+            this.dependenciesLabel.Location = new System.Drawing.Point(607, 603);
+            this.dependenciesLabel.Name = "dependenciesLabel";
+            this.dependenciesLabel.Size = new System.Drawing.Size(76, 13);
+            this.dependenciesLabel.TabIndex = 101;
+            this.dependenciesLabel.Text = "Dependencies";
+            this.dependenciesLabel.Visible = false;
             // 
             // configButton
             // 
@@ -1273,7 +1293,7 @@
             this.pipelineTab.Padding = new System.Windows.Forms.Padding(3);
             this.pipelineTab.Size = new System.Drawing.Size(549, 324);
             this.pipelineTab.TabIndex = 3;
-            this.pipelineTab.Text = "Pipeline Statistics";
+            this.pipelineTab.Text = "Pipeline Simulation";
             this.pipelineTab.UseVisualStyleBackColor = true;
             // 
             // pipelineTextBox
@@ -1293,6 +1313,7 @@
             this.Output.Controls.Add(this.pipelineTab);
             this.Output.Controls.Add(this.sourceCodeBox);
             this.Output.Controls.Add(this.summaryStatsBox);
+            this.Output.Controls.Add(this.pipelineStatsTab);
             this.Output.Location = new System.Drawing.Point(9, 454);
             this.Output.Name = "Output";
             this.Output.SelectedIndex = 0;
@@ -1497,12 +1518,224 @@
             this.label54.TabIndex = 127;
             this.label54.Text = "F15";
             // 
+            // issueStageText
+            // 
+            this.issueStageText.BackColor = System.Drawing.SystemColors.Menu;
+            this.issueStageText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.issueStageText.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.issueStageText.Location = new System.Drawing.Point(572, 726);
+            this.issueStageText.Name = "issueStageText";
+            this.issueStageText.ReadOnly = true;
+            this.issueStageText.Size = new System.Drawing.Size(153, 25);
+            this.issueStageText.TabIndex = 128;
+            this.issueStageText.Text = "";
+            // 
+            // instructionInFlightText
+            // 
+            this.instructionInFlightText.BackColor = System.Drawing.SystemColors.Menu;
+            this.instructionInFlightText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.instructionInFlightText.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.instructionInFlightText.Location = new System.Drawing.Point(731, 613);
+            this.instructionInFlightText.Name = "instructionInFlightText";
+            this.instructionInFlightText.ReadOnly = true;
+            this.instructionInFlightText.Size = new System.Drawing.Size(153, 187);
+            this.instructionInFlightText.TabIndex = 129;
+            this.instructionInFlightText.Text = "";
+            // 
+            // commitStageText
+            // 
+            this.commitStageText.BackColor = System.Drawing.SystemColors.Menu;
+            this.commitStageText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.commitStageText.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.commitStageText.Location = new System.Drawing.Point(572, 775);
+            this.commitStageText.Name = "commitStageText";
+            this.commitStageText.ReadOnly = true;
+            this.commitStageText.Size = new System.Drawing.Size(153, 25);
+            this.commitStageText.TabIndex = 130;
+            this.commitStageText.Text = "";
+            // 
+            // issueStageLabel
+            // 
+            this.issueStageLabel.AutoSize = true;
+            this.issueStageLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.issueStageLabel.Location = new System.Drawing.Point(630, 710);
+            this.issueStageLabel.Name = "issueStageLabel";
+            this.issueStageLabel.Size = new System.Drawing.Size(37, 13);
+            this.issueStageLabel.TabIndex = 131;
+            this.issueStageLabel.Text = "Issue";
+            // 
+            // commitStageLabel
+            // 
+            this.commitStageLabel.AutoSize = true;
+            this.commitStageLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.commitStageLabel.Location = new System.Drawing.Point(625, 758);
+            this.commitStageLabel.Name = "commitStageLabel";
+            this.commitStageLabel.Size = new System.Drawing.Size(47, 13);
+            this.commitStageLabel.TabIndex = 132;
+            this.commitStageLabel.Text = "Commit";
+            // 
+            // instructionsInFlightLabel
+            // 
+            this.instructionsInFlightLabel.AutoSize = true;
+            this.instructionsInFlightLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.instructionsInFlightLabel.Location = new System.Drawing.Point(747, 595);
+            this.instructionsInFlightLabel.Name = "instructionsInFlightLabel";
+            this.instructionsInFlightLabel.Size = new System.Drawing.Size(123, 13);
+            this.instructionsInFlightLabel.TabIndex = 133;
+            this.instructionsInFlightLabel.Text = "Instructions In Flight";
+            // 
+            // tddText
+            // 
+            this.tddText.BackColor = System.Drawing.SystemColors.Menu;
+            this.tddText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tddText.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tddText.Location = new System.Drawing.Point(679, 634);
+            this.tddText.Name = "tddText";
+            this.tddText.ReadOnly = true;
+            this.tddText.Size = new System.Drawing.Size(46, 25);
+            this.tddText.TabIndex = 136;
+            this.tddText.Text = "";
+            // 
+            // rsdText
+            // 
+            this.rsdText.BackColor = System.Drawing.SystemColors.Menu;
+            this.rsdText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.rsdText.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rsdText.Location = new System.Drawing.Point(626, 634);
+            this.rsdText.Name = "rsdText";
+            this.rsdText.ReadOnly = true;
+            this.rsdText.Size = new System.Drawing.Size(46, 25);
+            this.rsdText.TabIndex = 135;
+            this.rsdText.Text = "";
+            // 
+            // rbdText
+            // 
+            this.rbdText.BackColor = System.Drawing.SystemColors.Menu;
+            this.rbdText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.rbdText.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbdText.Location = new System.Drawing.Point(572, 634);
+            this.rbdText.Name = "rbdText";
+            this.rbdText.ReadOnly = true;
+            this.rbdText.Size = new System.Drawing.Size(47, 25);
+            this.rbdText.TabIndex = 134;
+            this.rbdText.Text = "";
+            // 
+            // delaysLabel
+            // 
+            this.delaysLabel.AutoSize = true;
+            this.delaysLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.delaysLabel.Location = new System.Drawing.Point(625, 595);
+            this.delaysLabel.Name = "delaysLabel";
+            this.delaysLabel.Size = new System.Drawing.Size(45, 13);
+            this.delaysLabel.TabIndex = 137;
+            this.delaysLabel.Text = "Delays";
+            this.delaysLabel.Visible = false;
+            // 
+            // tddLabel
+            // 
+            this.tddLabel.AutoSize = true;
+            this.tddLabel.Location = new System.Drawing.Point(687, 616);
+            this.tddLabel.Name = "tddLabel";
+            this.tddLabel.Size = new System.Drawing.Size(30, 13);
+            this.tddLabel.TabIndex = 140;
+            this.tddLabel.Text = "TDD";
+            // 
+            // rsdLabel
+            // 
+            this.rsdLabel.AutoSize = true;
+            this.rsdLabel.Location = new System.Drawing.Point(634, 616);
+            this.rsdLabel.Name = "rsdLabel";
+            this.rsdLabel.Size = new System.Drawing.Size(30, 13);
+            this.rsdLabel.TabIndex = 139;
+            this.rsdLabel.Text = "RSD";
+            // 
+            // rbdLabel
+            // 
+            this.rbdLabel.AutoSize = true;
+            this.rbdLabel.Location = new System.Drawing.Point(580, 616);
+            this.rbdLabel.Name = "rbdLabel";
+            this.rbdLabel.Size = new System.Drawing.Size(30, 13);
+            this.rbdLabel.TabIndex = 138;
+            this.rbdLabel.Text = "RBD";
+            // 
+            // instInExLabel1
+            // 
+            this.instInExLabel1.AutoSize = true;
+            this.instInExLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.instInExLabel1.Location = new System.Drawing.Point(600, 665);
+            this.instInExLabel1.Name = "instInExLabel1";
+            this.instInExLabel1.Size = new System.Drawing.Size(72, 13);
+            this.instInExLabel1.TabIndex = 141;
+            this.instInExLabel1.Text = "Instructions in";
+            this.instInExLabel1.Visible = false;
+            // 
+            // instInExText
+            // 
+            this.instInExText.BackColor = System.Drawing.SystemColors.Menu;
+            this.instInExText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.instInExText.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.instInExText.Location = new System.Drawing.Point(679, 668);
+            this.instInExText.Name = "instInExText";
+            this.instInExText.ReadOnly = true;
+            this.instInExText.Size = new System.Drawing.Size(46, 25);
+            this.instInExText.TabIndex = 142;
+            this.instInExText.Text = "";
+            // 
+            // instInExLabel2
+            // 
+            this.instInExLabel2.AutoSize = true;
+            this.instInExLabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.instInExLabel2.Location = new System.Drawing.Point(618, 680);
+            this.instInExLabel2.Name = "instInExLabel2";
+            this.instInExLabel2.Size = new System.Drawing.Size(54, 13);
+            this.instInExLabel2.TabIndex = 143;
+            this.instInExLabel2.Text = "Execution";
+            this.instInExLabel2.Visible = false;
+            // 
+            // pipelineStatsTab
+            // 
+            this.pipelineStatsTab.Controls.Add(this.pipelineStatsTextBox);
+            this.pipelineStatsTab.Location = new System.Drawing.Point(4, 22);
+            this.pipelineStatsTab.Name = "pipelineStatsTab";
+            this.pipelineStatsTab.Size = new System.Drawing.Size(549, 324);
+            this.pipelineStatsTab.TabIndex = 4;
+            this.pipelineStatsTab.Text = "Pipeline Statistics";
+            this.pipelineStatsTab.UseVisualStyleBackColor = true;
+            // 
+            // pipelineStatsTextBox
+            // 
+            this.pipelineStatsTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.pipelineStatsTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.pipelineStatsTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pipelineStatsTextBox.Location = new System.Drawing.Point(3, 6);
+            this.pipelineStatsTextBox.Name = "pipelineStatsTextBox";
+            this.pipelineStatsTextBox.ReadOnly = true;
+            this.pipelineStatsTextBox.Size = new System.Drawing.Size(543, 318);
+            this.pipelineStatsTextBox.TabIndex = 3;
+            this.pipelineStatsTextBox.Text = "";
+            // 
             // BUC10
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1491, 814);
+            this.Controls.Add(this.instInExLabel2);
+            this.Controls.Add(this.instInExText);
+            this.Controls.Add(this.instInExLabel1);
+            this.Controls.Add(this.tddLabel);
+            this.Controls.Add(this.rsdLabel);
+            this.Controls.Add(this.rbdLabel);
+            this.Controls.Add(this.delaysLabel);
+            this.Controls.Add(this.tddText);
+            this.Controls.Add(this.rsdText);
+            this.Controls.Add(this.rbdText);
+            this.Controls.Add(this.instructionsInFlightLabel);
+            this.Controls.Add(this.commitStageLabel);
+            this.Controls.Add(this.issueStageLabel);
+            this.Controls.Add(this.commitStageText);
+            this.Controls.Add(this.instructionInFlightText);
+            this.Controls.Add(this.issueStageText);
             this.Controls.Add(this.label54);
             this.Controls.Add(this.label53);
             this.Controls.Add(this.label52);
@@ -1526,19 +1759,19 @@
             this.Controls.Add(this.r2Dec);
             this.Controls.Add(this.buildButton);
             this.Controls.Add(this.configButton);
-            this.Controls.Add(this.label36);
-            this.Controls.Add(this.label35);
-            this.Controls.Add(this.label34);
-            this.Controls.Add(this.label33);
+            this.Controls.Add(this.dependenciesLabel);
+            this.Controls.Add(this.wawLabel);
+            this.Controls.Add(this.warLabel);
+            this.Controls.Add(this.rawLabel);
             this.Controls.Add(this.wawText);
             this.Controls.Add(this.warText);
             this.Controls.Add(this.rawText);
             this.Controls.Add(this.label32);
-            this.Controls.Add(this.label31);
-            this.Controls.Add(this.label30);
-            this.Controls.Add(this.label29);
-            this.Controls.Add(this.label28);
-            this.Controls.Add(this.label27);
+            this.Controls.Add(this.stage4StalledLabel);
+            this.Controls.Add(this.stage2StalledLabel);
+            this.Controls.Add(this.stage5StalledLabel);
+            this.Controls.Add(this.stage3StalledLabel);
+            this.Controls.Add(this.stage1StalledLabel);
             this.Controls.Add(this.stage5StalledText);
             this.Controls.Add(this.stage3StalledText);
             this.Controls.Add(this.stage4StalledText);
@@ -1547,12 +1780,12 @@
             this.Controls.Add(this.label26);
             this.Controls.Add(this.currentCycleText);
             this.Controls.Add(this.label25);
-            this.Controls.Add(this.label24);
+            this.Controls.Add(this.stage5Label);
             this.Controls.Add(this.stage5Text);
-            this.Controls.Add(this.label23);
-            this.Controls.Add(this.label22);
-            this.Controls.Add(this.label20);
-            this.Controls.Add(this.label18);
+            this.Controls.Add(this.stage4Label);
+            this.Controls.Add(this.stage3Label);
+            this.Controls.Add(this.stage2Label);
+            this.Controls.Add(this.stage1Label);
             this.Controls.Add(this.stage4Text);
             this.Controls.Add(this.stage3Text);
             this.Controls.Add(this.stage2Text);
@@ -1625,8 +1858,8 @@
             this.Text = "BUC/10";
             this.Load += new System.EventHandler(this.BUC10_Load);
             this.objectCode.ResumeLayout(false);
-            this.objectCodeBox.ResumeLayout(false);
             this.assemblerPage.ResumeLayout(false);
+            this.objectCodeBox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.buildButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.resetButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stepthroughButton)).EndInit();
@@ -1635,6 +1868,7 @@
             this.sourceCodeBox.ResumeLayout(false);
             this.pipelineTab.ResumeLayout(false);
             this.Output.ResumeLayout(false);
+            this.pipelineStatsTab.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1707,12 +1941,12 @@
         private System.Windows.Forms.RichTextBox stage1Text;
         private System.Windows.Forms.RichTextBox stage4Text;
         private System.Windows.Forms.RichTextBox stage3Text;
-        private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label stage1Label;
+        private System.Windows.Forms.Label stage2Label;
+        private System.Windows.Forms.Label stage3Label;
+        private System.Windows.Forms.Label stage4Label;
         private System.Windows.Forms.RichTextBox stage5Text;
-        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label stage5Label;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.RichTextBox currentCycleText;
@@ -1722,19 +1956,19 @@
         private System.Windows.Forms.RichTextBox stage4StalledText;
         private System.Windows.Forms.RichTextBox stage3StalledText;
         private System.Windows.Forms.RichTextBox stage5StalledText;
-        private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.Label label28;
-        private System.Windows.Forms.Label label29;
-        private System.Windows.Forms.Label label30;
-        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Label stage1StalledLabel;
+        private System.Windows.Forms.Label stage3StalledLabel;
+        private System.Windows.Forms.Label stage5StalledLabel;
+        private System.Windows.Forms.Label stage2StalledLabel;
+        private System.Windows.Forms.Label stage4StalledLabel;
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.RichTextBox rawText;
         private System.Windows.Forms.RichTextBox warText;
         private System.Windows.Forms.RichTextBox wawText;
-        private System.Windows.Forms.Label label33;
-        private System.Windows.Forms.Label label34;
-        private System.Windows.Forms.Label label35;
-        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.Label rawLabel;
+        private System.Windows.Forms.Label warLabel;
+        private System.Windows.Forms.Label wawLabel;
+        private System.Windows.Forms.Label dependenciesLabel;
         private System.Windows.Forms.Button configButton;
         private System.Windows.Forms.TabPage assemblerPage;
         private System.Windows.Forms.RichTextBox assemblerTextBox;
@@ -1767,6 +2001,24 @@
         private System.Windows.Forms.Label label52;
         private System.Windows.Forms.Label label53;
         private System.Windows.Forms.Label label54;
+        private System.Windows.Forms.RichTextBox issueStageText;
+        private System.Windows.Forms.RichTextBox instructionInFlightText;
+        private System.Windows.Forms.RichTextBox commitStageText;
+        private System.Windows.Forms.Label issueStageLabel;
+        private System.Windows.Forms.Label commitStageLabel;
+        private System.Windows.Forms.Label instructionsInFlightLabel;
+        private System.Windows.Forms.RichTextBox tddText;
+        private System.Windows.Forms.RichTextBox rsdText;
+        private System.Windows.Forms.RichTextBox rbdText;
+        private System.Windows.Forms.Label delaysLabel;
+        private System.Windows.Forms.Label tddLabel;
+        private System.Windows.Forms.Label rsdLabel;
+        private System.Windows.Forms.Label rbdLabel;
+        private System.Windows.Forms.Label instInExLabel1;
+        private System.Windows.Forms.RichTextBox instInExText;
+        private System.Windows.Forms.Label instInExLabel2;
+        private System.Windows.Forms.TabPage pipelineStatsTab;
+        private System.Windows.Forms.RichTextBox pipelineStatsTextBox;
     }
 }
 
