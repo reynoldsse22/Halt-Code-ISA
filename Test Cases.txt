@@ -34,3 +34,8 @@ ADD.s r3,r0,r3
 SUB.s r2,r3,r5
 BRNE 0x000F
 HALT 
+
+LDHL r1,#5
+LDHL r2,#10
+ADD r1,r2,r3
+HALT
