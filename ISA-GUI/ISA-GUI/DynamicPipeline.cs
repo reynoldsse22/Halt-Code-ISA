@@ -1115,7 +1115,7 @@ namespace ISA_GUI
                         {
                             load_storeBuffer.instruction = instruction;
                             load_storeBuffer.Busy = true;
-                            registers.floatQi[instruction.r3] = "load_storeBuffer";
+                            registers.floatQi[instruction.r3] = "memoryUnitFu";
                             return 10;
                         }
                     }
@@ -1129,7 +1129,7 @@ namespace ISA_GUI
                         {
                             load_storeBuffer.instruction = instruction;
                             load_storeBuffer.Busy = true;
-                            registers.intQi[instruction.r3] = "load_storeBuffer";
+                            registers.intQi[instruction.r3] = "memoryUnitFu";
                             return 10;
                         }
                     }
@@ -1141,9 +1141,9 @@ namespace ISA_GUI
                         load_storeBuffer.instruction = instruction;
                         load_storeBuffer.Busy = true;
                         if(instruction.isFloat)
-                            registers.floatQi[0] = "load_storeBuffer";
+                            registers.floatQi[0] = "memoryUnitFu";
                         else
-                            registers.intQi[0] = "load_storeBuffer";
+                            registers.intQi[0] = "memoryUnitFu";
                         return 10;
                         //Vj, Vk, Qj, Qk will be implemented here
                     }
@@ -1178,9 +1178,9 @@ namespace ISA_GUI
                         load_storeBuffer.instruction = instruction;
                         load_storeBuffer.Busy = true;
                         if (instruction.isFloat)
-                            registers.floatQi[0] = "load_storeBuffer";
+                            registers.floatQi[instruction.r3] = "memoryUnitFu";
                         else
-                            registers.intQi[0] = "load_storeBuffer";
+                            registers.intQi[instruction.r3] = "memoryUnitFu";
                         return 10;
                         //Vj, Vk, Qj, Qk will be implemented here
                     }
@@ -1197,7 +1197,7 @@ namespace ISA_GUI
                             }
                             load_storeBuffer.instruction = instruction;
                             load_storeBuffer.Busy = true;
-                            registers.floatQi[0] = "load_storeBuffer";
+                            registers.floatQi[instruction.r3] = "memoryUnitFu";
                             return 10;
                             //Vj, Vk, Qj, Qk will be implemented here
                         }
@@ -1212,7 +1212,7 @@ namespace ISA_GUI
                             }
                             load_storeBuffer.instruction = instruction;
                             load_storeBuffer.Busy = true;
-                            registers.intQi[0] = "load_storeBuffer";
+                            registers.intQi[instruction.r3] = "memoryUnitFu";
                             return 10;
                             //Vj, Vk, Qj, Qk will be implemented here
                         }

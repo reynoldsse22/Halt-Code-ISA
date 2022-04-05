@@ -144,59 +144,108 @@ namespace ISA_GUI
 		 *   @param  Instruction instruction
 		 *   @param ConfigCycle config
 		 */
-		public void writeToCDB(Instruction instruction, ref CommonDataBus CDB, in string result)
+		public bool writeToCDB(Instruction instruction, ref CommonDataBus CDB, in string result)
 		{
 			switch (instruction.functionalUnitID)
 			{
 				case 1:
-					CDB.index.Add(instruction.ID, CDB.CDB.Count);
-					CDB.CDB.Add("intAddFu", result);
+					if(!CDB.CDB.ContainsKey("intAddFu"))
+                    {
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.CDB.Add("intAddFu", result);
+						return true;
+					}
 					break;
 				case 2:
-					CDB.index.Add(instruction.ID, CDB.CDB.Count);
-					CDB.CDB.Add("intSubFu", result);
+					if (!CDB.CDB.ContainsKey("intSubFu"))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.CDB.Add("intSubFu", result);
+						return true;
+					}
 					break;
 				case 3:
-					CDB.index.Add(instruction.ID, CDB.CDB.Count);
-					CDB.CDB.Add("intMultFu", result);
+					if (!CDB.CDB.ContainsKey("intMultFu"))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.CDB.Add("intMultFu", result);
+						return true;
+					}
 					break;
 				case 4:
-					CDB.index.Add(instruction.ID, CDB.CDB.Count);
-					CDB.CDB.Add("intDivFu", result);
+					if (!CDB.CDB.ContainsKey("intDivFu"))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.CDB.Add("intDivFu", result);
+						return true;
+					}
 					break;
 				case 5:
-					CDB.index.Add(instruction.ID, CDB.CDB.Count);
-					CDB.CDB.Add("floatAddFu", result);
+					if (!CDB.CDB.ContainsKey("floatAddFu"))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.CDB.Add("floatAddFu", result);
+						return true;
+					}
 					break;
 				case 6:
-					CDB.index.Add(instruction.ID, CDB.CDB.Count);
-					CDB.CDB.Add("floatSubFu", result);
+					if (!CDB.CDB.ContainsKey("floatSubFu"))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.CDB.Add("floatSubFu", result);
+						return true;
+					}
 					break;
 				case 7:
-					CDB.index.Add(instruction.ID, CDB.CDB.Count);
-					CDB.CDB.Add("floatMultFu", result);
+					if (!CDB.CDB.ContainsKey("floatMultFu"))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.CDB.Add("floatMultFu", result);
+						return true;
+					}
 					break;
 				case 8:
-					CDB.index.Add(instruction.ID, CDB.CDB.Count);
-					CDB.CDB.Add("floatDivFu", result);
+					if (!CDB.CDB.ContainsKey("floatDivFu"))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.CDB.Add("floatDivFu", result);
+						return true;
+					}
 					break;
 				case 9:
-					CDB.index.Add(instruction.ID, CDB.CDB.Count);
-					CDB.CDB.Add("floatSubFu", result);
+					if (!CDB.CDB.ContainsKey("bitwiseOPFu"))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.CDB.Add("bitwiseOPFu", result);
+						return true;
+					}
 					break;
 				case 10:
-					CDB.index.Add(instruction.ID, CDB.CDB.Count);
-					CDB.CDB.Add("bitwiseOPFu", result);
+					if (!CDB.CDB.ContainsKey("memoryUnitFu"))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.CDB.Add("memoryUnitFu", result);
+						return true;
+					}
 					break;
 				case 11:
-					CDB.index.Add(instruction.ID, CDB.CDB.Count);
-					CDB.CDB.Add("memoryUnitFu", result);
+					if (!CDB.CDB.ContainsKey("branchFu"))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.CDB.Add("branchFu", result);
+						return true;
+					}
 					break;
 				case 12:
-					CDB.index.Add(instruction.ID, CDB.CDB.Count);
-					CDB.CDB.Add("shiftFu", result);
+					if (!CDB.CDB.ContainsKey("shiftFu"))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.CDB.Add("shiftFu", result);
+						return true;
+					}
 					break;
 			}
+			return false;
 		}
 
 		/**
