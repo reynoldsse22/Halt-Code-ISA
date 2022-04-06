@@ -58,7 +58,7 @@ namespace ISA_GUI
 			fOp2 = "";
 			fOp3 = "";
 			dependantOpID1 = -1;
-			dependantOpiD2 = -1;
+			dependantOpID2 = -1;
 		}
 	}
 }
