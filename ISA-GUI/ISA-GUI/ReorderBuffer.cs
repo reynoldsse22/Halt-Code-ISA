@@ -57,6 +57,7 @@ namespace ISA_GUI
 			if(reorderIndex == inst.ID)
             {
 				WR.commit(ref registers, ref inst, ref memory, ref halted, ref IM, ref branchTaken);
+				reorderIndex++;
 				return removeFromReorderBuffer(inst, ref CDB);
             }
 			return -1;

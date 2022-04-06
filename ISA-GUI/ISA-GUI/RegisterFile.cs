@@ -54,5 +54,16 @@ namespace ISA_GUI
 			Array.Clear(floatRegisters, 0, floatRegisters.Length);
 			ASPR = 0;
 		}
+
+		public void clearRegistersQI()
+        {
+			for (int i = 0; i < 16; i++)
+			{
+				intQi[i] = "0";
+				floatQi[i] = "0";
+				intQiIndex[i] = -1;
+				floatQiIndex[i] = -1;
+			}
+		}
     }
 }

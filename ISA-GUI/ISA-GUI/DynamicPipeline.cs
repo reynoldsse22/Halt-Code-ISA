@@ -163,11 +163,19 @@ namespace ISA_GUI
                                 reorderBufferDelay++;
                             }
                             int instructionIndex = reorderBuffer.checkCommit(inst, ref WR, ref dataMemory, ref lastBranchDecision, ref IM, ref registers, ref halted, ref commonDataBus);
-                            bool hazardDetected = detectControlHazard(instructionIndex);
+                            bool hazardDetected = detectControlHazard(instructionIndex, ref registers);
                             if(!hazardDetected)
                             {
-                                int cdbIndex = commonDataBus.index[instructionIndex];
-                                commonDataBus.CDB.Remove(commonDataBus.CDB.ElementAt(cdbIndex).Key);
+                                try
+                                {
+                                    int cdbIndex = commonDataBus.index[instructionIndex];
+                                    commonDataBus.CDB.Remove(commonDataBus.CDB.ElementAt(cdbIndex).Key);
+                                    instructionsInFlight.Remove(inst);
+                                }
+                                catch 
+                                {
+                                    continue;
+                                }
                             }
                             break;
                         //Store the answer and corresponding reservation name into the data bus
@@ -279,6 +287,8 @@ namespace ISA_GUI
                         fetchInstruction.stage = 1;
                         instructionQueue.Enqueue(fetchInstruction);
                     }
+                    else
+                        return;
                 }
                 catch(Exception)
                 {
@@ -289,7 +299,9 @@ namespace ISA_GUI
 
         private void fetchFromInstructionQueue()
         {
-            instructionsInFlight.Add(instructionQueue.Dequeue()); 
+            if(instructionQueue.Count != 0)
+                instructionsInFlight.Add(instructionQueue.Dequeue());
+            return;
         }
 
         private Instruction decode(Instruction instruction, ref InstructionMemory IM, ref ConfigCycle config)
@@ -301,6 +313,8 @@ namespace ISA_GUI
         private bool execute(Instruction instruction, ref RegisterFile registers,ref DataMemory memory, 
             ref InstructionMemory IM, ref ConfigCycle config, ref ALU alu, ref bool branchTaken, ref string result, ref int intASPR)
         {
+            if (instruction.opcode == 0 || instruction.opcode == 1)
+                return true;
             try
             {
                 sendToFU(ref instruction);
@@ -526,6 +540,9 @@ namespace ISA_GUI
 
         private void sendToFU(ref Instruction instruction)
         {
+            if (instruction.opcode == 0 || instruction.opcode == 1)
+                return;
+
             switch(instruction.functionalUnitID)
             {
                 case 1:
@@ -1194,7 +1211,7 @@ namespace ISA_GUI
             {
                 case 0:
                 case 1:
-                    break;
+                    return instruction;
                 case 2:         //Branch Instructions
                 case 3:
                 case 4:
@@ -1705,9 +1722,9 @@ namespace ISA_GUI
       * <hr>
       *   @param  Instruction[] stages
       */
-        public bool detectControlHazard(int id)
+        public bool detectControlHazard(int id, ref RegisterFile registers)
         {
-            if (id == -1)
+            if (id == -1 || lastBranchDecision == false)
                 return false;
             if ((instructionsInFlight[(id - 1)].programCounterValue != instructionsInFlight[id].address) && lastBranchDecision == true)
             {
@@ -1751,6 +1768,9 @@ namespace ISA_GUI
                 load_storeBuffer.Busy = false;
                 branchOPS.Busy = false;
                 shiftOPS.Busy = false;
+
+                registers.clearRegistersQI();
+
                 return true;
             }
             return false;
