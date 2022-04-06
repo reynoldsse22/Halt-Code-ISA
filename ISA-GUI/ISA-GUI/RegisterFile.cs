@@ -27,7 +27,9 @@ namespace ISA_GUI
         public int[] intRegisters = new int[16];     //16 16-bit registers
 		public float[] floatRegisters = new float[16];
 		public string[] intQi = new string[16];
+		public int[] intQiIndex = new int[16];
 		public string[] floatQi = new string[16];
+		public int[] floatQiIndex = new int[16];
 		public int ASPR;
 
 		/**
@@ -44,6 +46,8 @@ namespace ISA_GUI
             {
 				intQi[i] = "0";
 				floatQi[i] = "0";
+				intQiIndex[i] = -1;
+				floatQiIndex[i] = -1;
             }
             //Initialize registers
             Array.Clear(intRegisters, 0, intRegisters.Length);

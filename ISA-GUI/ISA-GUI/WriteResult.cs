@@ -152,6 +152,7 @@ namespace ISA_GUI
 					if(!CDB.CDB.ContainsKey("intAddFu"))
                     {
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
 						CDB.CDB.Add("intAddFu", result);
 						return true;
 					}
@@ -160,6 +161,7 @@ namespace ISA_GUI
 					if (!CDB.CDB.ContainsKey("intSubFu"))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
 						CDB.CDB.Add("intSubFu", result);
 						return true;
 					}
@@ -168,6 +170,7 @@ namespace ISA_GUI
 					if (!CDB.CDB.ContainsKey("intMultFu"))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
 						CDB.CDB.Add("intMultFu", result);
 						return true;
 					}
@@ -176,6 +179,7 @@ namespace ISA_GUI
 					if (!CDB.CDB.ContainsKey("intDivFu"))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
 						CDB.CDB.Add("intDivFu", result);
 						return true;
 					}
@@ -184,6 +188,7 @@ namespace ISA_GUI
 					if (!CDB.CDB.ContainsKey("floatAddFu"))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
 						CDB.CDB.Add("floatAddFu", result);
 						return true;
 					}
@@ -192,6 +197,7 @@ namespace ISA_GUI
 					if (!CDB.CDB.ContainsKey("floatSubFu"))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
 						CDB.CDB.Add("floatSubFu", result);
 						return true;
 					}
@@ -200,6 +206,7 @@ namespace ISA_GUI
 					if (!CDB.CDB.ContainsKey("floatMultFu"))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
 						CDB.CDB.Add("floatMultFu", result);
 						return true;
 					}
@@ -208,6 +215,7 @@ namespace ISA_GUI
 					if (!CDB.CDB.ContainsKey("floatDivFu"))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
 						CDB.CDB.Add("floatDivFu", result);
 						return true;
 					}
@@ -216,6 +224,7 @@ namespace ISA_GUI
 					if (!CDB.CDB.ContainsKey("bitwiseOPFu"))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
 						CDB.CDB.Add("bitwiseOPFu", result);
 						return true;
 					}
@@ -224,6 +233,7 @@ namespace ISA_GUI
 					if (!CDB.CDB.ContainsKey("memoryUnitFu"))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
 						CDB.CDB.Add("memoryUnitFu", result);
 						return true;
 					}
@@ -232,6 +242,7 @@ namespace ISA_GUI
 					if (!CDB.CDB.ContainsKey("branchFu"))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
 						CDB.CDB.Add("branchFu", result);
 						return true;
 					}
@@ -240,6 +251,7 @@ namespace ISA_GUI
 					if (!CDB.CDB.ContainsKey("shiftFu"))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
 						CDB.CDB.Add("shiftFu", result);
 						return true;
 					}
