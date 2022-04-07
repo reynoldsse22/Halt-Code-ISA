@@ -34,9 +34,9 @@ namespace ISA_GUI
 		public string fOp1, fOp2, fOp3;
 		public int iOperand1, iOperand2, iOperand3, ASPR, dependantOpID1, dependantOpID2;
 		public float fOperand1, fOperand2, fOperand3;
-		public bool isFloat, executionInProgress, doneExecuting, stage2ExecutionFinished;
+		public bool isFloat, executionInProgress, doneExecuting, stage2ExecutionFinished, justIssued;
 		public string assembly1, result;
-		public string assembly2;
+		public string assembly2, fullAssemblySyntax;
 		/**
 	    * Method Name: Instruction <br>
 	    * Method Purpose: Class constructor
@@ -51,6 +51,7 @@ namespace ISA_GUI
 			cycleControl = 0;
 			assembly1 = "NOP";
 			assembly2 = "";
+			fullAssemblySyntax = "";
 			iOp1 = "";
 			iOp2 = "";
 			iOp3 = "";

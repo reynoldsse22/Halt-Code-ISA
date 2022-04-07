@@ -10,11 +10,11 @@ namespace ISA_GUI
 {
     internal class DynamicPipeline
     {
-        Fetch fetch;
-        ControlUnit CU;
-        Printer print;
-        Queue<Instruction> instructionQueue;
-        List<Instruction> instructionsInFlight;
+        public Fetch fetch;
+        public ControlUnit CU;
+        public Printer print;
+        public Queue<Instruction> instructionQueue;
+        public List<Instruction> instructionsInFlight;
         public ALU alu;
         public ExecutionUnit EU;
         public WriteResult WR;
@@ -52,7 +52,7 @@ namespace ISA_GUI
 
         public int totalHazard, structuralHazard, dataHazard, controlHazard, RAW, WAR, WAW;
         public int reorderBufferDelay, reservationStationDelay, trueDependenceDelay, totalDelays, instructionID;
-        public int totalCyclesStalled;
+        public int totalCyclesStalled, numOfInstructionInExecution;
         public bool lastBranchDecision, doneExecuting, executionInProgress;
 
 
@@ -83,6 +83,7 @@ namespace ISA_GUI
             bitwiseOPFu = new BitwiseOPFU();
             memoryUnitFu = new MemoryUnit();
             branchFu = new BranchFU();
+            shiftFu = new ShiftFU();
             intAddRS = new ReservationStation("intAddRS");
             intSubRS = new ReservationStation("intSubRS");
             intMultRS = new ReservationStation("intMultRS");
@@ -108,6 +109,7 @@ namespace ISA_GUI
             RAW = 0;
             WAW = 0;
             instructionID = 1;
+            numOfInstructionInExecution = 0;
             lastBranchDecision = false;
             doneExecuting = false;
             executionInProgress = false;
@@ -205,6 +207,7 @@ namespace ISA_GUI
                             inst.dependantOpID2 = 0;
                             inst.doneExecuting = executeInstruction.doneExecuting;
                             inst.executionInProgress = executeInstruction.executionInProgress;
+                            inst.justIssued = false;
                             if (inst.doneExecuting)
                             {
                                 if (inst.opcode == 0 || inst.opcode == 1)
@@ -258,6 +261,7 @@ namespace ISA_GUI
                                 inst.dependantOpID1 = populateInstruction.dependantOpID1;
                                 inst.dependantOpID2 = populateInstruction.dependantOpID2;
                                 inst.stage = 2;
+                                inst.justIssued = true;
                             }
                             catch (Exception)
                             {
@@ -2207,6 +2211,39 @@ namespace ISA_GUI
                 //instructionQueue.Add(instruction);  //Fill up instruction queue
                 print.buildAssemblyString(ref assemblyString, ref instruction); //Prints assembly string to the GUI
             }
+        }
+
+
+        public void clearDynamicPipeline()
+        {
+            intAddFu.instruction = null;
+            intSubFu.instruction = null;
+            intMultFu.instruction = null;
+            intDivFu.instruction = null;
+            floatAddFu.instruction = null;
+            floatSubFu.instruction = null;
+            floatMultFu.instruction = null;
+            floatDivFu.instruction = null;
+            bitwiseOPFu.instruction = null;
+            memoryUnitFu.instruction = null;
+            branchFu.instruction = null;
+            shiftFu.instruction = null;
+            intAddRS.instruction = null;
+            intSubRS.instruction = null;
+            intMultRS.instruction = null;
+            intDivRS.instruction = null;
+            floatAddRS.instruction= null;
+            floatSubRS.instruction= null;
+            floatMultRS.instruction= null;
+            floatDivRS.instruction= null;
+            bitwiseOPRS.instruction = null;
+            shiftOPS.instruction = null;
+            load_storeBuffer.instruction = null;
+            branchOPS.instruction = null;
+            instructionsInFlight.Clear();
+            instructionQueue.Clear();
+            reorderBuffer.reorderBuffer.Clear();
+            reorderBuffer.reorderIndex = 1;
         }
     }
 }

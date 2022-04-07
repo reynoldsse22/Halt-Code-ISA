@@ -33,6 +33,35 @@ namespace ISA_GUI
         public bool success;
         public bool inProgress;
         public bool hazardDetected;
+        string assemblyString = "";
+        static string[] instructionList = {"HALT",
+                                "NOP",
+                                "BR",
+                                "BRNE",
+                                "BREQ",
+                                "BRLT",
+                                "BRLE",
+                                "BRGT",
+                                "BRGE",
+                                "LDWM",
+                                "STWM",
+                                "LDHL",
+                                "LDHH",
+                                "CMPI",
+                                "CMPR",
+                                "MOV",
+                                "ASL",
+                                "ASR",
+                                "LSL",
+                                "LSR",
+                                "ADD",
+                                "SUB",
+                                "MULT",
+                                "DIV",
+                                "AND",
+                                "OR",
+                                "XOR",
+                                "NOT"};
 
         /**
 	    * Method Name: ControlUnit <br>
@@ -68,6 +97,7 @@ namespace ISA_GUI
         {
             instruction.cycleControl = config.regAccess;    
             decode(ref IM, ref instruction);
+            getAssembly(ref instruction);
         }
         /**
         * Method Name: decode <br>
@@ -208,6 +238,93 @@ namespace ISA_GUI
             instruction.instrType = instrType;
             success = true;
             return;
+        }
+
+        private void getAssembly(ref Instruction instruction)
+        {
+            int opcode = instruction.opcode;
+            int r1 = instruction.r1;
+            int r2 = instruction.r2;
+            int r3 = instruction.r3;
+            int address = instruction.address;
+            int instrFlag = instruction.instrFlag;
+            string instrType = instruction.instrType;
+            string registerString = "r";
+            if (instrFlag == 2 || instrFlag == 3)
+            {
+                registerString = "f";
+            }
+            switch (opcode) //switch on the opcode value
+            {
+                case 0:
+                    appendAssemblyString("HALT", "", "", "", ref instruction); //HALT
+                    break;
+                case 1:
+                    appendAssemblyString("NOP", "", "", "", ref instruction); //NOP
+                    break;
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                case 10:
+                    appendAssemblyString(instructionList[opcode], "0x" + address.ToString("X").PadLeft(4, '0'), "", "", ref instruction);
+                    break;
+                case 11:
+                case 12:
+                case 13:
+                    appendAssemblyString(instructionList[opcode], registerString.Trim() + r3.ToString().Trim(), "#" + address.ToString().Trim(), "", ref instruction);
+                    break;
+                case 14:
+                    appendAssemblyString(instructionList[opcode], registerString.Trim() + r1.ToString(), registerString.Trim() + r2.ToString().Trim(), "", ref instruction);
+                    break;
+                case 15:
+                    appendAssemblyString(instructionList[opcode], registerString.Trim() + r2.ToString(), registerString.Trim() + r3.ToString().Trim(), "", ref instruction);
+                    break;
+                case 16:
+                case 17:
+                case 18:
+                case 19:
+                case 20:
+                case 21:
+                case 22:
+                case 23:
+                case 24:
+                case 25:
+                case 26:
+                    appendAssemblyString(instructionList[opcode], registerString.Trim() + r1.ToString().Trim(), registerString.Trim() + r2.ToString().Trim(),
+                        registerString.Trim() + r3.ToString().Trim(), ref instruction);
+                    break;
+                case 27:
+                    appendAssemblyString(instructionList[opcode], registerString.Trim() + r1.ToString().Trim(), registerString.Trim() + r3.ToString().Trim(), "", ref instruction);
+                    break;
+            }
+        }
+        private void appendAssemblyString(string instOp, string first, string second, string third, ref Instruction instruct)
+        {
+            string updatedAssembly = instOp.ToUpper();
+
+            if (second != "")
+                first += ",";
+            if (third != "")
+                second += ",";
+
+            if (instruct.opcode >= 9)
+            {
+                if (instruct.instrFlag == 2)
+                    updatedAssembly = "f." + updatedAssembly;
+                else if (instruct.instrFlag == 1)
+                    updatedAssembly += ".s";
+                else if (instruct.instrFlag == 3)
+                    updatedAssembly = "f." + updatedAssembly + 's';
+            }
+            instruct.assembly1 = updatedAssembly;
+            assemblyString += (updatedAssembly + " " + first + second + third + "\n");
+            instruct.assembly2 = first + second + third;
+            instruct.fullAssemblySyntax = instruct.assembly1 + " " + instruct.assembly2;
         }
     }
 }

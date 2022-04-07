@@ -172,7 +172,8 @@ namespace ISA_GUI
                     if (!config.dynamicPipelineSet)
                         cpu.runStaticPipeline(program, true, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config, ref stages);      //Run the program one cycle at a time. Stepthrough flag is true
                     else
-                        return;//ELSE STATEMENT FOR DYNAMIC PIPELINE GOES HERE
+                        cpu.runDynamicPipeline(program, true, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config); //Calling Dynamic Pipeline
+
                     updateGUI();        //update the GUI
                 }
                 catch (Exception)       //Catch any errors when getting input from user or decoding invalid instructions
@@ -344,17 +345,28 @@ namespace ISA_GUI
             cpu.IM.CurrentInstruction = 0;
             cpu.IM.instructions.Clear();
 
-            
-            cpu.SP.CU.instructionsProcessed = 0;
-            cpu.SP.CU.totalInstructions = 0;
-            cpu.SP.CU.ALUInstructionCount = 0;
-            cpu.SP.CU.memoryInstructionCount = 0;
-            cpu.SP.CU.controlInstructionCount = 0;
-            
-            
+            if(!config.dynamicPipelineSet)
+            {
+                cpu.SP.CU.instructionsProcessed = 0;
+                cpu.SP.CU.totalInstructions = 0;
+                cpu.SP.CU.ALUInstructionCount = 0;
+                cpu.SP.CU.memoryInstructionCount = 0;
+                cpu.SP.CU.controlInstructionCount = 0;
+                resetStaticPipeline();
+
+            }
+            else
+            {
+                cpu.DP.CU.instructionsProcessed = 0;
+                cpu.DP.CU.totalInstructions = 0;
+                cpu.DP.CU.ALUInstructionCount = 0;
+                cpu.DP.CU.memoryInstructionCount = 0;
+                cpu.DP.CU.controlInstructionCount = 0;
+                resetDynamicPipeline();
+            }
+
             StatsTextBox.Text = "";
             currentCycleText.SelectionAlignment = HorizontalAlignment.Center;
-            resetStaticPipeline();
             clearRegandMem();
             updateGUI();
         }
@@ -409,6 +421,29 @@ namespace ISA_GUI
             cpu.SP.cycleCount = 0;
         }
 
+
+        private void resetDynamicPipeline()
+        {
+            cpu.DP.fetch.inProgress = false;
+            cpu.DP.fetch.occupied = false;
+            cpu.DP.fetch.success = false;
+            cpu.DP.CU.inProgress = false;
+            cpu.DP.CU.occupied = false;
+            cpu.DP.CU.success = false;
+            cpu.DP.EU.inProgress = false;
+            cpu.DP.EU.occupied = false;
+            cpu.DP.EU.success = false;
+            cpu.DP.AM.inProgress = false;
+            cpu.DP.AM.occupied = false;
+            cpu.DP.AM.success = false;
+            cpu.DP.WR.inProgress = false;
+            cpu.DP.WR.occupied = false;
+            cpu.DP.WR.success = false;
+            cpu.DP.clearDynamicPipeline();
+            cpu.DP.clearDynamicPipeline();
+            cpu.registers.clearRegistersQI();
+        }
+
         /**
         * Method Name: clearPipeline <br>
         * Method Purpose: Resets the values in the pipeline
@@ -422,25 +457,36 @@ namespace ISA_GUI
             for(int i = 0; i<5; i++)    
                 stages[i] = null;
 
-            cpu.SP.cycleCount = 0;
-            cpu.SP.WAR = 0;
-            cpu.SP.WAW = 0;
-            cpu.SP.RAW = 0;
-            cpu.SP.totalCyclesStalled = 0;
-            cpu.SP.fetchStalled = 0;
-            cpu.SP.decodeStalled = 0;
-            cpu.SP.executeStalled = 0;
-            cpu.SP.accessMemStalled = 0;
-            cpu.SP.writeRegStalled = 0;
-            cpu.SP.dataHazard = 0;
-            cpu.SP.controlHazard = 0;
-            cpu.SP.structuralHazard = 0;
-            cpu.SP.totalHazard = 0;
-            stage1Text.Text = "";
-            stage2Text.Text = "";
-            stage3Text.Text = "";
-            stage4Text.Text = "";
-            stage5Text.Text = "";
+            if (!config.dynamicPipelineSet)
+            {
+                cpu.SP.cycleCount = 0;
+                cpu.SP.WAR = 0;
+                cpu.SP.WAW = 0;
+                cpu.SP.RAW = 0;
+                cpu.SP.fetchStalled = 0;
+                cpu.SP.decodeStalled = 0;
+                cpu.SP.executeStalled = 0;
+                cpu.SP.accessMemStalled = 0;
+                cpu.SP.writeRegStalled = 0;
+                cpu.SP.dataHazard = 0;
+                cpu.SP.controlHazard = 0;
+                cpu.SP.structuralHazard = 0;
+                cpu.SP.totalHazard = 0;
+                stage1Text.Text = "";
+                stage2Text.Text = "";
+                stage3Text.Text = "";
+                stage4Text.Text = "";
+                stage5Text.Text = "";
+            }
+            else
+            {
+                cpu.DP.cycleCount = 0;
+                cpu.DP.reservationStationDelay = 0;
+                cpu.DP.reorderBufferDelay = 0;
+                cpu.DP.trueDependenceDelay = 0;
+                issueStageText.Text = "";
+                commitStageText.Text = "";
+            }
         }
 
         /**
@@ -454,7 +500,10 @@ namespace ISA_GUI
         private void updateGUI()
         {
             updatePipelineGUIElements();
-            updatePipeline();
+            if (!config.dynamicPipelineSet)
+                updateStaticPipeline();
+            else
+                updateDynamicPipeline();
             setRegisters();
             setStatistics();
             setMemoryBox();
@@ -471,98 +520,13 @@ namespace ISA_GUI
         {
             if (config.dynamicPipelineSet)
             {
-                dependenciesLabel.Visible = false;
-                rawLabel.Visible = false;
-                warLabel.Visible = false;
-                wawLabel.Visible = false;
-                rawText.Visible = false;
-                wawText.Visible = false;
-                warText.Visible = false;
-                stage1Label.Visible = false;
-                stage1StalledLabel.Visible = false;
-                stage1StalledText.Visible = false;
-                stage1Text.Visible = false;
-                stage2Label.Visible = false;
-                stage2StalledLabel.Visible = false;
-                stage2StalledText.Visible = false;
-                stage2Text.Visible = false;
-                stage3Label.Visible = false;
-                stage3StalledLabel.Visible = false;
-                stage3StalledText.Visible = false;
-                stage3Text.Visible = false;
-                stage4Label.Visible = false;
-                stage4StalledLabel.Visible = false;
-                stage4StalledText.Visible = false;
-                stage4Text.Visible = false;
-                stage5Label.Visible = false;
-                stage5StalledLabel.Visible = false;
-                stage5StalledText.Visible = false;
-                stage5Text.Visible = false;
-
-                delaysLabel.Visible = true;
-                rbdLabel.Visible = true;
-                rsdLabel.Visible = true;
-                tddLabel.Visible = true;
-                rbdText.Visible = true;
-                rsdText.Visible = true;
-                tddText.Visible = true;
-                instInExLabel1.Visible = true;
-                instInExLabel2.Visible = true;
-                instInExText.Visible = true;
-                instructionsInFlightLabel.Visible = true;
-                instructionInFlightText.Visible = true;
-                issueStageLabel.Visible = true;
-                issueStageText.Visible = true;
-                commitStageLabel.Visible = true;
-                commitStageText.Visible = true;
-
+                staticPanel.Visible = false;
+                dynamicPanel.Visible = true;
             }
             else
             {
-                dependenciesLabel.Visible = true;
-                rawLabel.Visible = true;
-                warLabel.Visible = true;
-                wawLabel.Visible = true;
-                rawText.Visible = true;
-                wawText.Visible = true;
-                warText.Visible = true;
-                stage1Label.Visible = true;
-                stage1StalledLabel.Visible = true;
-                stage1StalledText.Visible = true;
-                stage1Text.Visible = true;
-                stage2Label.Visible = true;
-                stage2StalledLabel.Visible = true;
-                stage2StalledText.Visible = true;
-                stage2Text.Visible = true;
-                stage3Label.Visible = true;
-                stage3StalledLabel.Visible = true;
-                stage3StalledText.Visible = true;
-                stage3Text.Visible = true;
-                stage4Label.Visible = true;
-                stage4StalledLabel.Visible = true;
-                stage4StalledText.Visible = true;
-                stage4Text.Visible = true;
-                stage5Label.Visible = true;
-                stage5StalledLabel.Visible = true;
-                stage5StalledText.Visible = true;
-                stage5Text.Visible = true;
-
-                delaysLabel.Visible = false;
-                rbdLabel.Visible = false;
-                rsdLabel.Visible = false;
-                tddLabel.Visible = false;
-                rbdText.Visible = false;
-                rsdText.Visible = false;
-                tddText.Visible = false;
-                instInExLabel1.Visible = false;
-                instInExLabel2.Visible = false;
-                instInExText.Visible = false;
-                instructionsInFlightLabel.Visible = false;
-                instructionInFlightText.Visible = false;
-                issueStageLabel.Visible = false;
-                issueStageText.Visible = false;
-                commitStageLabel.Visible = false;
-                commitStageText.Visible = false;
+                staticPanel.Visible = true;
+                dynamicPanel.Visible = false;
             }
         }
 
@@ -689,42 +653,36 @@ namespace ISA_GUI
 		 * Date created: 3/2/22 <br>
 		 * <hr>
 		 */
-        private void updatePipeline()
+        private void updateStaticPipeline()
         {
-            int instructionHex;
 
             if (stages[0] != null)
             {
-                instructionHex = (stages[0].binInstruction[2] + (stages[0].binInstruction[1] << 8) + (stages[0].binInstruction[0] << 16));
-                stage1Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
+                stage1Text.Text = stages[0].fullAssemblySyntax;
             }
             else
                 stage1Text.Text = "";
             if (stages[1] != null)
             {
-                instructionHex = (stages[1].binInstruction[2] + (stages[1].binInstruction[1] << 8) + (stages[1].binInstruction[0] << 16));
-                stage2Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
+                stage2Text.Text = stages[1].fullAssemblySyntax;
             }
             else
                 stage2Text.Text = "";
             if (stages[2] != null)
             {
-                instructionHex = (stages[2].binInstruction[2] + (stages[2].binInstruction[1] << 8) + (stages[2].binInstruction[0] << 16));
-                stage3Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
+                stage3Text.Text = stages[2].fullAssemblySyntax;
             }
             else
                 stage3Text.Text = "";
             if (stages[3] != null)
             {
-                instructionHex = (stages[3].binInstruction[2] + (stages[3].binInstruction[1] << 8) + (stages[3].binInstruction[0] << 16));
-                stage4Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
+                stage4Text.Text = stages[3].fullAssemblySyntax;
             }
             else
                 stage4Text.Text = "";
             if (stages[4] != null)
             {
-                instructionHex = (stages[4].binInstruction[2] + (stages[4].binInstruction[1] << 8) + (stages[4].binInstruction[0] << 16));
-                stage5Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
+                stage5Text.Text = stages[4].fullAssemblySyntax;
             }
             else
                 stage5Text.Text = "";
@@ -742,6 +700,29 @@ namespace ISA_GUI
                 wawText.Text = cpu.SP.WAW.ToString();
             }
            
+        }
+
+
+        private void updateDynamicPipeline()
+        {
+            string instructionsInFlight = "";
+            int numOfInstInExecution = 0;
+            foreach(Instruction inst in cpu.DP.reorderBuffer.reorderBuffer)
+            {
+                instructionsInFlight += inst.fullAssemblySyntax + "\n";
+                if (inst.justIssued)
+                    issueStageText.Text = inst.fullAssemblySyntax;
+                if (inst.stage == 5)
+                    commitStageText.Text = inst.fullAssemblySyntax;
+                if (inst.executionInProgress)
+                    numOfInstInExecution++;
+            }
+            instructionInFlightText.Text = instructionsInFlight;
+            instInExText.Text = numOfInstInExecution.ToString();
+            currentCycleText.Text = cpu.DP.cycleCount.ToString();
+            rbdText.Text = cpu.DP.reorderBufferDelay.ToString();
+            rsdText.Text = cpu.DP.reservationStationDelay.ToString();
+            tddText.Text = cpu.DP.trueDependenceDelay.ToString();
         }
 
         
