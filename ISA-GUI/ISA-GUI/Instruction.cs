@@ -34,7 +34,7 @@ namespace ISA_GUI
 		public string fOp1, fOp2, fOp3;
 		public int iOperand1, iOperand2, iOperand3, ASPR, dependantOpID1, dependantOpID2;
 		public float fOperand1, fOperand2, fOperand3;
-		public bool isFloat, executionInProgress, doneExecuting;
+		public bool isFloat, executionInProgress, doneExecuting, stage2ExecutionFinished;
 		public string assembly1, result;
 		public string assembly2;
 		/**
@@ -59,6 +59,7 @@ namespace ISA_GUI
 			fOp3 = "";
 			dependantOpID1 = -1;
 			dependantOpID2 = -1;
+			stage2ExecutionFinished = false;
 		}
 	}
 }

@@ -65,5 +65,17 @@ namespace ISA_GUI
 				floatQiIndex[i] = -1;
 			}
 		}
+
+		public void clearSpecificRegisterQI(Instruction instruction)
+        {
+			if(instruction.isFloat)
+            {
+				floatQi[Array.IndexOf(floatQiIndex, instruction.ID)] = "0";
+			}
+            else
+            {
+				intQi[Array.IndexOf(intQiIndex, instruction.ID)] = "0";
+            }
+        }
     }
 }

@@ -148,20 +148,13 @@ namespace ISA_GUI
                 
 
                 //Put the instructions into the reservation station. This should be the first cycle of the pipeline
-                foreach (Instruction inst in instructionsInFlight) //Will run through instruction queue, instruction will bne take off the queue once commited
+                foreach (Instruction inst in instructionsInFlight.ToList()) //Will run through instruction queue, instruction will bne take off the queue once commited
                 {
                     switch (inst.stage) //Instuction will hold which cycle it's in
                     {
                         //Take instructions from the data bus and add them to the reorder buffer where instructions will be executed based on program counter
                         case 5:
-                            try
-                            {
-                                reorderBuffer.addToReorderBuffer(inst, ref config);
-                            }
-                            catch
-                            {
-                                reorderBufferDelay++;
-                            }
+                            
                             int instructionIndex = reorderBuffer.checkCommit(inst, ref WR, ref dataMemory, ref lastBranchDecision, ref IM, ref registers, ref halted, ref commonDataBus);
                             bool hazardDetected = detectControlHazard(instructionIndex, ref registers);
                             if(!hazardDetected)
@@ -170,7 +163,10 @@ namespace ISA_GUI
                                 {
                                     int cdbIndex = commonDataBus.index[instructionIndex];
                                     commonDataBus.CDB.Remove(commonDataBus.CDB.ElementAt(cdbIndex).Key);
+                                    commonDataBus.index.Remove(inst.ID);
+                                    commonDataBus.IDIndex.Remove(cdbIndex);
                                     instructionsInFlight.Remove(inst);
+                                    registers.clearSpecificRegisterQI(inst);
                                 }
                                 catch 
                                 {
@@ -181,6 +177,7 @@ namespace ISA_GUI
                         //Store the answer and corresponding reservation name into the data bus
                         case 4:
                             WR.writeToCDB(inst, ref commonDataBus, in inst.result);
+                            clearFU(inst);
                             inst.stage = 5;
                             break;
 
@@ -201,12 +198,14 @@ namespace ISA_GUI
                         //Open up reservation station to allow for more instructions to flow in
                         //Execute within the functional unit
                         case 2:
-                            doneExecuting = execute(inst, ref registers, ref dataMemory, ref IM, ref config, ref alu, ref lastBranchDecision, ref result, ref instASPR);
+                            Instruction executeInstruction = execute(inst, ref registers, ref dataMemory, ref IM, ref config, ref alu, ref lastBranchDecision, ref result, ref instASPR);
                             inst.result = result;
                             inst.ASPR = instASPR;
                             inst.dependantOpID1 = 0;
                             inst.dependantOpID2 = 0;
-                            if (doneExecuting)
+                            inst.doneExecuting = executeInstruction.doneExecuting;
+                            inst.executionInProgress = executeInstruction.executionInProgress;
+                            if (inst.doneExecuting)
                             {
                                 if (inst.opcode == 0 || inst.opcode == 1)
                                     inst.stage = 5;
@@ -246,8 +245,9 @@ namespace ISA_GUI
 
                             try
                             {
-                                
                                 Instruction populateInstruction = populateReservationStation(inst, ref registers);
+                                reorderBuffer.addToReorderBuffer(inst, ref config);
+                                instructionQueue.Dequeue();
                                 inst.functionalUnitID = populateInstruction.functionalUnitID;
                                 inst.fOp1 = populateInstruction.fOp1;
                                 inst.fOp2 = populateInstruction.fOp2;
@@ -261,14 +261,13 @@ namespace ISA_GUI
                             }
                             catch (Exception)
                             {
+                                instructionsInFlight.Remove(inst);
                                 reservationStationDelay++;
                             }
                             break;
                     }
                 }
 
-                //generateAssembly(ref assemblyString, IM);       //Populates instructionQueue and writes out assembly
-                //halted = true; //For testing purposes
             } while (!halted && !stepThrough);
         }
 
@@ -300,7 +299,7 @@ namespace ISA_GUI
         private void fetchFromInstructionQueue()
         {
             if(instructionQueue.Count != 0)
-                instructionsInFlight.Add(instructionQueue.Dequeue());
+                instructionsInFlight.Add(instructionQueue.Peek());
             return;
         }
 
@@ -310,31 +309,42 @@ namespace ISA_GUI
             return instruction;
         }
         
-        private bool execute(Instruction instruction, ref RegisterFile registers,ref DataMemory memory, 
+        private Instruction execute(Instruction instruction, ref RegisterFile registers,ref DataMemory memory, 
             ref InstructionMemory IM, ref ConfigCycle config, ref ALU alu, ref bool branchTaken, ref string result, ref int intASPR)
         {
             if (instruction.opcode == 0 || instruction.opcode == 1)
-                return true;
-            try
             {
-                sendToFU(ref instruction);
+                instruction.doneExecuting = true;
+                return instruction;
+            }
+            try
+            {   
+                if(!instruction.executionInProgress)
+                    sendToFU(ref instruction);
             }
             catch(Exception)
             {
-                return false;
+                instruction.doneExecuting = false;
+                return instruction;
             }
+            instruction.executionInProgress = true;
 
             bool dependencies = checkDependencies(ref instruction, ref commonDataBus, ref registers);
             if(dependencies)
             {
-                return false;
+                instruction.doneExecuting = false;
+                return instruction;
             }
             switch (instruction.functionalUnitID)
             {
                 case 1:
-                    if(!intAddFu.instruction.executionInProgress && !intAddFu.instruction.doneExecuting)
+                    if(!intAddFu.instruction.stage2ExecutionFinished && !intAddFu.instruction.doneExecuting)
                     {
                         EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intAddFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        instruction.doneExecuting = false;
+                        instruction.executionInProgress = true;
+                        instruction.stage2ExecutionFinished = true;
+                        intAddFu.instruction.stage2ExecutionFinished = true;
                         intAddFu.instruction.executionInProgress = true;
                         intAddFu.instruction.cycleControl--;
                     }
@@ -344,14 +354,20 @@ namespace ISA_GUI
                     {
                         intAddFu.instruction.doneExecuting = true;
                         intAddFu.instruction.executionInProgress = false;
+                        instruction.doneExecuting = true;
+                        instruction.executionInProgress = false;
                         intAddFu.instruction = null;
-                        return true;
+                        return instruction;
                     }
                     break;
                 case 2:
-                    if (!intSubFu.instruction.executionInProgress && !intSubFu.instruction.doneExecuting)
+                    if (!intSubFu.instruction.stage2ExecutionFinished && !intSubFu.instruction.doneExecuting)
                     {
                         EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intSubFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        instruction.doneExecuting = false;
+                        instruction.executionInProgress = true;
+                        instruction.stage2ExecutionFinished = true;
+                        intSubFu.instruction.stage2ExecutionFinished = true;
                         intSubFu.instruction.executionInProgress = true;
                         intSubFu.instruction.cycleControl--;
                     }
@@ -361,14 +377,20 @@ namespace ISA_GUI
                     {
                         intSubFu.instruction.doneExecuting = true;
                         intSubFu.instruction.executionInProgress = false;
+                        instruction.doneExecuting = true;
+                        instruction.executionInProgress = false;
                         intSubFu.instruction = null;
-                        return true;
+                        return instruction;
                     }
                     break;
                 case 3:
-                    if (!intMultFu.instruction.executionInProgress && !intMultFu.instruction.doneExecuting)
+                    if (!intMultFu.instruction.stage2ExecutionFinished && !intMultFu.instruction.doneExecuting)
                     {
                         EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intMultFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        instruction.doneExecuting = false;
+                        instruction.executionInProgress = true;
+                        instruction.stage2ExecutionFinished = true;
+                        intMultFu.instruction.stage2ExecutionFinished = true;
                         intMultFu.instruction.executionInProgress = true;
                         intMultFu.instruction.cycleControl--;
                     }
@@ -378,14 +400,20 @@ namespace ISA_GUI
                     {
                         intMultFu.instruction.doneExecuting = true;
                         intMultFu.instruction.executionInProgress = false;
+                        instruction.doneExecuting = true;
+                        instruction.executionInProgress = false;
                         intMultFu.instruction = null;
-                        return true;
+                        return instruction;
                     }
                     break;
                 case 4:
-                    if (!intDivFu.instruction.executionInProgress && !intDivFu.instruction.doneExecuting)
+                    if (!intDivFu.instruction.stage2ExecutionFinished && !intDivFu.instruction.doneExecuting)
                     {
                         EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intDivFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        instruction.doneExecuting = false;
+                        instruction.executionInProgress = true;
+                        instruction.stage2ExecutionFinished = true;
+                        intDivFu.instruction.stage2ExecutionFinished = true;
                         intDivFu.instruction.executionInProgress = true;
                         intDivFu.instruction.cycleControl--;
                     }
@@ -395,14 +423,20 @@ namespace ISA_GUI
                     {
                         intDivFu.instruction.doneExecuting = true;
                         intDivFu.instruction.executionInProgress = false;
+                        instruction.doneExecuting = true;
+                        instruction.executionInProgress = false;
                         intDivFu.instruction = null;
-                        return true;
+                        return instruction;
                     }
                     break;
                 case 5:
-                    if (!floatAddFu.instruction.executionInProgress && !floatAddFu.instruction.doneExecuting)
+                    if (!floatAddFu.instruction.stage2ExecutionFinished && !floatAddFu.instruction.doneExecuting)
                     {
                         EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatAddFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        instruction.doneExecuting = false;
+                        instruction.executionInProgress = true;
+                        instruction.stage2ExecutionFinished = true;
+                        floatAddFu.instruction.stage2ExecutionFinished = true;
                         floatAddFu.instruction.executionInProgress = true;
                         floatAddFu.instruction.cycleControl--;
                     }
@@ -412,14 +446,20 @@ namespace ISA_GUI
                     {
                         floatAddFu.instruction.doneExecuting = true;
                         floatAddFu.instruction.executionInProgress = false;
+                        instruction.doneExecuting = true;
+                        instruction.executionInProgress = false;
                         floatAddFu.instruction = null;
-                        return true;
+                        return instruction;
                     }
                     break;
                 case 6:
-                    if (!floatSubFu.instruction.executionInProgress && !floatSubFu.instruction.doneExecuting)
+                    if (!floatSubFu.instruction.stage2ExecutionFinished && !floatSubFu.instruction.doneExecuting)
                     {
                         EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatSubFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        instruction.doneExecuting = false;
+                        instruction.executionInProgress = true;
+                        instruction.stage2ExecutionFinished = true;
+                        floatSubFu.instruction.stage2ExecutionFinished = true;
                         floatSubFu.instruction.executionInProgress = true;
                         floatSubFu.instruction.cycleControl--;
                     }
@@ -429,14 +469,20 @@ namespace ISA_GUI
                     {
                         floatSubFu.instruction.doneExecuting = true;
                         floatSubFu.instruction.executionInProgress = false;
+                        instruction.doneExecuting = true;
+                        instruction.executionInProgress = false;
                         floatSubFu.instruction = null;
-                        return true;
+                        return instruction;
                     }
                     break;
                 case 7:
-                    if (!floatMultFu.instruction.executionInProgress && !floatMultFu.instruction.doneExecuting)
+                    if (!floatMultFu.instruction.stage2ExecutionFinished && !floatMultFu.instruction.doneExecuting)
                     {
                         EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatMultFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        instruction.doneExecuting = false;
+                        instruction.executionInProgress = true;
+                        instruction.stage2ExecutionFinished = true;
+                        floatMultFu.instruction.stage2ExecutionFinished = true;
                         floatMultFu.instruction.executionInProgress = true;
                         floatMultFu.instruction.cycleControl--;
                     }
@@ -446,14 +492,20 @@ namespace ISA_GUI
                     {
                         floatMultFu.instruction.doneExecuting = true;
                         floatMultFu.instruction.executionInProgress = false;
+                        instruction.doneExecuting = true;
+                        instruction.executionInProgress = false;
                         floatMultFu.instruction = null;
-                        return true;
+                        return instruction;
                     }
                     break;
                 case 8:
-                    if (!floatDivFu.instruction.executionInProgress && !floatDivFu.instruction.doneExecuting)
+                    if (!floatDivFu.instruction.stage2ExecutionFinished && !floatDivFu.instruction.doneExecuting)
                     {
                         EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatDivFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        instruction.doneExecuting = false;
+                        instruction.executionInProgress = true;
+                        instruction.stage2ExecutionFinished = true;
+                        floatDivFu.instruction.stage2ExecutionFinished = true;
                         floatDivFu.instruction.executionInProgress = true;
                         floatDivFu.instruction.cycleControl--;
                     }
@@ -463,14 +515,20 @@ namespace ISA_GUI
                     {
                         floatDivFu.instruction.doneExecuting = true;
                         floatDivFu.instruction.executionInProgress = false;
+                        instruction.doneExecuting = true;
+                        instruction.executionInProgress = false;
                         floatDivFu.instruction = null;
-                        return true;
+                        return instruction;
                     }
                     break;
                 case 9:
-                    if (!bitwiseOPFu.instruction.executionInProgress && !bitwiseOPFu.instruction.doneExecuting)
+                    if (!bitwiseOPFu.instruction.stage2ExecutionFinished && !bitwiseOPFu.instruction.doneExecuting)
                     {
                         EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref bitwiseOPFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        instruction.doneExecuting = false;
+                        instruction.executionInProgress = true;
+                        instruction.stage2ExecutionFinished = true;
+                        bitwiseOPFu.instruction.stage2ExecutionFinished = true;
                         bitwiseOPFu.instruction.executionInProgress = true;
                         bitwiseOPFu.instruction.cycleControl--;
                     }
@@ -480,14 +538,20 @@ namespace ISA_GUI
                     {
                         bitwiseOPFu.instruction.doneExecuting = true;
                         bitwiseOPFu.instruction.executionInProgress = false;
+                        instruction.doneExecuting = true;
+                        instruction.executionInProgress = false;
                         bitwiseOPFu.instruction = null;
-                        return true;
+                        return instruction;
                     }
                     break;
                 case 10:
-                    if (!memoryUnitFu.instruction.executionInProgress && !memoryUnitFu.instruction.doneExecuting)
+                    if (!memoryUnitFu.instruction.stage2ExecutionFinished && !memoryUnitFu.instruction.doneExecuting)
                     {
                         EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref memoryUnitFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        instruction.doneExecuting = false;
+                        instruction.executionInProgress = true;
+                        instruction.stage2ExecutionFinished = true;
+                        memoryUnitFu.instruction.stage2ExecutionFinished = true;
                         memoryUnitFu.instruction.executionInProgress = true;
                         memoryUnitFu.instruction.cycleControl--;
                     }
@@ -497,13 +561,19 @@ namespace ISA_GUI
                     {
                         memoryUnitFu.instruction.doneExecuting = true;
                         memoryUnitFu.instruction.executionInProgress = false;
-                        return true;
+                        instruction.doneExecuting = true;
+                        instruction.executionInProgress = false;
+                        return instruction;
                     }
                     break;
                 case 11:
-                    if (!branchFu.instruction.executionInProgress && !branchFu.instruction.doneExecuting)
+                    if (!branchFu.instruction.stage2ExecutionFinished && !branchFu.instruction.doneExecuting)
                     {
                         EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref branchFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        instruction.doneExecuting = false;
+                        instruction.executionInProgress = true;
+                        instruction.stage2ExecutionFinished = true;
+                        branchFu.instruction.stage2ExecutionFinished = true;
                         branchFu.instruction.executionInProgress = true;
                         branchFu.instruction.cycleControl--;
                     }
@@ -513,14 +583,20 @@ namespace ISA_GUI
                     {
                         branchFu.instruction.doneExecuting = true;
                         branchFu.instruction.executionInProgress = false;
+                        instruction.doneExecuting = true;
+                        instruction.executionInProgress = false;
                         branchFu.instruction = null;
-                        return true;
+                        return instruction;
                     }
                     break;
                 case 12:
-                    if (!shiftFu.instruction.executionInProgress && !shiftFu.instruction.doneExecuting)
+                    if (!shiftFu.instruction.stage2ExecutionFinished && !shiftFu.instruction.doneExecuting)
                     {
                         EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref shiftFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        instruction.doneExecuting = false;
+                        instruction.executionInProgress = true;
+                        instruction.stage2ExecutionFinished = true;
+                        shiftFu.instruction.stage2ExecutionFinished = true;
                         shiftFu.instruction.executionInProgress = true;
                         shiftFu.instruction.cycleControl--;
                     }
@@ -530,12 +606,15 @@ namespace ISA_GUI
                     {
                         shiftFu.instruction.doneExecuting = true;
                         shiftFu.instruction.executionInProgress = false;
+                        instruction.doneExecuting = true;
+                        instruction.executionInProgress = false;
                         shiftFu.instruction = null;
-                        return true;
+                        return instruction;
                     }
                     break;
             }
-            return false;
+            instruction.doneExecuting = false;
+            return instruction;
         }
 
         private void sendToFU(ref Instruction instruction)
@@ -663,11 +742,12 @@ namespace ISA_GUI
             {
                 case 10:
                 case 12:
+                    memoryUnitFu.instruction = checkOperandDependencies(memoryUnitFu.instruction, ref registers);
                     if (instruction.isFloat)
                     {
                         if (memoryUnitFu.instruction.fOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(memoryUnitFu.instruction.fOp1))
+                            if (CDB.CDB.ContainsKey(memoryUnitFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
                                     memoryUnitFu.instruction.fOperand1 = float.Parse(CDB.CDB[memoryUnitFu.instruction.fOp1]);
@@ -685,7 +765,7 @@ namespace ISA_GUI
                     {
                         if (memoryUnitFu.instruction.iOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(memoryUnitFu.instruction.iOp1))
+                            if (CDB.CDB.ContainsKey(memoryUnitFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
                                     memoryUnitFu.instruction.iOperand1 = int.Parse(CDB.CDB[memoryUnitFu.instruction.iOp1]);
@@ -703,9 +783,10 @@ namespace ISA_GUI
                 case 13:
                     if (instruction.isFloat)
                     {
+                        floatSubFu.instruction = checkOperandDependencies(floatSubFu.instruction, ref registers);
                         if (floatSubFu.instruction.fOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(floatSubFu.instruction.fOp1))
+                            if (CDB.CDB.ContainsKey(floatSubFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
                                     floatSubFu.instruction.fOperand1 = int.Parse(CDB.CDB[floatSubFu.instruction.fOp1]);
@@ -721,9 +802,10 @@ namespace ISA_GUI
                     }
                     else
                     {
+                        intSubFu.instruction = checkOperandDependencies(intSubFu.instruction, ref registers);
                         if (intSubFu.instruction.iOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intSubFu.instruction.iOp1))
+                            if (CDB.CDB.ContainsKey(intSubFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
                                     intSubFu.instruction.iOperand1 = int.Parse(CDB.CDB[intSubFu.instruction.iOp1]);
@@ -739,11 +821,13 @@ namespace ISA_GUI
                     }
                     break;
                 case 14:
+                    
                     if (instruction.isFloat)
                     {
+                        floatSubFu.instruction = checkOperandDependencies(floatSubFu.instruction, ref registers);
                         if (floatSubFu.instruction.fOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(floatSubFu.instruction.fOp1))
+                            if (CDB.CDB.ContainsKey(floatSubFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
                                     floatSubFu.instruction.fOperand1 = int.Parse(CDB.CDB[floatSubFu.instruction.fOp1]);
@@ -758,7 +842,7 @@ namespace ISA_GUI
                             floatSubFu.instruction.fOperand1 = registers.floatRegisters[floatSubFu.instruction.r1];
                         if (floatSubFu.instruction.fOp2 != "")
                         {
-                            if (CDB.CDB.ContainsKey(floatSubFu.instruction.fOp2))
+                            if (CDB.CDB.ContainsKey(floatSubFu.instruction.fOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                             {
                                 if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
                                     floatSubFu.instruction.fOperand2 = float.Parse(CDB.CDB[floatSubFu.instruction.fOp2]);
@@ -774,9 +858,10 @@ namespace ISA_GUI
                     }
                     else
                     {
+                        intSubFu.instruction = checkOperandDependencies(floatSubFu.instruction, ref registers);
                         if (intSubFu.instruction.iOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intSubFu.instruction.iOp1))
+                            if (CDB.CDB.ContainsKey(intSubFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
                                     intSubFu.instruction.iOperand1 = int.Parse(CDB.CDB[intSubFu.instruction.iOp1]);
@@ -791,7 +876,7 @@ namespace ISA_GUI
                             intSubFu.instruction.iOperand1 = registers.intRegisters[intSubFu.instruction.r1];
                         if (intSubFu.instruction.iOp2 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intSubFu.instruction.iOp2))
+                            if (CDB.CDB.ContainsKey(intSubFu.instruction.iOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                             {
                                 if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
                                     intSubFu.instruction.iOperand2 = int.Parse(CDB.CDB[intSubFu.instruction.iOp2]);
@@ -806,9 +891,10 @@ namespace ISA_GUI
                 case 15:
                     if (instruction.isFloat)
                     {
+                        load_storeBuffer.instruction = checkOperandDependencies(load_storeBuffer.instruction, ref registers);
                         if (load_storeBuffer.instruction.fOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(load_storeBuffer.instruction.fOp2))
+                            if (CDB.CDB.ContainsKey(load_storeBuffer.instruction.fOp1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
                                     load_storeBuffer.instruction.fOperand1 = float.Parse(CDB.CDB[load_storeBuffer.instruction.fOp1]);
@@ -824,9 +910,10 @@ namespace ISA_GUI
                     }
                     else
                     {
+                        load_storeBuffer.instruction = checkOperandDependencies(load_storeBuffer.instruction, ref registers);
                         if (load_storeBuffer.instruction.iOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(load_storeBuffer.instruction.iOp1))
+                            if (CDB.CDB.ContainsKey(load_storeBuffer.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
                                     load_storeBuffer.instruction.iOperand1 = int.Parse(CDB.CDB[load_storeBuffer.instruction.iOp1]);
@@ -845,9 +932,10 @@ namespace ISA_GUI
                 case 17:
                 case 18:
                 case 19:
+                    shiftFu.instruction = checkOperandDependencies(shiftFu.instruction, ref registers);
                     if (shiftFu.instruction.iOp1 != "")
                     {
-                        if (CDB.CDB.ContainsKey(shiftFu.instruction.iOp1))
+                        if (CDB.CDB.ContainsKey(shiftFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                         {
                             if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
                                 shiftFu.instruction.iOperand1 = int.Parse(CDB.CDB[shiftFu.instruction.iOp1]);
@@ -862,7 +950,7 @@ namespace ISA_GUI
                         shiftFu.instruction.iOperand1 = registers.intRegisters[shiftFu.instruction.r1];
                     if (shiftFu.instruction.iOp2 != "")
                     {
-                        if (CDB.CDB.ContainsKey(shiftFu.instruction.iOp2))
+                        if (CDB.CDB.ContainsKey(shiftFu.instruction.iOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                         {
                             if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
                                 shiftFu.instruction.iOperand2 = int.Parse(CDB.CDB[shiftFu.instruction.iOp2]);
@@ -879,9 +967,10 @@ namespace ISA_GUI
                 case 20:
                     if (instruction.isFloat)
                     {
+                        floatAddFu.instruction = checkOperandDependencies(floatAddFu.instruction, ref registers);
                         if (floatAddFu.instruction.fOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(floatAddFu.instruction.fOp1))
+                            if (CDB.CDB.ContainsKey(floatAddFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
                                     floatAddFu.instruction.fOperand1 = int.Parse(CDB.CDB[floatAddFu.instruction.fOp1]);
@@ -896,7 +985,7 @@ namespace ISA_GUI
                             floatAddFu.instruction.fOperand1 = registers.floatRegisters[floatAddFu.instruction.r1];
                         if (floatAddFu.instruction.fOp2 != "")
                         {
-                            if (CDB.CDB.ContainsKey(floatAddFu.instruction.fOp2))
+                            if (CDB.CDB.ContainsKey(floatAddFu.instruction.fOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                             {
                                 if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
                                     floatAddFu.instruction.fOperand2 = float.Parse(CDB.CDB[floatAddFu.instruction.fOp2]);
@@ -912,9 +1001,10 @@ namespace ISA_GUI
                     }
                     else
                     {
+                        intAddFu.instruction = checkOperandDependencies(intAddFu.instruction, ref registers);
                         if (intAddFu.instruction.iOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intAddFu.instruction.iOp1))
+                            if (CDB.CDB.ContainsKey(intAddFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
                                     intAddFu.instruction.iOperand1 = int.Parse(CDB.CDB[intAddFu.instruction.iOp1]);
@@ -929,7 +1019,7 @@ namespace ISA_GUI
                             intAddFu.instruction.iOperand1 = registers.intRegisters[intAddFu.instruction.r1];
                         if (intAddFu.instruction.iOp2 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intAddFu.instruction.iOp2))
+                            if (CDB.CDB.ContainsKey(intAddFu.instruction.iOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                             {
                                 if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
                                     intAddFu.instruction.iOperand2 = int.Parse(CDB.CDB[intAddFu.instruction.iOp2]);
@@ -947,9 +1037,10 @@ namespace ISA_GUI
                 case 21:
                     if (instruction.isFloat)
                     {
+                        floatSubFu.instruction = checkOperandDependencies(floatSubFu.instruction, ref registers);
                         if (floatSubFu.instruction.fOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(floatSubFu.instruction.fOp1))
+                            if (CDB.CDB.ContainsKey(floatSubFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
                                     floatSubFu.instruction.fOperand1 = int.Parse(CDB.CDB[floatSubFu.instruction.fOp1]);
@@ -964,7 +1055,7 @@ namespace ISA_GUI
                             floatSubFu.instruction.fOperand1 = registers.floatRegisters[floatSubFu.instruction.r1];
                         if (floatSubFu.instruction.fOp2 != "")
                         {
-                            if (CDB.CDB.ContainsKey(floatSubFu.instruction.fOp2))
+                            if (CDB.CDB.ContainsKey(floatSubFu.instruction.fOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                             {
                                 if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
                                     floatSubFu.instruction.fOperand2 = float.Parse(CDB.CDB[floatSubFu.instruction.fOp2]);
@@ -980,9 +1071,10 @@ namespace ISA_GUI
                     }
                     else
                     {
+                        intSubFu.instruction = checkOperandDependencies(intSubFu.instruction, ref registers);
                         if (intSubFu.instruction.iOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intSubFu.instruction.iOp1))
+                            if (CDB.CDB.ContainsKey(intSubFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
                                     intSubFu.instruction.iOperand1 = int.Parse(CDB.CDB[intSubFu.instruction.iOp1]);
@@ -997,7 +1089,7 @@ namespace ISA_GUI
                             intSubFu.instruction.iOperand1 = registers.intRegisters[intSubFu.instruction.r1];
                         if (intSubFu.instruction.iOp2 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intSubFu.instruction.iOp2))
+                            if (CDB.CDB.ContainsKey(intSubFu.instruction.iOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                             {
                                 if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
                                     intSubFu.instruction.iOperand2 = int.Parse(CDB.CDB[intSubFu.instruction.iOp2]);
@@ -1015,9 +1107,10 @@ namespace ISA_GUI
                 case 22:
                     if (instruction.isFloat)
                     {
+                        floatMultFu.instruction = checkOperandDependencies(floatMultFu.instruction, ref registers);
                         if (floatMultFu.instruction.fOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(floatMultFu.instruction.fOp1))
+                            if (CDB.CDB.ContainsKey(floatMultFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
                                     floatMultFu.instruction.fOperand1 = int.Parse(CDB.CDB[floatMultFu.instruction.fOp1]);
@@ -1032,7 +1125,7 @@ namespace ISA_GUI
                             floatMultFu.instruction.fOperand1 = registers.floatRegisters[floatMultFu.instruction.r1];
                         if (floatMultFu.instruction.fOp2 != "")
                         {
-                            if (CDB.CDB.ContainsKey(floatMultFu.instruction.fOp2))
+                            if (CDB.CDB.ContainsKey(floatMultFu.instruction.fOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                             {
                                 if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
                                     floatMultFu.instruction.fOperand2 = float.Parse(CDB.CDB[floatMultFu.instruction.fOp2]);
@@ -1048,9 +1141,10 @@ namespace ISA_GUI
                     }
                     else
                     {
+                        intMultFu.instruction = checkOperandDependencies(intMultFu.instruction, ref registers);
                         if (intMultFu.instruction.iOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intMultFu.instruction.iOp1))
+                            if (CDB.CDB.ContainsKey(intMultFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
                                     intMultFu.instruction.iOperand1 = int.Parse(CDB.CDB[intMultFu.instruction.iOp1]);
@@ -1065,7 +1159,7 @@ namespace ISA_GUI
                             intMultFu.instruction.iOperand1 = registers.intRegisters[intMultFu.instruction.r1];
                         if (intMultFu.instruction.iOp2 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intMultFu.instruction.iOp2))
+                            if (CDB.CDB.ContainsKey(intMultFu.instruction.iOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                             {
                                 if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
                                     intMultFu.instruction.iOperand2 = int.Parse(CDB.CDB[intMultFu.instruction.iOp2]);
@@ -1083,9 +1177,10 @@ namespace ISA_GUI
                 case 23:
                     if(instruction.isFloat)
                     {
+                        floatDivFu.instruction = checkOperandDependencies(floatDivFu.instruction, ref registers);
                         if (floatDivFu.instruction.fOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(floatDivFu.instruction.fOp1))
+                            if (CDB.CDB.ContainsKey(floatDivFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
                                     floatDivFu.instruction.fOperand1 = int.Parse(CDB.CDB[floatDivFu.instruction.fOp1]);
@@ -1100,7 +1195,7 @@ namespace ISA_GUI
                             floatDivFu.instruction.fOperand1 = registers.floatRegisters[floatDivFu.instruction.r1];
                         if (floatDivFu.instruction.fOp2 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intDivFu.instruction.fOp2))
+                            if (CDB.CDB.ContainsKey(intDivFu.instruction.fOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                             {
                                 if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
                                     floatDivFu.instruction.fOperand2 = float.Parse(CDB.CDB[floatDivFu.instruction.fOp2]);
@@ -1116,9 +1211,10 @@ namespace ISA_GUI
                     }
                     else
                     {
+                        intDivFu.instruction = checkOperandDependencies(intDivFu.instruction, ref registers);
                         if (intDivFu.instruction.iOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intDivFu.instruction.iOp1))
+                            if (CDB.CDB.ContainsKey(intDivFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
                                     intDivFu.instruction.iOperand1 = int.Parse(CDB.CDB[intDivFu.instruction.iOp1]);
@@ -1133,7 +1229,7 @@ namespace ISA_GUI
                             intDivFu.instruction.iOperand1 = registers.intRegisters[intDivFu.instruction.r1];
                         if (intDivFu.instruction.iOp2 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intDivFu.instruction.iOp2))
+                            if (CDB.CDB.ContainsKey(intDivFu.instruction.iOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                             {
                                 if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
                                     intDivFu.instruction.iOperand2 = int.Parse(CDB.CDB[intDivFu.instruction.iOp2]);
@@ -1151,9 +1247,10 @@ namespace ISA_GUI
                 case 24:
                 case 25:
                 case 26:
+                    bitwiseOPFu.instruction = checkOperandDependencies(bitwiseOPFu.instruction, ref registers);
                     if (bitwiseOPFu.instruction.iOp1 != "")
                     {
-                        if (CDB.CDB.ContainsKey(bitwiseOPFu.instruction.iOp1))
+                        if (CDB.CDB.ContainsKey(bitwiseOPFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                         {
                             if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
                                 bitwiseOPFu.instruction.iOperand1 = int.Parse(CDB.CDB[bitwiseOPFu.instruction.iOp1]);
@@ -1168,7 +1265,7 @@ namespace ISA_GUI
                         bitwiseOPFu.instruction.iOperand1 = registers.intRegisters[bitwiseOPFu.instruction.r1];
                     if (bitwiseOPFu.instruction.iOp2 != "")
                     {
-                        if (CDB.CDB.ContainsKey(bitwiseOPFu.instruction.iOp2))
+                        if (CDB.CDB.ContainsKey(bitwiseOPFu.instruction.iOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                         {
                             if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
                                 bitwiseOPFu.instruction.iOperand2 = int.Parse(CDB.CDB[bitwiseOPFu.instruction.iOp2]);
@@ -1183,9 +1280,10 @@ namespace ISA_GUI
                         bitwiseOPFu.instruction.iOperand2 = registers.intRegisters[bitwiseOPFu.instruction.r2];
                     break;
                 case 27:
+                    bitwiseOPFu.instruction = checkOperandDependencies(bitwiseOPFu.instruction, ref registers);
                     if (bitwiseOPFu.instruction.iOp1 != "")
                     {
-                        if (CDB.CDB.ContainsKey(bitwiseOPFu.instruction.iOp1))
+                        if (CDB.CDB.ContainsKey(bitwiseOPFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                         {
                             if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
                                 bitwiseOPFu.instruction.iOperand1 = int.Parse(CDB.CDB[bitwiseOPFu.instruction.iOp1]);
@@ -1231,13 +1329,9 @@ namespace ISA_GUI
                 case 15:
                     if (instruction.isFloat)
                     {
-                        if (!registers.floatQi[instruction.r2].Equals("0"))
-                        {
-                            instruction.fOp1 = registers.floatQi[instruction.r2];
-                            instruction.dependantOpID1 = registers.floatQiIndex[instruction.r2];
-                        }
                         if (!load_storeBuffer.Busy)
                         {
+                            instruction = checkOperandDependencies(instruction, ref registers);
                             load_storeBuffer.Busy = true;
                             registers.floatQi[instruction.r3] = "memoryUnitFu";
                             registers.floatQiIndex[instruction.r3] = instruction.ID;
@@ -1248,13 +1342,9 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        if (!registers.intQi[instruction.r2].Equals("0"))
-                        {
-                            instruction.iOp1 = registers.intQi[instruction.r2];
-                            instruction.dependantOpID1 = registers.intQiIndex[instruction.r2];
-                        }
                         if (!load_storeBuffer.Busy)
                         {
+                            instruction = checkOperandDependencies(instruction, ref registers);
                             load_storeBuffer.Busy = true;
                             registers.intQi[instruction.r3] = "memoryUnitFu";
                             registers.intQiIndex[0] = instruction.ID;
@@ -1289,23 +1379,7 @@ namespace ISA_GUI
                     if (!load_storeBuffer.Busy)
                     {
                         load_storeBuffer.Busy = true;
-
-                        if(instruction.isFloat)
-                        {
-                            if (!registers.floatQi[0].Equals("0"))
-                            {
-                                instruction.fOp1 = registers.floatQi[0];
-                                instruction.dependantOpID1 = registers.floatQiIndex[0];
-                            }
-                        }
-                        else
-                        {
-                            if (!registers.intQi[0].Equals("0"))
-                            {
-                                instruction.iOp1 = registers.intQi[0];
-                                instruction.dependantOpID1 = registers.intQiIndex[0];
-                            }
-                        }
+                        instruction = checkOperandDependencies(instruction, ref registers);
                         instruction.functionalUnitID = 10;
                         load_storeBuffer.instruction = instruction;
                         return instruction;
@@ -1338,11 +1412,7 @@ namespace ISA_GUI
                     {
                         if (!load_storeBuffer.Busy)
                         {
-                            if (!registers.floatQi[0].Equals("0"))
-                            {
-                                instruction.fOp1 = registers.floatQi[0];
-                                instruction.dependantOpID1 = registers.floatQiIndex[0];
-                            }
+                            instruction = checkOperandDependencies(instruction, ref registers);
                             registers.floatQi[instruction.r3] = "memoryUnitFu";
                             registers.floatQiIndex[instruction.r3] = instruction.ID;
                             load_storeBuffer.Busy = true;
@@ -1356,11 +1426,7 @@ namespace ISA_GUI
                     {
                         if (!load_storeBuffer.Busy)
                         {
-                            if (!registers.intQi[0].Equals("0"))
-                            {
-                                instruction.iOp1 = registers.intQi[0];
-                                instruction.dependantOpID1 = registers.intQiIndex[0];
-                            }
+                            instruction = checkOperandDependencies(instruction, ref registers);
                             load_storeBuffer.Busy = true;
                             registers.intQi[instruction.r3] = "memoryUnitFu";
                             registers.intQiIndex[instruction.r3] = instruction.ID;
@@ -1374,13 +1440,9 @@ namespace ISA_GUI
                 case 13:
                     if (instruction.isFloat)
                     {
-                        if (!registers.floatQi[instruction.r3].Equals("0"))
-                        {
-                            instruction.fOp1 = registers.floatQi[instruction.r3];
-                            instruction.dependantOpID1 = registers.floatQiIndex[instruction.r3];
-                        }
                         if (!intSubRS.Busy)
                         {
+                            instruction = checkOperandDependencies(instruction, ref registers);
                             floatSubRS.Busy = true;
                             instruction.functionalUnitID = 2;
                             floatSubRS.instruction = instruction;
@@ -1389,13 +1451,9 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        if (!registers.intQi[instruction.r3].Equals("0"))
-                        {
-                            instruction.iOp1 = registers.intQi[instruction.r3];
-                            instruction.dependantOpID1 = registers.intQiIndex[instruction.r3];
-                        }
                         if (!intSubRS.Busy)
                         {
+                            instruction = checkOperandDependencies(instruction, ref registers);
                             intSubRS.Busy = true;
                             instruction.functionalUnitID = 2;
                             intSubRS.instruction = instruction;
@@ -1406,19 +1464,9 @@ namespace ISA_GUI
                 case 14:
                     if (instruction.isFloat)
                     {
-                        if (!registers.floatQi[instruction.r1].Equals("0"))
-                        {
-                            instruction.fOp1 = registers.floatQi[instruction.r1];
-                            instruction.dependantOpID1 = registers.floatQiIndex[instruction.r1];
-                        }
-
-                        if (!registers.floatQi[instruction.r2].Equals("0"))
-                        {
-                            instruction.fOp2 = registers.floatQi[instruction.r2];
-                            instruction.dependantOpID2 = registers.floatQiIndex[instruction.r2];
-                        }
                         if (!floatSubRS.Busy)
                         {
+                            instruction = checkOperandDependencies(instruction, ref registers);
                             floatSubRS.Busy = true;
                             instruction.functionalUnitID = 2;
                             floatSubRS.instruction = instruction;
@@ -1427,19 +1475,9 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        if (!registers.intQi[instruction.r1].Equals("0"))
-                        {
-                            instruction.iOp1 = registers.intQi[instruction.r1];
-                            instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
-                        }
-
-                        if (!registers.intQi[instruction.r2].Equals("0"))
-                        {
-                            instruction.iOp2 = registers.intQi[instruction.r2];
-                            instruction.dependantOpID2 = registers.intQiIndex[instruction.r2];
-                        }
                         if (!intSubRS.Busy)
                         {
+                            instruction = checkOperandDependencies(instruction, ref registers);
                             intSubRS.Busy = true;
                             instruction.functionalUnitID = 2;
                             intSubRS.instruction = instruction;
@@ -1453,17 +1491,7 @@ namespace ISA_GUI
                 case 19:
                     if(!shiftOPS.Busy)
                     {
-                        if (!registers.intQi[instruction.r1].Equals("0"))
-                        {
-                            instruction.iOp1 = registers.intQi[instruction.r1];
-                            instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
-                        }
-
-                        if (!registers.intQi[instruction.r2].Equals("0"))
-                        {
-                            instruction.iOp2 = registers.intQi[instruction.r2];
-                            instruction.dependantOpID2 = registers.intQiIndex[instruction.r2];
-                        }
+                        instruction = checkOperandDependencies(instruction, ref registers);
                         shiftOPS.Busy = true;
                         registers.intQi[instruction.r3] = "shiftOPS";
                         registers.intQiIndex[instruction.r3] = instruction.ID;
@@ -1477,17 +1505,7 @@ namespace ISA_GUI
                     {
                         if (!floatAddRS.Busy)
                         {
-                            if (!registers.floatQi[instruction.r1].Equals("0"))
-                            {
-                                instruction.fOp1 = registers.floatQi[instruction.r1];
-                                instruction.dependantOpID1 = registers.floatQiIndex[instruction.r1];
-                            }
-
-                            if (!registers.floatQi[instruction.r2].Equals("0"))
-                            {
-                                instruction.fOp2 = registers.floatQi[instruction.r2];
-                                instruction.dependantOpID2 = registers.floatQiIndex[instruction.r2];
-                            }
+                            instruction = checkOperandDependencies(instruction, ref registers);
                             floatAddRS.Busy = true;
                             registers.floatQi[instruction.r3] = "floatAddRS";
                             registers.floatQiIndex[instruction.r3] = instruction.ID;
@@ -1500,17 +1518,7 @@ namespace ISA_GUI
                     {
                         if(!intAddRS.Busy)
                         {
-                            if (!registers.intQi[instruction.r1].Equals("0"))
-                            {
-                                instruction.iOp1 = registers.intQi[instruction.r1];
-                                instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
-                            }
-
-                            if (!registers.intQi[instruction.r2].Equals("0"))
-                            {
-                                instruction.iOp2 = registers.intQi[instruction.r2];
-                                instruction.dependantOpID2 = registers.intQiIndex[instruction.r2];
-                            }
+                            instruction = checkOperandDependencies(instruction, ref registers);
                             intAddRS.Busy = true;
                             registers.intQi[instruction.r3] = "intAddRS";
                             registers.intQiIndex[instruction.r3] = instruction.ID;
@@ -1526,17 +1534,7 @@ namespace ISA_GUI
                     {
                         if(!floatSubRS.Busy)
                         {
-                            if (!registers.floatQi[instruction.r1].Equals("0"))
-                            {
-                                instruction.fOp1 = registers.floatQi[instruction.r1];
-                                instruction.dependantOpID1 = registers.floatQiIndex[instruction.r1];
-                            }
-
-                            if (!registers.floatQi[instruction.r2].Equals("0"))
-                            {
-                                instruction.fOp2 = registers.floatQi[instruction.r2];
-                                instruction.dependantOpID2 = registers.floatQiIndex[instruction.r2];
-                            }
+                            instruction = checkOperandDependencies(instruction, ref registers);
                             floatSubRS.Busy = true;
                             registers.floatQi[instruction.r3] = "floatSubRS";
                             registers.floatQiIndex[instruction.r3] = instruction.ID;
@@ -1549,17 +1547,7 @@ namespace ISA_GUI
                     {
                         if (!intSubRS.Busy)
                         {
-                            if (!registers.intQi[instruction.r1].Equals("0"))
-                            {
-                                instruction.iOp1 = registers.intQi[instruction.r1];
-                                instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
-                            }
-
-                            if (!registers.intQi[instruction.r2].Equals("0"))
-                            {
-                                instruction.iOp2 = registers.intQi[instruction.r2];
-                                instruction.dependantOpID2 = registers.intQiIndex[instruction.r2];
-                            }
+                            instruction = checkOperandDependencies(instruction, ref registers);
                             intSubRS.Busy = true;
                             registers.intQi[instruction.r3] = "intSubRS";
                             registers.intQiIndex[instruction.r3] = instruction.ID;
@@ -1574,17 +1562,7 @@ namespace ISA_GUI
                     {
                         if (!floatMultRS.Busy)
                         {
-                            if (!registers.floatQi[instruction.r1].Equals("0"))
-                            {
-                                instruction.fOp1 = registers.floatQi[instruction.r1];
-                                instruction.dependantOpID1 = registers.floatQiIndex[instruction.r1];
-                            }
-
-                            if (!registers.floatQi[instruction.r2].Equals("0"))
-                            {
-                                instruction.fOp2 = registers.floatQi[instruction.r2];
-                                instruction.dependantOpID2 = registers.floatQiIndex[instruction.r2];
-                            }
+                            instruction = checkOperandDependencies(instruction, ref registers);
                             floatMultRS.Busy = true;
                             registers.floatQi[instruction.r3] = "floatMultRS";
                             registers.floatQiIndex[instruction.r3] = instruction.ID;
@@ -1597,17 +1575,7 @@ namespace ISA_GUI
                     {
                         if (!intMultRS.Busy)
                         {
-                            if (!registers.intQi[instruction.r1].Equals("0"))
-                            {
-                                instruction.iOp1 = registers.intQi[instruction.r1];
-                                instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
-                            }
-
-                            if (!registers.intQi[instruction.r2].Equals("0"))
-                            {
-                                instruction.iOp2 = registers.intQi[instruction.r2];
-                                instruction.dependantOpID2 = registers.intQiIndex[instruction.r2];
-                            }
+                            instruction = checkOperandDependencies(instruction, ref registers);
                             intMultRS.Busy = true;
                             registers.intQi[instruction.r3] = "intMultRS";
                             registers.intQiIndex[instruction.r3] = instruction.ID;
@@ -1623,17 +1591,7 @@ namespace ISA_GUI
                     {
                         if (!floatDivRS.Busy)
                         {
-                            if (!registers.floatQi[instruction.r1].Equals("0"))
-                            {
-                                instruction.fOp1 = registers.floatQi[instruction.r1];
-                                instruction.dependantOpID1 = registers.floatQiIndex[instruction.r1];
-                            }
-
-                            if (!registers.floatQi[instruction.r2].Equals("0"))
-                            {
-                                instruction.fOp2 = registers.floatQi[instruction.r2];
-                                instruction.dependantOpID2 = registers.floatQiIndex[instruction.r2];
-                            }
+                            instruction = checkOperandDependencies(instruction, ref registers);
                             floatDivRS.Busy = true;
                             registers.floatQi[instruction.r3] = "floatDivRS";
                             registers.floatQiIndex[instruction.r3] = instruction.ID;
@@ -1646,17 +1604,7 @@ namespace ISA_GUI
                     {
                         if (!intDivRS.Busy)
                         {
-                            if (!registers.intQi[instruction.r1].Equals("0"))
-                            {
-                                instruction.iOp1 = registers.intQi[instruction.r1];
-                                instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
-                            }
-
-                            if (!registers.intQi[instruction.r2].Equals("0"))
-                            {
-                                instruction.iOp2 = registers.intQi[instruction.r2];
-                                instruction.dependantOpID2 = registers.intQiIndex[instruction.r2];
-                            }
+                            instruction = checkOperandDependencies(instruction, ref registers);
                             intDivRS.Busy = true;
                             registers.intQi[instruction.r3] = "intDivRS";
                             registers.intQiIndex[instruction.r3] = instruction.ID;
@@ -1671,17 +1619,7 @@ namespace ISA_GUI
                 case 26:
                     if (!bitwiseOPRS.Busy)
                     {
-                        if (!registers.intQi[instruction.r1].Equals("0"))
-                        {
-                            instruction.iOp1 = registers.intQi[instruction.r1];
-                            instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
-                        }
-
-                        if (!registers.intQi[instruction.r2].Equals("0"))
-                        {
-                            instruction.iOp2 = registers.intQi[instruction.r2];
-                            instruction.dependantOpID2 = registers.intQiIndex[instruction.r2];
-                        }
+                        instruction = checkOperandDependencies(instruction, ref registers);
                         bitwiseOPRS.Busy = true;
                         registers.intQi[instruction.r3] = "bitwiseOPRS";
                         registers.intQiIndex[instruction.r3] = instruction.ID;
@@ -1693,11 +1631,7 @@ namespace ISA_GUI
                 case 27:
                     if (!bitwiseOPRS.Busy)
                     {
-                        if (!registers.intQi[instruction.r1].Equals("0"))
-                        {
-                            instruction.iOp1 = registers.intQi[instruction.r1];
-                            instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
-                        }
+                        instruction = checkOperandDependencies(instruction, ref registers);
                         bitwiseOPRS.Busy = true;
                         registers.intQi[instruction.r3] = "bitwiseOPRS";
                         registers.intQiIndex[instruction.r3] = instruction.ID;
@@ -1775,6 +1709,490 @@ namespace ISA_GUI
             }
             return false;
         }
+
+        private void clearFU(Instruction instruction)
+        {
+            switch(instruction.functionalUnitID)
+            {
+                case 1:
+                    intAddFu.instruction = null;
+                    break;
+                case 2:
+                    intSubFu.instruction = null;
+                    break;
+                case 3:
+                    intMultFu.instruction = null;
+                    break;
+                case 4:
+                    intDivFu.instruction = null;
+                    break;
+                case 5:
+                    floatAddFu.instruction = null;
+                    break;
+                case 6:
+                    floatSubFu.instruction = null;
+                    break;
+                case 7:
+                    floatMultFu.instruction = null;
+                    break;
+                case 8:
+                    floatDivFu.instruction = null;
+                    break;
+                case 9:
+                    bitwiseOPFu.instruction = null;
+                    break;
+                case 10:
+                    memoryUnitFu.instruction = null;
+                    break;
+                case 11:
+                    branchFu.instruction = null;
+                    break;
+                case 12:
+                    shiftFu.instruction = null;
+                    break;
+            }
+        }
+
+
+
+        private Instruction checkOperandDependencies(Instruction instruction, ref RegisterFile registers)
+        {
+            switch (instruction.opcode)
+            {
+                
+                case 10:
+                    if (instruction.isFloat)
+                    {
+                        if (!registers.floatQi[0].Equals("0"))
+                        {
+                            instruction.fOp1 = registers.floatQi[0];
+                            instruction.dependantOpID1 = registers.floatQiIndex[0];
+                        }
+                        else
+                        {
+                            instruction.fOp1 = "";
+                            instruction.dependantOpID1 = -1;
+                        }
+                    }
+                    else
+                    {
+                        if (!registers.intQi[0].Equals("0"))
+                        {
+                            instruction.iOp1 = registers.intQi[0];
+                            instruction.dependantOpID1 = registers.intQiIndex[0];
+                        }
+                        else
+                        {
+                            instruction.iOp1 = "";
+                            instruction.dependantOpID1 = -1;
+                        }
+                    }
+                    break;
+                case 12:
+                    if (instruction.isFloat)
+                    {
+                        if (!registers.floatQi[0].Equals("0"))
+                        {
+                            instruction.fOp1 = registers.floatQi[0];
+                            instruction.dependantOpID1 = registers.floatQiIndex[0];
+                        }
+                        else
+                        {
+                            instruction.fOp1 = "";
+                            instruction.dependantOpID1 = -1;
+                        }
+                    }
+                    else
+                    {
+                        if (!registers.intQi[0].Equals("0"))
+                        {
+                            instruction.iOp1 = registers.intQi[0];
+                            instruction.dependantOpID1 = registers.intQiIndex[0];
+                        }
+                        else
+                        {
+                            instruction.iOp1 = "";
+                            instruction.dependantOpID1 = -1;
+                        }
+                    }
+                    break;
+                case 13:
+                    if (instruction.isFloat)
+                    {
+                        if (!registers.floatQi[instruction.r3].Equals("0"))
+                        {
+                            instruction.fOp1 = registers.floatQi[instruction.r3];
+                            instruction.dependantOpID1 = registers.floatQiIndex[instruction.r3];
+                        }
+                        else
+                        {
+                            instruction.fOp1 = "";
+                            instruction.dependantOpID1 = -1;
+                        }
+                    }
+                    else
+                    {
+                        if (!registers.intQi[instruction.r3].Equals("0"))
+                        {
+                            instruction.iOp1 = registers.intQi[instruction.r3];
+                            instruction.dependantOpID1 = registers.intQiIndex[instruction.r3];
+                        }
+                        else
+                        {
+                            instruction.iOp1 = "";
+                            instruction.dependantOpID1 = -1;
+                        }
+                    }
+                    break;
+                case 14:
+                    if (instruction.isFloat)
+                    {
+                        if (!registers.floatQi[instruction.r1].Equals("0"))
+                        {
+                            instruction.fOp1 = registers.floatQi[instruction.r1];
+                            instruction.dependantOpID1 = registers.floatQiIndex[instruction.r1];
+                        }
+                        else
+                        {
+                            instruction.fOp1 = "";
+                            instruction.dependantOpID1 = -1;
+                        }
+
+                        if (!registers.floatQi[instruction.r2].Equals("0"))
+                        {
+                            instruction.fOp2 = registers.floatQi[instruction.r2];
+                            instruction.dependantOpID2 = registers.floatQiIndex[instruction.r2];
+                        }
+                        else
+                        {
+                            instruction.fOp2 = "";
+                            instruction.dependantOpID2 = -1;
+                        }
+                    }
+                    else
+                    {
+                        if (!registers.intQi[instruction.r1].Equals("0"))
+                        {
+                            instruction.iOp1 = registers.intQi[instruction.r1];
+                            instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
+                        }
+                        else
+                        {
+                            instruction.fOp1 = "";
+                            instruction.dependantOpID1 = -1;
+                        }
+
+                        if (!registers.intQi[instruction.r2].Equals("0"))
+                        {
+                            instruction.iOp2 = registers.intQi[instruction.r2];
+                            instruction.dependantOpID2 = registers.intQiIndex[instruction.r2];
+                        }
+                        else
+                        {
+                            instruction.fOp2 = "";
+                            instruction.dependantOpID2 = -1;
+                        }
+                    }
+                    break;
+                case 15:
+                    if (instruction.isFloat)
+                    {
+                        if (!registers.floatQi[instruction.r2].Equals("0"))
+                        {
+                            instruction.fOp1 = registers.floatQi[instruction.r2];
+                            instruction.dependantOpID1 = registers.floatQiIndex[instruction.r2];
+                        }
+                        else
+                        {
+                            instruction.fOp1 = "";
+                            instruction.dependantOpID1 = -1;
+                        }
+                    }
+                    else
+                    {
+                        if (!registers.intQi[instruction.r2].Equals("0"))
+                        {
+                            instruction.iOp1 = registers.intQi[instruction.r2];
+                            instruction.dependantOpID1 = registers.intQiIndex[instruction.r2];
+                        }
+                        else
+                        {
+                            instruction.iOp1 = "";
+                            instruction.dependantOpID1 = -1;
+                        }
+                    }
+                    break;
+                case 16:
+                case 17:
+                case 18:
+                case 19:
+                    if (!registers.intQi[instruction.r1].Equals("0"))
+                    {
+                        instruction.iOp1 = registers.intQi[instruction.r1];
+                        instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
+                    }
+                    else
+                    {
+                        instruction.iOp1 = "";
+                        instruction.dependantOpID1 = -1;
+                    }
+
+                    if (!registers.intQi[instruction.r2].Equals("0"))
+                    {
+                        instruction.iOp2 = registers.intQi[instruction.r2];
+                        instruction.dependantOpID2 = registers.intQiIndex[instruction.r2];
+                    }
+                    else
+                    {
+                        instruction.iOp2 = "";
+                        instruction.dependantOpID2 = -1;
+                    }
+                    break;
+                case 20:            //Add instruction. Checks if it's float
+                    if ((instruction.isFloat))
+                    {
+                        if (!registers.floatQi[instruction.r1].Equals("0"))
+                        {
+                            instruction.fOp1 = registers.floatQi[instruction.r1];
+                            instruction.dependantOpID1 = registers.floatQiIndex[instruction.r1];
+                        }
+                        else
+                        {
+                            instruction.fOp1 = "";
+                            instruction.dependantOpID1 = -1;
+                        }
+
+                        if (!registers.floatQi[instruction.r2].Equals("0"))
+                        {
+                            instruction.fOp2 = registers.floatQi[instruction.r2];
+                            instruction.dependantOpID2 = registers.floatQiIndex[instruction.r2];
+                        }
+                        else
+                        {
+                            instruction.fOp2 = "";
+                            instruction.dependantOpID2 = -1;
+                        }
+                    }
+                    else
+                    {
+                        if (!registers.intQi[instruction.r1].Equals("0"))
+                        {
+                            instruction.iOp1 = registers.intQi[instruction.r1];
+                            instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
+                        }
+                        else
+                        {
+                            instruction.iOp1 = "";
+                            instruction.dependantOpID1 = -1;
+                        }
+
+                        if (!registers.intQi[instruction.r2].Equals("0"))
+                        {
+                            instruction.iOp2 = registers.intQi[instruction.r2];
+                            instruction.dependantOpID2 = registers.intQiIndex[instruction.r2];
+                        }
+                        else
+                        {
+                            instruction.iOp2 = "";
+                            instruction.dependantOpID2 = -1;
+                        }
+                    }
+
+                    break;
+                case 21:            //Sub instruction. Checks if it's float
+                    if ((instruction.isFloat))
+                    {
+                        if (!registers.floatQi[instruction.r1].Equals("0"))
+                        {
+                            instruction.fOp1 = registers.floatQi[instruction.r1];
+                            instruction.dependantOpID1 = registers.floatQiIndex[instruction.r1];
+                        }
+                        else
+                        {
+                            instruction.fOp1 = "";
+                            instruction.dependantOpID1 = -1;
+                        }
+
+                        if (!registers.floatQi[instruction.r2].Equals("0"))
+                        {
+                            instruction.fOp2 = registers.floatQi[instruction.r2];
+                            instruction.dependantOpID2 = registers.floatQiIndex[instruction.r2];
+                        }
+                        else
+                        {
+                            instruction.fOp2 = "";
+                            instruction.dependantOpID2 = -1;
+                        }
+                    }
+                    else
+                    {
+                        if (!registers.intQi[instruction.r1].Equals("0"))
+                        {
+                            instruction.iOp1 = registers.intQi[instruction.r1];
+                            instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
+                        }
+                        else
+                        {
+                            instruction.iOp1 = "";
+                            instruction.dependantOpID1 = -1;
+                        }
+
+                        if (!registers.intQi[instruction.r2].Equals("0"))
+                        {
+                            instruction.iOp2 = registers.intQi[instruction.r2];
+                            instruction.dependantOpID2 = registers.intQiIndex[instruction.r2];
+                        }
+                        else
+                        {
+                            instruction.iOp2 = "";
+                            instruction.dependantOpID2 = -1;
+                        }
+                    }
+                    break;
+                case 22:            //Mult instructions. Checks if it's float
+                    if ((instruction.isFloat))
+                    {
+                        if (!registers.floatQi[instruction.r1].Equals("0"))
+                        {
+                            instruction.fOp1 = registers.floatQi[instruction.r1];
+                            instruction.dependantOpID1 = registers.floatQiIndex[instruction.r1];
+                        }
+                        else
+                        {
+                            instruction.fOp1 = "";
+                            instruction.dependantOpID1 = -1;
+                        }
+
+                        if (!registers.floatQi[instruction.r2].Equals("0"))
+                        {
+                            instruction.fOp2 = registers.floatQi[instruction.r2];
+                            instruction.dependantOpID2 = registers.floatQiIndex[instruction.r2];
+                        }
+                        else
+                        {
+                            instruction.fOp2 = "";
+                            instruction.dependantOpID2 = -1;
+                        }
+                    }
+                    else
+                    {
+                        if (!registers.intQi[instruction.r1].Equals("0"))
+                        {
+                            instruction.iOp1 = registers.intQi[instruction.r1];
+                            instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
+                        }
+                        else
+                        {
+                            instruction.iOp1 = "";
+                            instruction.dependantOpID1 = -1;
+                        }
+
+                        if (!registers.intQi[instruction.r2].Equals("0"))
+                        {
+                            instruction.iOp2 = registers.intQi[instruction.r2];
+                            instruction.dependantOpID2 = registers.intQiIndex[instruction.r2];
+                        }
+                        else
+                        {
+                            instruction.iOp2 = "";
+                            instruction.dependantOpID2 = -1;
+                        }
+                    }
+
+                    break;
+                case 23:            //Div instructions. Checks if it's float
+                    if ((instruction.isFloat))
+                    {
+                        if (!registers.floatQi[instruction.r1].Equals("0"))
+                        {
+                            instruction.fOp1 = registers.floatQi[instruction.r1];
+                            instruction.dependantOpID1 = registers.floatQiIndex[instruction.r1];
+                        }
+                        else
+                        {
+                            instruction.fOp1 = "";
+                            instruction.dependantOpID1 = -1;
+                        }
+
+                        if (!registers.floatQi[instruction.r2].Equals("0"))
+                        {
+                            instruction.fOp2 = registers.floatQi[instruction.r2];
+                            instruction.dependantOpID2 = registers.floatQiIndex[instruction.r2];
+                        }
+                        else
+                        {
+                            instruction.fOp2 = "";
+                            instruction.dependantOpID2 = -1;
+                        }
+                    }
+                    else
+                    {
+                        if (!registers.intQi[instruction.r1].Equals("0"))
+                        {
+                            instruction.iOp1 = registers.intQi[instruction.r1];
+                            instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
+                        }
+                        else
+                        {
+                            instruction.iOp1 = "";
+                            instruction.dependantOpID1 = -1;
+                        }
+
+                        if (!registers.intQi[instruction.r2].Equals("0"))
+                        {
+                            instruction.iOp2 = registers.intQi[instruction.r2];
+                            instruction.dependantOpID2 = registers.intQiIndex[instruction.r2];
+                        }
+                        else
+                        {
+                            instruction.iOp2 = "";
+                            instruction.dependantOpID2 = -1;
+                        }
+                    }
+                    break;
+                case 24:
+                case 25:
+                case 26:
+                    if (!registers.intQi[instruction.r1].Equals("0"))
+                    {
+                        instruction.iOp1 = registers.intQi[instruction.r1];
+                        instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
+                    }
+                    else
+                    {
+                        instruction.iOp1 = "";
+                        instruction.dependantOpID1 = -1;
+                    }
+
+                    if (!registers.intQi[instruction.r2].Equals("0"))
+                    {
+                        instruction.iOp2 = registers.intQi[instruction.r2];
+                        instruction.dependantOpID2 = registers.intQiIndex[instruction.r2];
+                    }
+                    else
+                    {
+                        instruction.iOp2 = "";
+                        instruction.dependantOpID2 = -1;
+                    }
+                    break;
+                case 27:
+                    if (!registers.intQi[instruction.r1].Equals("0"))
+                    {
+                        instruction.iOp1 = registers.intQi[instruction.r1];
+                        instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
+                    }
+                    else
+                    {
+                        instruction.iOp1 = "";
+                        instruction.dependantOpID1 = -1;
+                    }
+                    break;
+
+
+            }
+            return instruction;
+        }
+
 
         /// <summary>Generates the assembly.</summary>
         /// <param name="IM">The instruction memory</param>
