@@ -746,7 +746,7 @@ namespace ISA_GUI
             {
                 case 10:
                 case 12:
-                    memoryUnitFu.instruction = checkOperandDependencies(memoryUnitFu.instruction, ref registers);
+                    checkOperandDependencies(ref memoryUnitFu.instruction, ref registers);
                     if (instruction.isFloat)
                     {
                         if (memoryUnitFu.instruction.fOp1 != "")
@@ -787,7 +787,7 @@ namespace ISA_GUI
                 case 13:
                     if (instruction.isFloat)
                     {
-                        floatSubFu.instruction = checkOperandDependencies(floatSubFu.instruction, ref registers);
+                        checkOperandDependencies(ref floatSubFu.instruction, ref registers);
                         if (floatSubFu.instruction.fOp1 != "")
                         {
                             if (CDB.CDB.ContainsKey(floatSubFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
@@ -806,7 +806,7 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        intSubFu.instruction = checkOperandDependencies(intSubFu.instruction, ref registers);
+                        checkOperandDependencies(ref intSubFu.instruction, ref registers);
                         if (intSubFu.instruction.iOp1 != "")
                         {
                             if (CDB.CDB.ContainsKey(intSubFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
@@ -828,7 +828,7 @@ namespace ISA_GUI
                     
                     if (instruction.isFloat)
                     {
-                        floatSubFu.instruction = checkOperandDependencies(floatSubFu.instruction, ref registers);
+                        checkOperandDependencies(ref floatSubFu.instruction, ref registers);
                         if (floatSubFu.instruction.fOp1 != "")
                         {
                             if (CDB.CDB.ContainsKey(floatSubFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
@@ -862,7 +862,7 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        intSubFu.instruction = checkOperandDependencies(floatSubFu.instruction, ref registers);
+                        checkOperandDependencies(ref floatSubFu.instruction, ref registers);
                         if (intSubFu.instruction.iOp1 != "")
                         {
                             if (CDB.CDB.ContainsKey(intSubFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
@@ -895,13 +895,13 @@ namespace ISA_GUI
                 case 15:
                     if (instruction.isFloat)
                     {
-                        load_storeBuffer.instruction = checkOperandDependencies(load_storeBuffer.instruction, ref registers);
-                        if (load_storeBuffer.instruction.fOp1 != "")
+                        checkOperandDependencies(ref memoryUnitFu.instruction, ref registers);
+                        if (memoryUnitFu.instruction.fOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(load_storeBuffer.instruction.fOp1))
+                            if (CDB.CDB.ContainsKey(memoryUnitFu.instruction.fOp1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    load_storeBuffer.instruction.fOperand1 = float.Parse(CDB.CDB[load_storeBuffer.instruction.fOp1]);
+                                    memoryUnitFu.instruction.fOperand1 = float.Parse(CDB.CDB[memoryUnitFu.instruction.fOp1]);
                             }
                             else
                             {
@@ -910,17 +910,17 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            load_storeBuffer.instruction.fOperand1 = registers.floatRegisters[load_storeBuffer.instruction.r2];
+                            memoryUnitFu.instruction.fOperand1 = registers.floatRegisters[memoryUnitFu.instruction.r2];
                     }
                     else
                     {
-                        load_storeBuffer.instruction = checkOperandDependencies(load_storeBuffer.instruction, ref registers);
-                        if (load_storeBuffer.instruction.iOp1 != "")
+                        checkOperandDependencies(ref memoryUnitFu.instruction, ref registers);
+                        if (memoryUnitFu.instruction.iOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(load_storeBuffer.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
+                            if (CDB.CDB.ContainsKey(memoryUnitFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    load_storeBuffer.instruction.iOperand1 = int.Parse(CDB.CDB[load_storeBuffer.instruction.iOp1]);
+                                    memoryUnitFu.instruction.iOperand1 = int.Parse(CDB.CDB[memoryUnitFu.instruction.iOp1]);
                             }
                             else
                             {
@@ -929,14 +929,14 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            load_storeBuffer.instruction.iOperand1 = registers.intRegisters[load_storeBuffer.instruction.r2];
+                            memoryUnitFu.instruction.iOperand1 = registers.intRegisters[memoryUnitFu.instruction.r2];
                     }
                     break;
                 case 16:
                 case 17:
                 case 18:
                 case 19:
-                    shiftFu.instruction = checkOperandDependencies(shiftFu.instruction, ref registers);
+                    checkOperandDependencies(ref shiftFu.instruction, ref registers);
                     if (shiftFu.instruction.iOp1 != "")
                     {
                         if (CDB.CDB.ContainsKey(shiftFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
@@ -971,7 +971,7 @@ namespace ISA_GUI
                 case 20:
                     if (instruction.isFloat)
                     {
-                        floatAddFu.instruction = checkOperandDependencies(floatAddFu.instruction, ref registers);
+                        checkOperandDependencies(ref floatAddFu.instruction, ref registers);
                         if (floatAddFu.instruction.fOp1 != "")
                         {
                             if (CDB.CDB.ContainsKey(floatAddFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
@@ -1005,7 +1005,7 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        intAddFu.instruction = checkOperandDependencies(intAddFu.instruction, ref registers);
+                        checkOperandDependencies(ref intAddFu.instruction, ref registers);
                         if (intAddFu.instruction.iOp1 != "")
                         {
                             if (CDB.CDB.ContainsKey(intAddFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
@@ -1041,7 +1041,7 @@ namespace ISA_GUI
                 case 21:
                     if (instruction.isFloat)
                     {
-                        floatSubFu.instruction = checkOperandDependencies(floatSubFu.instruction, ref registers);
+                        checkOperandDependencies(ref floatSubFu.instruction, ref registers);
                         if (floatSubFu.instruction.fOp1 != "")
                         {
                             if (CDB.CDB.ContainsKey(floatSubFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
@@ -1075,7 +1075,7 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        intSubFu.instruction = checkOperandDependencies(intSubFu.instruction, ref registers);
+                        checkOperandDependencies(ref intSubFu.instruction, ref registers);
                         if (intSubFu.instruction.iOp1 != "")
                         {
                             if (CDB.CDB.ContainsKey(intSubFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
@@ -1111,7 +1111,7 @@ namespace ISA_GUI
                 case 22:
                     if (instruction.isFloat)
                     {
-                        floatMultFu.instruction = checkOperandDependencies(floatMultFu.instruction, ref registers);
+                        checkOperandDependencies(ref floatMultFu.instruction, ref registers);
                         if (floatMultFu.instruction.fOp1 != "")
                         {
                             if (CDB.CDB.ContainsKey(floatMultFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
@@ -1145,7 +1145,7 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        intMultFu.instruction = checkOperandDependencies(intMultFu.instruction, ref registers);
+                        checkOperandDependencies(ref intMultFu.instruction, ref registers);
                         if (intMultFu.instruction.iOp1 != "")
                         {
                             if (CDB.CDB.ContainsKey(intMultFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
@@ -1181,7 +1181,7 @@ namespace ISA_GUI
                 case 23:
                     if(instruction.isFloat)
                     {
-                        floatDivFu.instruction = checkOperandDependencies(floatDivFu.instruction, ref registers);
+                        checkOperandDependencies(ref floatDivFu.instruction, ref registers);
                         if (floatDivFu.instruction.fOp1 != "")
                         {
                             if (CDB.CDB.ContainsKey(floatDivFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
@@ -1215,7 +1215,7 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        intDivFu.instruction = checkOperandDependencies(intDivFu.instruction, ref registers);
+                        checkOperandDependencies(ref intDivFu.instruction, ref registers);
                         if (intDivFu.instruction.iOp1 != "")
                         {
                             if (CDB.CDB.ContainsKey(intDivFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
@@ -1251,7 +1251,7 @@ namespace ISA_GUI
                 case 24:
                 case 25:
                 case 26:
-                    bitwiseOPFu.instruction = checkOperandDependencies(bitwiseOPFu.instruction, ref registers);
+                    checkOperandDependencies(ref bitwiseOPFu.instruction, ref registers);
                     if (bitwiseOPFu.instruction.iOp1 != "")
                     {
                         if (CDB.CDB.ContainsKey(bitwiseOPFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
@@ -1284,7 +1284,7 @@ namespace ISA_GUI
                         bitwiseOPFu.instruction.iOperand2 = registers.intRegisters[bitwiseOPFu.instruction.r2];
                     break;
                 case 27:
-                    bitwiseOPFu.instruction = checkOperandDependencies(bitwiseOPFu.instruction, ref registers);
+                    checkOperandDependencies(ref bitwiseOPFu.instruction, ref registers);
                     if (bitwiseOPFu.instruction.iOp1 != "")
                     {
                         if (CDB.CDB.ContainsKey(bitwiseOPFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
@@ -1335,7 +1335,7 @@ namespace ISA_GUI
                     {
                         if (!load_storeBuffer.Busy)
                         {
-                            instruction = checkOperandDependencies(instruction, ref registers);
+                            checkOperandDependencies(ref instruction, ref registers);
                             load_storeBuffer.Busy = true;
                             registers.floatQi[instruction.r3] = "memoryUnitFu";
                             registers.floatQiIndex[instruction.r3] = instruction.ID;
@@ -1348,7 +1348,7 @@ namespace ISA_GUI
                     {
                         if (!load_storeBuffer.Busy)
                         {
-                            instruction = checkOperandDependencies(instruction, ref registers);
+                            checkOperandDependencies(ref instruction, ref registers);
                             load_storeBuffer.Busy = true;
                             registers.intQi[instruction.r3] = "memoryUnitFu";
                             registers.intQiIndex[0] = instruction.ID;
@@ -1383,7 +1383,7 @@ namespace ISA_GUI
                     if (!load_storeBuffer.Busy)
                     {
                         load_storeBuffer.Busy = true;
-                        instruction = checkOperandDependencies(instruction, ref registers);
+                        checkOperandDependencies(ref instruction, ref registers);
                         instruction.functionalUnitID = 10;
                         load_storeBuffer.instruction = instruction;
                         return instruction;
@@ -1416,7 +1416,7 @@ namespace ISA_GUI
                     {
                         if (!load_storeBuffer.Busy)
                         {
-                            instruction = checkOperandDependencies(instruction, ref registers);
+                            checkOperandDependencies(ref instruction, ref registers);
                             registers.floatQi[instruction.r3] = "memoryUnitFu";
                             registers.floatQiIndex[instruction.r3] = instruction.ID;
                             load_storeBuffer.Busy = true;
@@ -1430,7 +1430,7 @@ namespace ISA_GUI
                     {
                         if (!load_storeBuffer.Busy)
                         {
-                            instruction = checkOperandDependencies(instruction, ref registers);
+                            checkOperandDependencies(ref instruction, ref registers);
                             load_storeBuffer.Busy = true;
                             registers.intQi[instruction.r3] = "memoryUnitFu";
                             registers.intQiIndex[instruction.r3] = instruction.ID;
@@ -1446,7 +1446,7 @@ namespace ISA_GUI
                     {
                         if (!intSubRS.Busy)
                         {
-                            instruction = checkOperandDependencies(instruction, ref registers);
+                            checkOperandDependencies(ref instruction, ref registers);
                             floatSubRS.Busy = true;
                             instruction.functionalUnitID = 2;
                             floatSubRS.instruction = instruction;
@@ -1457,7 +1457,7 @@ namespace ISA_GUI
                     {
                         if (!intSubRS.Busy)
                         {
-                            instruction = checkOperandDependencies(instruction, ref registers);
+                            checkOperandDependencies(ref instruction, ref registers);
                             intSubRS.Busy = true;
                             instruction.functionalUnitID = 2;
                             intSubRS.instruction = instruction;
@@ -1470,7 +1470,7 @@ namespace ISA_GUI
                     {
                         if (!floatSubRS.Busy)
                         {
-                            instruction = checkOperandDependencies(instruction, ref registers);
+                            checkOperandDependencies(ref instruction, ref registers);
                             floatSubRS.Busy = true;
                             instruction.functionalUnitID = 2;
                             floatSubRS.instruction = instruction;
@@ -1481,7 +1481,7 @@ namespace ISA_GUI
                     {
                         if (!intSubRS.Busy)
                         {
-                            instruction = checkOperandDependencies(instruction, ref registers);
+                            checkOperandDependencies(ref instruction, ref registers);
                             intSubRS.Busy = true;
                             instruction.functionalUnitID = 2;
                             intSubRS.instruction = instruction;
@@ -1495,7 +1495,7 @@ namespace ISA_GUI
                 case 19:
                     if(!shiftOPS.Busy)
                     {
-                        instruction = checkOperandDependencies(instruction, ref registers);
+                        checkOperandDependencies(ref instruction, ref registers);
                         shiftOPS.Busy = true;
                         registers.intQi[instruction.r3] = "shiftOPS";
                         registers.intQiIndex[instruction.r3] = instruction.ID;
@@ -1509,7 +1509,7 @@ namespace ISA_GUI
                     {
                         if (!floatAddRS.Busy)
                         {
-                            instruction = checkOperandDependencies(instruction, ref registers);
+                            checkOperandDependencies(ref instruction, ref registers);
                             floatAddRS.Busy = true;
                             registers.floatQi[instruction.r3] = "floatAddRS";
                             registers.floatQiIndex[instruction.r3] = instruction.ID;
@@ -1522,7 +1522,7 @@ namespace ISA_GUI
                     {
                         if(!intAddRS.Busy)
                         {
-                            instruction = checkOperandDependencies(instruction, ref registers);
+                            checkOperandDependencies(ref instruction, ref registers);
                             intAddRS.Busy = true;
                             registers.intQi[instruction.r3] = "intAddRS";
                             registers.intQiIndex[instruction.r3] = instruction.ID;
@@ -1538,7 +1538,7 @@ namespace ISA_GUI
                     {
                         if(!floatSubRS.Busy)
                         {
-                            instruction = checkOperandDependencies(instruction, ref registers);
+                            checkOperandDependencies(ref instruction, ref registers);
                             floatSubRS.Busy = true;
                             registers.floatQi[instruction.r3] = "floatSubRS";
                             registers.floatQiIndex[instruction.r3] = instruction.ID;
@@ -1551,7 +1551,7 @@ namespace ISA_GUI
                     {
                         if (!intSubRS.Busy)
                         {
-                            instruction = checkOperandDependencies(instruction, ref registers);
+                            checkOperandDependencies(ref instruction, ref registers);
                             intSubRS.Busy = true;
                             registers.intQi[instruction.r3] = "intSubRS";
                             registers.intQiIndex[instruction.r3] = instruction.ID;
@@ -1566,7 +1566,7 @@ namespace ISA_GUI
                     {
                         if (!floatMultRS.Busy)
                         {
-                            instruction = checkOperandDependencies(instruction, ref registers);
+                            checkOperandDependencies(ref instruction, ref registers);
                             floatMultRS.Busy = true;
                             registers.floatQi[instruction.r3] = "floatMultRS";
                             registers.floatQiIndex[instruction.r3] = instruction.ID;
@@ -1579,7 +1579,7 @@ namespace ISA_GUI
                     {
                         if (!intMultRS.Busy)
                         {
-                            instruction = checkOperandDependencies(instruction, ref registers);
+                            checkOperandDependencies(ref instruction, ref registers);
                             intMultRS.Busy = true;
                             registers.intQi[instruction.r3] = "intMultRS";
                             registers.intQiIndex[instruction.r3] = instruction.ID;
@@ -1595,7 +1595,7 @@ namespace ISA_GUI
                     {
                         if (!floatDivRS.Busy)
                         {
-                            instruction = checkOperandDependencies(instruction, ref registers);
+                            checkOperandDependencies(ref instruction, ref registers);
                             floatDivRS.Busy = true;
                             registers.floatQi[instruction.r3] = "floatDivRS";
                             registers.floatQiIndex[instruction.r3] = instruction.ID;
@@ -1608,7 +1608,7 @@ namespace ISA_GUI
                     {
                         if (!intDivRS.Busy)
                         {
-                            instruction = checkOperandDependencies(instruction, ref registers);
+                            checkOperandDependencies(ref instruction, ref registers);
                             intDivRS.Busy = true;
                             registers.intQi[instruction.r3] = "intDivRS";
                             registers.intQiIndex[instruction.r3] = instruction.ID;
@@ -1623,7 +1623,7 @@ namespace ISA_GUI
                 case 26:
                     if (!bitwiseOPRS.Busy)
                     {
-                        instruction = checkOperandDependencies(instruction, ref registers);
+                        checkOperandDependencies(ref instruction, ref registers);
                         bitwiseOPRS.Busy = true;
                         registers.intQi[instruction.r3] = "bitwiseOPRS";
                         registers.intQiIndex[instruction.r3] = instruction.ID;
@@ -1635,7 +1635,7 @@ namespace ISA_GUI
                 case 27:
                     if (!bitwiseOPRS.Busy)
                     {
-                        instruction = checkOperandDependencies(instruction, ref registers);
+                        checkOperandDependencies(ref instruction, ref registers);
                         bitwiseOPRS.Busy = true;
                         registers.intQi[instruction.r3] = "bitwiseOPRS";
                         registers.intQiIndex[instruction.r3] = instruction.ID;
@@ -1759,7 +1759,7 @@ namespace ISA_GUI
 
 
 
-        private Instruction checkOperandDependencies(Instruction instruction, ref RegisterFile registers)
+        private Instruction checkOperandDependencies(ref Instruction instruction, ref RegisterFile registers)
         {
             switch (instruction.opcode)
             {
