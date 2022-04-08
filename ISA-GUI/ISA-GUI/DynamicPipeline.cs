@@ -159,7 +159,7 @@ namespace ISA_GUI
                         case 5:
                             
                             int instructionIndex = reorderBuffer.checkCommit(inst, ref WR, ref dataMemory, ref lastBranchDecision, ref IM, ref registers, ref halted, ref commonDataBus);
-                            bool hazardDetected = detectControlHazard(instructionIndex, ref registers);
+                            bool hazardDetected = detectControlHazard(instructionIndex, ref registers, inst);
                             if(!hazardDetected && instructionIndex != -1) //FIGURE OUT BRANCH CONTROL HAZARDS HERE
 
                             if (inst.opcode != 0 && inst.opcode != 1) //Makes sure not to run for halts or no ops
@@ -1721,10 +1721,14 @@ namespace ISA_GUI
       * <hr>
       *   @param  Instruction[] stages
       */
-        public bool detectControlHazard(int id, ref RegisterFile registers)
+        public bool detectControlHazard(int id, ref RegisterFile registers, Instruction instruction)
         {
             if (id == -1 || lastBranchDecision == false)
                 return false;
+
+            if (instruction.opcode < 2 || instruction.opcode > 8)
+                return false;
+
             if ((instructionsInFlight[(id - 1)].programCounterValue != instructionsInFlight[id].address) && lastBranchDecision == true)
             {
                 instructionID = id + 1;
