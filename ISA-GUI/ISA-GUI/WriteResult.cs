@@ -387,16 +387,16 @@ namespace ISA_GUI
 				case 15:
 					//MOV
 					if (!instruction.isFloat)
-						registers.intRegisters[instruction.destinationReg] = instruction.intResult;
+						registers.intRegisters[instruction.destinationReg] = int.Parse(instruction.result);
 					else
-						registers.floatRegisters[instruction.destinationReg] = instruction.floatResult;
+						registers.floatRegisters[instruction.destinationReg] = float.Parse(instruction.result);
 					break;
 				case 16:
 				case 17:
 				case 18:
 				case 19:
 					//Shifting
-					registers.intRegisters[instruction.destinationReg] = instruction.intResult;
+					registers.intRegisters[instruction.destinationReg] = int.Parse(instruction.result);
 					break;
 				case 20:
 				case 21:
@@ -408,9 +408,9 @@ namespace ISA_GUI
 				case 27:
 					//ALU instructions
 					if (!instruction.isFloat)
-						registers.intRegisters[instruction.destinationReg] = instruction.intResult;
+						registers.intRegisters[instruction.destinationReg] = int.Parse(instruction.result);
 					else
-						registers.floatRegisters[instruction.destinationReg] = instruction.floatResult;
+						registers.floatRegisters[instruction.destinationReg] = float.Parse(instruction.result);
 					break;
 			}
 		}

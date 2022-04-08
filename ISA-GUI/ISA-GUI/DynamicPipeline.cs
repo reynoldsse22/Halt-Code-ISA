@@ -159,7 +159,7 @@ namespace ISA_GUI
                             
                             int instructionIndex = reorderBuffer.checkCommit(inst, ref WR, ref dataMemory, ref lastBranchDecision, ref IM, ref registers, ref halted, ref commonDataBus);
                             bool hazardDetected = detectControlHazard(instructionIndex, ref registers);
-                            if(!hazardDetected)
+                            if(!hazardDetected && instructionIndex != -1)
                             {
                                 try
                                 {
@@ -1351,7 +1351,7 @@ namespace ISA_GUI
                             checkOperandDependencies(ref instruction, ref registers);
                             load_storeBuffer.Busy = true;
                             registers.intQi[instruction.r3] = "memoryUnitFu";
-                            registers.intQiIndex[0] = instruction.ID;
+                            registers.intQiIndex[instruction.r3] = instruction.ID;
                             instruction.functionalUnitID = 10;
                             load_storeBuffer.instruction = instruction;
                             return instruction;

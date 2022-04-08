@@ -327,9 +327,9 @@ namespace ISA_GUI
                     instruction.cycleControl = config.regAccess;
                     instruction.destinationReg = r3;
                     if (!instruction.isFloat)
-                        result = registers.intRegisters[r2].ToString();
+                        result = instruction.iOperand1.ToString();
                     else
-                        result = registers.floatRegisters[r2].ToString();
+                        result = instruction.iOperand1.ToString();
                     break;
 
 
@@ -352,6 +352,8 @@ namespace ISA_GUI
             success = true;
             return;
         }
+
+
     }
 
 
