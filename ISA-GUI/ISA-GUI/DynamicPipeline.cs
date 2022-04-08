@@ -1767,7 +1767,7 @@ namespace ISA_GUI
                 case 10:
                     if (instruction.isFloat)
                     {
-                        if (!registers.floatQi[0].Equals("0"))
+                        if (!registers.floatQi[0].Equals("0") && instruction.ID > registers.floatQiIndex[0])
                         {
                             instruction.fOp1 = registers.floatQi[0];
                             instruction.dependantOpID1 = registers.floatQiIndex[0];
@@ -1780,7 +1780,7 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        if (!registers.intQi[0].Equals("0"))
+                        if (!registers.intQi[0].Equals("0") && instruction.ID > registers.intQiIndex[0])
                         {
                             instruction.iOp1 = registers.intQi[0];
                             instruction.dependantOpID1 = registers.intQiIndex[0];
@@ -1795,7 +1795,7 @@ namespace ISA_GUI
                 case 12:
                     if (instruction.isFloat)
                     {
-                        if (!registers.floatQi[0].Equals("0"))
+                        if (!registers.floatQi[0].Equals("0") && instruction.ID > registers.floatQiIndex[0])
                         {
                             instruction.fOp1 = registers.floatQi[0];
                             instruction.dependantOpID1 = registers.floatQiIndex[0];
@@ -1823,7 +1823,7 @@ namespace ISA_GUI
                 case 13:
                     if (instruction.isFloat)
                     {
-                        if (!registers.floatQi[instruction.r3].Equals("0"))
+                        if (!registers.floatQi[instruction.r3].Equals("0") && instruction.ID > registers.floatQiIndex[instruction.r3])
                         {
                             instruction.fOp1 = registers.floatQi[instruction.r3];
                             instruction.dependantOpID1 = registers.floatQiIndex[instruction.r3];
@@ -1836,7 +1836,7 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        if (!registers.intQi[instruction.r3].Equals("0"))
+                        if (!registers.intQi[instruction.r3].Equals("0") && instruction.ID > registers.intQiIndex[instruction.r3])
                         {
                             instruction.iOp1 = registers.intQi[instruction.r3];
                             instruction.dependantOpID1 = registers.intQiIndex[instruction.r3];
@@ -1851,7 +1851,7 @@ namespace ISA_GUI
                 case 14:
                     if (instruction.isFloat)
                     {
-                        if (!registers.floatQi[instruction.r1].Equals("0"))
+                        if (!registers.floatQi[instruction.r1].Equals("0") && instruction.ID > registers.floatQiIndex[instruction.r1])
                         {
                             instruction.fOp1 = registers.floatQi[instruction.r1];
                             instruction.dependantOpID1 = registers.floatQiIndex[instruction.r1];
@@ -1862,7 +1862,7 @@ namespace ISA_GUI
                             instruction.dependantOpID1 = -1;
                         }
 
-                        if (!registers.floatQi[instruction.r2].Equals("0"))
+                        if (!registers.floatQi[instruction.r2].Equals("0") && instruction.ID > registers.floatQiIndex[instruction.r2])
                         {
                             instruction.fOp2 = registers.floatQi[instruction.r2];
                             instruction.dependantOpID2 = registers.floatQiIndex[instruction.r2];
@@ -1875,7 +1875,7 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        if (!registers.intQi[instruction.r1].Equals("0"))
+                        if (!registers.intQi[instruction.r1].Equals("0") && instruction.ID > registers.intQiIndex[instruction.r1])
                         {
                             instruction.iOp1 = registers.intQi[instruction.r1];
                             instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
@@ -1886,7 +1886,7 @@ namespace ISA_GUI
                             instruction.dependantOpID1 = -1;
                         }
 
-                        if (!registers.intQi[instruction.r2].Equals("0"))
+                        if (!registers.intQi[instruction.r2].Equals("0") && instruction.ID > registers.intQiIndex[instruction.r2])
                         {
                             instruction.iOp2 = registers.intQi[instruction.r2];
                             instruction.dependantOpID2 = registers.intQiIndex[instruction.r2];
@@ -1901,7 +1901,7 @@ namespace ISA_GUI
                 case 15:
                     if (instruction.isFloat)
                     {
-                        if (!registers.floatQi[instruction.r2].Equals("0"))
+                        if (!registers.floatQi[instruction.r2].Equals("0") && instruction.ID > registers.floatQiIndex[instruction.r2])
                         {
                             instruction.fOp1 = registers.floatQi[instruction.r2];
                             instruction.dependantOpID1 = registers.floatQiIndex[instruction.r2];
@@ -1914,7 +1914,7 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        if (!registers.intQi[instruction.r2].Equals("0"))
+                        if (!registers.intQi[instruction.r2].Equals("0") && instruction.ID > registers.intQiIndex[instruction.r2])
                         {
                             instruction.iOp1 = registers.intQi[instruction.r2];
                             instruction.dependantOpID1 = registers.intQiIndex[instruction.r2];
@@ -1930,7 +1930,7 @@ namespace ISA_GUI
                 case 17:
                 case 18:
                 case 19:
-                    if (!registers.intQi[instruction.r1].Equals("0"))
+                    if (!registers.intQi[instruction.r1].Equals("0") && instruction.ID > registers.intQiIndex[instruction.r1])
                     {
                         instruction.iOp1 = registers.intQi[instruction.r1];
                         instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
@@ -1941,7 +1941,7 @@ namespace ISA_GUI
                         instruction.dependantOpID1 = -1;
                     }
 
-                    if (!registers.intQi[instruction.r2].Equals("0"))
+                    if (!registers.intQi[instruction.r2].Equals("0") && instruction.ID > registers.intQiIndex[instruction.r2])
                     {
                         instruction.iOp2 = registers.intQi[instruction.r2];
                         instruction.dependantOpID2 = registers.intQiIndex[instruction.r2];
@@ -1955,7 +1955,7 @@ namespace ISA_GUI
                 case 20:            //Add instruction. Checks if it's float
                     if ((instruction.isFloat))
                     {
-                        if (!registers.floatQi[instruction.r1].Equals("0"))
+                        if (!registers.floatQi[instruction.r1].Equals("0") && instruction.ID > registers.floatQiIndex[instruction.r1])
                         {
                             instruction.fOp1 = registers.floatQi[instruction.r1];
                             instruction.dependantOpID1 = registers.floatQiIndex[instruction.r1];
@@ -1966,7 +1966,7 @@ namespace ISA_GUI
                             instruction.dependantOpID1 = -1;
                         }
 
-                        if (!registers.floatQi[instruction.r2].Equals("0"))
+                        if (!registers.floatQi[instruction.r2].Equals("0") && instruction.ID > registers.floatQiIndex[instruction.r2])
                         {
                             instruction.fOp2 = registers.floatQi[instruction.r2];
                             instruction.dependantOpID2 = registers.floatQiIndex[instruction.r2];
@@ -1979,7 +1979,7 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        if (!registers.intQi[instruction.r1].Equals("0"))
+                        if (!registers.intQi[instruction.r1].Equals("0") && instruction.ID > registers.intQiIndex[instruction.r1])
                         {
                             instruction.iOp1 = registers.intQi[instruction.r1];
                             instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
@@ -1990,7 +1990,7 @@ namespace ISA_GUI
                             instruction.dependantOpID1 = -1;
                         }
 
-                        if (!registers.intQi[instruction.r2].Equals("0"))
+                        if (!registers.intQi[instruction.r2].Equals("0") && instruction.ID > registers.intQiIndex[instruction.r2])
                         {
                             instruction.iOp2 = registers.intQi[instruction.r2];
                             instruction.dependantOpID2 = registers.intQiIndex[instruction.r2];
@@ -2006,7 +2006,7 @@ namespace ISA_GUI
                 case 21:            //Sub instruction. Checks if it's float
                     if ((instruction.isFloat))
                     {
-                        if (!registers.floatQi[instruction.r1].Equals("0"))
+                        if (!registers.floatQi[instruction.r1].Equals("0") && instruction.ID > registers.floatQiIndex[instruction.r1])
                         {
                             instruction.fOp1 = registers.floatQi[instruction.r1];
                             instruction.dependantOpID1 = registers.floatQiIndex[instruction.r1];
@@ -2017,7 +2017,7 @@ namespace ISA_GUI
                             instruction.dependantOpID1 = -1;
                         }
 
-                        if (!registers.floatQi[instruction.r2].Equals("0"))
+                        if (!registers.floatQi[instruction.r2].Equals("0") && instruction.ID > registers.floatQiIndex[instruction.r2])
                         {
                             instruction.fOp2 = registers.floatQi[instruction.r2];
                             instruction.dependantOpID2 = registers.floatQiIndex[instruction.r2];
@@ -2030,7 +2030,7 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        if (!registers.intQi[instruction.r1].Equals("0"))
+                        if (!registers.intQi[instruction.r1].Equals("0") && instruction.ID > registers.intQiIndex[instruction.r1])
                         {
                             instruction.iOp1 = registers.intQi[instruction.r1];
                             instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
@@ -2041,7 +2041,7 @@ namespace ISA_GUI
                             instruction.dependantOpID1 = -1;
                         }
 
-                        if (!registers.intQi[instruction.r2].Equals("0"))
+                        if (!registers.intQi[instruction.r2].Equals("0") && instruction.ID > registers.intQiIndex[instruction.r2])
                         {
                             instruction.iOp2 = registers.intQi[instruction.r2];
                             instruction.dependantOpID2 = registers.intQiIndex[instruction.r2];
@@ -2056,7 +2056,7 @@ namespace ISA_GUI
                 case 22:            //Mult instructions. Checks if it's float
                     if ((instruction.isFloat))
                     {
-                        if (!registers.floatQi[instruction.r1].Equals("0"))
+                        if (!registers.floatQi[instruction.r1].Equals("0") && instruction.ID > registers.floatQiIndex[instruction.r1])
                         {
                             instruction.fOp1 = registers.floatQi[instruction.r1];
                             instruction.dependantOpID1 = registers.floatQiIndex[instruction.r1];
@@ -2067,7 +2067,7 @@ namespace ISA_GUI
                             instruction.dependantOpID1 = -1;
                         }
 
-                        if (!registers.floatQi[instruction.r2].Equals("0"))
+                        if (!registers.floatQi[instruction.r2].Equals("0") && instruction.ID > registers.floatQiIndex[instruction.r2])
                         {
                             instruction.fOp2 = registers.floatQi[instruction.r2];
                             instruction.dependantOpID2 = registers.floatQiIndex[instruction.r2];
@@ -2080,7 +2080,7 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        if (!registers.intQi[instruction.r1].Equals("0"))
+                        if (!registers.intQi[instruction.r1].Equals("0") && instruction.ID > registers.intQiIndex[instruction.r1])
                         {
                             instruction.iOp1 = registers.intQi[instruction.r1];
                             instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
@@ -2091,7 +2091,7 @@ namespace ISA_GUI
                             instruction.dependantOpID1 = -1;
                         }
 
-                        if (!registers.intQi[instruction.r2].Equals("0"))
+                        if (!registers.intQi[instruction.r2].Equals("0") && instruction.ID > registers.intQiIndex[instruction.r2])
                         {
                             instruction.iOp2 = registers.intQi[instruction.r2];
                             instruction.dependantOpID2 = registers.intQiIndex[instruction.r2];
@@ -2107,7 +2107,7 @@ namespace ISA_GUI
                 case 23:            //Div instructions. Checks if it's float
                     if ((instruction.isFloat))
                     {
-                        if (!registers.floatQi[instruction.r1].Equals("0"))
+                        if (!registers.floatQi[instruction.r1].Equals("0") && instruction.ID > registers.floatQiIndex[instruction.r1])
                         {
                             instruction.fOp1 = registers.floatQi[instruction.r1];
                             instruction.dependantOpID1 = registers.floatQiIndex[instruction.r1];
@@ -2118,7 +2118,7 @@ namespace ISA_GUI
                             instruction.dependantOpID1 = -1;
                         }
 
-                        if (!registers.floatQi[instruction.r2].Equals("0"))
+                        if (!registers.floatQi[instruction.r2].Equals("0") && instruction.ID > registers.floatQiIndex[instruction.r2])
                         {
                             instruction.fOp2 = registers.floatQi[instruction.r2];
                             instruction.dependantOpID2 = registers.floatQiIndex[instruction.r2];
@@ -2131,7 +2131,7 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        if (!registers.intQi[instruction.r1].Equals("0"))
+                        if (!registers.intQi[instruction.r1].Equals("0") && instruction.ID > registers.intQiIndex[instruction.r1])
                         {
                             instruction.iOp1 = registers.intQi[instruction.r1];
                             instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
@@ -2142,7 +2142,7 @@ namespace ISA_GUI
                             instruction.dependantOpID1 = -1;
                         }
 
-                        if (!registers.intQi[instruction.r2].Equals("0"))
+                        if (!registers.intQi[instruction.r2].Equals("0") && instruction.ID > registers.intQiIndex[instruction.r2])
                         {
                             instruction.iOp2 = registers.intQi[instruction.r2];
                             instruction.dependantOpID2 = registers.intQiIndex[instruction.r2];
@@ -2157,7 +2157,7 @@ namespace ISA_GUI
                 case 24:
                 case 25:
                 case 26:
-                    if (!registers.intQi[instruction.r1].Equals("0"))
+                    if (!registers.intQi[instruction.r1].Equals("0") && instruction.ID > registers.intQiIndex[instruction.r1])
                     {
                         instruction.iOp1 = registers.intQi[instruction.r1];
                         instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
@@ -2168,7 +2168,7 @@ namespace ISA_GUI
                         instruction.dependantOpID1 = -1;
                     }
 
-                    if (!registers.intQi[instruction.r2].Equals("0"))
+                    if (!registers.intQi[instruction.r2].Equals("0") && instruction.ID > registers.intQiIndex[instruction.r2])
                     {
                         instruction.iOp2 = registers.intQi[instruction.r2];
                         instruction.dependantOpID2 = registers.intQiIndex[instruction.r2];
@@ -2180,7 +2180,7 @@ namespace ISA_GUI
                     }
                     break;
                 case 27:
-                    if (!registers.intQi[instruction.r1].Equals("0"))
+                    if (!registers.intQi[instruction.r1].Equals("0") && instruction.ID > registers.intQiIndex[instruction.r1])
                     {
                         instruction.iOp1 = registers.intQi[instruction.r1];
                         instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
