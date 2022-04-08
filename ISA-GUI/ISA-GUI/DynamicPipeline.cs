@@ -228,8 +228,11 @@ namespace ISA_GUI
                         //Execute within the functional unit
                         case 2:
                             Instruction executeInstruction = execute(inst, ref registers, ref dataMemory, ref IM, ref config, ref alu, ref lastBranchDecision, ref result, ref instASPR);
-                            inst.result = result;
-                            inst.ASPR = instASPR;
+                            if(inst.stage2Start == cycleCount)          //Makes sure that this is only ran once when the instruction values are executed
+                            {
+                                inst.result = result;
+                                inst.ASPR = instASPR;
+                            }
                             inst.dependantOpID1 = 0;
                             inst.dependantOpID2 = 0;
                             inst.doneExecuting = executeInstruction.doneExecuting;
@@ -1753,40 +1756,52 @@ namespace ISA_GUI
             switch(instruction.functionalUnitID)
             {
                 case 1:
-                    intAddFu.instruction = null;
+                    if(instruction.Equals(intAddFu.instruction))        //Makes sure that processing instructions do not delete different instructions in functional unit
+                        intAddFu.instruction = null;
                     break;
                 case 2:
-                    intSubFu.instruction = null;
+                    if(instruction.Equals(intSubFu.instruction))
+                        intSubFu.instruction = null;
                     break;
                 case 3:
-                    intMultFu.instruction = null;
+                    if(instruction.Equals(intMultFu.instruction))
+                        intMultFu.instruction = null;
                     break;
                 case 4:
+                    if(instruction.Equals(intDivFu.instruction))
                     intDivFu.instruction = null;
                     break;
                 case 5:
-                    floatAddFu.instruction = null;
+                    if(instruction.Equals(floatAddFu.instruction))
+                        floatAddFu.instruction = null;
                     break;
                 case 6:
-                    floatSubFu.instruction = null;
+                    if(instruction.Equals(floatSubFu.instruction))
+                        floatSubFu.instruction = null;
                     break;
                 case 7:
-                    floatMultFu.instruction = null;
+                    if(instruction.Equals(floatMultFu.instruction))
+                        floatMultFu.instruction = null;
                     break;
                 case 8:
-                    floatDivFu.instruction = null;
+                    if(instruction.Equals(floatDivFu.instruction))
+                        floatDivFu.instruction = null;
                     break;
                 case 9:
+                    if(instruction.Equals(bitwiseOPFu.instruction))
                     bitwiseOPFu.instruction = null;
                     break;
                 case 10:
-                    memoryUnitFu.instruction = null;
+                    if(instruction.Equals(memoryUnitFu.instruction))
+                        memoryUnitFu.instruction = null;
                     break;
                 case 11:
-                    branchFu.instruction = null;
+                    if(instruction.Equals(branchFu.instruction))
+                        branchFu.instruction = null;
                     break;
                 case 12:
-                    shiftFu.instruction = null;
+                    if(instruction.Equals(shiftFu.instruction))
+                        shiftFu.instruction = null;
                     break;
             }
         }
