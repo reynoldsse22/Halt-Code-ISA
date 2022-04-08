@@ -334,11 +334,21 @@ namespace ISA_GUI
             "   Team: Beaudry, Farmer, Ortiz, Reynolds\n" +
             "Project: Static Pipeline ISA Implementation\n" +
             "---------------------------------------------------------------\n\n");
-
-            pipelineOutput.Append(
+            if (!config.dynamicPipelineSet)
+            {
+                pipelineOutput.Append(
                 "                       Inst.   Decode/ Execute/  Access  Write To\n" +
                 "     Instruction       Fetch  Read Reg Calc Adr  Memory  Register\n" +
                 "--------------------- ------- -------- -------- ------- ---------");
+            }
+            else
+            {
+                pipelineOutput.Append(
+                "                                        Memory  Writes\n" +
+                "     Instruction      Issues  Executes   Read   Result  Commits\n" +
+                "--------------------- ------- -------- -------- ------- ---------");
+            }
+                
             assemblyOutput.Clear();
 
             cpu.IM.ProgramCounter = 0;
@@ -640,7 +650,28 @@ namespace ISA_GUI
                 statistics.Append(String.Format("write register:         {0}\n", cpu.SP.writeRegStalled));
                 statistics.Append(String.Format("Total:                  {0}\n\n", cpu.SP.totalCyclesStalled));
             }
-            
+            else
+            {
+                int totalInst = cpu.DP.CU.totalInstructions;
+                if (totalInst == 0)
+                    return;
+                statistics.Append("Summary Statistics\n");
+                statistics.Append("------------------\n");
+                statistics.Append(String.Format("Total instructions:              {0}\n", totalInst));                       //since we always go by 2's total instructions was pretty simple
+                statistics.Append(String.Format("Control instructions:            {0}, {1}%\n", cpu.DP.CU.controlInstructionCount, Math.Round((double)cpu.DP.CU.controlInstructionCount / totalInst * 100, 2)));
+                statistics.Append(String.Format("Arithmetic & logic instructions: {0}, {1}%\n", cpu.DP.CU.ALUInstructionCount, Math.Round((double)cpu.DP.CU.ALUInstructionCount / totalInst * 100, 2)));
+                statistics.Append(String.Format("Memory instructions:             {0}, {1}%\n", cpu.DP.CU.memoryInstructionCount, Math.Round((double)cpu.DP.CU.memoryInstructionCount / totalInst * 100, 2)));
+
+                statistics.Append("\n\nPipeline Statistics\n");
+                statistics.Append("------------------\n");
+                statistics.Append(String.Format("Total Cycles:           {0}\n", cpu.DP.cycleCount - 1));
+                statistics.Append("\nDelays\n");
+                statistics.Append("-------\n");
+                statistics.Append(String.Format("reorder buffer delays:             {0}\n", cpu.DP.reorderBufferDelay));
+                statistics.Append(String.Format("reservation station delays:        {0}\n", cpu.DP.reservationStationDelay));
+                statistics.Append(String.Format("true dependence delays:            {0}\n", cpu.DP.trueDependenceDelay));
+                statistics.Append(String.Format("Total:                  {0}\n\n", cpu.DP.reorderBufferDelay + cpu.DP.reservationStationDelay + cpu.DP.trueDependenceDelay));
+            }
             StatsTextBox.Text = statistics.ToString();
         }
 

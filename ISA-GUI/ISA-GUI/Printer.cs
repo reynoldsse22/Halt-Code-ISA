@@ -258,6 +258,16 @@ namespace ISA_GUI
                 stage5 = instruction.stage5Start.ToString();
             else
                 stage5 = instruction.stage5Start.ToString() + "-" + instruction.stage5End.ToString();
+            if (stage1 == "0")
+                stage1 = " ";
+            if (stage2 == "0")
+                stage2 = " ";
+            if (stage3 == "0")
+                stage3 = " ";
+            if (stage4 == "0")
+                stage4 = " ";
+            if (stage5 == "0")
+                stage5 = " ";
 
             string output = (string.Format("\n{0, 7} {1,13} {2, 7} {3, 8} {4, 8} {5, 7} {6, 9}",
                             instruction.assembly1.PadRight(7), instruction.assembly2.PadRight(13), stage1.PadLeft(7), stage2.PadLeft(8), stage3.PadLeft(8), stage4.PadLeft(7), stage5.PadLeft(9)));
@@ -266,7 +276,9 @@ namespace ISA_GUI
 
         }
 
-
-
+        public void buildPipelineString(ref StringBuilder pipelineString, Instruction instruction)
+        {
+            buildPipelineString(ref pipelineString, ref instruction);
+        }
     }
 }

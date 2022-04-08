@@ -27,6 +27,7 @@ namespace ISA_GUI
 	{
 		public List<Instruction> reorderBuffer;
 		public int reorderIndex;
+		public bool oneCommitPerCycle;		//The reorder buffer should only commit one instruction per cycle. Up for change
 		/**
 	    * Method Name: ReorderBuffer <br>
 	    * Method Purpose: Class constructor
@@ -38,6 +39,7 @@ namespace ISA_GUI
 		public ReorderBuffer()
 		{
 			reorderBuffer = new List<Instruction>();
+			oneCommitPerCycle = true;
 			reorderIndex = 1;
 		}
 
@@ -54,10 +56,11 @@ namespace ISA_GUI
 		public int checkCommit(Instruction inst, ref WriteResult WR, ref DataMemory memory, ref bool branchTaken, ref InstructionMemory IM, 
 			ref RegisterFile registers, ref bool halted, ref CommonDataBus CDB)
         {
-			if(reorderIndex == inst.ID)
+			if(reorderIndex == inst.ID && oneCommitPerCycle)
             {
 				WR.commit(ref registers, ref inst, ref memory, ref halted, ref IM, ref branchTaken);
 				reorderIndex++;
+				oneCommitPerCycle = false;
 				return removeFromReorderBuffer(inst, ref CDB);
             }
 			return -1;

@@ -25,6 +25,7 @@ namespace ISA_GUI
 	internal class MemoryUnit
 	{
 		public Instruction instruction;
+		public bool oneCycleFU;
 		/**
 	    * Method Name: MemoryUnitFu <br>
 	    * Method Purpose: Class constructor

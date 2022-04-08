@@ -25,6 +25,7 @@ namespace ISA_GUI
 	internal class BitwiseOPFU
 	{
 		public Instruction instruction;
+		public bool oneCycleFU;
 		/**
 	    * Method Name: BitwiseOPFU <br>
 	    * Method Purpose: Class constructor

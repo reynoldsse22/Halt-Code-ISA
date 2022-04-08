@@ -25,6 +25,7 @@ namespace ISA_GUI
 	internal class ShiftFU
 	{
 		public Instruction instruction;
+		public bool oneCycleFU;
 		/**
 	    * Method Name: ShiftFU <br>
 	    * Method Purpose: Class constructor

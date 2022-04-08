@@ -25,6 +25,7 @@ namespace ISA_GUI
 	internal class IntAddFU
 	{
 		public Instruction instruction;
+		public bool oneCycleFU;
 		/**
 	    * Method Name: IntAddFU <br>
 	    * Method Purpose: Class constructor
