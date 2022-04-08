@@ -25,6 +25,7 @@ namespace ISA_GUI
 	internal class BranchFU
 	{
 		public Instruction instruction;
+		public bool oneCycleFU;
 		/**
 	    * Method Name: BranchFU <br>
 	    * Method Purpose: Class constructor

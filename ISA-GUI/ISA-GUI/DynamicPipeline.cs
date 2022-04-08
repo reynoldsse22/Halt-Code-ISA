@@ -12,7 +12,6 @@ namespace ISA_GUI
     {
         public Fetch fetch;
         public ControlUnit CU;
-        public Printer print;
         public Queue<Instruction> instructionQueue;
         public List<Instruction> instructionsInFlight;
         public ALU alu;
@@ -62,7 +61,7 @@ namespace ISA_GUI
         {
             fetch = new Fetch();
             CU = new ControlUnit();
-            print = new Printer();
+            printer = new Printer();
             instructionQueue = new Queue<Instruction>();
             instructionsInFlight = new List<Instruction>();
             alu = new ALU();
@@ -133,7 +132,9 @@ namespace ISA_GUI
             do
             {
                 cycleCount++;
-                if(halted)
+                reorderBuffer.oneCommitPerCycle = true; //Control booleans to make sure stages only run once per cycle
+
+                if (halted)
                 {
                     return;
                 }
@@ -159,6 +160,19 @@ namespace ISA_GUI
                             
                             int instructionIndex = reorderBuffer.checkCommit(inst, ref WR, ref dataMemory, ref lastBranchDecision, ref IM, ref registers, ref halted, ref commonDataBus);
                             bool hazardDetected = detectControlHazard(instructionIndex, ref registers);
+
+                            if (inst.opcode != 0 && inst.opcode != 1) //Makes sure not to run for halts or no ops
+                            {
+                                if (inst.stage4End == 0)         //Makes sure this is only ran once
+                                    inst.stage4End = cycleCount - 1;
+                            }
+                            if(instructionIndex != -1)          //Runs then the instruction has been commited
+                            {
+                                inst.stage5Start = cycleCount;
+                                inst.stage5End = cycleCount;
+                                printer.buildDecodedString(ref decodedString, inst);      //Build the decoded instruction string
+                                printer.buildPipelineString(ref pipelingString, inst);
+                            }
                             if(!hazardDetected)
                             {
                                 try
@@ -170,7 +184,7 @@ namespace ISA_GUI
                                     instructionsInFlight.Remove(inst);
                                     registers.clearSpecificRegisterQI(inst);
                                 }
-                                catch 
+                                catch
                                 {
                                     continue;
                                 }
@@ -181,6 +195,16 @@ namespace ISA_GUI
                             WR.writeToCDB(inst, ref commonDataBus, in inst.result);
                             clearFU(inst);
                             inst.stage = 5;
+                            if (inst.stage3Start == 0)
+                            {
+                                inst.stage2End = cycleCount - 1;        //Only runs if the third stage was skipped
+                            }
+                            else
+                            {
+                                inst.stage3End = cycleCount - 1;        //Updates third stage ending
+                            }
+                            
+                            inst.stage4Start = cycleCount;              //Starts fourth stage
                             break;
 
                         //This should be where the Write Result and Memory Read stages will be held
@@ -189,6 +213,8 @@ namespace ISA_GUI
                             AM.accessMemoryDynamic(ref dataMemory, ref registers, inst, ref config, out result, ref memoryUnitFu, out instASPR);
                             inst.result = result;
                             inst.ASPR = instASPR;
+                            inst.stage2End = cycleCount - 1;        //End of the second stage
+                            inst.stage3Start = cycleCount;          //Start of the third
                             
                             if(memoryUnitFu.instruction.doneExecuting)
                             {
@@ -208,6 +234,7 @@ namespace ISA_GUI
                             inst.doneExecuting = executeInstruction.doneExecuting;
                             inst.executionInProgress = executeInstruction.executionInProgress;
                             inst.justIssued = false;
+                            
                             if (inst.doneExecuting)
                             {
                                 if (inst.opcode == 0 || inst.opcode == 1)
@@ -245,6 +272,7 @@ namespace ISA_GUI
                             inst.fOp1 = fetchInstruction.fOp1;
                             inst.fOp2 = fetchInstruction.fOp2;
                             inst.fOp3 = fetchInstruction.fOp3;
+                            inst.stage1Start = cycleCount;          //First starting stage
 
                             try
                             {
@@ -261,6 +289,7 @@ namespace ISA_GUI
                                 inst.dependantOpID1 = populateInstruction.dependantOpID1;
                                 inst.dependantOpID2 = populateInstruction.dependantOpID2;
                                 inst.stage = 2;
+                                inst.stage1End = cycleCount;
                                 inst.justIssued = true;
                             }
                             catch (Exception)
@@ -318,6 +347,8 @@ namespace ISA_GUI
         {
             if (instruction.opcode == 0 || instruction.opcode == 1)
             {
+                instruction.stage2Start = cycleCount;
+                instruction.stage2End = cycleCount;
                 instruction.doneExecuting = true;
                 return instruction;
             }
@@ -332,13 +363,16 @@ namespace ISA_GUI
                 return instruction;
             }
             instruction.executionInProgress = true;
-
             bool dependencies = checkDependencies(ref instruction, ref commonDataBus, ref registers);
-            if(dependencies)
+
+            if (dependencies)
             {
                 instruction.doneExecuting = false;
                 return instruction;
             }
+            if (instruction.stage2Start == 0)    //Makes sure this only runs once once the instruction started executing after dependencies are gone
+                instruction.stage2Start = cycleCount;
+
             switch (instruction.functionalUnitID)
             {
                 case 1:
@@ -617,7 +651,6 @@ namespace ISA_GUI
                     }
                     break;
             }
-            instruction.doneExecuting = false;
             return instruction;
         }
 
@@ -1981,8 +2014,11 @@ namespace ISA_GUI
                     {
                         if (!registers.intQi[instruction.r1].Equals("0"))
                         {
-                            instruction.iOp1 = registers.intQi[instruction.r1];
-                            instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
+                            if(registers.intQiIndex[instruction.r1] < instruction.ID)
+                            {
+                                instruction.iOp1 = registers.intQi[instruction.r1];
+                                instruction.dependantOpID1 = registers.intQiIndex[instruction.r1];
+                            }
                         }
                         else
                         {
@@ -2209,7 +2245,7 @@ namespace ISA_GUI
                 instruction = fetch.getNextInstruction(ref IM);
                 CU.decode(ref IM, ref instruction);
                 //instructionQueue.Add(instruction);  //Fill up instruction queue
-                print.buildAssemblyString(ref assemblyString, ref instruction); //Prints assembly string to the GUI
+                printer.buildAssemblyString(ref assemblyString, ref instruction); //Prints assembly string to the GUI
             }
         }
 

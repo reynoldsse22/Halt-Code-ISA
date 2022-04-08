@@ -25,6 +25,7 @@ namespace ISA_GUI
 	internal class FloatSubFU
 	{
 		public Instruction instruction;
+		public bool oneCycleFU;
 		/**
 	    * Method Name: FloatSubFU <br>
 	    * Method Purpose: Class constructor
