@@ -160,7 +160,7 @@ namespace ISA_GUI
                             
                             int instructionIndex = reorderBuffer.checkCommit(inst, ref WR, ref dataMemory, ref lastBranchDecision, ref IM, ref registers, ref halted, ref commonDataBus);
                             bool hazardDetected = detectControlHazard(instructionIndex, ref registers);
-                            if(!hazardDetected && instructionIndex != -1)
+                            if(!hazardDetected && instructionIndex != -1) //FIGURE OUT BRANCH CONTROL HAZARDS HERE
 
                             if (inst.opcode != 0 && inst.opcode != 1) //Makes sure not to run for halts or no ops
                             {
@@ -178,10 +178,31 @@ namespace ISA_GUI
                             {
                                 try
                                 {
+                                    if (instructionIndex < 0)
+                                        continue;
                                     int cdbIndex = commonDataBus.index[instructionIndex];
                                     commonDataBus.CDB.Remove(commonDataBus.CDB.ElementAt(cdbIndex).Key);
                                     commonDataBus.index.Remove(inst.ID);
                                     commonDataBus.IDIndex.Remove(cdbIndex);
+                                    if (cdbIndex < (commonDataBus.CDB.Count))
+                                    {
+                                        Dictionary<int, int> newDict = new Dictionary<int, int>();
+                                        Dictionary<int, int> newIndexDict = new Dictionary<int, int>();
+                                        for (int i = 0; i < commonDataBus.index.Count; i++)
+                                        {
+                                            if(commonDataBus.index.ElementAt(i).Value > cdbIndex)
+                                                newDict.Add(commonDataBus.index.ElementAt(i).Key, (commonDataBus.index.ElementAt(i).Value - 1));
+                                            else
+                                                newDict.Add(commonDataBus.index.ElementAt(i).Key, commonDataBus.index.ElementAt(i).Value);
+
+                                            if (commonDataBus.IDIndex.ElementAt(i).Key > cdbIndex)
+                                                newIndexDict.Add((commonDataBus.IDIndex.ElementAt(i).Key - 1), commonDataBus.IDIndex.ElementAt(i).Value);
+                                            else
+                                                newIndexDict.Add(commonDataBus.IDIndex.ElementAt(i).Key, commonDataBus.IDIndex.ElementAt(i).Value);
+                                        }
+                                        commonDataBus.index = newDict;
+                                        commonDataBus.IDIndex = newIndexDict;
+                                    }
                                     instructionsInFlight.Remove(inst);
                                     registers.clearSpecificRegisterQI(inst);
                                 }
@@ -193,19 +214,22 @@ namespace ISA_GUI
                             break;
                         //Store the answer and corresponding reservation name into the data bus
                         case 4:
-                            WR.writeToCDB(inst, ref commonDataBus, in inst.result);
-                            clearFU(inst);
-                            inst.stage = 5;
-                            if (inst.stage3Start == 0)
+                            bool success = WR.writeToCDB(inst, ref commonDataBus, in inst.result);
+                            if (success)
                             {
-                                inst.stage2End = cycleCount - 1;        //Only runs if the third stage was skipped
+                                clearFU(inst);
+                                inst.stage = 5;
+                                if (inst.stage3Start == 0)
+                                {
+                                    inst.stage2End = cycleCount - 1;        //Only runs if the third stage was skipped
+                                }
+                                else
+                                {
+                                    inst.stage3End = cycleCount - 1;        //Updates third stage ending
+                                }
+
+                                inst.stage4Start = cycleCount;              //Starts fourth stage
                             }
-                            else
-                            {
-                                inst.stage3End = cycleCount - 1;        //Updates third stage ending
-                            }
-                            
-                            inst.stage4Start = cycleCount;              //Starts fourth stage
                             break;
 
                         //This should be where the Write Result and Memory Read stages will be held
