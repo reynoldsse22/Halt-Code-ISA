@@ -204,7 +204,7 @@ namespace ISA_GUI
 
 
         public void executeDynamic(ref RegisterFile registers, ref DataMemory memory, ref ALU alu, ref InstructionMemory IM,
-                ref Instruction instruction, ref ConfigCycle config, ref bool branchTaken, out string result, out int instASPR)
+                ref Instruction instruction, ref ConfigCycle config, out string result, out int instASPR)
         {
             result = "";
             inProgress = true;
@@ -230,69 +230,13 @@ namespace ISA_GUI
                     instruction.cycleControl = 1;
                     return;                                     //No Operation
                 case 2:
-                    instruction.cycleControl = config.effAddress;
-                    IM.ProgramCounter = address;                            //Move the branching address into the program counter/instruction pointer
-                    branchTaken = true;
-                    break;
                 case 3:
-                    instruction.cycleControl = config.effAddress;
-                    if ((registers.ASPR & 2) == 0)
-                    {
-                        IM.ProgramCounter = address;                        //Move the BNE address into the program counter/instruction pointer
-                        branchTaken = true;
-                    }
-                    else
-                        branchTaken = false;
-                    break;
                 case 4:
-                    instruction.cycleControl = config.effAddress;
-                    if ((registers.ASPR & 2) == 1)
-                    {
-                        IM.ProgramCounter = address;                        //Move the BEQ address into the program counter/instruction pointer
-                        branchTaken = true;
-                    }
-                    else
-                        branchTaken = false;
-                    break;
                 case 5:
-                    instruction.cycleControl = config.effAddress;
-                    if ((registers.ASPR & 1) == 1 && (registers.ASPR & 1) == 0)
-                    {
-                        IM.ProgramCounter = address;                        //Move the BLT address into the program counter/instruction pointer
-                        branchTaken = true;
-                    }
-                    else
-                        branchTaken = false;
-                    break;
                 case 6:
-                    instruction.cycleControl = config.effAddress;
-                    if ((registers.ASPR & 2) == 1 || (registers.ASPR & 1) == 1)
-                    {
-                        IM.ProgramCounter = address;                        //Move the BLE address into the program counter/instruction pointer
-                        branchTaken = true;
-                    }
-                    else
-                        branchTaken = false;
-                    break;
                 case 7:
-                    instruction.cycleControl = config.effAddress;
-                    if ((registers.ASPR & 2) == 0 && (registers.ASPR & 1) == 0)
-                    {
-                        IM.ProgramCounter = address;                        //Move the BGT address into the program counter/instruction pointer
-                        branchTaken = true;
-                    }
-                    else
-                        branchTaken = false;
-                    break;
                 case 8:
                     instruction.cycleControl = config.effAddress;
-                    if (((registers.ASPR & 2) == 0 || (registers.ASPR & 1) == 0) || ((registers.ASPR & 2) == 1 || (registers.ASPR & 1) == 0))
-                    {
-                        IM.ProgramCounter = address;                        //Move the BGE address into the program counter/instruction pointer
-                        branchTaken = true;
-                    }
-                    else
-                        branchTaken = false;
                     break;
 
                 //MEMORY INSTRUCTIONS

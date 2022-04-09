@@ -72,6 +72,16 @@ namespace ISA_GUI
 			return instruction.ID;
         }
 
+		public void removeAllInstructionsAfterHazard(int id)
+        {
+			foreach(Instruction inst in reorderBuffer.ToList())
+            {
+				if(inst.ID > id)
+                {
+					reorderBuffer.Remove(inst);
+                }
+            }
+        }
 	}
 }
 

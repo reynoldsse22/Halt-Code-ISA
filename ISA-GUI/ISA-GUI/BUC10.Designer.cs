@@ -1693,7 +1693,6 @@
             this.instInExLabel1.Size = new System.Drawing.Size(72, 13);
             this.instInExLabel1.TabIndex = 141;
             this.instInExLabel1.Text = "Instructions in";
-            this.instInExLabel1.Visible = false;
             // 
             // instInExText
             // 
@@ -1716,7 +1715,6 @@
             this.instInExLabel2.Size = new System.Drawing.Size(54, 13);
             this.instInExLabel2.TabIndex = 143;
             this.instInExLabel2.Text = "Execution";
-            this.instInExLabel2.Visible = false;
             // 
             // staticPanel
             // 

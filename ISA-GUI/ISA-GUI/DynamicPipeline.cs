@@ -127,10 +127,12 @@ namespace ISA_GUI
         /// <param name="IM">The im.</param>
         /// <param name="registers">The registers.</param>
         /// <param name="dataMemory">The data memory.</param>
-        public void runCycle(List<string> input, bool stepThrough, ref StringBuilder assemblyString, ref StringBuilder decodedString, ref StringBuilder pipelingString, ref bool halted, ref ConfigCycle config, ref InstructionMemory IM, ref RegisterFile registers, ref DataMemory dataMemory)
+        public void runCycle(List<string> input, bool stepThrough, ref StringBuilder assemblyString, ref StringBuilder decodedString, ref StringBuilder pipelingString, 
+            ref bool halted, ref ConfigCycle config, ref InstructionMemory IM, ref RegisterFile registers, ref DataMemory dataMemory)
         {
             do
             {
+                startOfLoop:
                 cycleCount++;
                 reorderBuffer.oneCommitPerCycle = true; //Control booleans to make sure stages only run once per cycle
 
@@ -160,7 +162,6 @@ namespace ISA_GUI
                             
                             int instructionIndex = reorderBuffer.checkCommit(inst, ref WR, ref dataMemory, ref lastBranchDecision, ref IM, ref registers, ref halted, ref commonDataBus);
                             bool hazardDetected = detectControlHazard(instructionIndex, ref registers, inst);
-                            if(!hazardDetected && instructionIndex != -1) //FIGURE OUT BRANCH CONTROL HAZARDS HERE
 
                             if (inst.opcode != 0 && inst.opcode != 1) //Makes sure not to run for halts or no ops
                             {
@@ -174,7 +175,7 @@ namespace ISA_GUI
                                 printer.buildDecodedString(ref decodedString, inst);      //Build the decoded instruction string
                                 printer.buildPipelineString(ref pipelingString, inst);
                             }
-                            if(!hazardDetected)
+                            if (!hazardDetected && instructionIndex != -1)
                             {
                                 try
                                 {
@@ -190,7 +191,7 @@ namespace ISA_GUI
                                         Dictionary<int, int> newIndexDict = new Dictionary<int, int>();
                                         for (int i = 0; i < commonDataBus.index.Count; i++)
                                         {
-                                            if(commonDataBus.index.ElementAt(i).Value > cdbIndex)
+                                            if (commonDataBus.index.ElementAt(i).Value > cdbIndex)
                                                 newDict.Add(commonDataBus.index.ElementAt(i).Key, (commonDataBus.index.ElementAt(i).Value - 1));
                                             else
                                                 newDict.Add(commonDataBus.index.ElementAt(i).Key, commonDataBus.index.ElementAt(i).Value);
@@ -211,6 +212,8 @@ namespace ISA_GUI
                                     continue;
                                 }
                             }
+                            else
+                                goto startOfLoop;
                             break;
                         //Store the answer and corresponding reservation name into the data bus
                         case 4:
@@ -251,7 +254,7 @@ namespace ISA_GUI
                         //Open up reservation station to allow for more instructions to flow in
                         //Execute within the functional unit
                         case 2:
-                            Instruction executeInstruction = execute(inst, ref registers, ref dataMemory, ref IM, ref config, ref alu, ref lastBranchDecision, ref result, ref instASPR);
+                            Instruction executeInstruction = execute(inst, ref registers, ref dataMemory, ref IM, ref config, ref alu, ref result, ref instASPR);
                             if(inst.stage2Start == cycleCount)          //Makes sure that this is only ran once when the instruction values are executed
                             {
                                 inst.result = result;
@@ -371,7 +374,7 @@ namespace ISA_GUI
         }
         
         private Instruction execute(Instruction instruction, ref RegisterFile registers,ref DataMemory memory, 
-            ref InstructionMemory IM, ref ConfigCycle config, ref ALU alu, ref bool branchTaken, ref string result, ref int intASPR)
+            ref InstructionMemory IM, ref ConfigCycle config, ref ALU alu, ref string result, ref int intASPR)
         {
             if (instruction.opcode == 0 || instruction.opcode == 1)
             {
@@ -406,7 +409,7 @@ namespace ISA_GUI
                 case 1:
                     if(!intAddFu.instruction.stage2ExecutionFinished && !intAddFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intAddFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intAddFu.instruction, ref config, out result, out intASPR);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -429,7 +432,7 @@ namespace ISA_GUI
                 case 2:
                     if (!intSubFu.instruction.stage2ExecutionFinished && !intSubFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intSubFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intSubFu.instruction, ref config, out result, out intASPR);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -452,7 +455,7 @@ namespace ISA_GUI
                 case 3:
                     if (!intMultFu.instruction.stage2ExecutionFinished && !intMultFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intMultFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intMultFu.instruction, ref config, out result, out intASPR);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -475,7 +478,7 @@ namespace ISA_GUI
                 case 4:
                     if (!intDivFu.instruction.stage2ExecutionFinished && !intDivFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intDivFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intDivFu.instruction, ref config, out result, out intASPR);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -498,7 +501,7 @@ namespace ISA_GUI
                 case 5:
                     if (!floatAddFu.instruction.stage2ExecutionFinished && !floatAddFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatAddFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatAddFu.instruction, ref config, out result, out intASPR);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -521,7 +524,7 @@ namespace ISA_GUI
                 case 6:
                     if (!floatSubFu.instruction.stage2ExecutionFinished && !floatSubFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatSubFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatSubFu.instruction, ref config, out result, out intASPR);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -544,7 +547,7 @@ namespace ISA_GUI
                 case 7:
                     if (!floatMultFu.instruction.stage2ExecutionFinished && !floatMultFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatMultFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatMultFu.instruction, ref config, out result, out intASPR);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -567,7 +570,7 @@ namespace ISA_GUI
                 case 8:
                     if (!floatDivFu.instruction.stage2ExecutionFinished && !floatDivFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatDivFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatDivFu.instruction, ref config, out result, out intASPR);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -590,7 +593,7 @@ namespace ISA_GUI
                 case 9:
                     if (!bitwiseOPFu.instruction.stage2ExecutionFinished && !bitwiseOPFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref bitwiseOPFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref bitwiseOPFu.instruction, ref config, out result, out intASPR);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -613,7 +616,7 @@ namespace ISA_GUI
                 case 10:
                     if (!memoryUnitFu.instruction.stage2ExecutionFinished && !memoryUnitFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref memoryUnitFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref memoryUnitFu.instruction, ref config, out result, out intASPR);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -635,7 +638,7 @@ namespace ISA_GUI
                 case 11:
                     if (!branchFu.instruction.stage2ExecutionFinished && !branchFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref branchFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref branchFu.instruction, ref config, out result, out intASPR);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -658,7 +661,7 @@ namespace ISA_GUI
                 case 12:
                     if (!shiftFu.instruction.stage2ExecutionFinished && !shiftFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref shiftFu.instruction, ref config, ref branchTaken, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref shiftFu.instruction, ref config, out result, out intASPR);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -1558,7 +1561,7 @@ namespace ISA_GUI
                     {
                         checkOperandDependencies(ref instruction, ref registers);
                         shiftOPS.Busy = true;
-                        registers.intQi[instruction.r3] = "shiftOPS";
+                        registers.intQi[instruction.r3] = "shiftFu";
                         registers.intQiIndex[instruction.r3] = instruction.ID;
                         instruction.functionalUnitID = 12;
                         shiftOPS.instruction = instruction;
@@ -1572,7 +1575,7 @@ namespace ISA_GUI
                         {
                             checkOperandDependencies(ref instruction, ref registers);
                             floatAddRS.Busy = true;
-                            registers.floatQi[instruction.r3] = "floatAddRS";
+                            registers.floatQi[instruction.r3] = "floatAddFu";
                             registers.floatQiIndex[instruction.r3] = instruction.ID;
                             instruction.functionalUnitID = 5;
                             floatAddRS.instruction = instruction;
@@ -1585,7 +1588,7 @@ namespace ISA_GUI
                         {
                             checkOperandDependencies(ref instruction, ref registers);
                             intAddRS.Busy = true;
-                            registers.intQi[instruction.r3] = "intAddRS";
+                            registers.intQi[instruction.r3] = "intAddFu";
                             registers.intQiIndex[instruction.r3] = instruction.ID;
                             instruction.functionalUnitID = 1;
                             intAddRS.instruction = instruction;
@@ -1601,7 +1604,7 @@ namespace ISA_GUI
                         {
                             checkOperandDependencies(ref instruction, ref registers);
                             floatSubRS.Busy = true;
-                            registers.floatQi[instruction.r3] = "floatSubRS";
+                            registers.floatQi[instruction.r3] = "floatSubFu";
                             registers.floatQiIndex[instruction.r3] = instruction.ID;
                             instruction.functionalUnitID = 6;
                             floatSubRS.instruction = instruction;
@@ -1614,7 +1617,7 @@ namespace ISA_GUI
                         {
                             checkOperandDependencies(ref instruction, ref registers);
                             intSubRS.Busy = true;
-                            registers.intQi[instruction.r3] = "intSubRS";
+                            registers.intQi[instruction.r3] = "intSubFu";
                             registers.intQiIndex[instruction.r3] = instruction.ID;
                             instruction.functionalUnitID = 2;
                             intSubRS.instruction = instruction;
@@ -1629,7 +1632,7 @@ namespace ISA_GUI
                         {
                             checkOperandDependencies(ref instruction, ref registers);
                             floatMultRS.Busy = true;
-                            registers.floatQi[instruction.r3] = "floatMultRS";
+                            registers.floatQi[instruction.r3] = "floatMultFu";
                             registers.floatQiIndex[instruction.r3] = instruction.ID;
                             instruction.functionalUnitID = 7;
                             floatMultRS.instruction = instruction;
@@ -1642,7 +1645,7 @@ namespace ISA_GUI
                         {
                             checkOperandDependencies(ref instruction, ref registers);
                             intMultRS.Busy = true;
-                            registers.intQi[instruction.r3] = "intMultRS";
+                            registers.intQi[instruction.r3] = "intMultFu";
                             registers.intQiIndex[instruction.r3] = instruction.ID;
                             instruction.functionalUnitID = 3;
                             intMultRS.instruction = instruction;
@@ -1658,7 +1661,7 @@ namespace ISA_GUI
                         {
                             checkOperandDependencies(ref instruction, ref registers);
                             floatDivRS.Busy = true;
-                            registers.floatQi[instruction.r3] = "floatDivRS";
+                            registers.floatQi[instruction.r3] = "floatDivFu";
                             registers.floatQiIndex[instruction.r3] = instruction.ID;
                             instruction.functionalUnitID = 8;
                             floatDivRS.instruction = instruction;
@@ -1671,7 +1674,7 @@ namespace ISA_GUI
                         {
                             checkOperandDependencies(ref instruction, ref registers);
                             intDivRS.Busy = true;
-                            registers.intQi[instruction.r3] = "intDivRS";
+                            registers.intQi[instruction.r3] = "intDivFu";
                             registers.intQiIndex[instruction.r3] = instruction.ID;
                             instruction.functionalUnitID = 4;
                             intDivRS.instruction = instruction;
@@ -1686,7 +1689,7 @@ namespace ISA_GUI
                     {
                         checkOperandDependencies(ref instruction, ref registers);
                         bitwiseOPRS.Busy = true;
-                        registers.intQi[instruction.r3] = "bitwiseOPRS";
+                        registers.intQi[instruction.r3] = "bitwiseFu";
                         registers.intQiIndex[instruction.r3] = instruction.ID;
                         instruction.functionalUnitID = 9;
                         bitwiseOPRS.instruction = instruction;
@@ -1698,7 +1701,7 @@ namespace ISA_GUI
                     {
                         checkOperandDependencies(ref instruction, ref registers);
                         bitwiseOPRS.Busy = true;
-                        registers.intQi[instruction.r3] = "bitwiseOPRS";
+                        registers.intQi[instruction.r3] = "bitwiseFu";
                         registers.intQiIndex[instruction.r3] = instruction.ID;
                         instruction.functionalUnitID = 9;
                         bitwiseOPRS.instruction = instruction;
@@ -1729,7 +1732,9 @@ namespace ISA_GUI
             if (instruction.opcode < 2 || instruction.opcode > 8)
                 return false;
 
-            if ((instructionsInFlight[(id - 1)].programCounterValue != instructionsInFlight[id].address) && lastBranchDecision == true)
+            if ((instructionsInFlight.Find(inst => inst.ID == id).programCounterValue != 
+                instructionsInFlight.Find(inst => inst.ID == (id+1)).address) && 
+                lastBranchDecision == true)
             {
                 instructionID = id + 1;
                 instructionsInFlight.Clear();
@@ -1771,6 +1776,10 @@ namespace ISA_GUI
                 load_storeBuffer.Busy = false;
                 branchOPS.Busy = false;
                 shiftOPS.Busy = false;
+                reorderBuffer.removeAllInstructionsAfterHazard(id);
+                commonDataBus.CDB.Clear();
+                commonDataBus.index.Clear();
+                commonDataBus.IDIndex.Clear();
 
                 registers.clearRegistersQI();
 

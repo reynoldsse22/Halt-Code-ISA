@@ -70,12 +70,14 @@ namespace ISA_GUI
         {
 			if(instruction.isFloat)
             {
-				floatQi[Array.IndexOf(floatQiIndex, instruction.ID)] = "0";
+				floatQi[instruction.destinationReg] = "0";
+				floatQiIndex[instruction.destinationReg] = -1;
 			}
             else
             {
-				intQi[Array.IndexOf(intQiIndex, instruction.ID)] = "0";
-            }
+				intQi[instruction.destinationReg] = "0";
+				intQiIndex[instruction.destinationReg] = -1;
+			}
         }
     }
 }
