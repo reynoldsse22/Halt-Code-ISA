@@ -167,6 +167,7 @@ namespace ISA_GUI
                             int instructionIndex = reorderBuffer.checkCommit(inst, ref WR, ref dataMemory, ref lastBranchDecision, ref IM, ref registers, ref haltFound, ref commonDataBus);
                             if (instructionIndex < 0)
                             {
+                                justCommitedInstruction = null;
                                 continue;
                             }
                             
@@ -176,6 +177,7 @@ namespace ISA_GUI
                             inst.stage5Cycle = cycleCount;
                             printer.buildDecodedString(ref decodedString, inst);      //Build the decoded instruction string
                             printer.buildDynamicPipelineString(ref pipelineString, inst);
+                            justCommitedInstruction = inst;
                             bool hazardDetected = detectControlHazard(instructionIndex, ref registers, inst);
                             if (!hazardDetected)
                             {
@@ -209,6 +211,7 @@ namespace ISA_GUI
                                 }
                                 catch
                                 {
+                                    justCommitedInstruction = null;
                                     continue;
                                 }
                             }

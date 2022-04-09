@@ -452,6 +452,7 @@ namespace ISA_GUI
             cpu.DP.clearDynamicPipeline();
             cpu.DP.clearDynamicPipeline();
             cpu.registers.clearRegistersQI();
+            cpu.DP.instructionID = 1;
         }
 
         /**
@@ -740,14 +741,20 @@ namespace ISA_GUI
             int numOfInstInExecution = 0;
             foreach(Instruction inst in cpu.DP.reorderBuffer.reorderBuffer)
             {
-                instructionsInFlight += inst.fullAssemblySyntax + "\n";
-                if (inst.justIssued)
+                instructionsInFlight += string.Format("{0, 16} {1, 4}\n", inst.fullAssemblySyntax.PadRight(16, ' '), inst.ID.ToString().PadLeft(4,' '));
+                if (inst.justIssued && inst.stage1Cycle == cpu.DP.cycleCount)
                     issueStageText.Text = inst.fullAssemblySyntax;
-                if (inst.stage == 5)
-                    commitStageText.Text = inst.fullAssemblySyntax;
+                else
+                    issueStageText.Text = "";
+                
                 if (inst.executionInProgress)
                     numOfInstInExecution++;
             }
+
+            if (cpu.DP.justCommitedInstruction != null)
+                commitStageText.Text = cpu.DP.justCommitedInstruction.fullAssemblySyntax;
+            else
+                commitStageText.Text = "";
             instructionInFlightText.Text = instructionsInFlight;
             instInExText.Text = numOfInstInExecution.ToString();
             currentCycleText.Text = cpu.DP.cycleCount.ToString();
