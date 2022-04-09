@@ -276,9 +276,42 @@ namespace ISA_GUI
 
         }
 
-        public void buildPipelineString(ref StringBuilder pipelineString, Instruction instruction)
+        public void buildDynamicPipelineString(ref StringBuilder pipelineString, Instruction instruction)
         {
-            buildPipelineString(ref pipelineString, ref instruction);
+            string stage1, stage2, stage3, stage4, stage5;
+
+            stage1 = instruction.stage1Cycle.ToString();
+
+            if (instruction.stage2CycleStart == instruction.stage2CycleEnd)
+                stage2 = instruction.stage2CycleEnd.ToString();
+            else
+                stage2 = instruction.stage2CycleStart.ToString() + "-" + instruction.stage2CycleEnd.ToString();
+
+            if (instruction.stage3CycleStart == instruction.stage3CycleEnd)
+                stage3 = instruction.stage3CycleEnd.ToString();
+            else
+                stage3 = instruction.stage3CycleStart.ToString() + "-" + instruction.stage3CycleEnd.ToString();
+
+            stage4 = instruction.stage4Cycle.ToString();
+
+            stage5 = instruction.stage5Cycle.ToString();
+
+
+            if (stage1 == "0")
+                stage1 = " ";
+            if (stage2 == "0")
+                stage2 = " ";
+            if (stage3 == "0")
+                stage3 = " ";
+            if (stage4 == "0")
+                stage4 = " ";
+            if (stage5 == "0")
+                stage5 = " ";
+
+            string output = (string.Format("\n{0, 7} {1,13} {2, 7} {3, 8} {4, 8} {5, 7} {6, 9}",
+                            instruction.assembly1.PadRight(7), instruction.assembly2.PadRight(13), stage1.PadLeft(7), stage2.PadLeft(8), stage3.PadLeft(8), stage4.PadLeft(7), stage5.PadLeft(9)));
+
+            pipelineString.Append(output);
         }
     }
 }

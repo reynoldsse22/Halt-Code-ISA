@@ -14,6 +14,7 @@ namespace ISA_GUI
         public ControlUnit CU;
         public Queue<Instruction> instructionQueue;
         public List<Instruction> instructionsInFlight;
+        public Instruction justCommitedInstruction;
         public ALU alu;
         public ExecutionUnit EU;
         public WriteResult WR;
@@ -52,7 +53,7 @@ namespace ISA_GUI
         public int totalHazard, structuralHazard, dataHazard, controlHazard, RAW, WAR, WAW;
         public int reorderBufferDelay, reservationStationDelay, trueDependenceDelay, totalDelays, instructionID;
         public int totalCyclesStalled, numOfInstructionInExecution;
-        public bool lastBranchDecision, doneExecuting, executionInProgress;
+        public bool lastBranchDecision, doneExecuting, executionInProgress, haltFound, commitedThisCycle;
 
 
 
@@ -112,7 +113,8 @@ namespace ISA_GUI
             lastBranchDecision = false;
             doneExecuting = false;
             executionInProgress = false;
-            // timer = new Timer();
+            haltFound = false;
+            commitedThisCycle = false;
         }
 
         /// <summary>Runs the cycle.</summary>
@@ -127,11 +129,12 @@ namespace ISA_GUI
         /// <param name="IM">The im.</param>
         /// <param name="registers">The registers.</param>
         /// <param name="dataMemory">The data memory.</param>
-        public void runCycle(List<string> input, bool stepThrough, ref StringBuilder assemblyString, ref StringBuilder decodedString, ref StringBuilder pipelingString, 
+        public void runCycle(List<string> input, bool stepThrough, ref StringBuilder assemblyString, ref StringBuilder decodedString, ref StringBuilder pipelineString, 
             ref bool halted, ref ConfigCycle config, ref InstructionMemory IM, ref RegisterFile registers, ref DataMemory dataMemory)
         {
             do
             {
+                commitedThisCycle = false;
                 startOfLoop:
                 cycleCount++;
                 reorderBuffer.oneCommitPerCycle = true; //Control booleans to make sure stages only run once per cycle
@@ -142,7 +145,6 @@ namespace ISA_GUI
                 }
 
                 string result = "";
-                int instASPR = 0;
                 if (instructionQueue.Count == 0)
                 {
                     fillInstructionQueue(ref IM);
@@ -159,28 +161,26 @@ namespace ISA_GUI
                     {
                         //Take instructions from the data bus and add them to the reorder buffer where instructions will be executed based on program counter
                         case 5:
-                            
-                            int instructionIndex = reorderBuffer.checkCommit(inst, ref WR, ref dataMemory, ref lastBranchDecision, ref IM, ref registers, ref halted, ref commonDataBus);
-                            bool hazardDetected = detectControlHazard(instructionIndex, ref registers, inst);
+                            if (commitedThisCycle)
+                                continue;
 
-                            if (inst.opcode != 0 && inst.opcode != 1) //Makes sure not to run for halts or no ops
+                            int instructionIndex = reorderBuffer.checkCommit(inst, ref WR, ref dataMemory, ref lastBranchDecision, ref IM, ref registers, ref haltFound, ref commonDataBus);
+                            if (instructionIndex < 0)
                             {
-                                if (inst.stage4End == 0)         //Makes sure this is only ran once
-                                    inst.stage4End = cycleCount - 1;
+                                continue;
                             }
-                            if(instructionIndex != -1)          //Runs then the instruction has been commited
-                            {
-                                inst.stage5Start = cycleCount;
-                                inst.stage5End = cycleCount;
-                                printer.buildDecodedString(ref decodedString, inst);      //Build the decoded instruction string
-                                printer.buildPipelineString(ref pipelingString, inst);
-                            }
-                            if (!hazardDetected && instructionIndex != -1)
+                            
+                            if (haltFound)
+                                halted = true;
+                            commitedThisCycle = true;
+                            inst.stage5Cycle = cycleCount;
+                            printer.buildDecodedString(ref decodedString, inst);      //Build the decoded instruction string
+                            printer.buildDynamicPipelineString(ref pipelineString, inst);
+                            bool hazardDetected = detectControlHazard(instructionIndex, ref registers, inst);
+                            if (!hazardDetected)
                             {
                                 try
                                 {
-                                    if (instructionIndex < 0)
-                                        continue;
                                     int cdbIndex = commonDataBus.index[instructionIndex];
                                     commonDataBus.CDB.Remove(commonDataBus.CDB.ElementAt(cdbIndex).Key);
                                     commonDataBus.index.Remove(inst.ID);
@@ -222,30 +222,27 @@ namespace ISA_GUI
                             {
                                 clearFU(inst);
                                 inst.stage = 5;
-                                if (inst.stage3Start == 0)
+                                if (inst.stage4Cycle == 0)
                                 {
-                                    inst.stage2End = cycleCount - 1;        //Only runs if the third stage was skipped
+                                    inst.stage4Cycle = cycleCount;
                                 }
-                                else
-                                {
-                                    inst.stage3End = cycleCount - 1;        //Updates third stage ending
-                                }
-
-                                inst.stage4Start = cycleCount;              //Starts fourth stage
                             }
                             break;
 
                         //This should be where the Write Result and Memory Read stages will be held
                         case 3:
+                            if (inst.stage3CycleStart == 0)
+                                inst.stage3CycleStart = cycleCount;
                             memoryUnitFu.instruction.doneExecuting = false;
                             AM.accessMemoryDynamic(ref dataMemory, ref registers, inst, ref config, out result, ref memoryUnitFu);
                             inst.result = result;
                             inst.ASPR = memoryUnitFu.instruction.ASPR;
-                            inst.stage2End = cycleCount - 1;        //End of the second stage
-                            inst.stage3Start = cycleCount;          //Start of the third
+                           // inst.stage2End = cycleCount - 1;        //End of the second stage
+                           // inst.stage3Start = cycleCount;          //Start of the third
                             
                             if(memoryUnitFu.instruction.doneExecuting)
                             {
+                                inst.stage3CycleEnd = cycleCount;
                                 inst.stage = 4;
                             }
                             break;
@@ -254,11 +251,11 @@ namespace ISA_GUI
                         //Open up reservation station to allow for more instructions to flow in
                         //Execute within the functional unit
                         case 2:
+                            if (inst.stage2CycleStart == 0)
+                                inst.stage2CycleStart = cycleCount;
                             Instruction executeInstruction = execute(inst, ref registers, ref dataMemory, ref IM, ref config, ref alu, ref result);
-                            if(inst.stage2Start == cycleCount)          //Makes sure that this is only ran once when the instruction values are executed
-                            {
-                                inst.result = result;
-                            }
+                            
+                            inst.result = result;
                             inst.dependantOpID1 = 0;
                             inst.dependantOpID2 = 0;
                             inst.doneExecuting = executeInstruction.doneExecuting;
@@ -268,6 +265,7 @@ namespace ISA_GUI
                             
                             if (inst.doneExecuting)
                             {
+                                inst.stage2CycleEnd = cycleCount;
                                 if (inst.opcode == 0 || inst.opcode == 1)
                                     inst.stage = 5;
                                 else if (inst.opcode == 9 || inst.opcode == 11 || inst.opcode == 12)
@@ -320,7 +318,7 @@ namespace ISA_GUI
                                 inst.dependantOpID1 = populateInstruction.dependantOpID1;
                                 inst.dependantOpID2 = populateInstruction.dependantOpID2;
                                 inst.stage = 2;
-                                inst.stage1End = cycleCount;
+                                inst.stage1Cycle = cycleCount;
                                 inst.justIssued = true;
                             }
                             catch (Exception)

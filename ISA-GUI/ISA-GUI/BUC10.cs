@@ -193,7 +193,7 @@ namespace ISA_GUI
                     if (!config.dynamicPipelineSet)
                         cpu.runStaticPipeline(program, true, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config, ref stages);      //Run the program one cycle at a time. Stepthrough flag is true
                     else
-                        return;//ELSE STATEMENT FOR DYNAMIC PIPELINE GOES HERE
+                        cpu.runDynamicPipeline(program, true, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config); //Calling Dynamic Pipeline
                 }
                 catch (Exception)       //Catch any errors when getting input from user or decoding invalid instructions
                 {
