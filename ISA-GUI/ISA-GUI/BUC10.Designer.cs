@@ -1259,10 +1259,10 @@
             this.StatsTextBox.BackColor = System.Drawing.SystemColors.Window;
             this.StatsTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.StatsTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StatsTextBox.Location = new System.Drawing.Point(2, 5);
+            this.StatsTextBox.Location = new System.Drawing.Point(2, 3);
             this.StatsTextBox.Name = "StatsTextBox";
             this.StatsTextBox.ReadOnly = true;
-            this.StatsTextBox.Size = new System.Drawing.Size(544, 469);
+            this.StatsTextBox.Size = new System.Drawing.Size(541, 321);
             this.StatsTextBox.TabIndex = 1;
             this.StatsTextBox.Text = "";
             // 
@@ -1282,10 +1282,10 @@
             this.AssemblerListingTextBox.BackColor = System.Drawing.SystemColors.Window;
             this.AssemblerListingTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.AssemblerListingTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AssemblerListingTextBox.Location = new System.Drawing.Point(0, 5);
+            this.AssemblerListingTextBox.Location = new System.Drawing.Point(3, 3);
             this.AssemblerListingTextBox.Name = "AssemblerListingTextBox";
             this.AssemblerListingTextBox.ReadOnly = true;
-            this.AssemblerListingTextBox.Size = new System.Drawing.Size(549, 469);
+            this.AssemblerListingTextBox.Size = new System.Drawing.Size(543, 320);
             this.AssemblerListingTextBox.TabIndex = 0;
             this.AssemblerListingTextBox.Text = "";
             // 
@@ -1308,7 +1308,7 @@
             this.pipelineTextBox.Location = new System.Drawing.Point(3, 3);
             this.pipelineTextBox.Name = "pipelineTextBox";
             this.pipelineTextBox.ReadOnly = true;
-            this.pipelineTextBox.Size = new System.Drawing.Size(543, 471);
+            this.pipelineTextBox.Size = new System.Drawing.Size(543, 318);
             this.pipelineTextBox.TabIndex = 2;
             this.pipelineTextBox.Text = "";
             // 

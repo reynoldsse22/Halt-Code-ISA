@@ -238,9 +238,9 @@ namespace ISA_GUI
                         //This should be where the Write Result and Memory Read stages will be held
                         case 3:
                             memoryUnitFu.instruction.doneExecuting = false;
-                            AM.accessMemoryDynamic(ref dataMemory, ref registers, inst, ref config, out result, ref memoryUnitFu, out instASPR);
+                            AM.accessMemoryDynamic(ref dataMemory, ref registers, inst, ref config, out result, ref memoryUnitFu);
                             inst.result = result;
-                            inst.ASPR = instASPR;
+                            inst.ASPR = memoryUnitFu.instruction.ASPR;
                             inst.stage2End = cycleCount - 1;        //End of the second stage
                             inst.stage3Start = cycleCount;          //Start of the third
                             
@@ -254,17 +254,17 @@ namespace ISA_GUI
                         //Open up reservation station to allow for more instructions to flow in
                         //Execute within the functional unit
                         case 2:
-                            Instruction executeInstruction = execute(inst, ref registers, ref dataMemory, ref IM, ref config, ref alu, ref result, ref instASPR);
+                            Instruction executeInstruction = execute(inst, ref registers, ref dataMemory, ref IM, ref config, ref alu, ref result);
                             if(inst.stage2Start == cycleCount)          //Makes sure that this is only ran once when the instruction values are executed
                             {
                                 inst.result = result;
-                                inst.ASPR = instASPR;
                             }
                             inst.dependantOpID1 = 0;
                             inst.dependantOpID2 = 0;
                             inst.doneExecuting = executeInstruction.doneExecuting;
                             inst.executionInProgress = executeInstruction.executionInProgress;
                             inst.justIssued = false;
+                            inst.ASPR = executeInstruction.ASPR;
                             
                             if (inst.doneExecuting)
                             {
@@ -374,7 +374,7 @@ namespace ISA_GUI
         }
         
         private Instruction execute(Instruction instruction, ref RegisterFile registers,ref DataMemory memory, 
-            ref InstructionMemory IM, ref ConfigCycle config, ref ALU alu, ref string result, ref int intASPR)
+            ref InstructionMemory IM, ref ConfigCycle config, ref ALU alu, ref string result)
         {
             if (instruction.opcode == 0 || instruction.opcode == 1)
             {
@@ -409,7 +409,7 @@ namespace ISA_GUI
                 case 1:
                     if(!intAddFu.instruction.stage2ExecutionFinished && !intAddFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intAddFu.instruction, ref config, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intAddFu.instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -432,7 +432,7 @@ namespace ISA_GUI
                 case 2:
                     if (!intSubFu.instruction.stage2ExecutionFinished && !intSubFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intSubFu.instruction, ref config, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intSubFu.instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -455,7 +455,7 @@ namespace ISA_GUI
                 case 3:
                     if (!intMultFu.instruction.stage2ExecutionFinished && !intMultFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intMultFu.instruction, ref config, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intMultFu.instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -478,7 +478,7 @@ namespace ISA_GUI
                 case 4:
                     if (!intDivFu.instruction.stage2ExecutionFinished && !intDivFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intDivFu.instruction, ref config, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intDivFu.instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -501,7 +501,7 @@ namespace ISA_GUI
                 case 5:
                     if (!floatAddFu.instruction.stage2ExecutionFinished && !floatAddFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatAddFu.instruction, ref config, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatAddFu.instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -524,7 +524,7 @@ namespace ISA_GUI
                 case 6:
                     if (!floatSubFu.instruction.stage2ExecutionFinished && !floatSubFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatSubFu.instruction, ref config, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatSubFu.instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -547,7 +547,7 @@ namespace ISA_GUI
                 case 7:
                     if (!floatMultFu.instruction.stage2ExecutionFinished && !floatMultFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatMultFu.instruction, ref config, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatMultFu.instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -570,7 +570,7 @@ namespace ISA_GUI
                 case 8:
                     if (!floatDivFu.instruction.stage2ExecutionFinished && !floatDivFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatDivFu.instruction, ref config, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref floatDivFu.instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -593,7 +593,7 @@ namespace ISA_GUI
                 case 9:
                     if (!bitwiseOPFu.instruction.stage2ExecutionFinished && !bitwiseOPFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref bitwiseOPFu.instruction, ref config, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref bitwiseOPFu.instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -616,7 +616,7 @@ namespace ISA_GUI
                 case 10:
                     if (!memoryUnitFu.instruction.stage2ExecutionFinished && !memoryUnitFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref memoryUnitFu.instruction, ref config, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref memoryUnitFu.instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -638,7 +638,7 @@ namespace ISA_GUI
                 case 11:
                     if (!branchFu.instruction.stage2ExecutionFinished && !branchFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref branchFu.instruction, ref config, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref branchFu.instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
@@ -661,7 +661,7 @@ namespace ISA_GUI
                 case 12:
                     if (!shiftFu.instruction.stage2ExecutionFinished && !shiftFu.instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref shiftFu.instruction, ref config, out result, out intASPR);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref shiftFu.instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;

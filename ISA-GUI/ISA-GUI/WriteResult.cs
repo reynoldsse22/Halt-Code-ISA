@@ -386,6 +386,7 @@ namespace ISA_GUI
 					break;
 				case 15:
 					//MOV
+					registers.ASPR = instruction.ASPR;
 					if (!instruction.isFloat)
 						registers.intRegisters[instruction.destinationReg] = int.Parse(instruction.result);
 					else
@@ -396,6 +397,7 @@ namespace ISA_GUI
 				case 18:
 				case 19:
 					//Shifting
+					registers.ASPR = instruction.ASPR;
 					registers.intRegisters[instruction.destinationReg] = int.Parse(instruction.result);
 					break;
 				case 20:
@@ -406,6 +408,7 @@ namespace ISA_GUI
 				case 25:
 				case 26:
 				case 27:
+					registers.ASPR = instruction.ASPR;
 					//ALU instructions
 					if (!instruction.isFloat)
 						registers.intRegisters[instruction.destinationReg] = int.Parse(instruction.result);

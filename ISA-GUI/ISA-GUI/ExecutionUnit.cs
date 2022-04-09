@@ -204,7 +204,7 @@ namespace ISA_GUI
 
 
         public void executeDynamic(ref RegisterFile registers, ref DataMemory memory, ref ALU alu, ref InstructionMemory IM,
-                ref Instruction instruction, ref ConfigCycle config, out string result, out int instASPR)
+                ref Instruction instruction, ref ConfigCycle config, out string result)
         {
             result = "";
             inProgress = true;
@@ -218,7 +218,6 @@ namespace ISA_GUI
             int instrFlag = instruction.instrFlag;
             string instrType = instruction.instrType;
             int ASPR = instrFlag & 1;                           //gets the ASPR bit from the first four bits 00X0
-            instASPR = 0;
 
             switch (opcode)
             {
@@ -265,7 +264,7 @@ namespace ISA_GUI
                     break;
                 case 13:
                 case 14:
-                    alu.execute(ref registers, ref memory, ref alu, ref IM, ref instruction, ref config);
+                    alu.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref instruction, ref config, out result);
                     break;
                 case 15:
                     instruction.cycleControl = config.regAccess;
@@ -290,7 +289,7 @@ namespace ISA_GUI
                 case 25:
                 case 26:
                 case 27:
-                    alu.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref instruction, ref config, out result, out int intASPR);    //Transfer to the ALU
+                    alu.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref instruction, ref config, out result);    //Transfer to the ALU
                     break;
             }
             success = true;

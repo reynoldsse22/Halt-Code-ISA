@@ -120,10 +120,9 @@ namespace ISA_GUI
 		 *   @param	ConfigCycle config
 		 */
 		public void accessMemoryDynamic(ref DataMemory memory, ref RegisterFile registers, Instruction instruction, ref ConfigCycle config, 
-			out string result, ref MemoryUnit load_buffer, out int intASPR)
+			out string result, ref MemoryUnit load_buffer)
 		{
 			result = "";
-			intASPR = 0;
 			int ASPR = instruction.instrFlag & 1;
 			if(!load_buffer.instruction.executionInProgress && !load_buffer.instruction.doneExecuting)
             {
@@ -141,7 +140,7 @@ namespace ISA_GUI
 						load_buffer.instruction.intResult += (memory.MainMemory[load_buffer.instruction.address + 2]);           //Loads the LSB value from the address in memory to r0
 						result = load_buffer.instruction.intResult.ToString();
 						if (int.Parse(result) == 0 && ASPR == 1)
-							intASPR = 1;
+							load_buffer.instruction.ASPR = 1;
 						if (load_buffer.instruction.cycleControl == 0)
                         {
 							load_buffer.instruction.executionInProgress = false;
@@ -158,7 +157,7 @@ namespace ISA_GUI
 						load_buffer.instruction.floatResult = System.BitConverter.ToSingle(memoryFloat, 0);
 						result = load_buffer.instruction.floatResult.ToString();
 						if (float.Parse(result) == 0f && ASPR == 1)
-							intASPR = 1;
+							instruction.ASPR = 1;
 						if (load_buffer.instruction.cycleControl == 0)
 						{
 							load_buffer.instruction.executionInProgress = false;
@@ -189,9 +188,9 @@ namespace ISA_GUI
 						floatArray[3] = 0x00;                           //first byte is 0 because we don't use them 
 						result = System.BitConverter.ToSingle(floatArray, 0).ToString();
 						if (float.Parse(result) == 0f && ASPR == 1)
-							intASPR = 1;
+							load_buffer.instruction.ASPR = 1;
 						if (int.Parse(result) == 0 && ASPR == 1)
-							intASPR = 1;
+							load_buffer.instruction.ASPR = 1;
 						if (load_buffer.instruction.cycleControl == 0)
 						{
 							load_buffer.instruction.executionInProgress = false;
@@ -205,7 +204,7 @@ namespace ISA_GUI
 						load_buffer.instruction.executionInProgress = true;
 						result = (load_buffer.instruction.iOperand1 + (load_buffer.instruction.address << 12)).ToString();
 						if (int.Parse(result) == 0 && ASPR == 1)
-							intASPR = 1;
+							load_buffer.instruction.ASPR = 1;
 						if (load_buffer.instruction.cycleControl == 0)
 						{
 							load_buffer.instruction.executionInProgress = false;
@@ -226,7 +225,7 @@ namespace ISA_GUI
 						floatArray[3] = (byte)((load_buffer.instruction.address >> 4) & 255);   //get first byte by shifting right 4 and ANDing with 0xFF
 						result = System.BitConverter.ToSingle(floatArray, 0).ToString();
 						if (float.Parse(result) == 0f && ASPR == 1)
-							intASPR = 1;
+							load_buffer.instruction.ASPR = 1;
 						if (load_buffer.instruction.cycleControl == 0)
 						{
 							load_buffer.instruction.executionInProgress = false;

@@ -343,10 +343,9 @@ namespace ISA_GUI
         *   @param  int address
         */
         public void executeDynamic(ref RegisterFile registers, ref DataMemory memory, ref ALU alu, ref InstructionMemory IM, 
-            ref Instruction instruction, ref ConfigCycle config, out string result, out int instASPR)
+            ref Instruction instruction, ref ConfigCycle config, out string result)
         {
             result = "";
-            instASPR = 0;
             int opcode = instruction.opcode;
             int r3 = instruction.r3;
             int address = instruction.address;
@@ -626,7 +625,7 @@ namespace ISA_GUI
                 if (carry)
                     statusFlag += 1;
 
-                instASPR = statusFlag;       //assign the ASPR register the bit map value
+                instruction.ASPR = statusFlag;       //assign the ASPR register the bit map value
             }
 
         }

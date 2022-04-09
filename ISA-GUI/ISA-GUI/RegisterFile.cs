@@ -70,13 +70,19 @@ namespace ISA_GUI
         {
 			if(instruction.isFloat)
             {
-				floatQi[instruction.destinationReg] = "0";
-				floatQiIndex[instruction.destinationReg] = -1;
+				if(instruction.ID == floatQiIndex[instruction.destinationReg])
+                {
+					floatQi[instruction.destinationReg] = "0";
+					floatQiIndex[instruction.destinationReg] = -1;
+				}
 			}
             else
             {
-				intQi[instruction.destinationReg] = "0";
-				intQiIndex[instruction.destinationReg] = -1;
+				if(instruction.ID == intQiIndex[instruction.destinationReg])
+                {
+					intQi[instruction.destinationReg] = "0";
+					intQiIndex[instruction.destinationReg] = -1;
+				}
 			}
         }
     }
