@@ -361,7 +361,7 @@ namespace ISA_GUI
                     //Compare Immediate to Register
                     if (!instruction.isFloat)
                     {
-                        instruction.cycleControl = config.intALU;
+                        instruction.cycleControl = config.intSub;
                         int compare = (address - instruction.iOperand1);
                         if (compare > address && ASPR == 1)
                             carry = true;
@@ -370,7 +370,7 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        instruction.cycleControl = config.flAddSub;
+                        instruction.cycleControl = config.flSub;
                         float compare = (address - instruction.fOperand1);
                         if (compare > address && ASPR == 1)
                             carry = true;
@@ -382,7 +382,7 @@ namespace ISA_GUI
                     //Compare Registers
                     if (!instruction.isFloat)
                     {
-                        instruction.cycleControl = config.intALU;
+                        instruction.cycleControl = config.intSub;
                         int compare = (instruction.iOperand1 - instruction.iOperand2);
                         if (compare > address && ASPR == 1)
                             carry = true;
@@ -391,7 +391,7 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        instruction.cycleControl = config.flAddSub;
+                        instruction.cycleControl = config.flSub;
                         float compare = (instruction.fOperand1 - instruction.fOperand2);
                         if (compare > address && ASPR == 1)
                             carry = true;
@@ -403,7 +403,7 @@ namespace ISA_GUI
                     //arithmetic shift left
                     if (!instruction.isFloat)
                     {
-                        instruction.cycleControl = config.intALU;
+                        instruction.cycleControl = config.shift;
                         instruction.destinationReg = r3;
                         instruction.intResult = (instruction.iOperand1 << instruction.iOperand2);
                         result = instruction.intResult.ToString();
@@ -417,7 +417,7 @@ namespace ISA_GUI
                     //arithmetic shift right
                     if (!instruction.isFloat)
                     {
-                        instruction.cycleControl = config.intALU;
+                        instruction.cycleControl = config.shift;
                         instruction.destinationReg = r3;
                         instruction.intResult = (instruction.iOperand1 >> instruction.iOperand2);
                         result = instruction.intResult.ToString();
@@ -431,7 +431,7 @@ namespace ISA_GUI
                     //logical shift left
                     if (!instruction.isFloat)
                     {
-                        instruction.cycleControl = config.intALU;
+                        instruction.cycleControl = config.shift;
                         instruction.destinationReg = r3;
                         int rotateBit;
                         rotateBit = (instruction.iOperand1 & 8388608) >> 23;
@@ -449,7 +449,7 @@ namespace ISA_GUI
                     //logical shift right
                     if (!instruction.isFloat)
                     {
-                        instruction.cycleControl = config.intALU;
+                        instruction.cycleControl = config.shift;
                         instruction.destinationReg = r3;
                         int rotateBit;
                         rotateBit = (instruction.iOperand1 & 1) << 23;
@@ -468,7 +468,7 @@ namespace ISA_GUI
                     instruction.destinationReg = r3;
                     if (!instruction.isFloat)
                     {
-                        instruction.cycleControl = config.intALU;
+                        instruction.cycleControl = config.intAdd;
                         instruction.intResult = (instruction.iOperand1 + instruction.iOperand2);
                         result = instruction.intResult.ToString();
                         if (instruction.intResult < instruction.iOperand1 && ASPR == 1)
@@ -478,7 +478,7 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        instruction.cycleControl = config.flAddSub;
+                        instruction.cycleControl = config.flAdd;
                         instruction.floatResult = (instruction.fOperand1 + instruction.iOperand2);
                         result = instruction.floatResult.ToString();
                         if (instruction.floatResult < instruction.fOperand1 && ASPR == 1)
@@ -492,7 +492,7 @@ namespace ISA_GUI
                     instruction.destinationReg = r3;
                     if (!instruction.isFloat)
                     {
-                        instruction.cycleControl = config.intALU;
+                        instruction.cycleControl = config.intSub;
                         instruction.intResult = (instruction.iOperand1 - instruction.iOperand2);
                         result = instruction.intResult.ToString();
                         if (instruction.intResult > instruction.iOperand1 && ASPR == 1)
@@ -502,7 +502,7 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        instruction.cycleControl = config.flAddSub;
+                        instruction.cycleControl = config.flSub;
                         instruction.floatResult = (instruction.fOperand1 - instruction.fOperand2);
                         result = instruction.floatResult.ToString();
                         if (instruction.floatResult > instruction.fOperand1 && ASPR == 1)
@@ -516,7 +516,7 @@ namespace ISA_GUI
                     instruction.destinationReg = r3;
                     if (!instruction.isFloat)
                     {
-                        instruction.cycleControl = config.intALU;
+                        instruction.cycleControl = config.intMult;
                         instruction.intResult = instruction.iOperand1 * instruction.iOperand2;
                         result = instruction.intResult.ToString();
                         if (instruction.intResult < instruction.iOperand1 && ASPR == 1)
@@ -540,7 +540,7 @@ namespace ISA_GUI
                     instruction.destinationReg = r3;
                     if (!instruction.isFloat)
                     {
-                        instruction.cycleControl = config.intALU;
+                        instruction.cycleControl = config.intDiv;
                         instruction.intResult = (int)instruction.iOperand1 / (int)instruction.iOperand2;
                         result = instruction.intResult.ToString();
                         if (instruction.intResult > instruction.iOperand1 && ASPR == 1)
@@ -563,7 +563,7 @@ namespace ISA_GUI
                     //AND
                     if (!instruction.isFloat)
                     {
-                        instruction.cycleControl = config.intALU;
+                        instruction.cycleControl = config.bitwise;
                         instruction.destinationReg = r3;
                         instruction.intResult = (instruction.iOperand1 & instruction.iOperand2);
                         result = instruction.intResult.ToString();
@@ -577,7 +577,7 @@ namespace ISA_GUI
                     //OR
                     if (!instruction.isFloat)
                     {
-                        instruction.cycleControl = config.intALU;
+                        instruction.cycleControl = config.bitwise;
                         instruction.destinationReg = r3;
                         instruction.intResult = (instruction.iOperand1 | instruction.iOperand2);
                         result = instruction.intResult.ToString();
@@ -591,7 +591,7 @@ namespace ISA_GUI
                     //XOR
                     if (!instruction.isFloat)
                     {
-                        instruction.cycleControl = config.intALU;
+                        instruction.cycleControl = config.bitwise;
                         instruction.destinationReg = r3;
                         instruction.intResult = (instruction.iOperand1 ^ instruction.iOperand2);
                         result = instruction.intResult.ToString();
@@ -605,7 +605,7 @@ namespace ISA_GUI
                     //NOT
                     if (!instruction.isFloat)
                     {
-                        instruction.cycleControl = config.intALU;
+                        instruction.cycleControl = config.bitwise;
                         instruction.destinationReg = r3;
                         instruction.intResult = (~instruction.iOperand1);
                         result = instruction.intResult.ToString();

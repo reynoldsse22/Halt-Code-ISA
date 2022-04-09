@@ -2306,6 +2306,8 @@ namespace ISA_GUI
 
         public void clearDynamicPipeline()
         {
+            instructionsInFlight.Clear();
+            instructionQueue.Clear();
             intAddFu.instruction = null;
             intSubFu.instruction = null;
             intMultFu.instruction = null;
@@ -2322,17 +2324,47 @@ namespace ISA_GUI
             intSubRS.instruction = null;
             intMultRS.instruction = null;
             intDivRS.instruction = null;
-            floatAddRS.instruction= null;
-            floatSubRS.instruction= null;
-            floatMultRS.instruction= null;
-            floatDivRS.instruction= null;
+            floatAddRS.instruction = null;
+            floatSubRS.instruction = null;
+            floatMultRS.instruction = null;
+            floatDivRS.instruction = null;
             bitwiseOPRS.instruction = null;
-            shiftOPS.instruction = null;
             load_storeBuffer.instruction = null;
             branchOPS.instruction = null;
-            instructionsInFlight.Clear();
-            instructionQueue.Clear();
+            shiftOPS.instruction = null;
+
+            intAddRS.Busy = false;
+            intSubRS.Busy = false;
+            intMultRS.Busy = false;
+            intDivRS.Busy = false;
+            floatAddRS.Busy = false;
+            floatSubRS.Busy = false;
+            floatMultRS.Busy = false;
+            floatDivRS.Busy = false;
+            bitwiseOPRS.Busy = false;
+            load_storeBuffer.Busy = false;
+            branchOPS.Busy = false;
+            shiftOPS.Busy = false;
+            commonDataBus.CDB.Clear();
+            commonDataBus.index.Clear();
+            commonDataBus.IDIndex.Clear();
             reorderBuffer.reorderBuffer.Clear();
+            justCommitedInstruction = null;
+            instructionID = 1;
+            cycleCount = 0;
+
+            fetchInstruction = new Instruction();
+            totalCyclesStalled = 0;
+            totalHazard = 0;
+            structuralHazard = 0;
+            dataHazard = 0;
+            controlHazard = 0;
+            numOfInstructionInExecution = 0;
+            lastBranchDecision = false;
+            doneExecuting = false;
+            executionInProgress = false;
+            haltFound = false;
+            commitedThisCycle = false;
             reorderBuffer.reorderIndex = 1;
         }
     }

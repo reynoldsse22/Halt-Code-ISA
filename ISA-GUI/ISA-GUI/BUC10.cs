@@ -450,9 +450,7 @@ namespace ISA_GUI
             cpu.DP.WR.occupied = false;
             cpu.DP.WR.success = false;
             cpu.DP.clearDynamicPipeline();
-            cpu.DP.clearDynamicPipeline();
             cpu.registers.clearRegistersQI();
-            cpu.DP.instructionID = 1;
         }
 
         /**
@@ -665,13 +663,13 @@ namespace ISA_GUI
 
                 statistics.Append("\n\nPipeline Statistics\n");
                 statistics.Append("------------------\n");
-                statistics.Append(String.Format("Total Cycles:           {0}\n", cpu.DP.cycleCount - 1));
+                statistics.Append(String.Format("Total Cycles:                    {0}\n", cpu.DP.cycleCount - 1));
                 statistics.Append("\nDelays\n");
                 statistics.Append("-------\n");
-                statistics.Append(String.Format("reorder buffer delays:             {0}\n", cpu.DP.reorderBufferDelay));
-                statistics.Append(String.Format("reservation station delays:        {0}\n", cpu.DP.reservationStationDelay));
-                statistics.Append(String.Format("true dependence delays:            {0}\n", cpu.DP.trueDependenceDelay));
-                statistics.Append(String.Format("Total:                  {0}\n\n", cpu.DP.reorderBufferDelay + cpu.DP.reservationStationDelay + cpu.DP.trueDependenceDelay));
+                statistics.Append(String.Format("Teorder buffer delays:           {0}\n", cpu.DP.reorderBufferDelay));
+                statistics.Append(String.Format("Teservation station delays:      {0}\n", cpu.DP.reservationStationDelay));
+                statistics.Append(String.Format("True dependence delays:          {0}\n", cpu.DP.trueDependenceDelay));
+                statistics.Append(String.Format("Total:                           {0}\n\n", cpu.DP.reorderBufferDelay + cpu.DP.reservationStationDelay + cpu.DP.trueDependenceDelay));
             }
             StatsTextBox.Text = statistics.ToString();
         }

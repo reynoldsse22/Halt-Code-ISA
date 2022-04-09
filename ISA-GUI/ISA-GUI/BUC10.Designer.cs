@@ -1698,7 +1698,7 @@
             // 
             this.instInExText.BackColor = System.Drawing.SystemColors.Menu;
             this.instInExText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.instInExText.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.instInExText.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.instInExText.Location = new System.Drawing.Point(111, 83);
             this.instInExText.Name = "instInExText";
             this.instInExText.ReadOnly = true;
