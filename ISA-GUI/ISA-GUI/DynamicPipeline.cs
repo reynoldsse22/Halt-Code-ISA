@@ -251,8 +251,7 @@ namespace ISA_GUI
                         //Open up reservation station to allow for more instructions to flow in
                         //Execute within the functional unit
                         case 2:
-                            if (inst.stage2CycleStart == 0)
-                                inst.stage2CycleStart = cycleCount;
+                            
                             Instruction executeInstruction = execute(inst, ref registers, ref dataMemory, ref IM, ref config, ref alu, ref result);
                             
                             inst.result = result;
@@ -266,6 +265,7 @@ namespace ISA_GUI
                             if (inst.doneExecuting)
                             {
                                 inst.stage2CycleEnd = cycleCount;
+                                inst.stage2CycleStart = executeInstruction.stage2CycleStart;
                                 if (inst.opcode == 0 || inst.opcode == 1)
                                     inst.stage = 5;
                                 else if (inst.opcode == 9 || inst.opcode == 11 || inst.opcode == 12)
@@ -376,8 +376,8 @@ namespace ISA_GUI
         {
             if (instruction.opcode == 0 || instruction.opcode == 1)
             {
-                instruction.stage2Start = cycleCount;
-                instruction.stage2End = cycleCount;
+                instruction.stage2CycleStart = cycleCount;
+                instruction.stage2CycleEnd = cycleCount;
                 instruction.doneExecuting = true;
                 return instruction;
             }
@@ -399,8 +399,8 @@ namespace ISA_GUI
                 instruction.doneExecuting = false;
                 return instruction;
             }
-            if (instruction.stage2Start == 0)    //Makes sure this only runs once once the instruction started executing after dependencies are gone
-                instruction.stage2Start = cycleCount;
+            if (instruction.stage2CycleStart == 0)    //Makes sure this only runs once once the instruction started executing after dependencies are gone
+                instruction.stage2CycleStart = cycleCount;
 
             switch (instruction.functionalUnitID)
             {
