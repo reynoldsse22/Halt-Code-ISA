@@ -760,6 +760,7 @@ namespace ISA_GUI
 
 
             updateRegisterQiText();
+            updateFunctionUnits();
         }
 
 
@@ -785,6 +786,165 @@ namespace ISA_GUI
                 cpu.registers.floatQi[14].PadRight(9, ' '), cpu.registers.floatQi[15].PadRight(9, ' ')));
 
             registersQIText.Text = registers;
+        }
+
+        private void updateFunctionUnits()
+        {
+            string intAdd = "";
+            string intSub = "";
+            string intMult = "";
+            string intDiv = "";
+            string flAdd = "";
+            string flSub = "";
+            string flMult = "";
+            string flDiv = "";
+            string bitwise = "";
+            string branch = "";
+            string memory = "";
+            string load_storeBuffer = "";
+
+            intAdd += "     IntAddFU     \n";
+            intAdd += "-------------------\n";
+            if (cpu.DP.intAddFu.instruction != null)
+            {
+                intAdd += cpu.DP.intAddFu.instruction.fullAssemblySyntax + "\n";
+                intAdd += "-------------------\n";
+            }
+            intAdd += "  Reserv. Station  \n";
+            intAdd += "-------------------\n";
+            if (cpu.DP.intAddRS.instruction != null)
+                intAdd += cpu.DP.intAddRS.instruction.fullAssemblySyntax + "\n";
+            intAddText.Text = intAdd;
+
+            intSub += "     IntSubFU     \n";
+            intSub += "-------------------\n";
+            if (cpu.DP.intSubFu.instruction != null)
+            {
+                intSub += cpu.DP.intSubFu.instruction.fullAssemblySyntax + "\n";
+                intSub += "-------------------\n";
+            }
+            intSub += "  Reserv. Station  \n";
+            intSub += "-------------------\n";
+            if (cpu.DP.intSubRS.instruction != null)
+                intSub += cpu.DP.intSubRS.instruction.fullAssemblySyntax + "\n";
+            intSubText.Text = intSub;
+
+            intMult += "     IntMulFU     \n";
+            intMult += "-------------------\n";
+            if (cpu.DP.intMulFu.instruction != null)
+            {
+                intMult += cpu.DP.intMulFu.instruction.fullAssemblySyntax + "\n";
+                intMult += "-------------------\n";
+            }
+            intMult += "  Reserv. Station  \n";
+            intMult += "-------------------\n";
+            if (cpu.DP.intMultRS.instruction != null)
+                intMult += cpu.DP.intMultRS.instruction.fullAssemblySyntax + "\n";
+            intMultText.Text = intMult;
+
+            intDiv += "     IntDivFU     \n";
+            intDiv += "-------------------\n";
+            if (cpu.DP.intDivFu.instruction != null)
+            {
+                intDiv += cpu.DP.intDivFu.instruction.fullAssemblySyntax + "\n";
+                intDiv += "-------------------\n";
+            }
+            intDiv += "  Reserv. Station  \n";
+            intDiv += "-------------------\n";
+            if (cpu.DP.intDivRS.instruction != null)
+                intDiv += cpu.DP.intDivRS.instruction.fullAssemblySyntax + "\n";
+            intDivText.Text = intDiv;
+
+            flAdd += "      flAddFU      \n";
+            flAdd += "-------------------\n";
+            if (cpu.DP.flAddFu.instruction != null)
+            {
+                intAdd += cpu.DP.flAddFu.instruction.fullAssemblySyntax + "\n";
+                flAdd += "-------------------\n";
+            }
+            flAdd += "  Reserv. Station  \n";
+            flAdd += "-------------------\n";
+            if (cpu.DP.floatAddRS.instruction != null)
+                flAdd += cpu.DP.floatAddRS.instruction.fullAssemblySyntax + "\n";
+            flAddText.Text = flAdd;
+
+            flSub += "      flSubFU      \n";
+            flSub += "-------------------\n";
+            if (cpu.DP.flSubFu.instruction != null)
+            {
+                flSub += cpu.DP.flSubFu.instruction.fullAssemblySyntax + "\n";
+                flSub += "-------------------\n";
+            }
+            flSub += "  Reserv. Station  \n";
+            flSub += "-------------------\n";
+            if (cpu.DP.floatSubRS.instruction != null)
+                flSub += cpu.DP.floatSubRS.instruction.fullAssemblySyntax + "\n";
+            flSubText.Text = flSub;
+
+            flMult += "      flMultFU     \n";
+            flMult += "-------------------\n";
+            if (cpu.DP.flMultFu.instruction != null)
+            {
+                flMult += cpu.DP.flMultFu.instruction.fullAssemblySyntax + "\n";
+                flMult += "-------------------\n";
+            }
+            flMult += "  Reserv. Station  \n";
+            flMult += "-------------------\n";
+            if (cpu.DP.floatMultRS.instruction != null)
+                flMult += cpu.DP.floatMultRS.instruction.fullAssemblySyntax + "\n";
+            flMultText.Text = flMult;
+
+            flDiv += "      flDivFU      \n";
+            flDiv += "-------------------\n";
+            if (cpu.DP.flDivFu.instruction != null)
+            {
+                flDiv += cpu.DP.flDivFu.instruction.fullAssemblySyntax + "\n";
+                flDiv += "-------------------\n";
+            }
+            flDiv += "  Reserv. Station  \n";
+            flDiv += "-------------------\n";
+            if (cpu.DP.floatDivRS.instruction != null)
+                flDiv += cpu.DP.floatDivRS.instruction.fullAssemblySyntax + "\n";
+            flDivText.Text = flDiv;
+
+            bitwise += "        bitFU     \n";
+            bitwise += "-------------------\n";
+            if (cpu.DP.bitFu.instruction != null)
+            {
+                bitwise += cpu.DP.bitFu.instruction.fullAssemblySyntax + "\n";
+                bitwise += "-------------------\n";
+            }
+            bitwise += "  Reserv. Station  \n";
+            bitwise += "-------------------\n";
+            if (cpu.DP.bitwiseOPRS.instruction != null)
+                bitwise += cpu.DP.bitwiseOPRS.instruction.fullAssemblySyntax + "\n";
+            bitwiseText.Text = bitwise;
+
+            branch += "      branchFU     \n";
+            branch += "-------------------\n";
+            if (cpu.DP.branchFu.instruction != null)
+            {
+                branch += cpu.DP.branchFu.instruction.fullAssemblySyntax + "\n";
+                branch += "-------------------\n";
+            }
+            branch += "  Reserv. Station  \n";
+            branch += "-------------------\n";
+            if (cpu.DP.branchOPS.instruction != null)
+                branch += cpu.DP.branchOPS.instruction.fullAssemblySyntax + "\n";
+            branchText.Text = branch;
+
+            memory += "    Memory Unit   \n";
+            memory += "-------------------\n";
+            if (cpu.DP.memoryFu.instruction != null)
+                memory += cpu.DP.memoryFu.instruction.fullAssemblySyntax + "\n";
+            memoryFUText.Text = memory;
+
+            load_storeBuffer += " Load/Store Buffer\n";
+            load_storeBuffer += "-------------------\n";
+            if (cpu.DP.load_storeBuffer.instruction != null)
+                load_storeBuffer += cpu.DP.load_storeBuffer.instruction.fullAssemblySyntax + "\n";
+            load_storeBufferText.Text = load_storeBuffer;
+
         }
         
         /**
