@@ -102,7 +102,6 @@
             this.stage5Text = new System.Windows.Forms.RichTextBox();
             this.stage5Label = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.label25 = new System.Windows.Forms.Label();
             this.currentCycleText = new System.Windows.Forms.RichTextBox();
             this.label26 = new System.Windows.Forms.Label();
             this.stage1StalledText = new System.Windows.Forms.RichTextBox();
@@ -176,6 +175,10 @@
             this.instInExLabel2 = new System.Windows.Forms.Label();
             this.staticPanel = new System.Windows.Forms.Panel();
             this.dynamicPanel = new System.Windows.Forms.Panel();
+            this.memoryTabControl = new System.Windows.Forms.TabControl();
+            this.mainMemoryTab = new System.Windows.Forms.TabPage();
+            this.dynamicPipelineMemoryTab = new System.Windows.Forms.TabPage();
+            this.registersQIText = new System.Windows.Forms.RichTextBox();
             this.objectCode.SuspendLayout();
             this.assemblerPage.SuspendLayout();
             this.objectCodeBox.SuspendLayout();
@@ -190,13 +193,16 @@
             this.pipelineStatsTab.SuspendLayout();
             this.staticPanel.SuspendLayout();
             this.dynamicPanel.SuspendLayout();
+            this.memoryTabControl.SuspendLayout();
+            this.mainMemoryTab.SuspendLayout();
+            this.dynamicPipelineMemoryTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // CPU
             // 
             this.CPU.AutoSize = true;
             this.CPU.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CPU.Location = new System.Drawing.Point(720, 12);
+            this.CPU.Location = new System.Drawing.Point(416, 9);
             this.CPU.Name = "CPU";
             this.CPU.Size = new System.Drawing.Size(45, 20);
             this.CPU.TabIndex = 0;
@@ -205,11 +211,11 @@
             // MemoryText
             // 
             this.MemoryText.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MemoryText.Location = new System.Drawing.Point(894, 78);
+            this.MemoryText.Location = new System.Drawing.Point(0, 0);
             this.MemoryText.Name = "MemoryText";
             this.MemoryText.ReadOnly = true;
             this.MemoryText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.MemoryText.Size = new System.Drawing.Size(585, 724);
+            this.MemoryText.Size = new System.Drawing.Size(640, 754);
             this.MemoryText.TabIndex = 2;
             this.MemoryText.Text = "";
             // 
@@ -218,7 +224,7 @@
             this.ZFlagBox.BackColor = System.Drawing.SystemColors.Menu;
             this.ZFlagBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ZFlagBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ZFlagBox.Location = new System.Drawing.Point(1134, 17);
+            this.ZFlagBox.Location = new System.Drawing.Point(489, 9);
             this.ZFlagBox.Name = "ZFlagBox";
             this.ZFlagBox.ReadOnly = true;
             this.ZFlagBox.Size = new System.Drawing.Size(25, 25);
@@ -230,7 +236,7 @@
             this.cFlagBox.BackColor = System.Drawing.SystemColors.Menu;
             this.cFlagBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.cFlagBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cFlagBox.Location = new System.Drawing.Point(1181, 17);
+            this.cFlagBox.Location = new System.Drawing.Point(536, 9);
             this.cFlagBox.Name = "cFlagBox";
             this.cFlagBox.ReadOnly = true;
             this.cFlagBox.Size = new System.Drawing.Size(25, 25);
@@ -357,7 +363,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(1066, 53);
+            this.label15.Location = new System.Drawing.Point(425, 52);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(36, 13);
             this.label15.TabIndex = 21;
@@ -366,7 +372,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(899, 23);
+            this.label16.Location = new System.Drawing.Point(588, 13);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(25, 13);
             this.label16.TabIndex = 22;
@@ -375,7 +381,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(902, 52);
+            this.label17.Location = new System.Drawing.Point(737, 14);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(21, 13);
             this.label17.TabIndex = 23;
@@ -384,7 +390,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(1117, 24);
+            this.label19.Location = new System.Drawing.Point(472, 14);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(14, 13);
             this.label19.TabIndex = 25;
@@ -393,7 +399,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(1165, 25);
+            this.label21.Location = new System.Drawing.Point(519, 15);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(14, 13);
             this.label21.TabIndex = 27;
@@ -728,10 +734,10 @@
             this.asprHex.BackColor = System.Drawing.SystemColors.Menu;
             this.asprHex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.asprHex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.asprHex.Location = new System.Drawing.Point(1108, 46);
+            this.asprHex.Location = new System.Drawing.Point(467, 45);
             this.asprHex.Name = "asprHex";
             this.asprHex.ReadOnly = true;
-            this.asprHex.Size = new System.Drawing.Size(98, 25);
+            this.asprHex.Size = new System.Drawing.Size(94, 25);
             this.asprHex.TabIndex = 54;
             this.asprHex.Text = "";
             // 
@@ -752,10 +758,10 @@
             this.cirHex.BackColor = System.Drawing.SystemColors.Menu;
             this.cirHex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.cirHex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cirHex.Location = new System.Drawing.Point(927, 18);
+            this.cirHex.Location = new System.Drawing.Point(616, 8);
             this.cirHex.Name = "cirHex";
             this.cirHex.ReadOnly = true;
-            this.cirHex.Size = new System.Drawing.Size(94, 25);
+            this.cirHex.Size = new System.Drawing.Size(109, 25);
             this.cirHex.TabIndex = 56;
             this.cirHex.Text = "";
             // 
@@ -776,10 +782,10 @@
             this.pcHex.BackColor = System.Drawing.SystemColors.Menu;
             this.pcHex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pcHex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pcHex.Location = new System.Drawing.Point(927, 48);
+            this.pcHex.Location = new System.Drawing.Point(759, 11);
             this.pcHex.Name = "pcHex";
             this.pcHex.ReadOnly = true;
-            this.pcHex.Size = new System.Drawing.Size(94, 25);
+            this.pcHex.Size = new System.Drawing.Size(109, 25);
             this.pcHex.TabIndex = 58;
             this.pcHex.Text = "";
             // 
@@ -963,15 +969,6 @@
             this.stage5Label.Size = new System.Drawing.Size(120, 13);
             this.stage5Label.TabIndex = 79;
             this.stage5Label.Text = "Stage 5 - Write Reg";
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(1037, 23);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(65, 13);
-            this.label25.TabIndex = 80;
-            this.label25.Text = "Status Flags";
             // 
             // currentCycleText
             // 
@@ -1184,9 +1181,9 @@
             // configButton
             // 
             this.configButton.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.configButton.Location = new System.Drawing.Point(1333, 17);
+            this.configButton.Location = new System.Drawing.Point(1357, 9);
             this.configButton.Name = "configButton";
-            this.configButton.Size = new System.Drawing.Size(145, 39);
+            this.configButton.Size = new System.Drawing.Size(145, 34);
             this.configButton.TabIndex = 102;
             this.configButton.Text = "Configurations";
             this.configButton.UseVisualStyleBackColor = false;
@@ -1773,12 +1770,70 @@
             this.dynamicPanel.Size = new System.Drawing.Size(320, 220);
             this.dynamicPanel.TabIndex = 146;
             // 
+            // memoryTabControl
+            // 
+            this.memoryTabControl.Appearance = System.Windows.Forms.TabAppearance.Buttons;
+            this.memoryTabControl.Controls.Add(this.mainMemoryTab);
+            this.memoryTabControl.Controls.Add(this.dynamicPipelineMemoryTab);
+            this.memoryTabControl.Location = new System.Drawing.Point(891, 27);
+            this.memoryTabControl.Multiline = true;
+            this.memoryTabControl.Name = "memoryTabControl";
+            this.memoryTabControl.Padding = new System.Drawing.Point(7, 2);
+            this.memoryTabControl.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.memoryTabControl.SelectedIndex = 0;
+            this.memoryTabControl.Size = new System.Drawing.Size(627, 787);
+            this.memoryTabControl.TabIndex = 147;
+            // 
+            // mainMemoryTab
+            // 
+            this.mainMemoryTab.Controls.Add(this.MemoryText);
+            this.mainMemoryTab.Location = new System.Drawing.Point(4, 23);
+            this.mainMemoryTab.Name = "mainMemoryTab";
+            this.mainMemoryTab.Padding = new System.Windows.Forms.Padding(3);
+            this.mainMemoryTab.Size = new System.Drawing.Size(643, 760);
+            this.mainMemoryTab.TabIndex = 0;
+            this.mainMemoryTab.Text = "Main Memory";
+            this.mainMemoryTab.UseVisualStyleBackColor = true;
+            // 
+            // dynamicPipelineMemoryTab
+            // 
+            this.dynamicPipelineMemoryTab.Controls.Add(this.registersQIText);
+            this.dynamicPipelineMemoryTab.Location = new System.Drawing.Point(4, 23);
+            this.dynamicPipelineMemoryTab.Name = "dynamicPipelineMemoryTab";
+            this.dynamicPipelineMemoryTab.Padding = new System.Windows.Forms.Padding(3);
+            this.dynamicPipelineMemoryTab.Size = new System.Drawing.Size(619, 760);
+            this.dynamicPipelineMemoryTab.TabIndex = 1;
+            this.dynamicPipelineMemoryTab.Text = "Dynamic Pipeline";
+            this.dynamicPipelineMemoryTab.UseVisualStyleBackColor = true;
+            // 
+            // registersQIText
+            // 
+            this.registersQIText.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.registersQIText.Location = new System.Drawing.Point(0, 562);
+            this.registersQIText.Name = "registersQIText";
+            this.registersQIText.ReadOnly = true;
+            this.registersQIText.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.registersQIText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.registersQIText.Size = new System.Drawing.Size(615, 188);
+            this.registersQIText.TabIndex = 3;
+            this.registersQIText.Text = "";
+            // 
             // BUC10
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1491, 814);
+            this.ClientSize = new System.Drawing.Size(1516, 814);
+            this.Controls.Add(this.configButton);
+            this.Controls.Add(this.label21);
+            this.Controls.Add(this.cFlagBox);
+            this.Controls.Add(this.ZFlagBox);
+            this.Controls.Add(this.label19);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.label15);
+            this.Controls.Add(this.pcHex);
+            this.Controls.Add(this.asprHex);
+            this.Controls.Add(this.memoryTabControl);
             this.Controls.Add(this.dynamicPanel);
             this.Controls.Add(this.staticPanel);
             this.Controls.Add(this.label54);
@@ -1803,11 +1858,9 @@
             this.Controls.Add(this.r1Dec);
             this.Controls.Add(this.r2Dec);
             this.Controls.Add(this.buildButton);
-            this.Controls.Add(this.configButton);
             this.Controls.Add(this.label32);
             this.Controls.Add(this.label26);
             this.Controls.Add(this.currentCycleText);
-            this.Controls.Add(this.label25);
             this.Controls.Add(this.pipelineLabel);
             this.Controls.Add(this.resetButton);
             this.Controls.Add(this.label1);
@@ -1816,11 +1869,9 @@
             this.Controls.Add(this.objectCode);
             this.Controls.Add(this.Output);
             this.Controls.Add(this.f1Dec);
-            this.Controls.Add(this.pcHex);
             this.Controls.Add(this.f0Dec);
             this.Controls.Add(this.cirHex);
             this.Controls.Add(this.f2Dec);
-            this.Controls.Add(this.asprHex);
             this.Controls.Add(this.f15Dec);
             this.Controls.Add(this.r15Dec);
             this.Controls.Add(this.f14Dec);
@@ -1847,11 +1898,7 @@
             this.Controls.Add(this.r4Dec);
             this.Controls.Add(this.f3Dec);
             this.Controls.Add(this.r3Dec);
-            this.Controls.Add(this.label21);
-            this.Controls.Add(this.label19);
-            this.Controls.Add(this.label17);
             this.Controls.Add(this.label16);
-            this.Controls.Add(this.label15);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.label12);
@@ -1865,10 +1912,7 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.cFlagBox);
-            this.Controls.Add(this.ZFlagBox);
             this.Controls.Add(this.CPU);
-            this.Controls.Add(this.MemoryText);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -1891,6 +1935,9 @@
             this.staticPanel.PerformLayout();
             this.dynamicPanel.ResumeLayout(false);
             this.dynamicPanel.PerformLayout();
+            this.memoryTabControl.ResumeLayout(false);
+            this.mainMemoryTab.ResumeLayout(false);
+            this.dynamicPipelineMemoryTab.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1970,7 +2017,6 @@
         private System.Windows.Forms.RichTextBox stage5Text;
         private System.Windows.Forms.Label stage5Label;
         private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.Label label25;
         private System.Windows.Forms.RichTextBox currentCycleText;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.RichTextBox stage1StalledText;
@@ -2043,6 +2089,10 @@
         private System.Windows.Forms.RichTextBox pipelineStatsTextBox;
         private System.Windows.Forms.Panel staticPanel;
         private System.Windows.Forms.Panel dynamicPanel;
+        private System.Windows.Forms.TabControl memoryTabControl;
+        private System.Windows.Forms.TabPage mainMemoryTab;
+        private System.Windows.Forms.TabPage dynamicPipelineMemoryTab;
+        private System.Windows.Forms.RichTextBox registersQIText;
     }
 }
 

@@ -519,6 +519,10 @@ namespace ISA_GUI
                 currentCycleText.Text = cpu.SP.cycleCount.ToString();
 
             }
+            else
+            {
+                updateRegisterQiText();
+            }
             AssemblerListingTextBox.Text = decodedString.ToString();
             pipelineTextBox.Text = pipelineOutput.ToString();
         }
@@ -734,7 +738,6 @@ namespace ISA_GUI
         private void updateDynamicPipeline()
         {
             string instructionsInFlight = "";
-            int numOfInstInExecution = 0;
             foreach(Instruction inst in cpu.DP.reorderBuffer.reorderBuffer)
             {
                 instructionsInFlight += string.Format("{0, 16} {1, 4}\n", inst.fullAssemblySyntax.PadRight(16, ' '), inst.ID.ToString().PadLeft(4,' '));
@@ -742,9 +745,6 @@ namespace ISA_GUI
                     issueStageText.Text = inst.fullAssemblySyntax;
                 else
                     issueStageText.Text = "";
-                
-                if (inst.executionInProgress)
-                    numOfInstInExecution++;
             }
 
             if (cpu.DP.justCommitedInstruction != null)
@@ -752,13 +752,40 @@ namespace ISA_GUI
             else
                 commitStageText.Text = "";
             instructionInFlightText.Text = instructionsInFlight;
-            instInExText.Text = numOfInstInExecution.ToString();
+            instInExText.Text = cpu.DP.numOfInstructionsInExecution.ToString();
             currentCycleText.Text = cpu.DP.cycleCount.ToString();
             rbdText.Text = cpu.DP.reorderBufferDelay.ToString();
             rsdText.Text = cpu.DP.reservationStationDelay.ToString();
             tddText.Text = cpu.DP.trueDependenceDelay.ToString();
+
+
+            updateRegisterQiText();
         }
 
+
+        private void updateRegisterQiText()
+        {
+            string registers =          "                                    Register Status                                       \n";
+            registers +=                "---------------------------------------------------------------------------------------\n";
+            registers +=                "Field -- r0        r1        r2        r3        r4        r5        r6        r7         \n";
+            registers += (string.Format("Qi       {0, 9} {1, 9} {2, 9} {3, 9} {4, 9} {5, 9} {6, 9} {7, 9}\n\n", cpu.registers.intQi[0].PadRight(9, ' '), cpu.registers.intQi[1].PadRight(9, ' '),
+                cpu.registers.intQi[2].PadRight(9, ' '), cpu.registers.intQi[3].PadRight(9, ' '), cpu.registers.intQi[4].PadRight(9, ' '), cpu.registers.intQi[5].PadRight(9, ' '), 
+                cpu.registers.intQi[6].PadRight(9, ' '), cpu.registers.intQi[7].PadRight(9, ' '))); 
+            registers +=                "Field -- r8        r9        r10       r11       r12       r13       r14       r15       \n";
+            registers += (string.Format("Qi       {0, 9} {1, 9} {2, 9} {3, 9} {4, 9} {5, 9} {6, 9} {7, 9}\n\n", cpu.registers.intQi[8].PadRight(9, ' '), cpu.registers.intQi[9].PadRight(9, ' '),
+                cpu.registers.intQi[10].PadRight(9, ' '), cpu.registers.intQi[11].PadRight(9, ' '), cpu.registers.intQi[12].PadRight(9, ' '), cpu.registers.intQi[13].PadRight(9, ' '),
+                cpu.registers.intQi[14].PadRight(9, ' '), cpu.registers.intQi[15].PadRight(9, ' ')));
+            registers +=                "Field -- f0        f1        f2        f3        f4        f5        f6        f7        \n";
+            registers += (string.Format("Qi       {0, 9} {1, 9} {2, 9} {3, 9} {4, 9} {5, 9} {6, 9} {7, 9}\n\n", cpu.registers.floatQi[0].PadRight(9, ' '), cpu.registers.floatQi[1].PadRight(9, ' '),
+                cpu.registers.floatQi[2].PadRight(9, ' '), cpu.registers.floatQi[3].PadRight(9, ' '), cpu.registers.floatQi[4].PadRight(9, ' '), cpu.registers.floatQi[5].PadRight(9, ' '),
+                cpu.registers.floatQi[6].PadRight(9, ' '), cpu.registers.floatQi[7].PadRight(9, ' ')));
+            registers +=                "Field -- f8        f9        f10       f11       f12       f13       f14       f15       \n";
+            registers += (string.Format("Qi       {0, 9} {1, 9} {2, 9} {3, 9} {4, 9} {5, 9} {6, 9} {7, 9}\n\n", cpu.registers.floatQi[8].PadRight(9, ' '), cpu.registers.floatQi[9].PadRight(9, ' '),
+                cpu.registers.floatQi[10].PadRight(9, ' '), cpu.registers.floatQi[11].PadRight(9, ' '), cpu.registers.floatQi[12].PadRight(9, ' '), cpu.registers.floatQi[13].PadRight(9, ' '),
+                cpu.registers.floatQi[14].PadRight(9, ' '), cpu.registers.floatQi[15].PadRight(9, ' ')));
+
+            registersQIText.Text = registers;
+        }
         
         /**
 		 * Method Name: setMemoryBox <br>
