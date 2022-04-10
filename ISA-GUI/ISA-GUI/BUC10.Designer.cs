@@ -162,7 +162,6 @@
             this.commitStageText = new System.Windows.Forms.RichTextBox();
             this.issueStageLabel = new System.Windows.Forms.Label();
             this.commitStageLabel = new System.Windows.Forms.Label();
-            this.reorderBufferLabel = new System.Windows.Forms.Label();
             this.tddText = new System.Windows.Forms.RichTextBox();
             this.rsdText = new System.Windows.Forms.RichTextBox();
             this.rbdText = new System.Windows.Forms.RichTextBox();
@@ -191,6 +190,10 @@
             this.branchText = new System.Windows.Forms.RichTextBox();
             this.load_storeBufferText = new System.Windows.Forms.RichTextBox();
             this.bitwiseText = new System.Windows.Forms.RichTextBox();
+            this.reorder_cdbTabControl = new System.Windows.Forms.TabControl();
+            this.reorderBufferPage = new System.Windows.Forms.TabPage();
+            this.CDBPage = new System.Windows.Forms.TabPage();
+            this.commonDataBusText = new System.Windows.Forms.RichTextBox();
             this.objectCode.SuspendLayout();
             this.assemblerPage.SuspendLayout();
             this.objectCodeBox.SuspendLayout();
@@ -208,6 +211,9 @@
             this.memoryTabControl.SuspendLayout();
             this.mainMemoryTab.SuspendLayout();
             this.dynamicPipelineMemoryTab.SuspendLayout();
+            this.reorder_cdbTabControl.SuspendLayout();
+            this.reorderBufferPage.SuspendLayout();
+            this.CDBPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // CPU
@@ -866,7 +872,7 @@
             // 
             this.pipelineLabel.AutoSize = true;
             this.pipelineLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pipelineLabel.Location = new System.Drawing.Point(693, 559);
+            this.pipelineLabel.Location = new System.Drawing.Point(693, 551);
             this.pipelineLabel.Name = "pipelineLabel";
             this.pipelineLabel.Size = new System.Drawing.Size(72, 20);
             this.pipelineLabel.TabIndex = 69;
@@ -987,7 +993,7 @@
             this.currentCycleText.BackColor = System.Drawing.SystemColors.Menu;
             this.currentCycleText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.currentCycleText.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.currentCycleText.Location = new System.Drawing.Point(831, 556);
+            this.currentCycleText.Location = new System.Drawing.Point(831, 548);
             this.currentCycleText.Name = "currentCycleText";
             this.currentCycleText.ReadOnly = true;
             this.currentCycleText.Size = new System.Drawing.Size(55, 25);
@@ -997,7 +1003,7 @@
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(788, 555);
+            this.label26.Location = new System.Drawing.Point(788, 547);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(41, 13);
             this.label26.TabIndex = 82;
@@ -1111,7 +1117,7 @@
             // label32
             // 
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(788, 568);
+            this.label32.Location = new System.Drawing.Point(788, 560);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(33, 13);
             this.label32.TabIndex = 94;
@@ -1570,10 +1576,10 @@
             this.instructionInFlightText.BackColor = System.Drawing.SystemColors.Menu;
             this.instructionInFlightText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.instructionInFlightText.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.instructionInFlightText.Location = new System.Drawing.Point(163, 28);
+            this.instructionInFlightText.Location = new System.Drawing.Point(0, 1);
             this.instructionInFlightText.Name = "instructionInFlightText";
             this.instructionInFlightText.ReadOnly = true;
-            this.instructionInFlightText.Size = new System.Drawing.Size(153, 187);
+            this.instructionInFlightText.Size = new System.Drawing.Size(154, 190);
             this.instructionInFlightText.TabIndex = 129;
             this.instructionInFlightText.Text = "";
             // 
@@ -1608,16 +1614,6 @@
             this.commitStageLabel.Size = new System.Drawing.Size(47, 13);
             this.commitStageLabel.TabIndex = 132;
             this.commitStageLabel.Text = "Commit";
-            // 
-            // reorderBufferLabel
-            // 
-            this.reorderBufferLabel.AutoSize = true;
-            this.reorderBufferLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.reorderBufferLabel.Location = new System.Drawing.Point(163, 11);
-            this.reorderBufferLabel.Name = "reorderBufferLabel";
-            this.reorderBufferLabel.Size = new System.Drawing.Size(151, 13);
-            this.reorderBufferLabel.TabIndex = 133;
-            this.reorderBufferLabel.Text = "Reorder Buffer            ID";
             // 
             // tddText
             // 
@@ -1761,10 +1757,9 @@
             // 
             // dynamicPanel
             // 
-            this.dynamicPanel.Controls.Add(this.reorderBufferLabel);
+            this.dynamicPanel.Controls.Add(this.reorder_cdbTabControl);
             this.dynamicPanel.Controls.Add(this.issueStageText);
             this.dynamicPanel.Controls.Add(this.instInExLabel2);
-            this.dynamicPanel.Controls.Add(this.instructionInFlightText);
             this.dynamicPanel.Controls.Add(this.instInExText);
             this.dynamicPanel.Controls.Add(this.commitStageText);
             this.dynamicPanel.Controls.Add(this.instInExLabel1);
@@ -1986,6 +1981,51 @@
             this.bitwiseText.TabIndex = 12;
             this.bitwiseText.Text = "";
             // 
+            // reorder_cdbTabControl
+            // 
+            this.reorder_cdbTabControl.Appearance = System.Windows.Forms.TabAppearance.Buttons;
+            this.reorder_cdbTabControl.Controls.Add(this.reorderBufferPage);
+            this.reorder_cdbTabControl.Controls.Add(this.CDBPage);
+            this.reorder_cdbTabControl.Location = new System.Drawing.Point(161, 0);
+            this.reorder_cdbTabControl.Name = "reorder_cdbTabControl";
+            this.reorder_cdbTabControl.SelectedIndex = 0;
+            this.reorder_cdbTabControl.Size = new System.Drawing.Size(168, 226);
+            this.reorder_cdbTabControl.TabIndex = 144;
+            // 
+            // reorderBufferPage
+            // 
+            this.reorderBufferPage.Controls.Add(this.instructionInFlightText);
+            this.reorderBufferPage.Location = new System.Drawing.Point(4, 25);
+            this.reorderBufferPage.Name = "reorderBufferPage";
+            this.reorderBufferPage.Padding = new System.Windows.Forms.Padding(3);
+            this.reorderBufferPage.Size = new System.Drawing.Size(160, 197);
+            this.reorderBufferPage.TabIndex = 0;
+            this.reorderBufferPage.Text = "Reorder Buffer";
+            this.reorderBufferPage.UseVisualStyleBackColor = true;
+            // 
+            // CDBPage
+            // 
+            this.CDBPage.Controls.Add(this.commonDataBusText);
+            this.CDBPage.Location = new System.Drawing.Point(4, 25);
+            this.CDBPage.Name = "CDBPage";
+            this.CDBPage.Padding = new System.Windows.Forms.Padding(3);
+            this.CDBPage.Size = new System.Drawing.Size(160, 197);
+            this.CDBPage.TabIndex = 1;
+            this.CDBPage.Text = "CDB";
+            this.CDBPage.UseVisualStyleBackColor = true;
+            // 
+            // commonDataBusText
+            // 
+            this.commonDataBusText.BackColor = System.Drawing.SystemColors.Menu;
+            this.commonDataBusText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.commonDataBusText.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.commonDataBusText.Location = new System.Drawing.Point(0, 1);
+            this.commonDataBusText.Name = "commonDataBusText";
+            this.commonDataBusText.ReadOnly = true;
+            this.commonDataBusText.Size = new System.Drawing.Size(153, 190);
+            this.commonDataBusText.TabIndex = 130;
+            this.commonDataBusText.Text = "";
+            // 
             // BUC10
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2106,6 +2146,9 @@
             this.memoryTabControl.ResumeLayout(false);
             this.mainMemoryTab.ResumeLayout(false);
             this.dynamicPipelineMemoryTab.ResumeLayout(false);
+            this.reorder_cdbTabControl.ResumeLayout(false);
+            this.reorderBufferPage.ResumeLayout(false);
+            this.CDBPage.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2242,7 +2285,6 @@
         private System.Windows.Forms.RichTextBox commitStageText;
         private System.Windows.Forms.Label issueStageLabel;
         private System.Windows.Forms.Label commitStageLabel;
-        private System.Windows.Forms.Label reorderBufferLabel;
         private System.Windows.Forms.RichTextBox tddText;
         private System.Windows.Forms.RichTextBox rsdText;
         private System.Windows.Forms.RichTextBox rbdText;
@@ -2273,6 +2315,10 @@
         private System.Windows.Forms.RichTextBox intDivText;
         private System.Windows.Forms.RichTextBox intMultText;
         private System.Windows.Forms.RichTextBox intAddText;
+        private System.Windows.Forms.TabControl reorder_cdbTabControl;
+        private System.Windows.Forms.TabPage reorderBufferPage;
+        private System.Windows.Forms.TabPage CDBPage;
+        private System.Windows.Forms.RichTextBox commonDataBusText;
     }
 }
 

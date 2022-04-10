@@ -737,8 +737,11 @@ namespace ISA_GUI
 
         private void updateDynamicPipeline()
         {
-            string instructionsInFlight = "";
-            foreach(Instruction inst in cpu.DP.reorderBuffer.reorderBuffer)
+            string instructionsInFlight = "Reorder Buffer     ID\n";
+            instructionsInFlight += "---------------------";
+            string commonDataBus =        "CDB             Value\n";
+            commonDataBus += "---------------------";
+            foreach (Instruction inst in cpu.DP.reorderBuffer.reorderBuffer)
             {
                 instructionsInFlight += string.Format("{0, 16} {1, 4}\n", inst.fullAssemblySyntax.PadRight(16, ' '), inst.ID.ToString().PadLeft(4,' '));
                 if (inst.justIssued && inst.stage1Cycle == cpu.DP.cycleCount)
@@ -746,6 +749,12 @@ namespace ISA_GUI
                 else
                     issueStageText.Text = "";
             }
+
+            foreach(KeyValuePair<string, string> instruction in cpu.DP.commonDataBus.CDB)
+            {
+                commonDataBus += string.Format("{0, 16} {1, 4}\n", instruction.Key.PadRight(16, ' '), instruction.Value.ToString().PadLeft(4, ' '));
+            }
+            commonDataBusText.Text = commonDataBus;
 
             if (cpu.DP.justCommitedInstruction != null)
                 commitStageText.Text = cpu.DP.justCommitedInstruction.fullAssemblySyntax;
