@@ -53,7 +53,7 @@ namespace ISA_GUI
         public int totalHazard, structuralHazard, dataHazard, controlHazard, RAW, WAR, WAW;
         public int reorderBufferDelay, reservationStationDelay, trueDependenceDelay, totalDelays, instructionID;
         public int totalCyclesStalled, numOfInstructionInExecution;
-        public bool lastBranchDecision, doneExecuting, executionInProgress, haltFound, commitedThisCycle;
+        public bool lastBranchDecision, doneExecuting, executionInProgress, haltFound, commitedThisCycle, branchDecoded, instructionFetched;
 
 
 
@@ -115,6 +115,7 @@ namespace ISA_GUI
             executionInProgress = false;
             haltFound = false;
             commitedThisCycle = false;
+            branchDecoded = false;
         }
 
         /// <summary>Runs the cycle.</summary>
@@ -141,6 +142,7 @@ namespace ISA_GUI
 
                 if (halted)
                 {
+                    clearDynamicPipeline();
                     return;
                 }
 
@@ -150,8 +152,10 @@ namespace ISA_GUI
                     fillInstructionQueue(ref IM);
                 }
 
-               
-                fetchFromInstructionQueue();
+                if(instructionsInFlight.Count == 0)
+                {
+                    fetchFromInstructionQueue();
+                }
                 
 
                 //Put the instructions into the reservation station. This should be the first cycle of the pipeline
@@ -178,7 +182,7 @@ namespace ISA_GUI
                             printer.buildDecodedString(ref decodedString, inst);      //Build the decoded instruction string
                             printer.buildDynamicPipelineString(ref pipelineString, inst);
                             justCommitedInstruction = inst;
-                            bool hazardDetected = detectControlHazard(instructionIndex, ref registers, inst);
+                            bool hazardDetected = detectControlHazard(instructionIndex, ref registers, inst, ref IM);
                             if (!hazardDetected)
                             {
                                 try
@@ -216,7 +220,10 @@ namespace ISA_GUI
                                 }
                             }
                             else
+                            {
+                                justCommitedInstruction = null;
                                 goto startOfLoop;
+                            }
                             break;
                         //Store the answer and corresponding reservation name into the data bus
                         case 4:
@@ -304,13 +311,12 @@ namespace ISA_GUI
                             inst.fOp1 = fetchInstruction.fOp1;
                             inst.fOp2 = fetchInstruction.fOp2;
                             inst.fOp3 = fetchInstruction.fOp3;
-                            inst.stage1Start = cycleCount;          //First starting stage
-
                             try
                             {
                                 Instruction populateInstruction = populateReservationStation(inst, ref registers);
                                 reorderBuffer.addToReorderBuffer(inst, ref config);
-                                instructionQueue.Dequeue();
+                                if(instructionQueue.Count > 0)
+                                    instructionQueue.Dequeue();
                                 inst.functionalUnitID = populateInstruction.functionalUnitID;
                                 inst.fOp1 = populateInstruction.fOp1;
                                 inst.fOp2 = populateInstruction.fOp2;
@@ -332,14 +338,18 @@ namespace ISA_GUI
                             break;
                     }
                 }
+                if (instructionQueue.Count == 0 && cycleCount != 1)
+                {
+                    fillInstructionQueue(ref IM);
+                }
+                fetchFromInstructionQueue();
 
             } while (!halted && !stepThrough);
         }
 
-
         private void fillInstructionQueue(ref InstructionMemory IM)
         {
-            for(int i = 0; i < 10; i++)
+            for(int i = 0; i < 20; i++)
             {
                 fetchInstruction = new Instruction();
                 try
@@ -371,6 +381,15 @@ namespace ISA_GUI
         private Instruction decode(Instruction instruction, ref InstructionMemory IM, ref ConfigCycle config)
         {
             CU.decode(ref IM, ref instruction, ref config);
+            if(instruction.opcode >= 2 && instruction.opcode <= 8)
+            {
+                if(config.predictionSet && lastBranchDecision)
+                {
+                    IM.ProgramCounter = instruction.address;
+                    instructionID = instruction.ID + 1;
+                    instructionQueue.Clear();
+                }
+            }
             return instruction;
         }
         
@@ -1725,68 +1744,100 @@ namespace ISA_GUI
       * <hr>
       *   @param  Instruction[] stages
       */
-        public bool detectControlHazard(int id, ref RegisterFile registers, Instruction instruction)
+        public bool detectControlHazard(int id, ref RegisterFile registers, Instruction instruction, ref InstructionMemory IM)
         {
-            if (id == -1 || lastBranchDecision == false)
+            if (id == -1)
                 return false;
 
             if (instruction.opcode < 2 || instruction.opcode > 8)
                 return false;
 
-            if ((instructionsInFlight.Find(inst => inst.ID == id).programCounterValue != 
-                instructionsInFlight.Find(inst => inst.ID == (id+1)).address) && 
-                lastBranchDecision == true)
+            //int programCount = IM.ProgramCounter;
+            //IM.ProgramCounter = instruction.address;
+            //Instruction testInstruction = fetch.getNextInstruction(ref IM);
+            //CU.decode(ref IM, ref testInstruction);
+            //IM.ProgramCounter = programCount;
+            Instruction testInstruction = new Instruction();
+
+            try
             {
-                instructionID = id + 1;
-                instructionsInFlight.Clear();
-                instructionQueue.Clear();
-                intAddFu.instruction = null;
-                intSubFu.instruction = null;
-                intMultFu.instruction = null;
-                intDivFu.instruction = null;
-                floatAddFu.instruction = null;
-                floatSubFu.instruction = null;
-                floatMultFu.instruction = null;
-                floatDivFu.instruction = null;
-                bitwiseOPFu.instruction = null;
-                memoryUnitFu.instruction = null;
-                branchFu.instruction = null;
-                shiftFu.instruction = null;
-                intAddRS.instruction = null;
-                intSubRS.instruction = null;
-                intMultRS.instruction = null;
-                intDivRS.instruction = null;
-                floatAddRS.instruction = null;
-                floatSubRS.instruction = null;
-                floatMultRS.instruction = null;
-                floatDivRS.instruction = null;
-                bitwiseOPRS.instruction = null;
-                load_storeBuffer.instruction = null;
-                branchOPS.instruction = null;
-                shiftOPS.instruction = null;
-
-                intAddRS.Busy = false;
-                intSubRS.Busy = false;
-                intMultRS.Busy = false;
-                intDivRS.Busy = false;
-                floatAddRS.Busy = false;
-                floatSubRS.Busy = false;
-                floatMultRS.Busy = false;
-                floatDivRS.Busy = false;
-                bitwiseOPRS.Busy = false;
-                load_storeBuffer.Busy = false;
-                branchOPS.Busy = false;
-                shiftOPS.Busy = false;
-                reorderBuffer.removeAllInstructionsAfterHazard(id);
-                commonDataBus.CDB.Clear();
-                commonDataBus.index.Clear();
-                commonDataBus.IDIndex.Clear();
-
-                registers.clearRegistersQI();
-
-                return true;
+                testInstruction = instructionsInFlight.Find(inst => inst.ID == (id + 1));
             }
-            return false;
+            catch (Exception)
+            {
+                IM.ProgramCounter = (instruction.programCounterValue + 3);
+                goto flush;
+            }
+
+            if (lastBranchDecision)
+            {
+                if (instruction.address != testInstruction.programCounterValue)
+                {
+                    IM.ProgramCounter = instruction.address;
+                    goto flush;
+                }
+                return false;
+            }
+            else
+            {
+                if ((instruction.programCounterValue + 3) != testInstruction.programCounterValue)
+                {
+                    IM.ProgramCounter = (instruction.programCounterValue + 3);
+                    goto flush;
+                }
+                return false;
+            }
+
+            flush:
+
+            instructionID = id + 1;
+            instructionsInFlight.Clear();
+            instructionQueue.Clear();
+            intAddFu.instruction = null;
+            intSubFu.instruction = null;
+            intMultFu.instruction = null;
+            intDivFu.instruction = null;
+            floatAddFu.instruction = null;
+            floatSubFu.instruction = null;
+            floatMultFu.instruction = null;
+            floatDivFu.instruction = null;
+            bitwiseOPFu.instruction = null;
+            memoryUnitFu.instruction = null;
+            branchFu.instruction = null;
+            shiftFu.instruction = null;
+            intAddRS.instruction = null;
+            intSubRS.instruction = null;
+            intMultRS.instruction = null;
+            intDivRS.instruction = null;
+            floatAddRS.instruction = null;
+            floatSubRS.instruction = null;
+            floatMultRS.instruction = null;
+            floatDivRS.instruction = null;
+            bitwiseOPRS.instruction = null;
+            load_storeBuffer.instruction = null;
+            branchOPS.instruction = null;
+            shiftOPS.instruction = null;
+
+            intAddRS.Busy = false;
+            intSubRS.Busy = false;
+            intMultRS.Busy = false;
+            intDivRS.Busy = false;
+            floatAddRS.Busy = false;
+            floatSubRS.Busy = false;
+            floatMultRS.Busy = false;
+            floatDivRS.Busy = false;
+            bitwiseOPRS.Busy = false;
+            load_storeBuffer.Busy = false;
+            branchOPS.Busy = false;
+            shiftOPS.Busy = false;
+            reorderBuffer.removeAllInstructionsAfterHazard(id);
+            commonDataBus.CDB.Clear();
+            commonDataBus.index.Clear();
+            commonDataBus.IDIndex.Clear();
+
+            registers.clearRegistersQI();
+
+            return true;
         }
 
         private void clearFU(Instruction instruction)

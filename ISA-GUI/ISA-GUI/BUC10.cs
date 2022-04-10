@@ -130,7 +130,6 @@ namespace ISA_GUI
                 AssemblerListingTextBox.Text = message;
                 StatsTextBox.Text = message;
                 pipelineTextBox.Text = message;
-                assemblerTextBox.Text = message;
                 halted = true;
                 return;
             }
@@ -201,7 +200,6 @@ namespace ISA_GUI
                     AssemblerListingTextBox.Text = message;
                     StatsTextBox.Text = message;
                     pipelineTextBox.Text = message;
-                    assemblerTextBox.Text = message;
                     halted = true;
                     return;
                 }
