@@ -135,6 +135,19 @@ namespace ISA_GUI
         {
             do
             {
+                intAddFu.oneCycleFU = true;
+                intSubFu.oneCycleFU = true;
+                intMultFu.oneCycleFU = true;
+                intDivFu.oneCycleFU = true;
+                floatAddFu.oneCycleFU = true;
+                floatSubFu.oneCycleFU = true;
+                floatMultFu.oneCycleFU = true;
+                floatDivFu.oneCycleFU = true;
+                bitwiseOPFu.oneCycleFU = true;
+                memoryUnitFu.oneCycleFU = true;
+                branchFu.oneCycleFU = true;
+                shiftFu.oneCycleFU = true;
+
                 commitedThisCycle = false;
                 startOfLoop:
                 cycleCount++;
@@ -441,6 +454,7 @@ namespace ISA_GUI
                         intAddFu.instruction.cycleControl--;
                     if (intAddFu.instruction.cycleControl == 0)
                     {
+                        intAddFu.oneCycleFU = false;            //Makes sure this Functional Unit is only available for one cycle
                         intAddFu.instruction.doneExecuting = true;
                         intAddFu.instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
@@ -464,6 +478,7 @@ namespace ISA_GUI
                         intSubFu.instruction.cycleControl--;
                     if (intSubFu.instruction.cycleControl == 0)
                     {
+                        intSubFu.oneCycleFU = false;        //Makes sure this Functional Unit is only available for one cycle
                         intSubFu.instruction.doneExecuting = true;
                         intSubFu.instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
@@ -487,6 +502,7 @@ namespace ISA_GUI
                         intMultFu.instruction.cycleControl--;
                     if (intMultFu.instruction.cycleControl == 0)
                     {
+                        intMultFu.oneCycleFU = false;       //Makes sure this Functional Unit is only available for one cycle
                         intMultFu.instruction.doneExecuting = true;
                         intMultFu.instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
@@ -510,6 +526,7 @@ namespace ISA_GUI
                         intDivFu.instruction.cycleControl--;
                     if (intDivFu.instruction.cycleControl == 0)
                     {
+                        intDivFu.oneCycleFU = false;        //Makes sure this Functional Unit is only available for one cycle
                         intDivFu.instruction.doneExecuting = true;
                         intDivFu.instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
@@ -533,6 +550,7 @@ namespace ISA_GUI
                         floatAddFu.instruction.cycleControl--;
                     if (floatAddFu.instruction.cycleControl == 0)
                     {
+                        floatAddFu.oneCycleFU = false;      //Makes sure this Functional Unit is only available for one cycle
                         floatAddFu.instruction.doneExecuting = true;
                         floatAddFu.instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
@@ -556,6 +574,7 @@ namespace ISA_GUI
                         floatSubFu.instruction.cycleControl--;
                     if (floatSubFu.instruction.cycleControl == 0)
                     {
+                        floatSubFu.oneCycleFU = false;      //Makes sure this Functional Unit is only available for one cycle
                         floatSubFu.instruction.doneExecuting = true;
                         floatSubFu.instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
@@ -579,6 +598,7 @@ namespace ISA_GUI
                         floatMultFu.instruction.cycleControl--;
                     if (floatMultFu.instruction.cycleControl == 0)
                     {
+                        floatMultFu.oneCycleFU = false;     //Makes sure this Functional Unit is only available for one cycle
                         floatMultFu.instruction.doneExecuting = true;
                         floatMultFu.instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
@@ -602,6 +622,7 @@ namespace ISA_GUI
                         floatDivFu.instruction.cycleControl--;
                     if (floatDivFu.instruction.cycleControl == 0)
                     {
+                        floatDivFu.oneCycleFU = false;      //Makes sure this Functional Unit is only available for one cycle
                         floatDivFu.instruction.doneExecuting = true;
                         floatDivFu.instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
@@ -625,6 +646,7 @@ namespace ISA_GUI
                         bitwiseOPFu.instruction.cycleControl--;
                     if (bitwiseOPFu.instruction.cycleControl == 0)
                     {
+                        bitwiseOPFu.oneCycleFU = false;     //Makes sure this Functional Unit is only available for one cycle
                         bitwiseOPFu.instruction.doneExecuting = true;
                         bitwiseOPFu.instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
@@ -648,6 +670,7 @@ namespace ISA_GUI
                         memoryUnitFu.instruction.cycleControl--;
                     if (memoryUnitFu.instruction.cycleControl == 0)
                     {
+                        memoryUnitFu.oneCycleFU = false;        //Makes sure this Functional Unit is only available for one cycle
                         memoryUnitFu.instruction.doneExecuting = true;
                         memoryUnitFu.instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
@@ -670,6 +693,7 @@ namespace ISA_GUI
                         branchFu.instruction.cycleControl--;
                     if (branchFu.instruction.cycleControl == 0)
                     {
+                        branchFu.oneCycleFU = false;        //Makes sure this Functional Unit is only available for one cycle
                         branchFu.instruction.doneExecuting = true;
                         branchFu.instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
@@ -693,6 +717,7 @@ namespace ISA_GUI
                         shiftFu.instruction.cycleControl--;
                     if (shiftFu.instruction.cycleControl == 0)
                     {
+                        shiftFu.oneCycleFU = false;         //Makes sure this Functional Unit is only available for one cycle
                         shiftFu.instruction.doneExecuting = true;
                         shiftFu.instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
@@ -713,7 +738,7 @@ namespace ISA_GUI
             switch(instruction.functionalUnitID)
             {
                 case 1:
-                    if (intAddFu.instruction == null) 
+                    if (intAddFu.instruction == null && intAddFu.oneCycleFU) 
                     {
                         intAddFu.instruction = intAddRS.instruction;
                         intAddRS.instruction = null;
@@ -722,7 +747,7 @@ namespace ISA_GUI
                     }
                     break;
                 case 2:
-                    if (intSubFu.instruction == null)
+                    if (intSubFu.instruction == null && intSubFu.oneCycleFU)
                     {
                         intSubFu.instruction = intSubRS.instruction;
                         intSubRS.instruction = null;
@@ -731,7 +756,7 @@ namespace ISA_GUI
                     }
                     break;
                 case 3:
-                    if (intMultFu.instruction == null)
+                    if (intMultFu.instruction == null && intMultFu.oneCycleFU)
                     {
                         intMultFu.instruction = intMultRS.instruction;
                         intMultRS.instruction = null;
@@ -740,7 +765,7 @@ namespace ISA_GUI
                     }
                     break;
                 case 4:
-                    if (intDivFu.instruction == null)
+                    if (intDivFu.instruction == null && intDivFu.oneCycleFU)
                     {
                         intDivFu.instruction = intDivRS.instruction;
                         intDivRS.instruction = null;
@@ -749,7 +774,7 @@ namespace ISA_GUI
                     }
                     break;
                 case 5:
-                    if (floatAddFu.instruction == null)
+                    if (floatAddFu.instruction == null && floatAddFu.oneCycleFU)
                     {
                         floatAddFu.instruction = floatAddRS.instruction;
                         floatAddRS.instruction = null;
@@ -758,7 +783,7 @@ namespace ISA_GUI
                     }
                     break;
                 case 6:
-                    if (floatSubFu.instruction == null)
+                    if (floatSubFu.instruction == null && floatSubFu.oneCycleFU)
                     {
                         floatSubFu.instruction = floatSubRS.instruction;
                         floatSubRS.instruction = null;
@@ -767,7 +792,7 @@ namespace ISA_GUI
                     }
                     break;
                 case 7:
-                    if (floatMultFu.instruction == null)
+                    if (floatMultFu.instruction == null && floatMultFu.oneCycleFU )
                     {
                         floatMultFu.instruction = floatMultRS.instruction;
                         floatMultRS.instruction = null;
@@ -776,7 +801,7 @@ namespace ISA_GUI
                     }
                     break;
                 case 8:
-                    if (floatDivFu.instruction == null)
+                    if (floatDivFu.instruction == null && floatDivFu.oneCycleFU )
                     {
                         floatDivFu.instruction = floatDivRS.instruction;
                         floatDivRS.instruction = null;
@@ -785,7 +810,7 @@ namespace ISA_GUI
                     }
                     break;
                 case 9:
-                    if (bitwiseOPFu.instruction == null)
+                    if (bitwiseOPFu.instruction == null && bitwiseOPFu.oneCycleFU)
                     {
                         bitwiseOPFu.instruction = bitwiseOPRS.instruction;
                         bitwiseOPRS.instruction = null;
@@ -794,7 +819,7 @@ namespace ISA_GUI
                     }
                     break;
                 case 10:
-                    if (memoryUnitFu.instruction == null)
+                    if (memoryUnitFu.instruction == null && memoryUnitFu.oneCycleFU )
                     {
                         memoryUnitFu.instruction = load_storeBuffer.instruction;
                         load_storeBuffer.instruction = null;
@@ -803,7 +828,7 @@ namespace ISA_GUI
                     }
                     break;
                 case 11:
-                    if (branchFu.instruction == null)
+                    if (branchFu.instruction == null && branchFu.oneCycleFU )
                     {
                         branchFu.instruction = branchOPS.instruction;
                         branchOPS.instruction = null;
@@ -812,7 +837,7 @@ namespace ISA_GUI
                     }
                     break;
                 case 12:
-                    if (shiftFu.instruction == null)
+                    if (shiftFu.instruction == null && shiftFu.oneCycleFU )
                     {
                         shiftFu.instruction = shiftOPS.instruction;
                         shiftOPS.instruction = null;
