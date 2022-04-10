@@ -174,26 +174,28 @@
             this.instInExLabel2 = new System.Windows.Forms.Label();
             this.staticPanel = new System.Windows.Forms.Panel();
             this.dynamicPanel = new System.Windows.Forms.Panel();
-            this.memoryTabControl = new System.Windows.Forms.TabControl();
-            this.mainMemoryTab = new System.Windows.Forms.TabPage();
-            this.dynamicPipelineMemoryTab = new System.Windows.Forms.TabPage();
-            this.registersQIText = new System.Windows.Forms.RichTextBox();
-            this.intAddText = new System.Windows.Forms.RichTextBox();
-            this.intMultText = new System.Windows.Forms.RichTextBox();
-            this.intDivText = new System.Windows.Forms.RichTextBox();
-            this.intSubText = new System.Windows.Forms.RichTextBox();
-            this.flSubText = new System.Windows.Forms.RichTextBox();
-            this.flDivText = new System.Windows.Forms.RichTextBox();
-            this.flMultText = new System.Windows.Forms.RichTextBox();
-            this.flAddText = new System.Windows.Forms.RichTextBox();
-            this.memoryFUText = new System.Windows.Forms.RichTextBox();
-            this.branchText = new System.Windows.Forms.RichTextBox();
-            this.load_storeBufferText = new System.Windows.Forms.RichTextBox();
-            this.bitwiseText = new System.Windows.Forms.RichTextBox();
             this.reorder_cdbTabControl = new System.Windows.Forms.TabControl();
             this.reorderBufferPage = new System.Windows.Forms.TabPage();
             this.CDBPage = new System.Windows.Forms.TabPage();
             this.commonDataBusText = new System.Windows.Forms.RichTextBox();
+            this.memoryTabControl = new System.Windows.Forms.TabControl();
+            this.mainMemoryTab = new System.Windows.Forms.TabPage();
+            this.dynamicPipelineMemoryTab = new System.Windows.Forms.TabPage();
+            this.memoryFUText = new System.Windows.Forms.RichTextBox();
+            this.branchText = new System.Windows.Forms.RichTextBox();
+            this.load_storeBufferText = new System.Windows.Forms.RichTextBox();
+            this.bitwiseText = new System.Windows.Forms.RichTextBox();
+            this.flSubText = new System.Windows.Forms.RichTextBox();
+            this.flDivText = new System.Windows.Forms.RichTextBox();
+            this.flMultText = new System.Windows.Forms.RichTextBox();
+            this.flAddText = new System.Windows.Forms.RichTextBox();
+            this.intSubText = new System.Windows.Forms.RichTextBox();
+            this.intDivText = new System.Windows.Forms.RichTextBox();
+            this.intMultText = new System.Windows.Forms.RichTextBox();
+            this.intAddText = new System.Windows.Forms.RichTextBox();
+            this.registersQIText = new System.Windows.Forms.RichTextBox();
+            this.uploadButton = new System.Windows.Forms.Button();
+            this.SaveFile = new System.Windows.Forms.Button();
             this.objectCode.SuspendLayout();
             this.assemblerPage.SuspendLayout();
             this.objectCodeBox.SuspendLayout();
@@ -208,12 +210,12 @@
             this.pipelineStatsTab.SuspendLayout();
             this.staticPanel.SuspendLayout();
             this.dynamicPanel.SuspendLayout();
-            this.memoryTabControl.SuspendLayout();
-            this.mainMemoryTab.SuspendLayout();
-            this.dynamicPipelineMemoryTab.SuspendLayout();
             this.reorder_cdbTabControl.SuspendLayout();
             this.reorderBufferPage.SuspendLayout();
             this.CDBPage.SuspendLayout();
+            this.memoryTabControl.SuspendLayout();
+            this.mainMemoryTab.SuspendLayout();
+            this.dynamicPipelineMemoryTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // CPU
@@ -1777,6 +1779,51 @@
             this.dynamicPanel.Size = new System.Drawing.Size(320, 220);
             this.dynamicPanel.TabIndex = 146;
             // 
+            // reorder_cdbTabControl
+            // 
+            this.reorder_cdbTabControl.Appearance = System.Windows.Forms.TabAppearance.Buttons;
+            this.reorder_cdbTabControl.Controls.Add(this.reorderBufferPage);
+            this.reorder_cdbTabControl.Controls.Add(this.CDBPage);
+            this.reorder_cdbTabControl.Location = new System.Drawing.Point(161, 0);
+            this.reorder_cdbTabControl.Name = "reorder_cdbTabControl";
+            this.reorder_cdbTabControl.SelectedIndex = 0;
+            this.reorder_cdbTabControl.Size = new System.Drawing.Size(168, 226);
+            this.reorder_cdbTabControl.TabIndex = 144;
+            // 
+            // reorderBufferPage
+            // 
+            this.reorderBufferPage.Controls.Add(this.instructionInFlightText);
+            this.reorderBufferPage.Location = new System.Drawing.Point(4, 25);
+            this.reorderBufferPage.Name = "reorderBufferPage";
+            this.reorderBufferPage.Padding = new System.Windows.Forms.Padding(3);
+            this.reorderBufferPage.Size = new System.Drawing.Size(160, 197);
+            this.reorderBufferPage.TabIndex = 0;
+            this.reorderBufferPage.Text = "Reorder Buffer";
+            this.reorderBufferPage.UseVisualStyleBackColor = true;
+            // 
+            // CDBPage
+            // 
+            this.CDBPage.Controls.Add(this.commonDataBusText);
+            this.CDBPage.Location = new System.Drawing.Point(4, 25);
+            this.CDBPage.Name = "CDBPage";
+            this.CDBPage.Padding = new System.Windows.Forms.Padding(3);
+            this.CDBPage.Size = new System.Drawing.Size(160, 197);
+            this.CDBPage.TabIndex = 1;
+            this.CDBPage.Text = "CDB";
+            this.CDBPage.UseVisualStyleBackColor = true;
+            // 
+            // commonDataBusText
+            // 
+            this.commonDataBusText.BackColor = System.Drawing.SystemColors.Menu;
+            this.commonDataBusText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.commonDataBusText.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.commonDataBusText.Location = new System.Drawing.Point(0, 1);
+            this.commonDataBusText.Name = "commonDataBusText";
+            this.commonDataBusText.ReadOnly = true;
+            this.commonDataBusText.Size = new System.Drawing.Size(153, 190);
+            this.commonDataBusText.TabIndex = 130;
+            this.commonDataBusText.Text = "";
+            // 
             // memoryTabControl
             // 
             this.memoryTabControl.Appearance = System.Windows.Forms.TabAppearance.Buttons;
@@ -1824,114 +1871,6 @@
             this.dynamicPipelineMemoryTab.TabIndex = 1;
             this.dynamicPipelineMemoryTab.Text = "Dynamic Pipeline";
             this.dynamicPipelineMemoryTab.UseVisualStyleBackColor = true;
-            // 
-            // registersQIText
-            // 
-            this.registersQIText.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.registersQIText.Location = new System.Drawing.Point(0, 562);
-            this.registersQIText.Name = "registersQIText";
-            this.registersQIText.ReadOnly = true;
-            this.registersQIText.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.registersQIText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.registersQIText.Size = new System.Drawing.Size(615, 188);
-            this.registersQIText.TabIndex = 3;
-            this.registersQIText.Text = "";
-            // 
-            // intAddText
-            // 
-            this.intAddText.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.intAddText.Location = new System.Drawing.Point(0, 6);
-            this.intAddText.Name = "intAddText";
-            this.intAddText.ReadOnly = true;
-            this.intAddText.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.intAddText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.intAddText.Size = new System.Drawing.Size(144, 173);
-            this.intAddText.TabIndex = 4;
-            this.intAddText.Text = "";
-            // 
-            // intMultText
-            // 
-            this.intMultText.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.intMultText.Location = new System.Drawing.Point(311, 6);
-            this.intMultText.Name = "intMultText";
-            this.intMultText.ReadOnly = true;
-            this.intMultText.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.intMultText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.intMultText.Size = new System.Drawing.Size(144, 172);
-            this.intMultText.TabIndex = 5;
-            this.intMultText.Text = "";
-            // 
-            // intDivText
-            // 
-            this.intDivText.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.intDivText.Location = new System.Drawing.Point(466, 5);
-            this.intDivText.Name = "intDivText";
-            this.intDivText.ReadOnly = true;
-            this.intDivText.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.intDivText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.intDivText.Size = new System.Drawing.Size(144, 173);
-            this.intDivText.TabIndex = 6;
-            this.intDivText.Text = "";
-            // 
-            // intSubText
-            // 
-            this.intSubText.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.intSubText.Location = new System.Drawing.Point(155, 6);
-            this.intSubText.Name = "intSubText";
-            this.intSubText.ReadOnly = true;
-            this.intSubText.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.intSubText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.intSubText.Size = new System.Drawing.Size(144, 173);
-            this.intSubText.TabIndex = 7;
-            this.intSubText.Text = "";
-            // 
-            // flSubText
-            // 
-            this.flSubText.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.flSubText.Location = new System.Drawing.Point(155, 185);
-            this.flSubText.Name = "flSubText";
-            this.flSubText.ReadOnly = true;
-            this.flSubText.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.flSubText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.flSubText.Size = new System.Drawing.Size(144, 173);
-            this.flSubText.TabIndex = 11;
-            this.flSubText.Text = "";
-            // 
-            // flDivText
-            // 
-            this.flDivText.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.flDivText.Location = new System.Drawing.Point(466, 184);
-            this.flDivText.Name = "flDivText";
-            this.flDivText.ReadOnly = true;
-            this.flDivText.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.flDivText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.flDivText.Size = new System.Drawing.Size(144, 173);
-            this.flDivText.TabIndex = 10;
-            this.flDivText.Text = "";
-            // 
-            // flMultText
-            // 
-            this.flMultText.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.flMultText.Location = new System.Drawing.Point(311, 185);
-            this.flMultText.Name = "flMultText";
-            this.flMultText.ReadOnly = true;
-            this.flMultText.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.flMultText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.flMultText.Size = new System.Drawing.Size(144, 172);
-            this.flMultText.TabIndex = 9;
-            this.flMultText.Text = "";
-            // 
-            // flAddText
-            // 
-            this.flAddText.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.flAddText.Location = new System.Drawing.Point(0, 185);
-            this.flAddText.Name = "flAddText";
-            this.flAddText.ReadOnly = true;
-            this.flAddText.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.flAddText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.flAddText.Size = new System.Drawing.Size(144, 173);
-            this.flAddText.TabIndex = 8;
-            this.flAddText.Text = "";
             // 
             // memoryFUText
             // 
@@ -1981,50 +1920,133 @@
             this.bitwiseText.TabIndex = 12;
             this.bitwiseText.Text = "";
             // 
-            // reorder_cdbTabControl
+            // flSubText
             // 
-            this.reorder_cdbTabControl.Appearance = System.Windows.Forms.TabAppearance.Buttons;
-            this.reorder_cdbTabControl.Controls.Add(this.reorderBufferPage);
-            this.reorder_cdbTabControl.Controls.Add(this.CDBPage);
-            this.reorder_cdbTabControl.Location = new System.Drawing.Point(161, 0);
-            this.reorder_cdbTabControl.Name = "reorder_cdbTabControl";
-            this.reorder_cdbTabControl.SelectedIndex = 0;
-            this.reorder_cdbTabControl.Size = new System.Drawing.Size(168, 226);
-            this.reorder_cdbTabControl.TabIndex = 144;
+            this.flSubText.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.flSubText.Location = new System.Drawing.Point(155, 185);
+            this.flSubText.Name = "flSubText";
+            this.flSubText.ReadOnly = true;
+            this.flSubText.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.flSubText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.flSubText.Size = new System.Drawing.Size(144, 173);
+            this.flSubText.TabIndex = 11;
+            this.flSubText.Text = "";
             // 
-            // reorderBufferPage
+            // flDivText
             // 
-            this.reorderBufferPage.Controls.Add(this.instructionInFlightText);
-            this.reorderBufferPage.Location = new System.Drawing.Point(4, 25);
-            this.reorderBufferPage.Name = "reorderBufferPage";
-            this.reorderBufferPage.Padding = new System.Windows.Forms.Padding(3);
-            this.reorderBufferPage.Size = new System.Drawing.Size(160, 197);
-            this.reorderBufferPage.TabIndex = 0;
-            this.reorderBufferPage.Text = "Reorder Buffer";
-            this.reorderBufferPage.UseVisualStyleBackColor = true;
+            this.flDivText.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.flDivText.Location = new System.Drawing.Point(466, 184);
+            this.flDivText.Name = "flDivText";
+            this.flDivText.ReadOnly = true;
+            this.flDivText.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.flDivText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.flDivText.Size = new System.Drawing.Size(144, 173);
+            this.flDivText.TabIndex = 10;
+            this.flDivText.Text = "";
             // 
-            // CDBPage
+            // flMultText
             // 
-            this.CDBPage.Controls.Add(this.commonDataBusText);
-            this.CDBPage.Location = new System.Drawing.Point(4, 25);
-            this.CDBPage.Name = "CDBPage";
-            this.CDBPage.Padding = new System.Windows.Forms.Padding(3);
-            this.CDBPage.Size = new System.Drawing.Size(160, 197);
-            this.CDBPage.TabIndex = 1;
-            this.CDBPage.Text = "CDB";
-            this.CDBPage.UseVisualStyleBackColor = true;
+            this.flMultText.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.flMultText.Location = new System.Drawing.Point(311, 185);
+            this.flMultText.Name = "flMultText";
+            this.flMultText.ReadOnly = true;
+            this.flMultText.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.flMultText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.flMultText.Size = new System.Drawing.Size(144, 172);
+            this.flMultText.TabIndex = 9;
+            this.flMultText.Text = "";
             // 
-            // commonDataBusText
+            // flAddText
             // 
-            this.commonDataBusText.BackColor = System.Drawing.SystemColors.Menu;
-            this.commonDataBusText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.commonDataBusText.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.commonDataBusText.Location = new System.Drawing.Point(0, 1);
-            this.commonDataBusText.Name = "commonDataBusText";
-            this.commonDataBusText.ReadOnly = true;
-            this.commonDataBusText.Size = new System.Drawing.Size(153, 190);
-            this.commonDataBusText.TabIndex = 130;
-            this.commonDataBusText.Text = "";
+            this.flAddText.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.flAddText.Location = new System.Drawing.Point(0, 185);
+            this.flAddText.Name = "flAddText";
+            this.flAddText.ReadOnly = true;
+            this.flAddText.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.flAddText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.flAddText.Size = new System.Drawing.Size(144, 173);
+            this.flAddText.TabIndex = 8;
+            this.flAddText.Text = "";
+            // 
+            // intSubText
+            // 
+            this.intSubText.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.intSubText.Location = new System.Drawing.Point(155, 6);
+            this.intSubText.Name = "intSubText";
+            this.intSubText.ReadOnly = true;
+            this.intSubText.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.intSubText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.intSubText.Size = new System.Drawing.Size(144, 173);
+            this.intSubText.TabIndex = 7;
+            this.intSubText.Text = "";
+            // 
+            // intDivText
+            // 
+            this.intDivText.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.intDivText.Location = new System.Drawing.Point(466, 5);
+            this.intDivText.Name = "intDivText";
+            this.intDivText.ReadOnly = true;
+            this.intDivText.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.intDivText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.intDivText.Size = new System.Drawing.Size(144, 173);
+            this.intDivText.TabIndex = 6;
+            this.intDivText.Text = "";
+            // 
+            // intMultText
+            // 
+            this.intMultText.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.intMultText.Location = new System.Drawing.Point(311, 6);
+            this.intMultText.Name = "intMultText";
+            this.intMultText.ReadOnly = true;
+            this.intMultText.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.intMultText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.intMultText.Size = new System.Drawing.Size(144, 172);
+            this.intMultText.TabIndex = 5;
+            this.intMultText.Text = "";
+            // 
+            // intAddText
+            // 
+            this.intAddText.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.intAddText.Location = new System.Drawing.Point(0, 6);
+            this.intAddText.Name = "intAddText";
+            this.intAddText.ReadOnly = true;
+            this.intAddText.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.intAddText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.intAddText.Size = new System.Drawing.Size(144, 173);
+            this.intAddText.TabIndex = 4;
+            this.intAddText.Text = "";
+            // 
+            // registersQIText
+            // 
+            this.registersQIText.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.registersQIText.Location = new System.Drawing.Point(0, 562);
+            this.registersQIText.Name = "registersQIText";
+            this.registersQIText.ReadOnly = true;
+            this.registersQIText.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.registersQIText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.registersQIText.Size = new System.Drawing.Size(615, 188);
+            this.registersQIText.TabIndex = 3;
+            this.registersQIText.Text = "";
+            // 
+            // uploadButton
+            // 
+            this.uploadButton.Location = new System.Drawing.Point(254, 4);
+            this.uploadButton.Name = "uploadButton";
+            this.uploadButton.Size = new System.Drawing.Size(97, 31);
+            this.uploadButton.TabIndex = 148;
+            this.uploadButton.Text = "Upload";
+            this.uploadButton.UseVisualStyleBackColor = true;
+            this.uploadButton.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // SaveFile
+            // 
+            this.SaveFile.Location = new System.Drawing.Point(254, 42);
+            this.SaveFile.Name = "SaveFile";
+            this.SaveFile.Size = new System.Drawing.Size(97, 28);
+            this.SaveFile.TabIndex = 149;
+            this.SaveFile.Text = "Save";
+            this.SaveFile.UseVisualStyleBackColor = true;
+            this.SaveFile.Click += new System.EventHandler(this.SaveFile_Click);
             // 
             // BUC10
             // 
@@ -2032,6 +2054,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1516, 814);
+            this.Controls.Add(this.SaveFile);
+            this.Controls.Add(this.uploadButton);
             this.Controls.Add(this.configButton);
             this.Controls.Add(this.label21);
             this.Controls.Add(this.cFlagBox);
@@ -2143,12 +2167,12 @@
             this.staticPanel.PerformLayout();
             this.dynamicPanel.ResumeLayout(false);
             this.dynamicPanel.PerformLayout();
-            this.memoryTabControl.ResumeLayout(false);
-            this.mainMemoryTab.ResumeLayout(false);
-            this.dynamicPipelineMemoryTab.ResumeLayout(false);
             this.reorder_cdbTabControl.ResumeLayout(false);
             this.reorderBufferPage.ResumeLayout(false);
             this.CDBPage.ResumeLayout(false);
+            this.memoryTabControl.ResumeLayout(false);
+            this.mainMemoryTab.ResumeLayout(false);
+            this.dynamicPipelineMemoryTab.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2319,6 +2343,8 @@
         private System.Windows.Forms.TabPage reorderBufferPage;
         private System.Windows.Forms.TabPage CDBPage;
         private System.Windows.Forms.RichTextBox commonDataBusText;
+        private System.Windows.Forms.Button uploadButton;
+        private System.Windows.Forms.Button SaveFile;
     }
 }
 

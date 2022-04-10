@@ -16,6 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using System.IO;
 
 // THIS CLASS IS ONLY TO BE USED TO KICKOFF THE PIPELINE AND UPDATE THE GUI //
 
@@ -1093,7 +1094,41 @@ namespace ISA_GUI
                 List<string> program = getAssembly();      //get instructions from user
             }
         }
+        /**
+        * Method Name: button1_click <br>
+        * Method Purpose: load asembly fronm file
+        * <br>
+        * Date created:  <br>
+        * <hr>
+        *  
+        */
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.InitialDirectory = Path.Combine(Application.StartupPath, "");
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                StreamReader reader = new StreamReader(dlg.FileName, Encoding.Default);
+                assemblerTextBox.Text = reader.ReadToEnd();
+                reader.Close();
+            }
 
+            dlg.Dispose();
+        }
+
+        private void SaveFile_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.Filter = "*.txt|*.txt";
+            dlg.RestoreDirectory = true;
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                File.WriteAllText(dlg.FileName, StatsTextBox.Text);
+                File.AppendAllText(dlg.FileName, pipelineStatsTextBox.Text);
+            }
+            MessageBox.Show("Saved File");
+        }
     }
+    
 
 }
