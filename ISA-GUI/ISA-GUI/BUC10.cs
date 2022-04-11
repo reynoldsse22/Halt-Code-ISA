@@ -951,8 +951,12 @@ namespace ISA_GUI
 
             load_storeBuffer += " Load/Store Buffer\n";
             load_storeBuffer += "-------------------\n";
-            if (cpu.DP.load_storeBuffer.instruction != null)
-                load_storeBuffer += cpu.DP.load_storeBuffer.instruction.fullAssemblySyntax + "\n";
+            for (int i = 0; i < 5; i++)
+            {
+                
+                if (cpu.DP.loadStoreBuffer[i].instruction != null)
+                    load_storeBuffer += cpu.DP.loadStoreBuffer[i].instruction.fullAssemblySyntax + "\n";
+            }
             load_storeBufferText.Text = load_storeBuffer;
 
         }

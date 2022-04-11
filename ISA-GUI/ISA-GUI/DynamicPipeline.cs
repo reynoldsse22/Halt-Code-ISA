@@ -46,6 +46,7 @@ namespace ISA_GUI
         public ReservationStation shiftOPS;
         public ReservationStation load_storeBuffer;
         public Instruction fetchInstruction;
+        public ReservationStation[] loadStoreBuffer;
 
         public int totalHazard, structuralHazard, dataHazard, controlHazard, RAW, WAR, WAW;
         public int reorderBufferDelay, reservationStationDelay, trueDependenceDelay, totalDelays, instructionID;
@@ -92,8 +93,8 @@ namespace ISA_GUI
             bitwiseOPRS = new ReservationStation("bitwiseOPRS");
             branchOPS = new ReservationStation("branchOPS");        //Reservation station solely for branches\
             shiftOPS = new ReservationStation("shiftOPS");
-            load_storeBuffer = new ReservationStation("load_storeBuffer");
-
+            loadStoreBuffer = new ReservationStation[5];
+            for(int i = 0; i < 5; i++) { loadStoreBuffer[i] = new ReservationStation("load_storeBuffer" + i); loadStoreBuffer[i].arrayIndex = i; }
 
             fetchInstruction = new Instruction();
             cycleCount = 0;
@@ -825,9 +826,9 @@ namespace ISA_GUI
                 case 10:
                     if (memoryFu.instruction == null && memoryFu.oneCycleFU )
                     {
-                        memoryFu.instruction = load_storeBuffer.instruction;
-                        load_storeBuffer.instruction = null;
-                        load_storeBuffer.Busy = false;
+                        memoryFu.instruction = loadStoreBuffer[instruction.reservationStationIndex].instruction;
+                        loadStoreBuffer[instruction.reservationStationIndex].instruction = null;
+                        loadStoreBuffer[instruction.reservationStationIndex].Busy = false;
                         return;
                     }
                     break;
@@ -1446,111 +1447,139 @@ namespace ISA_GUI
                 case 15:
                     if (instruction.isFloat)
                     {
-                        if (!load_storeBuffer.Busy)
+                        foreach(ReservationStation loadstoreBuff in loadStoreBuffer)
                         {
-                            checkOperandDependencies(ref instruction, ref registers);
-                            load_storeBuffer.Busy = true;
-                            registers.floatQi[instruction.r3] = "memoryFu";
-                            registers.floatQiIndex[instruction.r3] = instruction.ID;
-                            instruction.functionalUnitID = 10;
-                            load_storeBuffer.instruction = instruction;
-                            return instruction;
+                            if (!loadstoreBuff.Busy)
+                            {
+                                checkOperandDependencies(ref instruction, ref registers);
+                                load_storeBuffer.Busy = true;
+                                registers.floatQi[instruction.r3] = "memoryFu";
+                                registers.floatQiIndex[instruction.r3] = instruction.ID;
+                                instruction.functionalUnitID = 10;
+                                instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
+                                loadstoreBuff.instruction = instruction;
+                                return instruction;
+                            }
                         }
                     }
                     else
                     {
-                        if (!load_storeBuffer.Busy)
+                        foreach (ReservationStation loadstoreBuff in loadStoreBuffer)
                         {
-                            checkOperandDependencies(ref instruction, ref registers);
-                            load_storeBuffer.Busy = true;
-                            registers.intQi[instruction.r3] = "memoryFu";
-                            registers.intQiIndex[instruction.r3] = instruction.ID;
-                            instruction.functionalUnitID = 10;
-                            load_storeBuffer.instruction = instruction;
-                            return instruction;
+                            if (!loadstoreBuff.Busy)
+                            {
+                                checkOperandDependencies(ref instruction, ref registers);
+                                loadstoreBuff.Busy = true;
+                                registers.intQi[instruction.r3] = "memoryFu";
+                                registers.intQiIndex[instruction.r3] = instruction.ID;
+                                instruction.functionalUnitID = 10;
+                                instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
+                                loadstoreBuff.instruction = instruction;
+                                return instruction;
+                            }
                         }
                     }
                     break;
                 
                 case 9:         //Load Instructions
-                    if (!load_storeBuffer.Busy)
+                    foreach (ReservationStation loadstoreBuff in loadStoreBuffer)
                     {
-                        load_storeBuffer.Busy = true;
-                        if(instruction.isFloat)
+                        if (!loadstoreBuff.Busy)
                         {
-                            registers.floatQi[0] = "memoryFu";
-                            registers.floatQiIndex[0] = instruction.ID;
+                            loadstoreBuff.Busy = true;
+                            if (instruction.isFloat)
+                            {
+                                registers.floatQi[0] = "memoryFu";
+                                registers.floatQiIndex[0] = instruction.ID;
+                            }
+                            else
+                            {
+                                registers.intQi[0] = "memoryFu";
+                                registers.intQiIndex[0] = instruction.ID;
+                            }
+                            instruction.functionalUnitID = 10;
+                            instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
+                            loadstoreBuff.instruction = instruction;
+                            return instruction;
+                            //Vj, Vk, Qj, Qk will be implemented here
                         }
-                        else
-                        {
-                            registers.intQi[0] = "memoryFu";
-                            registers.intQiIndex[0] = instruction.ID;
-                        }
-                        instruction.functionalUnitID = 10;
-                        load_storeBuffer.instruction = instruction;
-                        return instruction;
-                        //Vj, Vk, Qj, Qk will be implemented here
                     }
                     break;
                 case 10:
-                    if (!load_storeBuffer.Busy)
+                    foreach (ReservationStation loadstoreBuff in loadStoreBuffer)
                     {
-                        load_storeBuffer.Busy = true;
-                        checkOperandDependencies(ref instruction, ref registers);
-                        instruction.functionalUnitID = 10;
-                        load_storeBuffer.instruction = instruction;
-                        return instruction;
-                        //Vj, Vk, Qj, Qk will be implemented here
+                        if (!loadstoreBuff.Busy)
+                        {
+                            loadstoreBuff.Busy = true;
+                            checkOperandDependencies(ref instruction, ref registers);
+                            instruction.functionalUnitID = 10;
+                            instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
+                            loadstoreBuff.instruction = instruction;
+                            return instruction;
+                            //Vj, Vk, Qj, Qk will be implemented here
+                        }
                     }
                     break;
                 case 11:
-                    if (!load_storeBuffer.Busy)
+                    foreach (ReservationStation loadstoreBuff in loadStoreBuffer)
                     {
-                        load_storeBuffer.Busy = true;
-                        if (instruction.isFloat)
+                        if (!loadstoreBuff.Busy)
                         {
-                            registers.floatQi[instruction.r3] = "memoryFu";
-                            registers.floatQiIndex[instruction.r3] = instruction.ID;
+                            loadstoreBuff.Busy = true;
+                            if (instruction.isFloat)
+                            {
+                                registers.floatQi[instruction.r3] = "memoryFu";
+                                registers.floatQiIndex[instruction.r3] = instruction.ID;
+                            }
+                            else
+                            {
+                                registers.intQi[instruction.r3] = "memoryFu";
+                                registers.intQiIndex[instruction.r3] = instruction.ID;
+                            }
+                            instruction.functionalUnitID = 10;
+                            instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
+                            loadstoreBuff.instruction = instruction;
+                            return instruction;
+                            //Vj, Vk, Qj, Qk will be implemented here
                         }
-                        else
-                        {
-                            registers.intQi[instruction.r3] = "memoryFu";
-                            registers.intQiIndex[instruction.r3] = instruction.ID;
-                        }
-                        instruction.functionalUnitID = 10;
-                        load_storeBuffer.instruction = instruction;
-                        return instruction;
-                        //Vj, Vk, Qj, Qk will be implemented here
                     }
                     break;
 
                 case 12: 
                     if (instruction.isFloat)
                     {
-                        if (!load_storeBuffer.Busy)
+                        foreach (ReservationStation loadstoreBuff in loadStoreBuffer)
                         {
-                            checkOperandDependencies(ref instruction, ref registers);
-                            registers.floatQi[instruction.r3] = "memoryFu";
-                            registers.floatQiIndex[instruction.r3] = instruction.ID;
-                            load_storeBuffer.Busy = true;
-                            instruction.functionalUnitID = 10;
-                            load_storeBuffer.instruction = instruction;
-                            return instruction;
-                            //Vj, Vk, Qj, Qk will be implemented here
+                            if (!loadstoreBuff.Busy)
+                            {
+                                checkOperandDependencies(ref instruction, ref registers);
+                                registers.floatQi[instruction.r3] = "memoryFu";
+                                registers.floatQiIndex[instruction.r3] = instruction.ID;
+                                loadstoreBuff.Busy = true;
+                                instruction.functionalUnitID = 10;
+                                instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
+                                loadstoreBuff.instruction = instruction;
+                                return instruction;
+                                //Vj, Vk, Qj, Qk will be implemented here
+                            }
                         }
                     }
                     else
                     {
-                        if (!load_storeBuffer.Busy)
+                        foreach (ReservationStation loadstoreBuff in loadStoreBuffer)
                         {
-                            checkOperandDependencies(ref instruction, ref registers);
-                            load_storeBuffer.Busy = true;
-                            registers.intQi[instruction.r3] = "memoryFu";
-                            registers.intQiIndex[instruction.r3] = instruction.ID;
-                            instruction.functionalUnitID = 10;
-                            load_storeBuffer.instruction = instruction;
-                            return instruction;
-                            //Vj, Vk, Qj, Qk will be implemented here
+                            if (!loadstoreBuff.Busy)
+                            {
+                                checkOperandDependencies(ref instruction, ref registers);
+                                loadstoreBuff.Busy = true;
+                                registers.intQi[instruction.r3] = "memoryFu";
+                                registers.intQiIndex[instruction.r3] = instruction.ID;
+                                instruction.functionalUnitID = 10;
+                                instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
+                                loadstoreBuff.instruction = instruction;
+                                return instruction;
+                                //Vj, Vk, Qj, Qk will be implemented here
+                            }
                         }
                     }
                     break;

@@ -17,6 +17,8 @@ namespace ISA_GUI
         public string Qj { get; set; }
         public int Address { get; set; }
 
+        public int arrayIndex { get; set; }
+
         //Initialize all values as empty except for the names (which should be hard coded)
         public ReservationStation(string Name)
         {
