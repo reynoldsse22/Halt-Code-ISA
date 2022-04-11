@@ -217,8 +217,10 @@ namespace ISA_GUI
             dynamicFlMultConfigValue.Value = 5;
             dynamicFlDivConfigValue.Value = 10;
             dynamicBitwiseConfigValue.Value = 1;
-            dynamicReorderBufferSizeValue.Value = 5;
+            dynamicReorderBufferSizeValue.Value = 10;
             dynamicShiftConfigValue.Value = 1;
+            dynamicLoadConfigValue.Value = 1;
+            dynamicStoreConfigValue.Value = 1;
             bitGlobalPredictorValue.Value = 1;
             
 

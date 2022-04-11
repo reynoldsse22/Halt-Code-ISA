@@ -52,6 +52,7 @@ namespace ISA_GUI
         public int reorderBufferDelay, reservationStationDelay, trueDependenceDelay, totalDelays, instructionID;
         public int totalCyclesStalled, numOfInstructionsInExecution, twoBitPredictionCounter;
         public bool lastBranchDecision, executiveBranchDecision, doneExecuting, executionInProgress, haltFound, commitedThisCycle, branchDecoded, instructionFetched;
+        string result;
 
 
 
@@ -116,6 +117,7 @@ namespace ISA_GUI
             haltFound = false;
             commitedThisCycle = false;
             branchDecoded = false;
+            result = "";
         }
 
         /// <summary>Runs the cycle.</summary>
@@ -159,7 +161,6 @@ namespace ISA_GUI
                     return;
                 }
 
-                string result = "";
                 if (instructionQueue.Count == 0)
                 {
                     fillInstructionQueue(ref IM);
@@ -462,6 +463,7 @@ namespace ISA_GUI
                         intAddFu.oneCycleFU = false;            //Makes sure this Functional Unit is only available for one cycle
                         intAddFu.instruction.doneExecuting = true;
                         intAddFu.instruction.executionInProgress = false;
+                        result = intAddFu.instruction.result;
                         instruction.doneExecuting = true;
                         instruction.executionInProgress = false;
                         intAddFu.instruction = null;
@@ -483,6 +485,7 @@ namespace ISA_GUI
                         intSubFu.instruction.cycleControl--;
                     if (intSubFu.instruction.cycleControl == 0)
                     {
+                        result = intSubFu.instruction.result;
                         intSubFu.oneCycleFU = false;        //Makes sure this Functional Unit is only available for one cycle
                         intSubFu.instruction.doneExecuting = true;
                         intSubFu.instruction.executionInProgress = false;
@@ -507,6 +510,7 @@ namespace ISA_GUI
                         intMulFu.instruction.cycleControl--;
                     if (intMulFu.instruction.cycleControl == 0)
                     {
+                        result = intMulFu.instruction.result;
                         intMulFu.oneCycleFU = false;       //Makes sure this Functional Unit is only available for one cycle
                         intMulFu.instruction.doneExecuting = true;
                         intMulFu.instruction.executionInProgress = false;
@@ -531,6 +535,7 @@ namespace ISA_GUI
                         intDivFu.instruction.cycleControl--;
                     if (intDivFu.instruction.cycleControl == 0)
                     {
+                        result = intDivFu.instruction.result;
                         intDivFu.oneCycleFU = false;        //Makes sure this Functional Unit is only available for one cycle
                         intDivFu.instruction.doneExecuting = true;
                         intDivFu.instruction.executionInProgress = false;
@@ -554,7 +559,8 @@ namespace ISA_GUI
                     else
                         flAddFu.instruction.cycleControl--;
                     if (flAddFu.instruction.cycleControl == 0)
-                    { 
+                    {
+                        result = flAddFu.instruction.result;
                         flAddFu.oneCycleFU = false;      //Makes sure this Functional Unit is only available for one cycle
                         flAddFu.instruction.doneExecuting = true;
                         flAddFu.instruction.executionInProgress = false;
@@ -579,6 +585,7 @@ namespace ISA_GUI
                         flSubFu.instruction.cycleControl--;
                     if (flSubFu.instruction.cycleControl == 0)
                     {
+                        result = flSubFu.instruction.result;
                         flSubFu.oneCycleFU = false;      //Makes sure this Functional Unit is only available for one cycle
                         flSubFu.instruction.doneExecuting = true;
                         flSubFu.instruction.executionInProgress = false;
@@ -603,6 +610,7 @@ namespace ISA_GUI
                         flMultFu.instruction.cycleControl--;
                     if (flMultFu.instruction.cycleControl == 0)
                     {
+                        result = flMultFu.instruction.result;
                         flMultFu.oneCycleFU = false;     //Makes sure this Functional Unit is only available for one cycle
                         flMultFu.instruction.doneExecuting = true;
                         flMultFu.instruction.executionInProgress = false;
@@ -627,6 +635,7 @@ namespace ISA_GUI
                         flDivFu.instruction.cycleControl--;
                     if (flDivFu.instruction.cycleControl == 0)
                     {
+                        result = flDivFu.instruction.result;
                         flDivFu.oneCycleFU = false;      //Makes sure this Functional Unit is only available for one cycle
                         flDivFu.instruction.doneExecuting = true;
                         flDivFu.instruction.executionInProgress = false;
@@ -651,6 +660,7 @@ namespace ISA_GUI
                         bitFu.instruction.cycleControl--;
                     if (bitFu.instruction.cycleControl == 0)
                     {
+                        result = bitFu.instruction.result;
                         bitFu.oneCycleFU = false;     //Makes sure this Functional Unit is only available for one cycle
                         bitFu.instruction.doneExecuting = true;
                         bitFu.instruction.executionInProgress = false;
@@ -675,6 +685,7 @@ namespace ISA_GUI
                         memoryFu.instruction.cycleControl--;
                     if (memoryFu.instruction.cycleControl == 0)
                     {
+                        result = memoryFu.instruction.result;
                         memoryFu.oneCycleFU = false;        //Makes sure this Functional Unit is only available for one cycle
                         memoryFu.instruction.doneExecuting = true;
                         memoryFu.instruction.executionInProgress = false;
@@ -698,6 +709,7 @@ namespace ISA_GUI
                         branchFu.instruction.cycleControl--;
                     if (branchFu.instruction.cycleControl == 0)
                     {
+                        result = branchFu.instruction.result;
                         branchFu.oneCycleFU = false;        //Makes sure this Functional Unit is only available for one cycle
                         branchFu.instruction.doneExecuting = true;
                         branchFu.instruction.executionInProgress = false;
@@ -722,6 +734,7 @@ namespace ISA_GUI
                         shiftFu.instruction.cycleControl--;
                     if (shiftFu.instruction.cycleControl == 0)
                     {
+                        result = shiftFu.instruction.result;
                         shiftFu.oneCycleFU = false;         //Makes sure this Functional Unit is only available for one cycle
                         shiftFu.instruction.doneExecuting = true;
                         shiftFu.instruction.executionInProgress = false;
@@ -1947,7 +1960,7 @@ namespace ISA_GUI
                     break;
                 case 4:
                     if(instruction.Equals(intDivFu.instruction))
-                    intDivFu.instruction = null;
+                        intDivFu.instruction = null;
                     break;
                 case 5:
                     if(instruction.Equals(flAddFu.instruction))
@@ -1967,7 +1980,7 @@ namespace ISA_GUI
                     break;
                 case 9:
                     if(instruction.Equals(bitFu.instruction))
-                    bitFu.instruction = null;
+                        bitFu.instruction = null;
                     break;
                 case 10:
                     if(instruction.Equals(memoryFu.instruction))
@@ -2469,7 +2482,11 @@ namespace ISA_GUI
             floatMultRS.instruction = null;
             floatDivRS.instruction = null;
             bitwiseOPRS.instruction = null;
-            load_storeBuffer.instruction = null;
+            foreach(ReservationStation loadstore in loadStoreBuffer)
+            {
+                loadstore.instruction = null;
+                loadstore.Busy = false;
+            }
             branchOPS.instruction = null;
             shiftOPS.instruction = null;
 
@@ -2482,7 +2499,6 @@ namespace ISA_GUI
             floatMultRS.Busy = false;
             floatDivRS.Busy = false;
             bitwiseOPRS.Busy = false;
-            load_storeBuffer.Busy = false;
             branchOPS.Busy = false;
             shiftOPS.Busy = false;
             commonDataBus.CDB.Clear();

@@ -167,11 +167,11 @@ namespace ISA_GUI
 					}
 					break;
 				case 3:
-					if (!CDB.CDB.ContainsKey("intMultFu"))
+					if (!CDB.CDB.ContainsKey("intMulFu"))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
-						CDB.CDB.Add("intMultFu", result);
+						CDB.CDB.Add("intMulFu", result);
 						return true;
 					}
 					break;
@@ -185,56 +185,56 @@ namespace ISA_GUI
 					}
 					break;
 				case 5:
-					if (!CDB.CDB.ContainsKey("floatAddFu"))
+					if (!CDB.CDB.ContainsKey("flAddFu"))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
-						CDB.CDB.Add("floatAddFu", result);
+						CDB.CDB.Add("flAddFu", result);
 						return true;
 					}
 					break;
 				case 6:
-					if (!CDB.CDB.ContainsKey("floatSubFu"))
+					if (!CDB.CDB.ContainsKey("flSubFu"))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
-						CDB.CDB.Add("floatSubFu", result);
+						CDB.CDB.Add("flSubFu", result);
 						return true;
 					}
 					break;
 				case 7:
-					if (!CDB.CDB.ContainsKey("floatMultFu"))
+					if (!CDB.CDB.ContainsKey("flMultFu"))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
-						CDB.CDB.Add("floatMultFu", result);
+						CDB.CDB.Add("flMultFu", result);
 						return true;
 					}
 					break;
 				case 8:
-					if (!CDB.CDB.ContainsKey("floatDivFu"))
+					if (!CDB.CDB.ContainsKey("flDivFu"))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
-						CDB.CDB.Add("floatDivFu", result);
+						CDB.CDB.Add("flDivFu", result);
 						return true;
 					}
 					break;
 				case 9:
-					if (!CDB.CDB.ContainsKey("bitwiseOPFu"))
+					if (!CDB.CDB.ContainsKey("bitFu"))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
-						CDB.CDB.Add("bitwiseOPFu", result);
+						CDB.CDB.Add("bitFu", result);
 						return true;
 					}
 					break;
 				case 10:
-					if (!CDB.CDB.ContainsKey("memoryUnitFu"))
+					if (!CDB.CDB.ContainsKey("memoryFu"))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
-						CDB.CDB.Add("memoryUnitFu", result);
+						CDB.CDB.Add("memoryFu", result);
 						return true;
 					}
 					break;

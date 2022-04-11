@@ -248,10 +248,12 @@ namespace ISA_GUI
                     if (!instruction.isFloat)
                     {
                         result = instruction.fOperand1.ToString();
+                        instruction.result = result;
                     }
                     else
                     {
                         result = instruction.iOperand1.ToString();
+                        instruction.result = result;
                     }
                     break;
                 case 11:
@@ -270,9 +272,15 @@ namespace ISA_GUI
                     instruction.cycleControl = 1;
                     instruction.destinationReg = r3;
                     if (!instruction.isFloat)
+                    {
                         result = instruction.iOperand1.ToString();
+                        instruction.result = result;
+                    }
                     else
+                    {
                         result = instruction.iOperand1.ToString();
+                        instruction.result = result;
+                    }
                     break;
 
 
