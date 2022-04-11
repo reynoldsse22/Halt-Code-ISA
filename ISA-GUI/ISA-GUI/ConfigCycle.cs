@@ -25,7 +25,7 @@ namespace ISA_GUI
 	public class ConfigCycle
     {
 		public int fetch, memAccess, regAccess, load_store, intALU, flAddSub, flMult, flDiv, calcAddress, programSpeed;
-		public int load, store, intAdd, intSub, intMult, intDiv, flAdd, flSub, bitwise, shift, effAddress, reorderbuffersize;
+		public int load, store, intAdd, intSub, intMult, intDiv, flAdd, flSub, dynamicFlMult, dynamicFlDiv, bitwise, shift, effAddress, reorderbuffersize;
 		public bool predictionSet;
 		public bool forwardingSet;
 		public bool dynamicPipelineSet;
@@ -51,7 +51,7 @@ namespace ISA_GUI
 			intAdd = 1;
 			intSub = 1;
 			intMult = 1;
-			intDiv = 1;
+			intDiv = 2;
 			flAdd = 2;
 			flSub = 2;
 			bitwise = 1;
@@ -60,6 +60,8 @@ namespace ISA_GUI
 			flAddSub = 2;
 			flMult = 5;
 			flDiv = 10;
+			dynamicFlMult = 5;
+			dynamicFlDiv = 10;
 			calcAddress = 1;
 			reorderbuffersize = 10;
 			predictionSet = false;

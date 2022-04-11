@@ -398,7 +398,7 @@ namespace ISA_GUI
             CU.decode(ref IM, ref instruction, ref config);
             if(instruction.opcode >= 2 && instruction.opcode <= 8)
             {
-                if(config.predictionSet && lastBranchDecision)
+                if((config.predictionSet && lastBranchDecision) || instruction.opcode == 2)
                 {
                     IM.ProgramCounter = instruction.address;
                     instructionID = instruction.ID + 1;

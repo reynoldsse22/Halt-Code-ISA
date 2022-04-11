@@ -383,7 +383,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(425, 52);
+            this.label15.Location = new System.Drawing.Point(425, 48);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(36, 13);
             this.label15.TabIndex = 21;
@@ -754,7 +754,7 @@
             this.asprHex.BackColor = System.Drawing.SystemColors.Menu;
             this.asprHex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.asprHex.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.asprHex.Location = new System.Drawing.Point(467, 45);
+            this.asprHex.Location = new System.Drawing.Point(467, 41);
             this.asprHex.Name = "asprHex";
             this.asprHex.ReadOnly = true;
             this.asprHex.Size = new System.Drawing.Size(94, 25);
@@ -813,10 +813,10 @@
             // 
             this.objectCode.Controls.Add(this.assemblerPage);
             this.objectCode.Controls.Add(this.objectCodeBox);
-            this.objectCode.Location = new System.Drawing.Point(9, 64);
+            this.objectCode.Location = new System.Drawing.Point(9, 52);
             this.objectCode.Name = "objectCode";
             this.objectCode.SelectedIndex = 0;
-            this.objectCode.Size = new System.Drawing.Size(557, 376);
+            this.objectCode.Size = new System.Drawing.Size(557, 388);
             this.objectCode.TabIndex = 62;
             // 
             // assemblerPage
@@ -825,7 +825,7 @@
             this.assemblerPage.Location = new System.Drawing.Point(4, 22);
             this.assemblerPage.Name = "assemblerPage";
             this.assemblerPage.Padding = new System.Windows.Forms.Padding(3);
-            this.assemblerPage.Size = new System.Drawing.Size(549, 350);
+            this.assemblerPage.Size = new System.Drawing.Size(549, 362);
             this.assemblerPage.TabIndex = 1;
             this.assemblerPage.Text = "Assembler";
             this.assemblerPage.UseVisualStyleBackColor = true;
@@ -836,7 +836,7 @@
             this.assemblerTextBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.assemblerTextBox.Location = new System.Drawing.Point(0, 4);
             this.assemblerTextBox.Name = "assemblerTextBox";
-            this.assemblerTextBox.Size = new System.Drawing.Size(546, 343);
+            this.assemblerTextBox.Size = new System.Drawing.Size(546, 355);
             this.assemblerTextBox.TabIndex = 1;
             this.assemblerTextBox.Text = "";
             // 
@@ -846,7 +846,7 @@
             this.objectCodeBox.Location = new System.Drawing.Point(4, 22);
             this.objectCodeBox.Name = "objectCodeBox";
             this.objectCodeBox.Padding = new System.Windows.Forms.Padding(3);
-            this.objectCodeBox.Size = new System.Drawing.Size(549, 350);
+            this.objectCodeBox.Size = new System.Drawing.Size(549, 367);
             this.objectCodeBox.TabIndex = 0;
             this.objectCodeBox.Text = "Disassembler";
             this.objectCodeBox.UseVisualStyleBackColor = true;
@@ -857,7 +857,7 @@
             this.InputBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.InputBox.Location = new System.Drawing.Point(2, 5);
             this.InputBox.Name = "InputBox";
-            this.InputBox.Size = new System.Drawing.Size(544, 342);
+            this.InputBox.Size = new System.Drawing.Size(544, 354);
             this.InputBox.TabIndex = 0;
             this.InputBox.Text = "";
             // 
@@ -1214,7 +1214,7 @@
             this.buildButton.ErrorImage = global::ISA_GUI.Properties.Resources.icons8_hammer_48;
             this.buildButton.Image = global::ISA_GUI.Properties.Resources.icons8_hammer_48;
             this.buildButton.InitialImage = global::ISA_GUI.Properties.Resources.hammer;
-            this.buildButton.Location = new System.Drawing.Point(13, 8);
+            this.buildButton.Location = new System.Drawing.Point(167, 6);
             this.buildButton.Name = "buildButton";
             this.buildButton.Size = new System.Drawing.Size(52, 52);
             this.buildButton.TabIndex = 106;
@@ -1226,7 +1226,7 @@
             this.resetButton.ErrorImage = global::ISA_GUI.Properties.Resources.icons8_restart_48;
             this.resetButton.Image = global::ISA_GUI.Properties.Resources.icons8_restart_48;
             this.resetButton.InitialImage = global::ISA_GUI.Properties.Resources.icons8_restart_48;
-            this.resetButton.Location = new System.Drawing.Point(187, 8);
+            this.resetButton.Location = new System.Drawing.Point(341, 6);
             this.resetButton.Name = "resetButton";
             this.resetButton.Size = new System.Drawing.Size(52, 52);
             this.resetButton.TabIndex = 68;
@@ -1239,7 +1239,7 @@
             this.stepthroughButton.ErrorImage = global::ISA_GUI.Properties.Resources.icons8_tracking_footstep_isolated_on_a_white_background_48;
             this.stepthroughButton.Image = global::ISA_GUI.Properties.Resources.icons8_tracking_footstep_isolated_on_a_white_background_48;
             this.stepthroughButton.InitialImage = global::ISA_GUI.Properties.Resources.icons8_tracking_footstep_isolated_on_a_white_background_48;
-            this.stepthroughButton.Location = new System.Drawing.Point(129, 8);
+            this.stepthroughButton.Location = new System.Drawing.Point(283, 6);
             this.stepthroughButton.Name = "stepthroughButton";
             this.stepthroughButton.Size = new System.Drawing.Size(52, 52);
             this.stepthroughButton.TabIndex = 64;
@@ -1252,7 +1252,7 @@
             this.RunButton.ErrorImage = global::ISA_GUI.Properties.Resources.Play2;
             this.RunButton.Image = global::ISA_GUI.Properties.Resources.Play2;
             this.RunButton.InitialImage = global::ISA_GUI.Properties.Resources.Play2;
-            this.RunButton.Location = new System.Drawing.Point(71, 8);
+            this.RunButton.Location = new System.Drawing.Point(225, 6);
             this.RunButton.Name = "RunButton";
             this.RunButton.Size = new System.Drawing.Size(52, 52);
             this.RunButton.TabIndex = 63;
@@ -2030,19 +2030,19 @@
             // 
             // uploadButton
             // 
-            this.uploadButton.Location = new System.Drawing.Point(254, 4);
+            this.uploadButton.Location = new System.Drawing.Point(9, 16);
             this.uploadButton.Name = "uploadButton";
-            this.uploadButton.Size = new System.Drawing.Size(97, 31);
+            this.uploadButton.Size = new System.Drawing.Size(63, 23);
             this.uploadButton.TabIndex = 148;
-            this.uploadButton.Text = "Upload";
+            this.uploadButton.Text = "Input File";
             this.uploadButton.UseVisualStyleBackColor = true;
             this.uploadButton.Click += new System.EventHandler(this.button1_Click);
             // 
             // SaveFile
             // 
-            this.SaveFile.Location = new System.Drawing.Point(254, 42);
+            this.SaveFile.Location = new System.Drawing.Point(80, 17);
             this.SaveFile.Name = "SaveFile";
-            this.SaveFile.Size = new System.Drawing.Size(97, 28);
+            this.SaveFile.Size = new System.Drawing.Size(63, 22);
             this.SaveFile.TabIndex = 149;
             this.SaveFile.Text = "Save";
             this.SaveFile.UseVisualStyleBackColor = true;

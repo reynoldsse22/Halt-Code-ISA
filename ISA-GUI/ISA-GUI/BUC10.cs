@@ -865,7 +865,7 @@ namespace ISA_GUI
                 intDiv += cpu.DP.intDivRS.instruction.fullAssemblySyntax + "\n";
             intDivText.Text = intDiv;
 
-            flAdd += "      flAddFU      \n";
+            flAdd += "      FlAddFU      \n";
             flAdd += "-------------------\n";
             if (cpu.DP.flAddFu.instruction != null)
             {
@@ -878,7 +878,7 @@ namespace ISA_GUI
                 flAdd += cpu.DP.floatAddRS.instruction.fullAssemblySyntax + "\n";
             flAddText.Text = flAdd;
 
-            flSub += "      flSubFU      \n";
+            flSub += "      FlSubFU      \n";
             flSub += "-------------------\n";
             if (cpu.DP.flSubFu.instruction != null)
             {
@@ -891,7 +891,7 @@ namespace ISA_GUI
                 flSub += cpu.DP.floatSubRS.instruction.fullAssemblySyntax + "\n";
             flSubText.Text = flSub;
 
-            flMult += "      flMultFU     \n";
+            flMult += "      FlMultFU     \n";
             flMult += "-------------------\n";
             if (cpu.DP.flMultFu.instruction != null)
             {
@@ -904,7 +904,7 @@ namespace ISA_GUI
                 flMult += cpu.DP.floatMultRS.instruction.fullAssemblySyntax + "\n";
             flMultText.Text = flMult;
 
-            flDiv += "      flDivFU      \n";
+            flDiv += "      FlDivFU      \n";
             flDiv += "-------------------\n";
             if (cpu.DP.flDivFu.instruction != null)
             {
@@ -917,7 +917,7 @@ namespace ISA_GUI
                 flDiv += cpu.DP.floatDivRS.instruction.fullAssemblySyntax + "\n";
             flDivText.Text = flDiv;
 
-            bitwise += "        bitFU     \n";
+            bitwise += "       BitFU      \n";
             bitwise += "-------------------\n";
             if (cpu.DP.bitFu.instruction != null)
             {
@@ -930,7 +930,7 @@ namespace ISA_GUI
                 bitwise += cpu.DP.bitwiseOPRS.instruction.fullAssemblySyntax + "\n";
             bitwiseText.Text = bitwise;
 
-            branch += "      branchFU     \n";
+            branch += "      BranchFU     \n";
             branch += "-------------------\n";
             if (cpu.DP.branchFu.instruction != null)
             {

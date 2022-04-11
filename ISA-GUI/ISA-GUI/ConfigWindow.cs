@@ -42,15 +42,31 @@ namespace ISA_GUI
         {
             InitializeComponent();
             configurations = config;
-            fetchConfigValue.Value = configurations.fetch;
-            memAccessValue.Value = configurations.memAccess;
-            regAccessValue.Value = configurations.regAccess;
-            loadStoreValue.Value = configurations.load_store;
-            intALUValue.Value = configurations.intALU;
-            flAddSubValue.Value = configurations.flAddSub;
-            flMultValue.Value = configurations.flMult;
-            flDivValue.Value = configurations.flDiv;
-            calcAddressValue.Value = configurations.calcAddress;
+            dynamicIntAddConfigValue.Value = configurations.intAdd;
+            dynamicIntSubConfigValue.Value = configurations.intSub;
+            dynamicIntMultConfigValue.Value = configurations.intMult;
+            dynamicIntDivConfigValue.Value = configurations.intDiv;
+            dynamicFlAddConfigValue.Value = configurations.flAdd;
+            dynamicFlSubConfigValue.Value = configurations.flSub;
+            dynamicFlMultConfigValue.Value = configurations.dynamicFlMult;
+            dynamicFlDivConfigValue.Value = configurations.dynamicFlDiv;
+            dynamicEffAddressConfigValue.Value = configurations.effAddress;
+            dynamicBitwiseConfigValue.Value = configurations.bitwise;
+            dynamicLoadConfigValue.Value = configurations.load;
+            dynamicReorderBufferSizeValue.Value = configurations.reorderbuffersize;
+            dynamicStoreConfigValue.Value = configurations.store;
+            dynamicShiftConfigValue.Value = configurations.shift;
+
+            staticALUValue.Value = configurations.intALU;
+            staticCalcAddressValue.Value = configurations.calcAddress;
+            staticFetchValue.Value = configurations.fetch;
+            staticMemAccessValue.Value = configurations.memAccess;
+            staticRegAccessValue.Value = configurations.regAccess;
+            staticFlAdd_SubValue.Value = configurations.flAddSub;
+            staticFlMultValue.Value = configurations.flMult;
+            staticFlDivValue.Value = configurations.flDiv;
+            staticLoad_StoreValue.Value = configurations.load_store;
+
 
             if(configurations.dynamicPipelineSet)
             {
@@ -65,9 +81,18 @@ namespace ISA_GUI
 
 
             if (configurations.predictionSet)
+            {
                 predictionBox.SelectedIndex = 1;
+                bitGlobalPredictorValue.Enabled = true;
+                bitPredictorLabel.Enabled = true;
+
+            }
             else
+            {
                 predictionBox.SelectedIndex = 0;
+                bitGlobalPredictorValue.Enabled = false;
+                bitPredictorLabel.Enabled = false;
+            }
 
         }
 
@@ -98,15 +123,33 @@ namespace ISA_GUI
 		 */
         private void applyChangesButton_Click(object sender, EventArgs e)
         {
-            configurations.fetch = (int)fetchConfigValue.Value;
-            configurations.memAccess = (int)memAccessValue.Value;
-            configurations.regAccess = (int)regAccessValue.Value;
-            configurations.load_store = (int)loadStoreValue.Value;
-            configurations.intALU = (int)intALUValue.Value;
-            configurations.flAddSub = (int)flAddSubValue.Value;
-            configurations.flMult = (int)flMultValue.Value;
-            configurations.flDiv = (int)flDivValue.Value;
-            configurations.calcAddress = (int)calcAddressValue.Value;
+            configurations.intAdd = (int)dynamicIntAddConfigValue.Value;
+            configurations.intSub = (int)dynamicIntSubConfigValue.Value;
+            configurations.intMult = (int)dynamicIntMultConfigValue.Value;
+            configurations.intDiv = (int)dynamicIntDivConfigValue.Value;
+            configurations.flAdd = (int)dynamicFlAddConfigValue.Value;
+            configurations.flSub = (int)dynamicFlSubConfigValue.Value;
+            configurations.dynamicFlMult = (int)dynamicFlMultConfigValue.Value;
+            configurations.dynamicFlDiv = (int)dynamicFlDivConfigValue.Value;
+            configurations.effAddress = (int)dynamicEffAddressConfigValue.Value;
+            configurations.bitwise = (int)dynamicBitwiseConfigValue.Value;
+            configurations.load = (int)dynamicLoadConfigValue.Value;
+            configurations.reorderbuffersize = (int)dynamicReorderBufferSizeValue.Value;
+            configurations.store = (int)dynamicStoreConfigValue.Value;
+            configurations.shift = (int)dynamicShiftConfigValue.Value;
+
+            configurations.intALU = (int)staticALUValue.Value;
+            configurations.calcAddress = (int)staticCalcAddressValue.Value;
+            configurations.fetch = (int)staticFetchValue.Value;
+            configurations.memAccess = (int)staticMemAccessValue.Value;
+            configurations.regAccess = (int)staticRegAccessValue.Value;
+            configurations.flAddSub = (int)staticFlAdd_SubValue.Value;
+            configurations.flMult = (int)staticFlMultValue.Value;
+            configurations.flDiv = (int)staticFlDivValue.Value;
+            configurations.load_store = (int)staticLoad_StoreValue.Value;
+
+
+
 
             if (staticCheckbox.Checked)
                 configurations.dynamicPipelineSet = false;
@@ -148,30 +191,42 @@ namespace ISA_GUI
 		 */
         private void resetButton_Click(object sender, EventArgs e)
         {
-            fetchConfigValue.Value = 1;
-            memAccessValue.Value = 3;
-            regAccessValue.Value = 1;
-            loadStoreValue.Value = 1;
-            intALUValue.Value = 1;
-            flAddSubValue.Value = 2;
-            flMultValue.Value = 5;
-            flDivValue.Value = 10;
-            calcAddressValue.Value = 1;
+            staticFetchValue.Value = 1;
+            staticMemAccessValue.Value = 3;
+            staticRegAccessValue.Value = 1;
+            staticLoad_StoreValue.Value = 1;
+            staticALUValue.Value = 1;
+            staticFlAdd_SubValue.Value = 2;
+            staticFlMultValue.Value = 5;
+            staticFlDivValue.Value = 10;
+            staticCalcAddressValue.Value = 1;
             predictionBox.SelectedIndex = 0;
+
+            dynamicIntAddConfigValue.Value = 1;
+            dynamicIntSubConfigValue.Value = 1;
+            dynamicIntMultConfigValue.Value = 1;
+            dynamicIntDivConfigValue.Value = 2;
+            dynamicFlAddConfigValue.Value = 2;
+            dynamicFlSubConfigValue.Value = 2;
+            dynamicFlMultConfigValue.Value = 5;
+            dynamicFlDivConfigValue.Value = 10;
+            dynamicBitwiseConfigValue.Value = 1;
+            dynamicReorderBufferSizeValue.Value = 5;
+            dynamicShiftConfigValue.Value = 1;
+            
 
             configurations.predictionSet = false;
             configurations.forwardingSet = false;
-            configurations.fetch = (int)fetchConfigValue.Value;
-            configurations.memAccess = (int)memAccessValue.Value;
-            configurations.regAccess = (int)regAccessValue.Value;
-            configurations.load_store = (int)loadStoreValue.Value;
-            configurations.intALU = (int)intALUValue.Value;
-            configurations.flAddSub = (int)flAddSubValue.Value;
-            configurations.flMult = (int)flMultValue.Value;
-            configurations.flDiv = (int)flDivValue.Value;
-            configurations.calcAddress = (int)calcAddressValue.Value;
-            staticCheckbox.Checked = true;
-            dynamicCheckbox.Checked = false;
+            configurations.fetch = (int)staticFetchValue.Value;
+            configurations.memAccess = (int)staticMemAccessValue.Value;
+            configurations.regAccess = (int)staticRegAccessValue.Value;
+            configurations.load_store = (int)staticLoad_StoreValue.Value;
+            configurations.intALU = (int)staticALUValue.Value;
+            configurations.flAddSub = (int)staticFlAdd_SubValue.Value;
+            configurations.flMult = (int)staticFlMultValue.Value;
+            configurations.flDiv = (int)staticFlDivValue.Value;
+            configurations.calcAddress = (int)staticCalcAddressValue.Value;
+
         }
 
         private void staticCheckbox_CheckedChanged(object sender, EventArgs e)
@@ -187,9 +242,51 @@ namespace ISA_GUI
         private void dynamicCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             if (dynamicCheckbox.Checked)
+            {
                 staticCheckbox.Checked = false;
+                foreach(Control control in staticConfigPanel.Controls)
+                {
+                    control.Enabled = false;
+                }
+                foreach (Control control in dynamicConfigPanel.Controls)
+                {
+                    control.Enabled = true;
+                }
+                foreach(Control control in dynamicFUPanel.Controls)
+                {
+                    control.Enabled = true;
+                }
+            }
             else
+            {
                 staticCheckbox.Checked = true;
+                foreach (Control control in staticConfigPanel.Controls)
+                {
+                    control.Enabled = true;
+                }
+                foreach (Control control in dynamicConfigPanel.Controls)
+                {
+                    control.Enabled = false;
+                }
+                foreach (Control control in dynamicFUPanel.Controls)
+                {
+                    control.Enabled = false;
+                }
+            }
+        }
+
+        private void predictionBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(predictionBox.SelectedIndex == 1)
+            {
+                bitGlobalPredictorValue.Enabled = true;
+                bitPredictorLabel.Enabled = true;
+            }
+            else
+            {
+                bitGlobalPredictorValue.Enabled = false;
+                bitPredictorLabel.Enabled = false;
+            }
         }
     }
 }

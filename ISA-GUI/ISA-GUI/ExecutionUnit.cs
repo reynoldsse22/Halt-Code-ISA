@@ -267,7 +267,7 @@ namespace ISA_GUI
                     alu.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref instruction, ref config, out result);
                     break;
                 case 15:
-                    instruction.cycleControl = config.regAccess;
+                    instruction.cycleControl = 1;
                     instruction.destinationReg = r3;
                     if (!instruction.isFloat)
                         result = instruction.iOperand1.ToString();
