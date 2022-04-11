@@ -753,7 +753,15 @@ namespace ISA_GUI
 
             foreach(KeyValuePair<string, string> instruction in cpu.DP.commonDataBus.CDB)
             {
-                commonDataBus += string.Format("{0, 16} {1, 4}\n", instruction.Key.PadRight(16, ' '), instruction.Value.ToString().PadLeft(4, ' '));
+                try
+                {
+                    commonDataBus += string.Format("{0, 16} {1, 4}\n", instruction.Key.PadRight(16, ' '), instruction.Value.ToString().PadLeft(4, ' '));
+
+                }
+                catch(Exception)
+                {
+
+                }
             }
             commonDataBusText.Text = commonDataBus;
 

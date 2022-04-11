@@ -1916,7 +1916,11 @@ namespace ISA_GUI
             floatMultRS.instruction = null;
             floatDivRS.instruction = null;
             bitwiseOPRS.instruction = null;
-            load_storeBuffer.instruction = null;
+            foreach (ReservationStation loadstore in loadStoreBuffer)
+            {
+                loadstore.instruction = null;
+                loadstore.Busy = false;
+            }
             branchOPS.instruction = null;
             shiftOPS.instruction = null;
 
@@ -1929,7 +1933,6 @@ namespace ISA_GUI
             floatMultRS.Busy = false;
             floatDivRS.Busy = false;
             bitwiseOPRS.Busy = false;
-            load_storeBuffer.Busy = false;
             branchOPS.Busy = false;
             shiftOPS.Busy = false;
             reorderBuffer.removeAllInstructionsAfterHazard(id);
@@ -2048,7 +2051,7 @@ namespace ISA_GUI
                     }
                     else
                     {
-                        if (!registers.intQi[0].Equals("0"))
+                        if (!registers.intQi[0].Equals("0") && instruction.ID > registers.intQiIndex[0])
                         {
                             instruction.iOp1 = registers.intQi[0];
                             instruction.dependantOpID1 = registers.intQiIndex[0];
