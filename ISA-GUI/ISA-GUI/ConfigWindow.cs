@@ -56,6 +56,7 @@ namespace ISA_GUI
             dynamicReorderBufferSizeValue.Value = configurations.reorderbuffersize;
             dynamicStoreConfigValue.Value = configurations.store;
             dynamicShiftConfigValue.Value = configurations.shift;
+            bitGlobalPredictorValue.Value = configurations.whatBitPredictor;
 
             staticALUValue.Value = configurations.intALU;
             staticCalcAddressValue.Value = configurations.calcAddress;
@@ -157,9 +158,14 @@ namespace ISA_GUI
                 configurations.dynamicPipelineSet = true;
 
             if (predictionBox.SelectedIndex == 0)
+            {
                 configurations.predictionSet = false;
+            }
             else
+            {
                 configurations.predictionSet = true;
+                configurations.whatBitPredictor = (int)bitGlobalPredictorValue.Value;
+            }
 
 
 
@@ -213,6 +219,7 @@ namespace ISA_GUI
             dynamicBitwiseConfigValue.Value = 1;
             dynamicReorderBufferSizeValue.Value = 5;
             dynamicShiftConfigValue.Value = 1;
+            bitGlobalPredictorValue.Value = 1;
             
 
             configurations.predictionSet = false;

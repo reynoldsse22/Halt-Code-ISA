@@ -49,8 +49,8 @@ namespace ISA_GUI
 
         public int totalHazard, structuralHazard, dataHazard, controlHazard, RAW, WAR, WAW;
         public int reorderBufferDelay, reservationStationDelay, trueDependenceDelay, totalDelays, instructionID;
-        public int totalCyclesStalled, numOfInstructionsInExecution;
-        public bool lastBranchDecision, doneExecuting, executionInProgress, haltFound, commitedThisCycle, branchDecoded, instructionFetched;
+        public int totalCyclesStalled, numOfInstructionsInExecution, twoBitPredictionCounter;
+        public bool lastBranchDecision, executiveBranchDecision, doneExecuting, executionInProgress, haltFound, commitedThisCycle, branchDecoded, instructionFetched;
 
 
 
@@ -107,8 +107,10 @@ namespace ISA_GUI
             WAW = 0;
             instructionID = 1;
             numOfInstructionsInExecution = 0;
+            twoBitPredictionCounter = 0;
             lastBranchDecision = false;
             doneExecuting = false;
+            executiveBranchDecision = false;
             executionInProgress = false;
             haltFound = false;
             commitedThisCycle = false;
@@ -195,7 +197,7 @@ namespace ISA_GUI
                             printer.buildDecodedString(ref decodedString, inst);      //Build the decoded instruction string
                             printer.buildDynamicPipelineString(ref pipelineString, inst);
                             justCommitedInstruction = inst;
-                            bool hazardDetected = detectControlHazard(instructionIndex, ref registers, inst, ref IM);
+                            bool hazardDetected = detectControlHazard(instructionIndex, ref registers, inst, ref IM, ref config);
                             if (!hazardDetected)
                             {
                                 try
@@ -398,7 +400,7 @@ namespace ISA_GUI
             CU.decode(ref IM, ref instruction, ref config);
             if(instruction.opcode >= 2 && instruction.opcode <= 8)
             {
-                if((config.predictionSet && lastBranchDecision) || instruction.opcode == 2)
+                if((config.predictionSet && executiveBranchDecision) || instruction.opcode == 2)
                 {
                     IM.ProgramCounter = instruction.address;
                     instructionID = instruction.ID + 1;
@@ -1771,7 +1773,7 @@ namespace ISA_GUI
       * <hr>
       *   @param  Instruction[] stages
       */
-        public bool detectControlHazard(int id, ref RegisterFile registers, Instruction instruction, ref InstructionMemory IM)
+        public bool detectControlHazard(int id, ref RegisterFile registers, Instruction instruction, ref InstructionMemory IM, ref ConfigCycle config)
         {
             if (id == -1)
                 return false;
@@ -1779,11 +1781,31 @@ namespace ISA_GUI
             if (instruction.opcode < 2 || instruction.opcode > 8)
                 return false;
 
-            //int programCount = IM.ProgramCounter;
-            //IM.ProgramCounter = instruction.address;
-            //Instruction testInstruction = fetch.getNextInstruction(ref IM);
-            //CU.decode(ref IM, ref testInstruction);
-            //IM.ProgramCounter = programCount;
+
+            if (config.whatBitPredictor == 2)
+            {
+                if (twoBitPredictionCounter == 0)
+                {
+                    executiveBranchDecision = false;
+                }
+                else if (twoBitPredictionCounter == 1)
+                {
+                    executiveBranchDecision = false;
+                }
+                else if (twoBitPredictionCounter == 2)
+                {
+                    executiveBranchDecision = true;
+                }
+                else if (twoBitPredictionCounter == 3)
+                {
+                    executiveBranchDecision = true;
+                }
+            }
+            else if(config.whatBitPredictor == 1)
+            {
+                executiveBranchDecision = lastBranchDecision;
+            }
+
             Instruction testInstruction = new Instruction();
 
             try
@@ -1792,6 +1814,8 @@ namespace ISA_GUI
             }
             catch (Exception)
             {
+                if(twoBitPredictionCounter > 0)
+                    twoBitPredictionCounter -= 1;
                 IM.ProgramCounter = (instruction.programCounterValue + 3);
                 goto flush;
             }
@@ -1800,18 +1824,27 @@ namespace ISA_GUI
             {
                 if (instruction.address != testInstruction.programCounterValue)
                 {
+                    if (twoBitPredictionCounter < 3)
+                        twoBitPredictionCounter += 1;
                     IM.ProgramCounter = instruction.address;
                     goto flush;
                 }
+                if (twoBitPredictionCounter > 0)
+                    twoBitPredictionCounter -= 1;
                 return false;
             }
             else
             {
                 if ((instruction.programCounterValue + 3) != testInstruction.programCounterValue)
                 {
+                    if (twoBitPredictionCounter > 0)
+                        twoBitPredictionCounter -= 1;
                     IM.ProgramCounter = (instruction.programCounterValue + 3);
                     goto flush;
                 }
+                if (twoBitPredictionCounter < 3)
+                    twoBitPredictionCounter += 1;
+
                 return false;
             }
 
@@ -2444,6 +2477,8 @@ namespace ISA_GUI
             haltFound = false;
             commitedThisCycle = false;
             reorderBuffer.reorderIndex = 1;
+            executiveBranchDecision = false;
+            twoBitPredictionCounter = 0;
         }
     }
 }

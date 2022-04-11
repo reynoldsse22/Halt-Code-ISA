@@ -55,6 +55,8 @@
             this.staticCheckbox = new System.Windows.Forms.CheckBox();
             this.dynamicCheckbox = new System.Windows.Forms.CheckBox();
             this.dynamicConfigPanel = new System.Windows.Forms.Panel();
+            this.label13 = new System.Windows.Forms.Label();
+            this.dynamicShiftConfigValue = new System.Windows.Forms.NumericUpDown();
             this.label25 = new System.Windows.Forms.Label();
             this.dynamicBitwiseConfigValue = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
@@ -89,8 +91,6 @@
             this.dynamicReorderBufferSizeValue = new System.Windows.Forms.NumericUpDown();
             this.label30 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.dynamicShiftConfigValue = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicIntAddConfigValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicIntSubConfigValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicIntMultConfigValue)).BeginInit();
@@ -101,6 +101,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dynamicFlDivConfigValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicEffAddressConfigValue)).BeginInit();
             this.dynamicConfigPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dynamicShiftConfigValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicBitwiseConfigValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicStoreConfigValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicLoadConfigValue)).BeginInit();
@@ -118,7 +119,6 @@
             this.branchPredictionPanel.SuspendLayout();
             this.dynamicFUPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicReorderBufferSizeValue)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dynamicShiftConfigValue)).BeginInit();
             this.SuspendLayout();
             // 
             // dynamicIntAddConfigValue
@@ -552,6 +552,41 @@
             this.dynamicConfigPanel.Name = "dynamicConfigPanel";
             this.dynamicConfigPanel.Size = new System.Drawing.Size(232, 416);
             this.dynamicConfigPanel.TabIndex = 34;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label13.Location = new System.Drawing.Point(53, 379);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(32, 16);
+            this.label13.TabIndex = 35;
+            this.label13.Text = "Shift";
+            // 
+            // dynamicShiftConfigValue
+            // 
+            this.dynamicShiftConfigValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dynamicShiftConfigValue.Location = new System.Drawing.Point(7, 377);
+            this.dynamicShiftConfigValue.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.dynamicShiftConfigValue.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.dynamicShiftConfigValue.Name = "dynamicShiftConfigValue";
+            this.dynamicShiftConfigValue.Size = new System.Drawing.Size(40, 22);
+            this.dynamicShiftConfigValue.TabIndex = 34;
+            this.dynamicShiftConfigValue.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // label25
             // 
@@ -1036,7 +1071,7 @@
             this.bitGlobalPredictorValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bitGlobalPredictorValue.Location = new System.Drawing.Point(5, 67);
             this.bitGlobalPredictorValue.Maximum = new decimal(new int[] {
-            15,
+            2,
             0,
             0,
             0});
@@ -1122,41 +1157,6 @@
             this.label31.Text = "Reorder Buffer Size";
             this.label31.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label13.Location = new System.Drawing.Point(53, 379);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(32, 16);
-            this.label13.TabIndex = 35;
-            this.label13.Text = "Shift";
-            // 
-            // dynamicShiftConfigValue
-            // 
-            this.dynamicShiftConfigValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dynamicShiftConfigValue.Location = new System.Drawing.Point(7, 377);
-            this.dynamicShiftConfigValue.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.dynamicShiftConfigValue.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.dynamicShiftConfigValue.Name = "dynamicShiftConfigValue";
-            this.dynamicShiftConfigValue.Size = new System.Drawing.Size(40, 22);
-            this.dynamicShiftConfigValue.TabIndex = 34;
-            this.dynamicShiftConfigValue.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
             // Configurations
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1184,6 +1184,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dynamicEffAddressConfigValue)).EndInit();
             this.dynamicConfigPanel.ResumeLayout(false);
             this.dynamicConfigPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dynamicShiftConfigValue)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicBitwiseConfigValue)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicStoreConfigValue)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicLoadConfigValue)).EndInit();
@@ -1204,7 +1205,6 @@
             this.dynamicFUPanel.ResumeLayout(false);
             this.dynamicFUPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicReorderBufferSizeValue)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dynamicShiftConfigValue)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
