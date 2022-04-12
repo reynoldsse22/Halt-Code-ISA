@@ -1103,7 +1103,7 @@ namespace ISA_GUI
                             if (CDB.CDB.ContainsKey(flAddFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    flAddFu.instruction.fOperand1 = int.Parse(CDB.CDB[flAddFu.instruction.fOp1]);
+                                    flAddFu.instruction.fOperand1 = float.Parse(CDB.CDB[flAddFu.instruction.fOp1]);
                             }
                             else
                             {
@@ -1173,7 +1173,7 @@ namespace ISA_GUI
                             if (CDB.CDB.ContainsKey(flSubFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    flSubFu.instruction.fOperand1 = int.Parse(CDB.CDB[flSubFu.instruction.fOp1]);
+                                    flSubFu.instruction.fOperand1 = float.Parse(CDB.CDB[flSubFu.instruction.fOp1]);
                             }
                             else
                             {
@@ -1243,7 +1243,7 @@ namespace ISA_GUI
                             if (CDB.CDB.ContainsKey(flMultFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    flMultFu.instruction.fOperand1 = int.Parse(CDB.CDB[flMultFu.instruction.fOp1]);
+                                    flMultFu.instruction.fOperand1 = float.Parse(CDB.CDB[flMultFu.instruction.fOp1]);
                             }
                             else
                             {
@@ -1313,7 +1313,7 @@ namespace ISA_GUI
                             if (CDB.CDB.ContainsKey(flDivFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    flDivFu.instruction.fOperand1 = int.Parse(CDB.CDB[flDivFu.instruction.fOp1]);
+                                    flDivFu.instruction.fOperand1 = float.Parse(CDB.CDB[flDivFu.instruction.fOp1]);
                             }
                             else
                             {
