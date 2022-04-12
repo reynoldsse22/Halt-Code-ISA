@@ -1867,7 +1867,7 @@ namespace ISA_GUI
                     {
                         foreach (ReservationStation flSub in floatSubRSs)
                         {
-                            if (registers.floatQi[flSub.instruction.r3] == "0")
+                            if (!flSub.Busy && registers.floatQi[instruction.r3] == "0")
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
                                 flSub.Busy = true;
@@ -1882,7 +1882,7 @@ namespace ISA_GUI
                     {
                         foreach (ReservationStation intSub in intSubRSs)
                         {
-                            if (registers.intQi[intSub.instruction.r3] == "0")
+                            if (!intSub.Busy && registers.intQi[instruction.r3] == "0")
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
                                 intSub.Busy = true;
@@ -1900,7 +1900,7 @@ namespace ISA_GUI
                 case 19:
                     foreach (ReservationStation shift in shiftRSs)
                     {
-                        if (registers.intQi[shift.instruction.r3] == "0")
+                        if (!shift.Busy && registers.intQi[instruction.r3] == "0")
                         {
                             checkOperandDependencies(ref instruction, ref registers);
                             shift.Busy = true;
@@ -1918,7 +1918,7 @@ namespace ISA_GUI
                     {
                         foreach(ReservationStation flAdd in floatAddRSs)
                         {
-                            if (registers.intQi[flAdd.instruction.r3] == "0")
+                            if (!flAdd.Busy && registers.intQi[instruction.r3] == "0")
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
                                 flAdd.Busy = true;
@@ -1935,7 +1935,7 @@ namespace ISA_GUI
                     {
                         foreach(ReservationStation intAdd in intAddRSs)
                         {
-                            if (registers.intQi[intAdd.instruction.r3] == "0")
+                            if (!intAdd.Busy && registers.intQi[instruction.r3] == "0")
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
                                 intAdd.Busy = true;
@@ -1955,7 +1955,7 @@ namespace ISA_GUI
                     {
                         foreach(ReservationStation flSub in floatSubRSs)
                         {
-                            if (registers.intQi[flSub.instruction.r3] == "0")
+                            if (!flSub.Busy && registers.intQi[instruction.r3] == "0")
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
                                 flSub.Busy = true;
@@ -1972,7 +1972,7 @@ namespace ISA_GUI
                     {
                         foreach(ReservationStation intSub in intSubRSs)
                         {
-                            if (registers.intQi[intSub.instruction.r3] == "0")
+                            if (!intSub.Busy && registers.intQi[instruction.r3] == "0")
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
                                 intSub.Busy = true;
@@ -1991,7 +1991,7 @@ namespace ISA_GUI
                     {
                         foreach(ReservationStation flMult in floatMultRSs)
                         {
-                            if (registers.intQi[flMult.instruction.r3] == "0")
+                            if (!flMult.Busy && registers.intQi[instruction.r3] == "0")
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
                                 flMult.Busy = true;
@@ -2008,7 +2008,7 @@ namespace ISA_GUI
                     {
                         foreach(ReservationStation intMult in intMultRSs)
                         {
-                            if (registers.intQi[intMult.instruction.r3] == "0")
+                            if (!intMult.Busy && registers.intQi[instruction.r3] == "0")
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
                                 intMult.Busy = true;
@@ -2027,7 +2027,7 @@ namespace ISA_GUI
                     {
                         foreach(ReservationStation flDiv in floatDivRSs)
                         {
-                            if (registers.intQi[flDiv.instruction.r3] == "0")
+                            if (!flDiv.Busy && registers.intQi[instruction.r3] == "0")
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
                                 flDiv.Busy = true;
@@ -2044,7 +2044,7 @@ namespace ISA_GUI
                     {
                         foreach(ReservationStation intDiv in intDivRSs)
                         {
-                            if (registers.intQi[intDiv.instruction.r3] == "0")
+                            if (!intDiv.Busy && registers.intQi[instruction.r3] == "0")
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
                                 intDiv.Busy = true;
@@ -2064,7 +2064,7 @@ namespace ISA_GUI
                 case 27:
                     foreach (ReservationStation bitwise in bitwiseRSs)
                     {
-                        if (registers.intQi[bitwise.instruction.r3] == "0")
+                        if (!bitwise.Busy && registers.intQi[instruction.r3] == "0")
                         {
                             checkOperandDependencies(ref instruction, ref registers);
                             bitwise.Busy = true;
