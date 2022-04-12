@@ -406,8 +406,8 @@ namespace ISA_GUI
                         instruction.cycleControl = config.shift;
                         instruction.destinationReg = r3;
                         instruction.intResult = (instruction.iOperand1 << instruction.iOperand2);
-                        result = instruction.intResult.ToString();
-                        instruction.result = result;
+                        instruction.result = instruction.intResult.ToString();
+                        result = instruction.result;
                         if (instruction.intResult == 0 && ASPR == 1)
                             zero = true;
                     }
@@ -421,8 +421,8 @@ namespace ISA_GUI
                         instruction.cycleControl = config.shift;
                         instruction.destinationReg = r3;
                         instruction.intResult = (instruction.iOperand1 >> instruction.iOperand2);
-                        result = instruction.intResult.ToString();
-                        instruction.result = result;
+                        instruction.result = instruction.intResult.ToString();
+                        result = instruction.result;
                         if (instruction.intResult == 0 && ASPR == 1)
                             zero = true;
                     }
@@ -440,8 +440,8 @@ namespace ISA_GUI
                         instruction.intResult = instruction.iOperand1 << instruction.iOperand2;
                         instruction.intResult = instruction.intResult & 16777215;
                         instruction.intResult = instruction.intResult | rotateBit;
-                        result = instruction.intResult.ToString();
-                        instruction.result = result;
+                        instruction.result = instruction.intResult.ToString();
+                        result = instruction.result;
                         if (instruction.intResult == 0 && ASPR == 1)
                             zero = true;
                     }
@@ -459,8 +459,8 @@ namespace ISA_GUI
                         instruction.intResult = instruction.iOperand1 >> instruction.iOperand2;
                         instruction.intResult = instruction.intResult & 16777215;
                         instruction.intResult = instruction.intResult | rotateBit;
-                        result = instruction.intResult.ToString();
-                        instruction.result = result;
+                        instruction.result = instruction.intResult.ToString();
+                        result = instruction.result;
                         if (instruction.intResult == 0 && ASPR == 1)
                             zero = true;
                     }
@@ -474,8 +474,8 @@ namespace ISA_GUI
                     {
                         instruction.cycleControl = config.intAdd;
                         instruction.intResult = (instruction.iOperand1 + instruction.iOperand2);
-                        result = instruction.intResult.ToString();
-                        instruction.result = result;
+                        instruction.result = instruction.intResult.ToString();
+                        result = instruction.result;
                         if (instruction.intResult < instruction.iOperand1 && ASPR == 1)
                             carry = true;
                         if (instruction.intResult == 0 && ASPR == 1)
@@ -485,8 +485,8 @@ namespace ISA_GUI
                     {
                         instruction.cycleControl = config.flAdd;
                         instruction.floatResult = (instruction.fOperand1 + instruction.iOperand2);
-                        result = instruction.floatResult.ToString();
-                        instruction.result = result;
+                        instruction.result = instruction.floatResult.ToString();
+                        result = instruction.result;
                         if (instruction.floatResult < instruction.fOperand1 && ASPR == 1)
                             carry = true;
                         if (instruction.floatResult == 0 && ASPR == 1)
@@ -500,8 +500,8 @@ namespace ISA_GUI
                     {
                         instruction.cycleControl = config.intSub;
                         instruction.intResult = (instruction.iOperand1 - instruction.iOperand2);
-                        result = instruction.intResult.ToString();
-                        instruction.result = result;
+                        instruction.result = instruction.intResult.ToString();
+                        result = instruction.result;
                         if (instruction.intResult > instruction.iOperand1 && ASPR == 1)
                             carry = true;
                         if (instruction.intResult == 0 && ASPR == 1)
@@ -511,8 +511,8 @@ namespace ISA_GUI
                     {
                         instruction.cycleControl = config.flSub;
                         instruction.floatResult = (instruction.fOperand1 - instruction.fOperand2);
-                        result = instruction.floatResult.ToString();
-                        instruction.result = result;
+                        instruction.result = instruction.floatResult.ToString();
+                        result = instruction.result;
                         if (instruction.floatResult > instruction.fOperand1 && ASPR == 1)
                             carry = true;
                         if (instruction.floatResult == 0 && ASPR == 1)
@@ -526,8 +526,8 @@ namespace ISA_GUI
                     {
                         instruction.cycleControl = config.intMult;
                         instruction.intResult = instruction.iOperand1 * instruction.iOperand2;
-                        result = instruction.intResult.ToString();
-                        instruction.result = result;
+                        instruction.result = instruction.intResult.ToString();
+                        result = instruction.result;
                         if (instruction.intResult < instruction.iOperand1 && ASPR == 1)
                             carry = true;
                         if (instruction.intResult == 0 && ASPR == 1)
@@ -537,8 +537,8 @@ namespace ISA_GUI
                     {
                         instruction.cycleControl = config.flMult;
                         instruction.floatResult = instruction.fOperand1 * instruction.fOperand2;
-                        result = instruction.floatResult.ToString();
-                        instruction.result = result;
+                        instruction.result = instruction.floatResult.ToString();
+                        result = instruction.result;
                         if (instruction.floatResult > instruction.fOperand1 && ASPR == 1)
                             carry = true;
                         if (instruction.floatResult == 0 && ASPR == 1)
@@ -552,8 +552,8 @@ namespace ISA_GUI
                     {
                         instruction.cycleControl = config.intDiv;
                         instruction.intResult = (int)instruction.iOperand1 / (int)instruction.iOperand2;
-                        result = instruction.intResult.ToString();
-                        instruction.result = result;
+                        instruction.result = instruction.intResult.ToString();
+                        result = instruction.result;
                         if (instruction.intResult > instruction.iOperand1 && ASPR == 1)
                             carry = true;
                         if (instruction.intResult == 0 && ASPR == 1)
@@ -563,8 +563,8 @@ namespace ISA_GUI
                     {
                         instruction.cycleControl = config.flDiv;
                         instruction.floatResult = instruction.fOperand1 / instruction.fOperand1;
-                        result = instruction.floatResult.ToString();
-                        instruction.result = result;
+                        instruction.result = instruction.floatResult.ToString();
+                        result = instruction.result;
                         if (instruction.floatResult > instruction.fOperand1 && ASPR == 1)
                             carry = true;
                         if (instruction.floatResult == 0 && ASPR == 1)
@@ -578,8 +578,8 @@ namespace ISA_GUI
                         instruction.cycleControl = config.bitwise;
                         instruction.destinationReg = r3;
                         instruction.intResult = (instruction.iOperand1 & instruction.iOperand2);
-                        result = instruction.intResult.ToString();
-                        instruction.result = result;
+                        instruction.result = instruction.intResult.ToString();
+                        result = instruction.result;
                         if (instruction.intResult == 0 && ASPR == 1)
                             zero = true;
                     }
@@ -593,8 +593,8 @@ namespace ISA_GUI
                         instruction.cycleControl = config.bitwise;
                         instruction.destinationReg = r3;
                         instruction.intResult = (instruction.iOperand1 | instruction.iOperand2);
-                        result = instruction.intResult.ToString();
-                        instruction.result = result;
+                        instruction.result = instruction.intResult.ToString();
+                        result = instruction.result;
                         if (instruction.intResult == 0 && ASPR == 1)
                             zero = true;
                     }
@@ -608,8 +608,8 @@ namespace ISA_GUI
                         instruction.cycleControl = config.bitwise;
                         instruction.destinationReg = r3;
                         instruction.intResult = (instruction.iOperand1 ^ instruction.iOperand2);
-                        result = instruction.intResult.ToString();
-                        instruction.result = result;
+                        instruction.result = instruction.intResult.ToString();
+                        result = instruction.result;
                         if (instruction.intResult == 0 && ASPR == 1)
                             zero = true;
                     }
@@ -623,8 +623,8 @@ namespace ISA_GUI
                         instruction.cycleControl = config.bitwise;
                         instruction.destinationReg = r3;
                         instruction.intResult = (~instruction.iOperand1);
-                        result = instruction.intResult.ToString();
-                        instruction.result = result;
+                        instruction.result = instruction.intResult.ToString();
+                        result = instruction.result;
                         if (instruction.intResult == 0 && ASPR == 1)
                             zero = true;
                     }

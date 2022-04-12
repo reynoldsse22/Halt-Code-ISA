@@ -281,7 +281,8 @@ namespace ISA_GUI
                         case 2:
                             numOfInstructionsInExecution++;
                             Instruction executeInstruction = execute(inst, ref registers, ref dataMemory, ref IM, ref config, ref alu, ref result);
-                            inst.result = result;
+                            if(inst.doneExecuting)
+                                inst.result = result;
                             inst.dependantOpID1 = 0;
                             inst.dependantOpID2 = 0;
                             inst.doneExecuting = executeInstruction.doneExecuting;
