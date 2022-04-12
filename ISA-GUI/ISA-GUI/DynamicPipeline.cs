@@ -44,7 +44,6 @@ namespace ISA_GUI
         public ReservationStation bitwiseOPRS;
         public ReservationStation branchOPS;
         public ReservationStation shiftOPS;
-        public ReservationStation load_storeBuffer;
         public Instruction fetchInstruction;
         public ReservationStation[] loadStoreBuffer;
 
@@ -295,7 +294,7 @@ namespace ISA_GUI
                                 numOfInstructionsInExecution -= 1;
                                 inst.stage2CycleEnd = cycleCount;
                                 inst.stage2CycleStart = executeInstruction.stage2CycleStart;
-                                if (inst.opcode == 0 || inst.opcode == 1)
+                                if (inst.opcode == 0 || inst.opcode == 1 || (inst.opcode >= 2 && inst.opcode <= 8))
                                     inst.stage = 5;
                                 else if (inst.opcode == 9 || inst.opcode == 11 || inst.opcode == 12)
                                 {
@@ -1465,7 +1464,7 @@ namespace ISA_GUI
                             if (!loadstoreBuff.Busy)
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
-                                load_storeBuffer.Busy = true;
+                                loadstoreBuff.Busy = true;
                                 registers.floatQi[instruction.r3] = "memoryFu";
                                 registers.floatQiIndex[instruction.r3] = instruction.ID;
                                 instruction.functionalUnitID = 10;
