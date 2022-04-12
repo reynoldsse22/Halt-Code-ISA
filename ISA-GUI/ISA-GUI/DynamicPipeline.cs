@@ -2044,7 +2044,7 @@ namespace ISA_GUI
                     {
                         foreach(ReservationStation intDiv in intDivRSs)
                         {
-                            if (registers.intQi[flDiv.instruction.r3] == "0")
+                            if (registers.intQi[intDiv.instruction.r3] == "0")
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
                                 intDiv.Busy = true;
@@ -2064,7 +2064,7 @@ namespace ISA_GUI
                 case 27:
                     foreach (ReservationStation bitwise in bitwiseRSs)
                     {
-                        if (registers.intQi[flDiv.instruction.r3] == "0")
+                        if (registers.intQi[bitwise.instruction.r3] == "0")
                         {
                             checkOperandDependencies(ref instruction, ref registers);
                             bitwise.Busy = true;
