@@ -840,8 +840,8 @@ namespace ISA_GUI
                     if (memoryFu.instruction == null && memoryFu.oneCycleFU )
                     {
                         memoryFu.instruction = loadStoreBuffer[instruction.reservationStationIndex].instruction;
-                        loadStoreBuffer[instruction.reservationStationIndex].instruction = null;
                         loadStoreBuffer[instruction.reservationStationIndex].Busy = false;
+                        loadStoreBuffer[instruction.reservationStationIndex].instruction = null;
                         return;
                     }
                     break;
@@ -1464,14 +1464,17 @@ namespace ISA_GUI
                         {
                             if (!loadstoreBuff.Busy)
                             {
-                                checkOperandDependencies(ref instruction, ref registers);
-                                loadstoreBuff.Busy = true;
-                                registers.floatQi[instruction.r3] = "memoryFu";
-                                registers.floatQiIndex[instruction.r3] = instruction.ID;
-                                instruction.functionalUnitID = 10;
-                                instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
-                                loadstoreBuff.instruction = instruction;
-                                return instruction;
+                                if (registers.floatQi[instruction.r3] == "0")
+                                {
+                                    checkOperandDependencies(ref instruction, ref registers);
+                                    loadstoreBuff.Busy = true;
+                                    registers.floatQi[instruction.r3] = "memoryFu";
+                                    registers.floatQiIndex[instruction.r3] = instruction.ID;
+                                    instruction.functionalUnitID = 10;
+                                    instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
+                                    loadstoreBuff.instruction = instruction;
+                                    return instruction;
+                                }
                             }
                         }
                     }
@@ -1481,14 +1484,17 @@ namespace ISA_GUI
                         {
                             if (!loadstoreBuff.Busy)
                             {
-                                checkOperandDependencies(ref instruction, ref registers);
-                                loadstoreBuff.Busy = true;
-                                registers.intQi[instruction.r3] = "memoryFu";
-                                registers.intQiIndex[instruction.r3] = instruction.ID;
-                                instruction.functionalUnitID = 10;
-                                instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
-                                loadstoreBuff.instruction = instruction;
-                                return instruction;
+                                if (registers.intQi[instruction.r3] == "0")
+                                {
+                                    checkOperandDependencies(ref instruction, ref registers);
+                                    loadstoreBuff.Busy = true;
+                                    registers.intQi[instruction.r3] = "memoryFu";
+                                    registers.intQiIndex[instruction.r3] = instruction.ID;
+                                    instruction.functionalUnitID = 10;
+                                    instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
+                                    loadstoreBuff.instruction = instruction;
+                                    return instruction;
+                                }
                             }
                         }
                     }
@@ -1502,11 +1508,15 @@ namespace ISA_GUI
                             loadstoreBuff.Busy = true;
                             if (instruction.isFloat)
                             {
+                                if (registers.floatQi[0] != "0")
+                                    break;
                                 registers.floatQi[0] = "memoryFu";
                                 registers.floatQiIndex[0] = instruction.ID;
                             }
                             else
                             {
+                                if (registers.intQi[0] != "0")
+                                    break;
                                 registers.intQi[0] = "memoryFu";
                                 registers.intQiIndex[0] = instruction.ID;
                             }
@@ -1538,17 +1548,21 @@ namespace ISA_GUI
                     {
                         if (!loadstoreBuff.Busy)
                         {
-                            loadstoreBuff.Busy = true;
                             if (instruction.isFloat)
                             {
+                                if (registers.floatQi[instruction.r3] != "0")
+                                    break;
                                 registers.floatQi[instruction.r3] = "memoryFu";
                                 registers.floatQiIndex[instruction.r3] = instruction.ID;
                             }
                             else
                             {
+                                if (registers.intQi[instruction.r3] != "0")
+                                    break;
                                 registers.intQi[instruction.r3] = "memoryFu";
                                 registers.intQiIndex[instruction.r3] = instruction.ID;
                             }
+                            loadstoreBuff.Busy = true;
                             instruction.functionalUnitID = 10;
                             instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
                             loadstoreBuff.instruction = instruction;
@@ -1565,15 +1579,18 @@ namespace ISA_GUI
                         {
                             if (!loadstoreBuff.Busy)
                             {
-                                checkOperandDependencies(ref instruction, ref registers);
-                                registers.floatQi[instruction.r3] = "memoryFu";
-                                registers.floatQiIndex[instruction.r3] = instruction.ID;
-                                loadstoreBuff.Busy = true;
-                                instruction.functionalUnitID = 10;
-                                instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
-                                loadstoreBuff.instruction = instruction;
-                                return instruction;
-                                //Vj, Vk, Qj, Qk will be implemented here
+                                if (registers.floatQi[instruction.r3] == "0")
+                                {
+                                    checkOperandDependencies(ref instruction, ref registers);
+                                    registers.floatQi[instruction.r3] = "memoryFu";
+                                    registers.floatQiIndex[instruction.r3] = instruction.ID;
+                                    loadstoreBuff.Busy = true;
+                                    instruction.functionalUnitID = 10;
+                                    instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
+                                    loadstoreBuff.instruction = instruction;
+                                    return instruction;
+                                    //Vj, Vk, Qj, Qk will be implemented here
+                                }
                             }
                         }
                     }
@@ -1583,15 +1600,18 @@ namespace ISA_GUI
                         {
                             if (!loadstoreBuff.Busy)
                             {
-                                checkOperandDependencies(ref instruction, ref registers);
-                                loadstoreBuff.Busy = true;
-                                registers.intQi[instruction.r3] = "memoryFu";
-                                registers.intQiIndex[instruction.r3] = instruction.ID;
-                                instruction.functionalUnitID = 10;
-                                instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
-                                loadstoreBuff.instruction = instruction;
-                                return instruction;
-                                //Vj, Vk, Qj, Qk will be implemented here
+                                if (registers.intQi[instruction.r3] == "0")
+                                {
+                                    checkOperandDependencies(ref instruction, ref registers);
+                                    loadstoreBuff.Busy = true;
+                                    registers.intQi[instruction.r3] = "memoryFu";
+                                    registers.intQiIndex[instruction.r3] = instruction.ID;
+                                    instruction.functionalUnitID = 10;
+                                    instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
+                                    loadstoreBuff.instruction = instruction;
+                                    return instruction;
+                                    //Vj, Vk, Qj, Qk will be implemented here
+                                }
                             }
                         }
                     }
@@ -1601,22 +1621,28 @@ namespace ISA_GUI
                     {
                         if (!intSubRS.Busy)
                         {
-                            checkOperandDependencies(ref instruction, ref registers);
-                            floatSubRS.Busy = true;
-                            instruction.functionalUnitID = 2;
-                            floatSubRS.instruction = instruction;
-                            return instruction;
+                            if (registers.floatQi[instruction.r3] == "0")
+                            {
+                                checkOperandDependencies(ref instruction, ref registers);
+                                floatSubRS.Busy = true;
+                                instruction.functionalUnitID = 2;
+                                floatSubRS.instruction = instruction;
+                                return instruction;
+                            }
                         }
                     }
                     else
                     {
                         if (!intSubRS.Busy)
                         {
-                            checkOperandDependencies(ref instruction, ref registers);
-                            intSubRS.Busy = true;
-                            instruction.functionalUnitID = 2;
-                            intSubRS.instruction = instruction;
-                            return instruction;
+                            if (registers.intQi[instruction.r3] == "0")
+                            {
+                                checkOperandDependencies(ref instruction, ref registers);
+                                intSubRS.Busy = true;
+                                instruction.functionalUnitID = 2;
+                                intSubRS.instruction = instruction;
+                                return instruction;
+                            }
                         }
                     }
                     break;
@@ -1625,22 +1651,28 @@ namespace ISA_GUI
                     {
                         if (!floatSubRS.Busy)
                         {
-                            checkOperandDependencies(ref instruction, ref registers);
-                            floatSubRS.Busy = true;
-                            instruction.functionalUnitID = 2;
-                            floatSubRS.instruction = instruction;
-                            return instruction;
+                            if (registers.floatQi[instruction.r3] == "0")
+                            {
+                                checkOperandDependencies(ref instruction, ref registers);
+                                floatSubRS.Busy = true;
+                                instruction.functionalUnitID = 2;
+                                floatSubRS.instruction = instruction;
+                                return instruction;
+                            }
                         }
                     }
                     else
                     {
                         if (!intSubRS.Busy)
                         {
-                            checkOperandDependencies(ref instruction, ref registers);
-                            intSubRS.Busy = true;
-                            instruction.functionalUnitID = 2;
-                            intSubRS.instruction = instruction;
-                            return instruction;
+                            if (registers.intQi[instruction.r3] == "0")
+                            {
+                                checkOperandDependencies(ref instruction, ref registers);
+                                intSubRS.Busy = true;
+                                instruction.functionalUnitID = 2;
+                                intSubRS.instruction = instruction;
+                                return instruction;
+                            }
                         }
                     }
                     break;
@@ -1650,13 +1682,16 @@ namespace ISA_GUI
                 case 19:
                     if(!shiftOPS.Busy)
                     {
-                        checkOperandDependencies(ref instruction, ref registers);
-                        shiftOPS.Busy = true;
-                        registers.intQi[instruction.r3] = "shiftFu";
-                        registers.intQiIndex[instruction.r3] = instruction.ID;
-                        instruction.functionalUnitID = 12;
-                        shiftOPS.instruction = instruction;
-                        return instruction;
+                        if (registers.intQi[instruction.r3] == "0")
+                        {
+                            checkOperandDependencies(ref instruction, ref registers);
+                            shiftOPS.Busy = true;
+                            registers.intQi[instruction.r3] = "shiftFu";
+                            registers.intQiIndex[instruction.r3] = instruction.ID;
+                            instruction.functionalUnitID = 12;
+                            shiftOPS.instruction = instruction;
+                            return instruction;
+                        }
                     }
                     break;
                 case 20:            //Add instruction. Checks if it's float
@@ -1664,26 +1699,37 @@ namespace ISA_GUI
                     {
                         if (!floatAddRS.Busy)
                         {
-                            checkOperandDependencies(ref instruction, ref registers);
-                            floatAddRS.Busy = true;
-                            registers.floatQi[instruction.r3] = "flAddFu";
-                            registers.floatQiIndex[instruction.r3] = instruction.ID;
-                            instruction.functionalUnitID = 5;
-                            floatAddRS.instruction = instruction;
-                            return instruction;
+                            if(registers.floatQi[instruction.r3] == "0")
+                            {
+                                checkOperandDependencies(ref instruction, ref registers);
+                                floatAddRS.Busy = true;
+                                registers.floatQi[instruction.r3] = "flAddFu";
+                                registers.floatQiIndex[instruction.r3] = instruction.ID;
+                                instruction.functionalUnitID = 5;
+                                floatAddRS.instruction = instruction;
+                                return instruction;
+                            }
+
                         }
                     }
                     else
                     {
                         if(!intAddRS.Busy)
                         {
-                            checkOperandDependencies(ref instruction, ref registers);
-                            intAddRS.Busy = true;
-                            registers.intQi[instruction.r3] = "intAddFu";
-                            registers.intQiIndex[instruction.r3] = instruction.ID;
-                            instruction.functionalUnitID = 1;
-                            intAddRS.instruction = instruction;
-                            return instruction;
+                            if(registers.intQi[instruction.r3] == "0" && registers.intQiIndex[instruction.r3] == -1)
+                            {
+                                if (registers.intQi[instruction.r3] == "0")
+                                {
+                                    checkOperandDependencies(ref instruction, ref registers);
+                                    intAddRS.Busy = true;
+                                    registers.intQi[instruction.r3] = "intAddFu";
+                                    registers.intQiIndex[instruction.r3] = instruction.ID;
+                                    instruction.functionalUnitID = 1;
+                                    intAddRS.instruction = instruction;
+                                    return instruction;
+                                }
+                            }
+
                         }
                     }
                     
@@ -1693,26 +1739,32 @@ namespace ISA_GUI
                     {
                         if(!floatSubRS.Busy)
                         {
-                            checkOperandDependencies(ref instruction, ref registers);
-                            floatSubRS.Busy = true;
-                            registers.floatQi[instruction.r3] = "flSubFu";
-                            registers.floatQiIndex[instruction.r3] = instruction.ID;
-                            instruction.functionalUnitID = 6;
-                            floatSubRS.instruction = instruction;
-                            return instruction;
+                            if (registers.floatQi[instruction.r3] == "0")
+                            {
+                                checkOperandDependencies(ref instruction, ref registers);
+                                floatSubRS.Busy = true;
+                                registers.floatQi[instruction.r3] = "flSubFu";
+                                registers.floatQiIndex[instruction.r3] = instruction.ID;
+                                instruction.functionalUnitID = 6;
+                                floatSubRS.instruction = instruction;
+                                return instruction;
+                            }
                         }
                     }
                     else
                     {
                         if (!intSubRS.Busy)
                         {
-                            checkOperandDependencies(ref instruction, ref registers);
-                            intSubRS.Busy = true;
-                            registers.intQi[instruction.r3] = "intSubFu";
-                            registers.intQiIndex[instruction.r3] = instruction.ID;
-                            instruction.functionalUnitID = 2;
-                            intSubRS.instruction = instruction;
-                            return instruction;
+                            if (registers.intQi[instruction.r3] == "0")
+                            {
+                                checkOperandDependencies(ref instruction, ref registers);
+                                intSubRS.Busy = true;
+                                registers.intQi[instruction.r3] = "intSubFu";
+                                registers.intQiIndex[instruction.r3] = instruction.ID;
+                                instruction.functionalUnitID = 2;
+                                intSubRS.instruction = instruction;
+                                return instruction;
+                            }
                         }
                     }
                     break;
@@ -1721,26 +1773,32 @@ namespace ISA_GUI
                     {
                         if (!floatMultRS.Busy)
                         {
-                            checkOperandDependencies(ref instruction, ref registers);
-                            floatMultRS.Busy = true;
-                            registers.floatQi[instruction.r3] = "flMultFu";
-                            registers.floatQiIndex[instruction.r3] = instruction.ID;
-                            instruction.functionalUnitID = 7;
-                            floatMultRS.instruction = instruction;
-                            return instruction;
+                            if (registers.floatQi[instruction.r3] == "0")
+                            {
+                                checkOperandDependencies(ref instruction, ref registers);
+                                floatMultRS.Busy = true;
+                                registers.floatQi[instruction.r3] = "flMultFu";
+                                registers.floatQiIndex[instruction.r3] = instruction.ID;
+                                instruction.functionalUnitID = 7;
+                                floatMultRS.instruction = instruction;
+                                return instruction;
+                            }
                         }
                     }
                     else
                     {
                         if (!intMultRS.Busy)
                         {
-                            checkOperandDependencies(ref instruction, ref registers);
-                            intMultRS.Busy = true;
-                            registers.intQi[instruction.r3] = "intMulFu";
-                            registers.intQiIndex[instruction.r3] = instruction.ID;
-                            instruction.functionalUnitID = 3;
-                            intMultRS.instruction = instruction;
-                            return instruction;
+                            if (registers.intQi[instruction.r3] == "0")
+                            {
+                                checkOperandDependencies(ref instruction, ref registers);
+                                intMultRS.Busy = true;
+                                registers.intQi[instruction.r3] = "intMulFu";
+                                registers.intQiIndex[instruction.r3] = instruction.ID;
+                                instruction.functionalUnitID = 3;
+                                intMultRS.instruction = instruction;
+                                return instruction;
+                            }
                         }
                     }
                       
@@ -1750,26 +1808,32 @@ namespace ISA_GUI
                     {
                         if (!floatDivRS.Busy)
                         {
-                            checkOperandDependencies(ref instruction, ref registers);
-                            floatDivRS.Busy = true;
-                            registers.floatQi[instruction.r3] = "flDivFu";
-                            registers.floatQiIndex[instruction.r3] = instruction.ID;
-                            instruction.functionalUnitID = 8;
-                            floatDivRS.instruction = instruction;
-                            return instruction;
+                            if (registers.floatQi[instruction.r3] == "0")
+                            {
+                                checkOperandDependencies(ref instruction, ref registers);
+                                floatDivRS.Busy = true;
+                                registers.floatQi[instruction.r3] = "flDivFu";
+                                registers.floatQiIndex[instruction.r3] = instruction.ID;
+                                instruction.functionalUnitID = 8;
+                                floatDivRS.instruction = instruction;
+                                return instruction;
+                            }
                         }
                     }
                     else
                     {
                         if (!intDivRS.Busy)
                         {
-                            checkOperandDependencies(ref instruction, ref registers);
-                            intDivRS.Busy = true;
-                            registers.intQi[instruction.r3] = "intDivFu";
-                            registers.intQiIndex[instruction.r3] = instruction.ID;
-                            instruction.functionalUnitID = 4;
-                            intDivRS.instruction = instruction;
-                            return instruction;
+                            if (registers.intQi[instruction.r3] == "0")
+                            {
+                                checkOperandDependencies(ref instruction, ref registers);
+                                intDivRS.Busy = true;
+                                registers.intQi[instruction.r3] = "intDivFu";
+                                registers.intQiIndex[instruction.r3] = instruction.ID;
+                                instruction.functionalUnitID = 4;
+                                intDivRS.instruction = instruction;
+                                return instruction;
+                            }
                         }
                     }
                     break;
@@ -1778,25 +1842,31 @@ namespace ISA_GUI
                 case 26:
                     if (!bitwiseOPRS.Busy)
                     {
-                        checkOperandDependencies(ref instruction, ref registers);
-                        bitwiseOPRS.Busy = true;
-                        registers.intQi[instruction.r3] = "bitFu";
-                        registers.intQiIndex[instruction.r3] = instruction.ID;
-                        instruction.functionalUnitID = 9;
-                        bitwiseOPRS.instruction = instruction;
-                        return instruction;
+                        if (registers.intQi[instruction.r3] == "0")
+                        {
+                            checkOperandDependencies(ref instruction, ref registers);
+                            bitwiseOPRS.Busy = true;
+                            registers.intQi[instruction.r3] = "bitFu";
+                            registers.intQiIndex[instruction.r3] = instruction.ID;
+                            instruction.functionalUnitID = 9;
+                            bitwiseOPRS.instruction = instruction;
+                            return instruction;
+                        }
                     }
                     break;
                 case 27:
                     if (!bitwiseOPRS.Busy)
                     {
-                        checkOperandDependencies(ref instruction, ref registers);
-                        bitwiseOPRS.Busy = true;
-                        registers.intQi[instruction.r3] = "bitFu";
-                        registers.intQiIndex[instruction.r3] = instruction.ID;
-                        instruction.functionalUnitID = 9;
-                        bitwiseOPRS.instruction = instruction;
-                        return instruction;
+                        if (registers.intQi[instruction.r3] == "0")
+                        {
+                            checkOperandDependencies(ref instruction, ref registers);
+                            bitwiseOPRS.Busy = true;
+                            registers.intQi[instruction.r3] = "bitFu";
+                            registers.intQiIndex[instruction.r3] = instruction.ID;
+                            instruction.functionalUnitID = 9;
+                            bitwiseOPRS.instruction = instruction;
+                            return instruction;
+                        }
                     }
                     break;
 
