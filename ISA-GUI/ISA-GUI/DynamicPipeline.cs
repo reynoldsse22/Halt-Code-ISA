@@ -1071,14 +1071,11 @@ namespace ISA_GUI
                 case 10:
                     for (int i = 0; i < config.memoryFUs; i++)
                     {
-                        if (memoryFUs[i].instruction == null && memoryFUs[i].oneCycleFU)
-                        {
-                            memoryFUs[i].instruction = loadStoreBuffer[instruction.reservationStationIndex].instruction;
-                            memoryFUs[i].instruction.functionalUnitIndex = i;
-                            loadStoreBuffer[instruction.reservationStationIndex].instruction = null;
-                            loadStoreBuffer[instruction.reservationStationIndex].Busy = false;
-                            return;
-                        }
+                        memoryFUs[i].instruction = loadStoreBuffer[instruction.reservationStationIndex].instruction;
+						memoryFUs[i].instruction.functionalUnitIndex = i;
+						loadStoreBuffer[instruction.reservationStationIndex].instruction = null;
+						loadStoreBuffer[instruction.reservationStationIndex].Busy = false;
+						return;
                     }
                     break;
                 case 11:
@@ -1712,14 +1709,17 @@ namespace ISA_GUI
                         {
                             if (!loadstoreBuff.Busy)
                             {
-                                checkOperandDependencies(ref instruction, ref registers);
-                                loadstoreBuff.Busy = true;
-                                registers.floatQi[instruction.r3] = "memoryFu";
-                                registers.floatQiIndex[instruction.r3] = instruction.ID;
-                                instruction.functionalUnitID = 10;
-                                instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
-                                loadstoreBuff.instruction = instruction;
-                                return instruction;
+                                if (registers.floatQi[instruction.r3] == "0")
+                                {
+                                    checkOperandDependencies(ref instruction, ref registers);
+                                    loadstoreBuff.Busy = true;
+                                    registers.floatQi[instruction.r3] = "memoryFu";
+                                    registers.floatQiIndex[instruction.r3] = instruction.ID;
+                                    instruction.functionalUnitID = 10;
+                                    instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
+                                    loadstoreBuff.instruction = instruction;
+                                    return instruction;
+                                }
                             }
                         }
                     }
@@ -1729,14 +1729,17 @@ namespace ISA_GUI
                         {
                             if (!loadstoreBuff.Busy)
                             {
-                                checkOperandDependencies(ref instruction, ref registers);
-                                loadstoreBuff.Busy = true;
-                                registers.intQi[instruction.r3] = "memoryFu";
-                                registers.intQiIndex[instruction.r3] = instruction.ID;
-                                instruction.functionalUnitID = 10;
-                                instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
-                                loadstoreBuff.instruction = instruction;
-                                return instruction;
+                                if (registers.intQi[instruction.r3] == "0")
+                                {
+                                    checkOperandDependencies(ref instruction, ref registers);
+                                    loadstoreBuff.Busy = true;
+                                    registers.intQi[instruction.r3] = "memoryFu";
+                                    registers.intQiIndex[instruction.r3] = instruction.ID;
+                                    instruction.functionalUnitID = 10;
+                                    instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
+                                    loadstoreBuff.instruction = instruction;
+                                    return instruction;
+                                }
                             }
                         }
                     }
@@ -1750,12 +1753,16 @@ namespace ISA_GUI
                             loadstoreBuff.Busy = true;
                             if (instruction.isFloat)
                             {
-                                registers.floatQi[0] = "memoryFU";
+                                if (registers.floatQi[0] != "0")
+                                    break;
+                                registers.floatQi[0] = "memoryFu";
                                 registers.floatQiIndex[0] = instruction.ID;
                             }
                             else
                             {
-                                registers.intQi[0] = "memoryFU";
+                                if (registers.intQi[0] != "0")
+                                    break;
+                                registers.intQi[0] = "memoryFu";
                                 registers.intQiIndex[0] = instruction.ID;
                             }
                             instruction.functionalUnitID = 10;
@@ -1786,17 +1793,21 @@ namespace ISA_GUI
                     {
                         if (!loadstoreBuff.Busy)
                         {
-                            loadstoreBuff.Busy = true;
                             if (instruction.isFloat)
                             {
-                                registers.floatQi[instruction.r3] = "memoryFU";
+                                if (registers.floatQi[instruction.r3] != "0")
+                                    break;
+                                registers.floatQi[instruction.r3] = "memoryFu";
                                 registers.floatQiIndex[instruction.r3] = instruction.ID;
                             }
                             else
                             {
-                                registers.intQi[instruction.r3] = "memoryFU";
+                                if (registers.intQi[instruction.r3] != "0")
+                                    break;
+                                registers.intQi[instruction.r3] = "memoryFu";
                                 registers.intQiIndex[instruction.r3] = instruction.ID;
                             }
+                            loadstoreBuff.Busy = true;
                             instruction.functionalUnitID = 10;
                             instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
                             loadstoreBuff.instruction = instruction;
@@ -1813,15 +1824,18 @@ namespace ISA_GUI
                         {
                             if (!loadstoreBuff.Busy)
                             {
-                                checkOperandDependencies(ref instruction, ref registers);
-                                registers.floatQi[instruction.r3] = "memoryFU";
-                                registers.floatQiIndex[instruction.r3] = instruction.ID;
-                                loadstoreBuff.Busy = true;
-                                instruction.functionalUnitID = 10;
-                                instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
-                                loadstoreBuff.instruction = instruction;
-                                return instruction;
-                                //Vj, Vk, Qj, Qk will be implemented here
+                                if (registers.floatQi[instruction.r3] == "0")
+                                {
+                                    checkOperandDependencies(ref instruction, ref registers);
+                                    registers.floatQi[instruction.r3] = "memoryFu";
+                                    registers.floatQiIndex[instruction.r3] = instruction.ID;
+                                    loadstoreBuff.Busy = true;
+                                    instruction.functionalUnitID = 10;
+                                    instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
+                                    loadstoreBuff.instruction = instruction;
+                                    return instruction;
+                                    //Vj, Vk, Qj, Qk will be implemented here
+                                }
                             }
                         }
                     }
@@ -1831,15 +1845,18 @@ namespace ISA_GUI
                         {
                             if (!loadstoreBuff.Busy)
                             {
-                                checkOperandDependencies(ref instruction, ref registers);
-                                loadstoreBuff.Busy = true;
-                                registers.intQi[instruction.r3] = "memoryFU";
-                                registers.intQiIndex[instruction.r3] = instruction.ID;
-                                instruction.functionalUnitID = 10;
-                                instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
-                                loadstoreBuff.instruction = instruction;
-                                return instruction;
-                                //Vj, Vk, Qj, Qk will be implemented here
+                                if (registers.intQi[instruction.r3] == "0")
+                                {
+                                    checkOperandDependencies(ref instruction, ref registers);
+                                    loadstoreBuff.Busy = true;
+                                    registers.intQi[instruction.r3] = "memoryFu";
+                                    registers.intQiIndex[instruction.r3] = instruction.ID;
+                                    instruction.functionalUnitID = 10;
+                                    instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
+                                    loadstoreBuff.instruction = instruction;
+                                    return instruction;
+                                    //Vj, Vk, Qj, Qk will be implemented here
+                                }         
                             }
                         }
                     }
@@ -1850,7 +1867,7 @@ namespace ISA_GUI
                     {
                         foreach (ReservationStation flSub in floatSubRSs)
                         {
-                            if (!flSub.Busy)
+                            if (registers.floatQi[flSub.instruction.r3] == "0")
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
                                 flSub.Busy = true;
@@ -1865,7 +1882,7 @@ namespace ISA_GUI
                     {
                         foreach (ReservationStation intSub in intSubRSs)
                         {
-                            if (!intSub.Busy)
+                            if (registers.intQi[intSub.instruction.r3] == "0")
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
                                 intSub.Busy = true;
@@ -1883,7 +1900,7 @@ namespace ISA_GUI
                 case 19:
                     foreach (ReservationStation shift in shiftRSs)
                     {
-                        if (!shift.Busy)
+                        if (registers.intQi[shift.instruction.r3] == "0")
                         {
                             checkOperandDependencies(ref instruction, ref registers);
                             shift.Busy = true;
@@ -1901,7 +1918,7 @@ namespace ISA_GUI
                     {
                         foreach(ReservationStation flAdd in floatAddRSs)
                         {
-                            if (!flAdd.Busy)
+                            if (registers.intQi[flAdd.instruction.r3] == "0")
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
                                 flAdd.Busy = true;
@@ -1918,7 +1935,7 @@ namespace ISA_GUI
                     {
                         foreach(ReservationStation intAdd in intAddRSs)
                         {
-                            if (!intAdd.Busy)
+                            if (registers.intQi[intAdd.instruction.r3] == "0")
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
                                 intAdd.Busy = true;
@@ -1938,7 +1955,7 @@ namespace ISA_GUI
                     {
                         foreach(ReservationStation flSub in floatSubRSs)
                         {
-                            if (!flSub.Busy)
+                            if (registers.intQi[flSub.instruction.r3] == "0")
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
                                 flSub.Busy = true;
@@ -1955,7 +1972,7 @@ namespace ISA_GUI
                     {
                         foreach(ReservationStation intSub in intSubRSs)
                         {
-                            if (!intSub.Busy)
+                            if (registers.intQi[intSub.instruction.r3] == "0")
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
                                 intSub.Busy = true;
@@ -1974,7 +1991,7 @@ namespace ISA_GUI
                     {
                         foreach(ReservationStation flMult in floatMultRSs)
                         {
-                            if (!flMult.Busy)
+                            if (registers.intQi[flMult.instruction.r3] == "0")
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
                                 flMult.Busy = true;
@@ -1991,7 +2008,7 @@ namespace ISA_GUI
                     {
                         foreach(ReservationStation intMult in intMultRSs)
                         {
-                            if (!intMult.Busy)
+                            if (registers.intQi[intMult.instruction.r3] == "0")
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
                                 intMult.Busy = true;
@@ -2010,7 +2027,7 @@ namespace ISA_GUI
                     {
                         foreach(ReservationStation flDiv in floatDivRSs)
                         {
-                            if (!flDiv.Busy)
+                            if (registers.intQi[flDiv.instruction.r3] == "0")
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
                                 flDiv.Busy = true;
@@ -2027,7 +2044,7 @@ namespace ISA_GUI
                     {
                         foreach(ReservationStation intDiv in intDivRSs)
                         {
-                            if (!intDiv.Busy)
+                            if (registers.intQi[flDiv.instruction.r3] == "0")
                             {
                                 checkOperandDependencies(ref instruction, ref registers);
                                 intDiv.Busy = true;
@@ -2047,7 +2064,7 @@ namespace ISA_GUI
                 case 27:
                     foreach (ReservationStation bitwise in bitwiseRSs)
                     {
-                        if (!bitwise.Busy)
+                        if (registers.intQi[flDiv.instruction.r3] == "0")
                         {
                             checkOperandDependencies(ref instruction, ref registers);
                             bitwise.Busy = true;
