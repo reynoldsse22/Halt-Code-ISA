@@ -153,7 +153,7 @@ namespace ISA_GUI
                     {
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
-						CDB.CDB.Add("intAddFu", result);
+						CDB.CDB.Add("intAddFu" + instruction.functionalUnitIndex, result);
 						return true;
 					}
 					break;
@@ -162,7 +162,7 @@ namespace ISA_GUI
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
-						CDB.CDB.Add("intSubFu", result);
+						CDB.CDB.Add("intSubFu" + instruction.functionalUnitIndex, result);
 						return true;
 					}
 					break;
@@ -171,7 +171,7 @@ namespace ISA_GUI
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
-						CDB.CDB.Add("intMulFu", result);
+						CDB.CDB.Add("intMulFu" + instruction.functionalUnitIndex, result);
 						return true;
 					}
 					break;
@@ -180,7 +180,7 @@ namespace ISA_GUI
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
-						CDB.CDB.Add("intDivFu", result);
+						CDB.CDB.Add("intDivFu" + instruction.functionalUnitIndex, result);
 						return true;
 					}
 					break;
@@ -189,7 +189,7 @@ namespace ISA_GUI
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
-						CDB.CDB.Add("flAddFu", result);
+						CDB.CDB.Add("flAddFu" + instruction.functionalUnitIndex, result);
 						return true;
 					}
 					break;
@@ -198,7 +198,7 @@ namespace ISA_GUI
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
-						CDB.CDB.Add("flSubFu", result);
+						CDB.CDB.Add("flSubFu" + instruction.functionalUnitIndex, result);
 						return true;
 					}
 					break;
@@ -207,7 +207,7 @@ namespace ISA_GUI
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
-						CDB.CDB.Add("flMultFu", result);
+						CDB.CDB.Add("flMultFu" + instruction.functionalUnitIndex, result);
 						return true;
 					}
 					break;
@@ -216,7 +216,7 @@ namespace ISA_GUI
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
-						CDB.CDB.Add("flDivFu", result);
+						CDB.CDB.Add("flDivFu" + instruction.functionalUnitIndex, result);
 						return true;
 					}
 					break;
@@ -225,7 +225,7 @@ namespace ISA_GUI
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
-						CDB.CDB.Add("bitFu", result);
+						CDB.CDB.Add("bitFu" + instruction.functionalUnitIndex, result);
 						return true;
 					}
 					break;
@@ -234,7 +234,7 @@ namespace ISA_GUI
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
-						CDB.CDB.Add("memoryFu", result);
+						CDB.CDB.Add("memoryFu" + instruction.functionalUnitIndex, result);
 						return true;
 					}
 					break;
@@ -243,7 +243,7 @@ namespace ISA_GUI
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
-						CDB.CDB.Add("branchFu", result);
+						CDB.CDB.Add("branchFu" + instruction.functionalUnitIndex, result);
 						return true;
 					}
 					break;
@@ -252,7 +252,7 @@ namespace ISA_GUI
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
-						CDB.CDB.Add("shiftFu", result);
+						CDB.CDB.Add("shiftFu" + instruction.functionalUnitIndex, result);
 						return true;
 					}
 					break;
