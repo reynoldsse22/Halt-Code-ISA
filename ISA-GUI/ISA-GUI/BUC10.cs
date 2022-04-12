@@ -831,10 +831,9 @@ namespace ISA_GUI
                 if (fu.instruction != null)
                 {
                     intAdd += fu.instruction.fullAssemblySyntax + "\n";
-                    intAdd += "-------------------\n";
                 }
             }
-            intAdd += "  Reserv. Station  \n";
+            intAdd += "\n  Reserv. Station  \n";
             intAdd += "-------------------\n";
             foreach (ReservationStation rs in cpu.DP.intAddRSs)
             {
@@ -850,10 +849,9 @@ namespace ISA_GUI
                 if (fu.instruction != null)
                 {
                     intSub += fu.instruction.fullAssemblySyntax + "\n";
-                    intSub += "-------------------\n";
                 }
             }
-            intSub += "  Reserv. Station  \n";
+            intSub += "\n  Reserv. Station  \n";
             intSub += "-------------------\n";
             foreach (ReservationStation rs in cpu.DP.intSubRSs)
             {
@@ -869,10 +867,9 @@ namespace ISA_GUI
                 if (fu.instruction != null)
                 {
                     intMult += fu.instruction.fullAssemblySyntax + "\n";
-                    intMult += "-------------------\n";
                 }
             }
-            intMult += "  Reserv. Station  \n";
+            intMult += "\n  Reserv. Station  \n";
             intMult += "-------------------\n";
             foreach (ReservationStation rs in cpu.DP.intMultRSs)
             {
@@ -888,10 +885,9 @@ namespace ISA_GUI
                 if (fu.instruction != null)
                 {
                     intDiv += fu.instruction.fullAssemblySyntax + "\n";
-                    intDiv += "-------------------\n";
                 }
             }
-            intDiv += "  Reserv. Station  \n";
+            intDiv += "\n  Reserv. Station  \n";
             intDiv += "-------------------\n";
             foreach (ReservationStation rs in cpu.DP.intDivRSs)
             {
@@ -906,11 +902,10 @@ namespace ISA_GUI
             {
                 if (fu.instruction != null)
                 {
-                    intAdd += fu.instruction.fullAssemblySyntax + "\n";
-                    flAdd += "-------------------\n";
+                    flAdd += fu.instruction.fullAssemblySyntax + "\n";
                 }
             }
-            flAdd += "  Reserv. Station  \n";
+            flAdd += "\n  Reserv. Station  \n";
             flAdd += "-------------------\n";
             foreach (ReservationStation rs in cpu.DP.floatAddRSs)
             {
@@ -926,10 +921,9 @@ namespace ISA_GUI
                 if (fu.instruction != null)
                 {
                     flSub += fu.instruction.fullAssemblySyntax + "\n";
-                    flSub += "-------------------\n";
                 }
             }
-            flSub += "  Reserv. Station  \n";
+            flSub += "\n  Reserv. Station  \n";
             flSub += "-------------------\n";
             foreach (ReservationStation rs in cpu.DP.floatSubRSs)
             {
@@ -945,10 +939,9 @@ namespace ISA_GUI
                 if (fu.instruction != null)
                 {
                     flMult += fu.instruction.fullAssemblySyntax + "\n";
-                    flMult += "-------------------\n";
                 }
             }
-            flMult += "  Reserv. Station  \n";
+            flMult += "\n  Reserv. Station  \n";
             flMult += "-------------------\n";
             foreach (ReservationStation rs in cpu.DP.floatMultRSs)
             {
@@ -964,10 +957,9 @@ namespace ISA_GUI
                 if (fu.instruction != null)
                 {
                     flDiv += fu.instruction.fullAssemblySyntax + "\n";
-                    flDiv += "-------------------\n";
                 }
             }
-            flDiv += "  Reserv. Station  \n";
+            flDiv += "\n  Reserv. Station  \n";
             flDiv += "-------------------\n";
             foreach (ReservationStation rs in cpu.DP.floatDivRSs)
             {
@@ -983,10 +975,9 @@ namespace ISA_GUI
                 if (fu.instruction != null)
                 {
                     bitwise += fu.instruction.fullAssemblySyntax + "\n";
-                    bitwise += "-------------------\n";
                 }
             }
-            bitwise += "  Reserv. Station  \n";
+            bitwise += "\n  Reserv. Station  \n";
             bitwise += "-------------------\n";
             foreach (ReservationStation rs in cpu.DP.bitwiseRSs)
             {
@@ -1002,10 +993,9 @@ namespace ISA_GUI
                 if (fu.instruction != null)
                 {
                     branch += fu.instruction.fullAssemblySyntax + "\n";
-                    branch += "-------------------\n";
                 }
             }
-            branch += "  Reserv. Station  \n";
+            branch += "\n  Reserv. Station  \n";
             branch += "-------------------\n";
             foreach (ReservationStation rs in cpu.DP.branchRSs)
             {
