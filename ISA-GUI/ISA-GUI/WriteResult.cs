@@ -359,7 +359,7 @@ namespace ISA_GUI
 					}
 					else
 					{
-						byte[] currentFloat = System.BitConverter.GetBytes(instruction.fOperand1);        //Float to be stored
+						byte[] currentFloat = System.BitConverter.GetBytes(instruction.fOperand1);                          //Float to be stored
 						memory.MainMemory[instruction.address] = currentFloat[3];                                           //Stores the MSB value of f0 at the address in memory
 						memory.MainMemory[instruction.address + 1] = currentFloat[2];                                       //Stores the TSB value of f0 at the address in memory
 						memory.MainMemory[instruction.address + 2] = currentFloat[1];                                       //Stores the LSB value of f0 at the address in memory

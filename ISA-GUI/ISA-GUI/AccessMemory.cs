@@ -170,7 +170,8 @@ namespace ISA_GUI
                     {
 						load_buffer.instruction.executionInProgress = true;
 						result = load_buffer.instruction.address.ToString();
-						
+						if (int.Parse(result) == 0 && ASPR == 1)
+							load_buffer.instruction.ASPR = 1;
 						if (load_buffer.instruction.cycleControl == 0)
 						{
 							load_buffer.instruction.executionInProgress = false;
@@ -188,8 +189,6 @@ namespace ISA_GUI
 						floatArray[3] = 0x00;                           //first byte is 0 because we don't use them 
 						result = System.BitConverter.ToSingle(floatArray, 0).ToString();
 						if (float.Parse(result) == 0f && ASPR == 1)
-							load_buffer.instruction.ASPR = 1;
-						if (int.Parse(result) == 0 && ASPR == 1)
 							load_buffer.instruction.ASPR = 1;
 						if (load_buffer.instruction.cycleControl == 0)
 						{
