@@ -21,31 +21,55 @@ namespace ISA_GUI
         public Instruction stall = new Instruction();
         public CommonDataBus commonDataBus;
         public ReorderBuffer reorderBuffer;
-        public IntAddFU intAddFu;
-        public IntSubFU intSubFu;
-        public IntMultFU intMulFu;
-        public IntDivFU intDivFu;
-        public FloatAddFU flAddFu;
-        public FloatSubFU flSubFu;
-        public FloatMultFU flMultFu;
-        public FloatDivFU flDivFu;
-        public BitwiseOPFU bitFu;
-        public MemoryUnit memoryFu;
-        public BranchFU branchFu;
-        public ShiftFU shiftFu;
-        public ReservationStation intAddRS;
-        public ReservationStation intSubRS;
-        public ReservationStation intMultRS;
-        public ReservationStation intDivRS;
-        public ReservationStation floatAddRS;
-        public ReservationStation floatSubRS;
-        public ReservationStation floatMultRS;
-        public ReservationStation floatDivRS;
-        public ReservationStation bitwiseOPRS;
-        public ReservationStation branchOPS;
-        public ReservationStation shiftOPS;
-        public Instruction fetchInstruction;
+       // public IntAddFU intAddFu;
+        public IntAddFU[] intAddFUs;
+        //public IntSubFU intSubFu;
+        public IntSubFU[] intSubFUs;
+        //public IntMultFU intMulFu;
+        public IntMultFU[] intMultFUs;
+        //public IntDivFU intDivFu;
+        public IntDivFU[] intDivFUs;
+        //public FloatAddFU flAddFu;
+        public FloatAddFU[] flAddFUs;
+        //public FloatSubFU flSubFu;
+        public FloatSubFU[] flSubFUs;
+        //public FloatMultFU flMultFu;
+        public FloatMultFU[] flMultFUs;
+       // public FloatDivFU flDivFu;
+        public FloatDivFU[] flDivFUs;
+       // public BitwiseOPFU bitFu;
+        public BitwiseOPFU[] bitFUs;
+        //public MemoryUnit memoryFu;
+        public MemoryUnit[] memoryFUs;
+       // public BranchFU branchFu;
+        public BranchFU[] branchFUs;
+       // public ShiftFU shiftFu;
+        public ShiftFU[] shiftFUs;
+
+        //public ReservationStation intAddRS;
+        public ReservationStation[] intAddRSs;
+        //public ReservationStation intSubRS;
+        public ReservationStation[] intSubRSs;
+       // public ReservationStation intMultRS;
+        public ReservationStation[] intMultRSs;
+        //public ReservationStation intDivRS;
+        public ReservationStation[] intDivRSs;
+        //public ReservationStation floatAddRS;
+        public ReservationStation[] floatAddRSs;
+        //public ReservationStation floatSubRS;
+        public ReservationStation[] floatSubRSs;
+        //public ReservationStation floatMultRS;
+        public ReservationStation[] floatMultRSs;
+        //public ReservationStation floatDivRS;
+        public ReservationStation[] floatDivRSs;
+        //public ReservationStation bitwiseOPRS;
+        public ReservationStation[] bitwiseRSs;
+       // public ReservationStation branchOPS;
+        public ReservationStation[] branchRSs;
+        //public ReservationStation shiftOPS;
+        public ReservationStation[] shiftRSs;
         public ReservationStation[] loadStoreBuffer;
+        public Instruction fetchInstruction;
 
         public int totalHazard, structuralHazard, dataHazard, controlHazard, RAW, WAR, WAW;
         public int reorderBufferDelay, reservationStationDelay, trueDependenceDelay, totalDelays, instructionID;
@@ -70,31 +94,30 @@ namespace ISA_GUI
             WR = new WriteResult();
             commonDataBus = new CommonDataBus();
             reorderBuffer = new ReorderBuffer();
-            intAddFu = new IntAddFU();
-            intSubFu = new IntSubFU();
-            intMulFu = new IntMultFU();
-            intDivFu = new IntDivFU();
-            flAddFu = new FloatAddFU();
-            flSubFu = new FloatSubFU();
-            flMultFu = new FloatMultFU();
-            flDivFu = new FloatDivFU();
-            bitFu = new BitwiseOPFU();
-            memoryFu = new MemoryUnit();
-            branchFu = new BranchFU();
-            shiftFu = new ShiftFU();
-            intAddRS = new ReservationStation("intAddRS");
-            intSubRS = new ReservationStation("intSubRS");
-            intMultRS = new ReservationStation("intMultRS");
-            intDivRS = new ReservationStation("intDivRS");
-            floatAddRS = new ReservationStation("floatAddRS");
-            floatSubRS = new ReservationStation("floatSubRS");
-            floatMultRS = new ReservationStation("floatMultRS");
-            floatDivRS = new ReservationStation("floatDivRS");
-            bitwiseOPRS = new ReservationStation("bitwiseOPRS");
-            branchOPS = new ReservationStation("branchOPS");        //Reservation station solely for branches\
-            shiftOPS = new ReservationStation("shiftOPS");
+           // intAddFu = new IntAddFU();
+            //intSubFu = new IntSubFU();
+            //intMulFu = new IntMultFU();
+            //intDivFu = new IntDivFU();
+            //flAddFu = new FloatAddFU();
+            //flSubFu = new FloatSubFU();
+            //flMultFu = new FloatMultFU();
+            //flDivFu = new FloatDivFU();
+           // bitFu = new BitwiseOPFU();
+           // memoryFu = new MemoryUnit();
+            //branchFu = new BranchFU();
+            //shiftFu = new ShiftFU();
+           // intAddRS = new ReservationStation("intAddRS");
+           // intSubRS = new ReservationStation("intSubRS");
+           // intMultRS = new ReservationStation("intMultRS");
+          //  intDivRS = new ReservationStation("intDivRS");
+          //  floatAddRS = new ReservationStation("floatAddRS");
+          //  floatSubRS = new ReservationStation("floatSubRS");
+          //  floatMultRS = new ReservationStation("floatMultRS");
+          //  floatDivRS = new ReservationStation("floatDivRS");
+           // bitwiseOPRS = new ReservationStation("bitwiseOPRS");
+           // branchOPS = new ReservationStation("branchOPS");        //Reservation station solely for branches\
+           // shiftOPS = new ReservationStation("shiftOPS");
             loadStoreBuffer = new ReservationStation[5];
-            for(int i = 0; i < 5; i++) { loadStoreBuffer[i] = new ReservationStation("load_storeBuffer" + i); loadStoreBuffer[i].arrayIndex = i; }
 
             fetchInstruction = new Instruction();
             cycleCount = 0;
@@ -134,20 +157,13 @@ namespace ISA_GUI
         public void runCycle(List<string> input, bool stepThrough, ref StringBuilder assemblyString, ref StringBuilder decodedString, ref StringBuilder pipelineString, 
             ref bool halted, ref ConfigCycle config, ref InstructionMemory IM, ref RegisterFile registers, ref DataMemory dataMemory)
         {
+            if(cycleCount == 0)
+            {
+                initializeFUs(config);
+            }
             do
             {
-                intAddFu.oneCycleFU = true;
-                intSubFu.oneCycleFU = true;
-                intMulFu.oneCycleFU = true;
-                intDivFu.oneCycleFU = true;
-                flAddFu.oneCycleFU = true;
-                flSubFu.oneCycleFU = true;
-                flMultFu.oneCycleFU = true;
-                flDivFu.oneCycleFU = true;
-                bitFu.oneCycleFU = true;
-                memoryFu.oneCycleFU = true;
-                branchFu.oneCycleFU = true;
-                shiftFu.oneCycleFU = true;
+                setCycleLimit();
 
                 commitedThisCycle = false;
                 startOfLoop:
@@ -260,14 +276,14 @@ namespace ISA_GUI
                             numOfInstructionsInExecution++;
                             if (inst.stage3CycleStart == 0)
                                 inst.stage3CycleStart = cycleCount;
-                            memoryFu.instruction.doneExecuting = false;
-                            AM.accessMemoryDynamic(ref dataMemory, ref registers, inst, ref config, out result, ref memoryFu);
+                            memoryFUs[inst.functionalUnitIndex].instruction.doneExecuting = false;
+                            AM.accessMemoryDynamic(ref dataMemory, ref registers, inst, ref config, out result, ref memoryFUs[inst.functionalUnitIndex]);
                             inst.result = result;
-                            inst.ASPR = memoryFu.instruction.ASPR;
+                            inst.ASPR = memoryFUs[inst.functionalUnitIndex].instruction.ASPR;
                            // inst.stage2End = cycleCount - 1;        //End of the second stage
                            // inst.stage3Start = cycleCount;          //Start of the third
                             
-                            if(memoryFu.instruction.doneExecuting)
+                            if (memoryFUs[inst.functionalUnitIndex].instruction.doneExecuting)
                             {
                                 numOfInstructionsInExecution--;
                                 inst.stage3CycleEnd = cycleCount;
@@ -397,6 +413,139 @@ namespace ISA_GUI
             return;
         }
 
+
+        private void initializeFUs(ConfigCycle config)
+        {
+
+            for(int i = 0; i < config.intAddFUs; i++)
+            {
+                intAddFUs[i] = new IntAddFU("intAddFU"+i);
+                intAddFUs[i].indexer = i;
+                intAddRSs[i] = new ReservationStation("intAddRS"+i);
+                intAddRSs[i].arrayIndex = i;
+            }
+
+            for (int i = 0; i < config.intSubFUs; i++)
+            {
+                intSubFUs[i] = new IntSubFU("intSubFU" + i);
+                intSubFUs[i].indexer = i;
+                intSubRSs[i] = new ReservationStation("intSubRS" + i);
+                intSubRSs[i].arrayIndex = i;
+            }
+
+            for (int i = 0; i < config.intMultFUs; i++)
+            {
+                intMultFUs[i] = new IntMultFU("intMulFU" + i);
+                intMultFUs[i].indexer = i;
+                intMultRSs[i] = new ReservationStation("intMulRS" + i);
+                intMultRSs[i].arrayIndex = i;
+            }
+
+            for (int i = 0; i < config.intDivFus; i++)
+            {
+                intDivFUs[i] = new IntDivFU("intDivFU" + i);
+                intDivFUs[i].indexer = i;
+                intDivRSs[i] = new ReservationStation("intDivRS" + i);
+                intDivRSs[i].arrayIndex = i;
+            }
+
+            for (int i = 0; i < config.flAddFUs; i++)
+            {
+                flAddFUs[i] = new FloatAddFU("intAddFU" + i);
+                flAddFUs[i].indexer = i;
+                floatAddRSs[i] = new ReservationStation("flAddRS" + i);
+                floatAddRSs[i].arrayIndex = i;
+            }
+
+            for (int i = 0; i < config.flSubFUs; i++)
+            {
+                flSubFUs[i] = new FloatSubFU("flSubFU" + i);
+                flSubFUs[i].indexer = i;
+                floatSubRSs[i] = new ReservationStation("flSubRS" + i);
+                floatSubRSs[i].arrayIndex = i;
+            }
+
+            for (int i = 0; i < config.flMultFUs; i++)
+            {
+                flMultFUs[i] = new FloatMultFU("flMulFU" + i);
+                flMultFUs[i].indexer = i;
+                floatMultRSs[i] = new ReservationStation("flMulRS" + i);
+                floatMultRSs[i].arrayIndex = i;
+            }
+
+            for (int i = 0; i < config.flDivFUs; i++)
+            {
+                flDivFUs[i] = new FloatDivFU("flDivFU" + i);
+                flDivFUs[i].indexer = i;
+                floatDivRSs[i] = new ReservationStation("flDivRS" + i);
+                floatDivRSs[i].arrayIndex = i;
+            }
+
+            for (int i = 0; i < config.bitwiseFUs; i++)
+            {
+                bitFUs[i] = new BitwiseOPFU("bitwiseFU" + i);
+                bitFUs[i].indexer = i;
+                bitwiseRSs[i] = new ReservationStation("bitwiseRS" + i);
+                bitwiseRSs[i].arrayIndex = i;
+            }
+
+            for (int i = 0; i < config.branchFUs; i++)
+            {
+                branchFUs[i] = new BranchFU("branchFU" + i);
+                branchFUs[i].indexer = i;
+                branchRSs[i] = new ReservationStation("branchRS" + i);
+                branchRSs[i].arrayIndex = i;
+            }
+
+            for (int i = 0; i < config.shiftFUs; i++)
+            {
+                shiftFUs[i] = new ShiftFU("shiftFU" + i);
+                shiftFUs[i].indexer = i;
+                shiftRSs[i] = new ReservationStation("shiftRS" + i);
+                shiftRSs[i].arrayIndex = i;
+            }
+
+            for (int i = 0; i < config.memoryFUs; i++)
+            {
+                memoryFUs[i] = new MemoryUnit("memoryFU" + i);
+                memoryFUs[i].indexer = i;
+            }
+
+            for (int i = 0; i < (config.memoryFUs + 5); i++) 
+            { 
+                loadStoreBuffer[i] = new ReservationStation("load_storeBuffer" + i); 
+                loadStoreBuffer[i].arrayIndex = i; 
+            }
+        }
+
+        private void setCycleLimit()
+        {
+            foreach (IntAddFU fu in intAddFUs)
+                fu.oneCycleFU = true;
+            foreach (IntSubFU fu in intSubFUs)
+                fu.oneCycleFU = true;
+            foreach (IntMultFU fu in intMultFUs)
+                fu.oneCycleFU = true;
+            foreach (IntDivFU fu in intDivFUs)
+                fu.oneCycleFU = true;
+            foreach (FloatAddFU fu in flAddFUs)
+                fu.oneCycleFU = true;
+            foreach (FloatSubFU fu in flSubFUs)
+                fu.oneCycleFU = true;
+            foreach (FloatMultFU fu in flMultFUs)
+                fu.oneCycleFU = true;
+            foreach (FloatDivFU fu in flDivFUs)
+                fu.oneCycleFU = true;
+            foreach (BitwiseOPFU fu in bitFUs)
+                fu.oneCycleFU = true;
+            foreach (BranchFU fu in branchFUs)
+                fu.oneCycleFU = true;
+            foreach (ShiftFU fu in shiftFUs)
+                fu.oneCycleFU = true;
+            foreach (MemoryUnit fu in memoryFUs)
+                fu.oneCycleFU = true;
+        }
+
         private Instruction decode(Instruction instruction, ref InstructionMemory IM, ref ConfigCycle config)
         {
             CU.decode(ref IM, ref instruction, ref config);
@@ -446,301 +595,301 @@ namespace ISA_GUI
             switch (instruction.functionalUnitID)
             {
                 case 1:
-                    if(!intAddFu.instruction.stage2ExecutionFinished && !intAddFu.instruction.doneExecuting)
+                    if(!intAddFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished && !intAddFUs[instruction.functionalUnitIndex].instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intAddFu.instruction, ref config, out result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intAddFUs[instruction.functionalUnitIndex].instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
-                        intAddFu.instruction.stage2ExecutionFinished = true;
-                        intAddFu.instruction.executionInProgress = true;
-                        intAddFu.instruction.cycleControl--;
+                        intAddFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished = true;
+                        intAddFUs[instruction.functionalUnitIndex].instruction.executionInProgress = true;
+                        intAddFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
                     }
                     else
-                        intAddFu.instruction.cycleControl--;
-                    if (intAddFu.instruction.cycleControl == 0)
+                        intAddFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
+                    if (intAddFUs[instruction.functionalUnitIndex].instruction.cycleControl == 0)
                     {
-                        intAddFu.oneCycleFU = false;            //Makes sure this Functional Unit is only available for one cycle
-                        intAddFu.instruction.doneExecuting = true;
-                        intAddFu.instruction.executionInProgress = false;
-                        result = intAddFu.instruction.result;
+                        intAddFUs[instruction.functionalUnitIndex].oneCycleFU = false;            //Makes sure this Functional Unit is only available for one cycle
+                        intAddFUs[instruction.functionalUnitIndex].instruction.doneExecuting = true;
+                        intAddFUs[instruction.functionalUnitIndex].instruction.executionInProgress = false;
+                        result = intAddFUs[instruction.functionalUnitIndex].instruction.result;
                         instruction.doneExecuting = true;
                         instruction.executionInProgress = false;
-                        intAddFu.instruction = null;
+                        intAddFUs[instruction.functionalUnitIndex].instruction = null;
                         return instruction;
                     }
                     break;
                 case 2:
-                    if (!intSubFu.instruction.stage2ExecutionFinished && !intSubFu.instruction.doneExecuting)
+                    if (!intSubFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished && !intSubFUs[instruction.functionalUnitIndex].instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intSubFu.instruction, ref config, out result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intSubFUs[instruction.functionalUnitIndex].instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
-                        intSubFu.instruction.stage2ExecutionFinished = true;
-                        intSubFu.instruction.executionInProgress = true;
-                        intSubFu.instruction.cycleControl--;
+                        intSubFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished = true;
+                        intSubFUs[instruction.functionalUnitIndex].instruction.executionInProgress = true;
+                        intSubFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
                     }
                     else
-                        intSubFu.instruction.cycleControl--;
-                    if (intSubFu.instruction.cycleControl == 0)
+                        intSubFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
+                    if (intSubFUs[instruction.functionalUnitIndex].instruction.cycleControl == 0)
                     {
-                        result = intSubFu.instruction.result;
-                        intSubFu.oneCycleFU = false;        //Makes sure this Functional Unit is only available for one cycle
-                        intSubFu.instruction.doneExecuting = true;
-                        intSubFu.instruction.executionInProgress = false;
+                        result = intSubFUs[instruction.functionalUnitIndex].instruction.result;
+                        intSubFUs[instruction.functionalUnitIndex].oneCycleFU = false;        //Makes sure this Functional Unit is only available for one cycle
+                        intSubFUs[instruction.functionalUnitIndex].instruction.doneExecuting = true;
+                        intSubFUs[instruction.functionalUnitIndex].instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
                         instruction.executionInProgress = false;
-                        intSubFu.instruction = null;
+                        intSubFUs[instruction.functionalUnitIndex].instruction = null;
                         return instruction;
                     }
                     break;
                 case 3:
-                    if (!intMulFu.instruction.stage2ExecutionFinished && !intMulFu.instruction.doneExecuting)
+                    if (!intMultFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished && !intMultFUs[instruction.functionalUnitIndex].instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intMulFu.instruction, ref config, out result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intMultFUs[instruction.functionalUnitIndex].instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
-                        intMulFu.instruction.stage2ExecutionFinished = true;
-                        intMulFu.instruction.executionInProgress = true;
-                        intMulFu.instruction.cycleControl--;
+                        intMultFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished = true;
+                        intMultFUs[instruction.functionalUnitIndex].instruction.executionInProgress = true;
+                        intMultFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
                     }
                     else
-                        intMulFu.instruction.cycleControl--;
-                    if (intMulFu.instruction.cycleControl == 0)
+                        intMultFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
+                    if (intMultFUs[instruction.functionalUnitIndex].instruction.cycleControl == 0)
                     {
-                        result = intMulFu.instruction.result;
-                        intMulFu.oneCycleFU = false;       //Makes sure this Functional Unit is only available for one cycle
-                        intMulFu.instruction.doneExecuting = true;
-                        intMulFu.instruction.executionInProgress = false;
+                        result = intMultFUs[instruction.functionalUnitIndex].instruction.result;
+                        intMultFUs[instruction.functionalUnitIndex].oneCycleFU = false;       //Makes sure this Functional Unit is only available for one cycle
+                        intMultFUs[instruction.functionalUnitIndex].instruction.doneExecuting = true;
+                        intMultFUs[instruction.functionalUnitIndex].instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
                         instruction.executionInProgress = false;
-                        intMulFu.instruction = null;
+                        intMultFUs[instruction.functionalUnitIndex].instruction = null;
                         return instruction;
                     }
                     break;
                 case 4:
-                    if (!intDivFu.instruction.stage2ExecutionFinished && !intDivFu.instruction.doneExecuting)
+                    if (!intDivFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished && !intDivFUs[instruction.functionalUnitIndex].instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intDivFu.instruction, ref config, out result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref intDivFUs[instruction.functionalUnitIndex].instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
-                        intDivFu.instruction.stage2ExecutionFinished = true;
-                        intDivFu.instruction.executionInProgress = true;
-                        intDivFu.instruction.cycleControl--;
+                        intDivFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished = true;
+                        intDivFUs[instruction.functionalUnitIndex].instruction.executionInProgress = true;
+                        intDivFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
                     }
                     else
-                        intDivFu.instruction.cycleControl--;
-                    if (intDivFu.instruction.cycleControl == 0)
+                        intDivFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
+                    if (intDivFUs[instruction.functionalUnitIndex].instruction.cycleControl == 0)
                     {
-                        result = intDivFu.instruction.result;
-                        intDivFu.oneCycleFU = false;        //Makes sure this Functional Unit is only available for one cycle
-                        intDivFu.instruction.doneExecuting = true;
-                        intDivFu.instruction.executionInProgress = false;
+                        result = intDivFUs[instruction.functionalUnitIndex].instruction.result;
+                        intDivFUs[instruction.functionalUnitIndex].oneCycleFU = false;        //Makes sure this Functional Unit is only available for one cycle
+                        intDivFUs[instruction.functionalUnitIndex].instruction.doneExecuting = true;
+                        intDivFUs[instruction.functionalUnitIndex].instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
                         instruction.executionInProgress = false;
-                        intDivFu.instruction = null;
+                        intDivFUs[instruction.functionalUnitIndex].instruction = null;
                         return instruction;
                     }
                     break;
                 case 5:
-                    if (!flAddFu.instruction.stage2ExecutionFinished && !flAddFu.instruction.doneExecuting)
+                    if (!flAddFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished && !flAddFUs[instruction.functionalUnitIndex].instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref flAddFu.instruction, ref config, out result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref flAddFUs[instruction.functionalUnitIndex].instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
-                        flAddFu.instruction.stage2ExecutionFinished = true;
-                        flAddFu.instruction.executionInProgress = true;
-                        flAddFu.instruction.cycleControl--;
+                        flAddFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished = true;
+                        flAddFUs[instruction.functionalUnitIndex].instruction.executionInProgress = true;
+                        flAddFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
                     }
                     else
-                        flAddFu.instruction.cycleControl--;
-                    if (flAddFu.instruction.cycleControl == 0)
+                        flAddFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
+                    if (flAddFUs[instruction.functionalUnitIndex].instruction.cycleControl == 0)
                     {
-                        result = flAddFu.instruction.result;
-                        flAddFu.oneCycleFU = false;      //Makes sure this Functional Unit is only available for one cycle
-                        flAddFu.instruction.doneExecuting = true;
-                        flAddFu.instruction.executionInProgress = false;
+                        result = flAddFUs[instruction.functionalUnitIndex].instruction.result;
+                        flAddFUs[instruction.functionalUnitIndex].oneCycleFU = false;      //Makes sure this Functional Unit is only available for one cycle
+                        flAddFUs[instruction.functionalUnitIndex].instruction.doneExecuting = true;
+                        flAddFUs[instruction.functionalUnitIndex].instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
                         instruction.executionInProgress = false;
-                        flAddFu.instruction = null;
+                        flAddFUs[instruction.functionalUnitIndex].instruction = null;
                         return instruction;
                     }
                     break;
                 case 6:
-                    if (!flSubFu.instruction.stage2ExecutionFinished && !flSubFu.instruction.doneExecuting)
+                    if (!flSubFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished && !flSubFUs[instruction.functionalUnitIndex].instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref flSubFu.instruction, ref config, out result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref flSubFUs[instruction.functionalUnitIndex].instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
-                        flSubFu.instruction.stage2ExecutionFinished = true;
-                        flSubFu.instruction.executionInProgress = true;
-                        flSubFu.instruction.cycleControl--;
+                        flSubFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished = true;
+                        flSubFUs[instruction.functionalUnitIndex].instruction.executionInProgress = true;
+                        flSubFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
                     }
                     else
-                        flSubFu.instruction.cycleControl--;
-                    if (flSubFu.instruction.cycleControl == 0)
+                        flSubFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
+                    if (flSubFUs[instruction.functionalUnitIndex].instruction.cycleControl == 0)
                     {
-                        result = flSubFu.instruction.result;
-                        flSubFu.oneCycleFU = false;      //Makes sure this Functional Unit is only available for one cycle
-                        flSubFu.instruction.doneExecuting = true;
-                        flSubFu.instruction.executionInProgress = false;
+                        result = flSubFUs[instruction.functionalUnitIndex].instruction.result;
+                        flSubFUs[instruction.functionalUnitIndex].oneCycleFU = false;      //Makes sure this Functional Unit is only available for one cycle
+                        flSubFUs[instruction.functionalUnitIndex].instruction.doneExecuting = true;
+                        flSubFUs[instruction.functionalUnitIndex].instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
                         instruction.executionInProgress = false;
-                        flSubFu.instruction = null;
+                        flSubFUs[instruction.functionalUnitIndex].instruction = null;
                         return instruction;
                     }
                     break;
                 case 7:
-                    if (!flMultFu.instruction.stage2ExecutionFinished && !flMultFu.instruction.doneExecuting)
+                    if (!flMultFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished && !flMultFUs[instruction.functionalUnitIndex].instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref flMultFu.instruction, ref config, out result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref flMultFUs[instruction.functionalUnitIndex].instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
-                        flMultFu.instruction.stage2ExecutionFinished = true;
-                        flMultFu.instruction.executionInProgress = true;
-                        flMultFu.instruction.cycleControl--;
+                        flMultFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished = true;
+                        flMultFUs[instruction.functionalUnitIndex].instruction.executionInProgress = true;
+                        flMultFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
                     }
                     else
-                        flMultFu.instruction.cycleControl--;
-                    if (flMultFu.instruction.cycleControl == 0)
+                        flMultFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
+                    if (flMultFUs[instruction.functionalUnitIndex].instruction.cycleControl == 0)
                     {
-                        result = flMultFu.instruction.result;
-                        flMultFu.oneCycleFU = false;     //Makes sure this Functional Unit is only available for one cycle
-                        flMultFu.instruction.doneExecuting = true;
-                        flMultFu.instruction.executionInProgress = false;
+                        result = flMultFUs[instruction.functionalUnitIndex].instruction.result;
+                        flMultFUs[instruction.functionalUnitIndex].oneCycleFU = false;     //Makes sure this Functional Unit is only available for one cycle
+                        flMultFUs[instruction.functionalUnitIndex].instruction.doneExecuting = true;
+                        flMultFUs[instruction.functionalUnitIndex].instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
                         instruction.executionInProgress = false;
-                        flMultFu.instruction = null;
+                        flMultFUs[instruction.functionalUnitIndex].instruction = null;
                         return instruction;
                     }
                     break;
                 case 8:
-                    if (!flDivFu.instruction.stage2ExecutionFinished && !flDivFu.instruction.doneExecuting)
+                    if (!flDivFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished && !flDivFUs[instruction.functionalUnitIndex].instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref flDivFu.instruction, ref config, out result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref flDivFUs[instruction.functionalUnitIndex].instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
-                        flDivFu.instruction.stage2ExecutionFinished = true;
-                        flDivFu.instruction.executionInProgress = true;
-                        flDivFu.instruction.cycleControl--;
+                        flDivFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished = true;
+                        flDivFUs[instruction.functionalUnitIndex].instruction.executionInProgress = true;
+                        flDivFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
                     }
                     else
-                        flDivFu.instruction.cycleControl--;
-                    if (flDivFu.instruction.cycleControl == 0)
+                        flDivFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
+                    if (flDivFUs[instruction.functionalUnitIndex].instruction.cycleControl == 0)
                     {
-                        result = flDivFu.instruction.result;
-                        flDivFu.oneCycleFU = false;      //Makes sure this Functional Unit is only available for one cycle
-                        flDivFu.instruction.doneExecuting = true;
-                        flDivFu.instruction.executionInProgress = false;
+                        result = flDivFUs[instruction.functionalUnitIndex].instruction.result;
+                        flDivFUs[instruction.functionalUnitIndex].oneCycleFU = false;      //Makes sure this Functional Unit is only available for one cycle
+                        flDivFUs[instruction.functionalUnitIndex].instruction.doneExecuting = true;
+                        flDivFUs[instruction.functionalUnitIndex].instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
                         instruction.executionInProgress = false;
-                        flDivFu.instruction = null;
+                        flDivFUs[instruction.functionalUnitIndex].instruction = null;
                         return instruction;
                     }
                     break;
                 case 9:
-                    if (!bitFu.instruction.stage2ExecutionFinished && !bitFu.instruction.doneExecuting)
+                    if (!bitFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished && !bitFUs[instruction.functionalUnitIndex].instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref bitFu.instruction, ref config, out result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref bitFUs[instruction.functionalUnitIndex].instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
-                        bitFu.instruction.stage2ExecutionFinished = true;
-                        bitFu.instruction.executionInProgress = true;
-                        bitFu.instruction.cycleControl--;
+                        bitFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished = true;
+                        bitFUs[instruction.functionalUnitIndex].instruction.executionInProgress = true;
+                        bitFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
                     }
                     else
-                        bitFu.instruction.cycleControl--;
-                    if (bitFu.instruction.cycleControl == 0)
+                        bitFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
+                    if (bitFUs[instruction.functionalUnitIndex].instruction.cycleControl == 0)
                     {
-                        result = bitFu.instruction.result;
-                        bitFu.oneCycleFU = false;     //Makes sure this Functional Unit is only available for one cycle
-                        bitFu.instruction.doneExecuting = true;
-                        bitFu.instruction.executionInProgress = false;
+                        result = bitFUs[instruction.functionalUnitIndex].instruction.result;
+                        bitFUs[instruction.functionalUnitIndex].oneCycleFU = false;     //Makes sure this Functional Unit is only available for one cycle
+                        bitFUs[instruction.functionalUnitIndex].instruction.doneExecuting = true;
+                        bitFUs[instruction.functionalUnitIndex].instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
                         instruction.executionInProgress = false;
-                        bitFu.instruction = null;
+                        bitFUs[instruction.functionalUnitIndex].instruction = null;
                         return instruction;
                     }
                     break;
                 case 10:
-                    if (!memoryFu.instruction.stage2ExecutionFinished && !memoryFu.instruction.doneExecuting)
+                    if (!memoryFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished && !memoryFUs[instruction.functionalUnitIndex].instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref memoryFu.instruction, ref config, out result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref memoryFUs[instruction.functionalUnitIndex].instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
-                        memoryFu.instruction.stage2ExecutionFinished = true;
-                        memoryFu.instruction.executionInProgress = true;
-                        memoryFu.instruction.cycleControl--;
+                        memoryFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished = true;
+                        memoryFUs[instruction.functionalUnitIndex].instruction.executionInProgress = true;
+                        memoryFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
                     }
                     else
-                        memoryFu.instruction.cycleControl--;
-                    if (memoryFu.instruction.cycleControl == 0)
+                        memoryFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
+                    if (memoryFUs[instruction.functionalUnitIndex].instruction.cycleControl == 0)
                     {
-                        result = memoryFu.instruction.result;
-                        memoryFu.oneCycleFU = false;        //Makes sure this Functional Unit is only available for one cycle
-                        memoryFu.instruction.doneExecuting = true;
-                        memoryFu.instruction.executionInProgress = false;
+                        result = memoryFUs[instruction.functionalUnitIndex].instruction.result;
+                        memoryFUs[instruction.functionalUnitIndex].oneCycleFU = false;        //Makes sure this Functional Unit is only available for one cycle
+                        memoryFUs[instruction.functionalUnitIndex].instruction.doneExecuting = true;
+                        memoryFUs[instruction.functionalUnitIndex].instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
                         instruction.executionInProgress = false;
                         return instruction;
                     }
                     break;
                 case 11:
-                    if (!branchFu.instruction.stage2ExecutionFinished && !branchFu.instruction.doneExecuting)
+                    if (!branchFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished && !branchFUs[instruction.functionalUnitIndex].instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref branchFu.instruction, ref config, out result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref branchFUs[instruction.functionalUnitIndex].instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
-                        branchFu.instruction.stage2ExecutionFinished = true;
-                        branchFu.instruction.executionInProgress = true;
-                        branchFu.instruction.cycleControl--;
+                        branchFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished = true;
+                        branchFUs[instruction.functionalUnitIndex].instruction.executionInProgress = true;
+                        branchFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
                     }
                     else
-                        branchFu.instruction.cycleControl--;
-                    if (branchFu.instruction.cycleControl == 0)
+                        branchFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
+                    if (branchFUs[instruction.functionalUnitIndex].instruction.cycleControl == 0)
                     {
-                        result = branchFu.instruction.result;
-                        branchFu.oneCycleFU = false;        //Makes sure this Functional Unit is only available for one cycle
-                        branchFu.instruction.doneExecuting = true;
-                        branchFu.instruction.executionInProgress = false;
+                        result = branchFUs[instruction.functionalUnitIndex].instruction.result;
+                        branchFUs[instruction.functionalUnitIndex].oneCycleFU = false;        //Makes sure this Functional Unit is only available for one cycle
+                        branchFUs[instruction.functionalUnitIndex].instruction.doneExecuting = true;
+                        branchFUs[instruction.functionalUnitIndex].instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
                         instruction.executionInProgress = false;
-                        branchFu.instruction = null;
+                        branchFUs[instruction.functionalUnitIndex].instruction = null;
                         return instruction;
                     }
                     break;
                 case 12:
-                    if (!shiftFu.instruction.stage2ExecutionFinished && !shiftFu.instruction.doneExecuting)
+                    if (!shiftFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished && !shiftFUs[instruction.functionalUnitIndex].instruction.doneExecuting)
                     {
-                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref shiftFu.instruction, ref config, out result);
+                        EU.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref shiftFUs[instruction.functionalUnitIndex].instruction, ref config, out result);
                         instruction.doneExecuting = false;
                         instruction.executionInProgress = true;
                         instruction.stage2ExecutionFinished = true;
-                        shiftFu.instruction.stage2ExecutionFinished = true;
-                        shiftFu.instruction.executionInProgress = true;
-                        shiftFu.instruction.cycleControl--;
+                        shiftFUs[instruction.functionalUnitIndex].instruction.stage2ExecutionFinished = true;
+                        shiftFUs[instruction.functionalUnitIndex].instruction.executionInProgress = true;
+                        shiftFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
                     }
                     else
-                        shiftFu.instruction.cycleControl--;
-                    if (shiftFu.instruction.cycleControl == 0)
+                        shiftFUs[instruction.functionalUnitIndex].instruction.cycleControl--;
+                    if (shiftFUs[instruction.functionalUnitIndex].instruction.cycleControl == 0)
                     {
-                        result = shiftFu.instruction.result;
-                        shiftFu.oneCycleFU = false;         //Makes sure this Functional Unit is only available for one cycle
-                        shiftFu.instruction.doneExecuting = true;
-                        shiftFu.instruction.executionInProgress = false;
+                        result = shiftFUs[instruction.functionalUnitIndex].instruction.result;
+                        shiftFUs[instruction.functionalUnitIndex].oneCycleFU = false;         //Makes sure this Functional Unit is only available for one cycle
+                        shiftFUs[instruction.functionalUnitIndex].instruction.doneExecuting = true;
+                        shiftFUs[instruction.functionalUnitIndex].instruction.executionInProgress = false;
                         instruction.doneExecuting = true;
                         instruction.executionInProgress = false;
-                        shiftFu.instruction = null;
+                        shiftFUs[instruction.functionalUnitIndex].instruction = null;
                         return instruction;
                     }
                     break;
@@ -748,7 +897,7 @@ namespace ISA_GUI
             return instruction;
         }
 
-        private void sendToFU(ref Instruction instruction)
+        private void sendToFU(ref Instruction instruction, ConfigCycle config)
         {
             if (instruction.opcode == 0 || instruction.opcode == 1)
                 return;
@@ -756,111 +905,159 @@ namespace ISA_GUI
             switch(instruction.functionalUnitID)
             {
                 case 1:
-                    if (intAddFu.instruction == null && intAddFu.oneCycleFU) 
+                    for(int i = 0; i < config.intAddFUs; i++)
                     {
-                        intAddFu.instruction = intAddRS.instruction;
-                        intAddRS.instruction = null;
-                        intAddRS.Busy = false;
-                        return;
+                        if (intAddFUs[i].instruction == null && intAddFUs[i].oneCycleFU)
+                        {
+                            intAddFUs[i].instruction = intAddRSs[instruction.reservationStationIndex].instruction;
+                            intAddFUs[i].instruction.functionalUnitIndex = i;
+                            intAddRSs[instruction.reservationStationIndex].instruction = null;
+                            intAddRSs[instruction.reservationStationIndex].Busy = false;
+                            return;
+                        }
                     }
                     break;
                 case 2:
-                    if (intSubFu.instruction == null && intSubFu.oneCycleFU)
+                    for (int i = 0; i < config.intSubFUs; i++)
                     {
-                        intSubFu.instruction = intSubRS.instruction;
-                        intSubRS.instruction = null;
-                        intSubRS.Busy = false;
-                        return;
+                        if (intSubFUs[i].instruction == null && intSubFUs[i].oneCycleFU)
+                        {
+                            intSubFUs[i].instruction = intSubRSs[instruction.reservationStationIndex].instruction;
+                            intSubFUs[i].instruction.functionalUnitIndex = i;
+                            intSubRSs[instruction.reservationStationIndex].instruction = null;
+                            intSubRSs[instruction.reservationStationIndex].Busy = false;
+                            return;
+                        }
                     }
                     break;
                 case 3:
-                    if (intMulFu.instruction == null && intMulFu.oneCycleFU)
+                    for (int i = 0; i < config.intMultFUs; i++)
                     {
-                        intMulFu.instruction = intMultRS.instruction;
-                        intMultRS.instruction = null;
-                        intMultRS.Busy = false;
-                        return;
+                        if (intMultFUs[i].instruction == null && intMultFUs[i].oneCycleFU)
+                        {
+                            intMultFUs[i].instruction = intMultRSs[instruction.reservationStationIndex].instruction;
+                            intMultFUs[i].instruction.functionalUnitIndex = i;
+                            intMultRSs[instruction.reservationStationIndex].instruction = null;
+                            intMultRSs[instruction.reservationStationIndex].Busy = false;
+                            return;
+                        }
                     }
                     break;
                 case 4:
-                    if (intDivFu.instruction == null && intDivFu.oneCycleFU)
+                    for (int i = 0; i < config.intDivFus; i++)
                     {
-                        intDivFu.instruction = intDivRS.instruction;
-                        intDivRS.instruction = null;
-                        intDivRS.Busy = false;
-                        return;
+                        if (intDivFUs[i].instruction == null && intDivFUs[i].oneCycleFU)
+                        {
+                            intDivFUs[i].instruction = intDivRSs[instruction.reservationStationIndex].instruction;
+                            intDivFUs[i].instruction.functionalUnitIndex = i;
+                            intDivRSs[instruction.reservationStationIndex].instruction = null;
+                            intDivRSs[instruction.reservationStationIndex].Busy = false;
+                            return;
+                        }
                     }
                     break;
                 case 5:
-                    if (flAddFu.instruction == null && flAddFu.oneCycleFU)
+                    for (int i = 0; i < config.flAddFUs; i++)
                     {
-                        flAddFu.instruction = floatAddRS.instruction;
-                        floatAddRS.instruction = null;
-                        floatAddRS.Busy = false;
-                        return;
+                        if (flAddFUs[i].instruction == null && flAddFUs[i].oneCycleFU)
+                        {
+                            flAddFUs[i].instruction = floatAddRSs[instruction.reservationStationIndex].instruction;
+                            flAddFUs[i].instruction.functionalUnitIndex = i;
+                            floatAddRSs[instruction.reservationStationIndex].instruction = null;
+                            floatAddRSs[instruction.reservationStationIndex].Busy = false;
+                            return;
+                        }
                     }
                     break;
                 case 6:
-                    if (flSubFu.instruction == null && flSubFu.oneCycleFU)
+                    for (int i = 0; i < config.flSubFUs; i++)
                     {
-                        flSubFu.instruction = floatSubRS.instruction;
-                        floatSubRS.instruction = null;
-                        floatSubRS.Busy = false;
-                        return;
+                        if (flSubFUs[i].instruction == null && flSubFUs[i].oneCycleFU)
+                        {
+                            flSubFUs[i].instruction = floatSubRSs[instruction.reservationStationIndex].instruction;
+                            flSubFUs[i].instruction.functionalUnitIndex = i;
+                            floatSubRSs[instruction.reservationStationIndex].instruction = null;
+                            floatSubRSs[instruction.reservationStationIndex].Busy = false;
+                            return;
+                        }
                     }
                     break;
                 case 7:
-                    if (flMultFu.instruction == null && flMultFu.oneCycleFU )
+                    for (int i = 0; i < config.flMultFUs; i++)
                     {
-                        flMultFu.instruction = floatMultRS.instruction;
-                        floatMultRS.instruction = null;
-                        floatMultRS.Busy = false;
-                        return;
+                        if (flMultFUs[i].instruction == null && flSubFUs[i].oneCycleFU)
+                        {
+                            flMultFUs[i].instruction = floatMultRSs[instruction.reservationStationIndex].instruction;
+                            flMultFUs[i].instruction.functionalUnitIndex = i;
+                            floatMultRSs[instruction.reservationStationIndex].instruction = null;
+                            floatMultRSs[instruction.reservationStationIndex].Busy = false;
+                            return;
+                        }
                     }
                     break;
                 case 8:
-                    if (flDivFu.instruction == null && flDivFu.oneCycleFU )
+                    for (int i = 0; i < config.flDivFUs; i++)
                     {
-                        flDivFu.instruction = floatDivRS.instruction;
-                        floatDivRS.instruction = null;
-                        floatDivRS.Busy = false;
-                        return;
+                        if (flDivFUs[i].instruction == null && flDivFUs[i].oneCycleFU)
+                        {
+                            flDivFUs[i].instruction = floatDivRSs[instruction.reservationStationIndex].instruction;
+                            flDivFUs[i].instruction.functionalUnitIndex = i;
+                            floatDivRSs[instruction.reservationStationIndex].instruction = null;
+                            floatDivRSs[instruction.reservationStationIndex].Busy = false;
+                            return;
+                        }
                     }
                     break;
                 case 9:
-                    if (bitFu.instruction == null && bitFu.oneCycleFU)
+                    for (int i = 0; i < config.bitwiseFUs; i++)
                     {
-                        bitFu.instruction = bitwiseOPRS.instruction;
-                        bitwiseOPRS.instruction = null;
-                        bitwiseOPRS.Busy = false;
-                        return;
+                        if (bitFUs[i].instruction == null && bitFUs[i].oneCycleFU)
+                        {
+                            bitFUs[i].instruction = bitwiseRSs[instruction.reservationStationIndex].instruction;
+                            bitFUs[i].instruction.functionalUnitIndex = i;
+                            bitwiseRSs[instruction.reservationStationIndex].instruction = null;
+                            bitwiseRSs[instruction.reservationStationIndex].Busy = false;
+                            return;
+                        }
                     }
                     break;
                 case 10:
-                    if (memoryFu.instruction == null && memoryFu.oneCycleFU )
+                    for (int i = 0; i < config.memoryFUs; i++)
                     {
-                        memoryFu.instruction = loadStoreBuffer[instruction.reservationStationIndex].instruction;
-                        loadStoreBuffer[instruction.reservationStationIndex].instruction = null;
-                        loadStoreBuffer[instruction.reservationStationIndex].Busy = false;
-                        return;
+                        if (memoryFUs[i].instruction == null && memoryFUs[i].oneCycleFU)
+                        {
+                            memoryFUs[i].instruction = loadStoreBuffer[instruction.reservationStationIndex].instruction;
+                            memoryFUs[i].instruction.functionalUnitIndex = i;
+                            loadStoreBuffer[instruction.reservationStationIndex].instruction = null;
+                            loadStoreBuffer[instruction.reservationStationIndex].Busy = false;
+                            return;
+                        }
                     }
                     break;
                 case 11:
-                    if (branchFu.instruction == null && branchFu.oneCycleFU )
+                    for (int i = 0; i < config.branchFUs; i++)
                     {
-                        branchFu.instruction = branchOPS.instruction;
-                        branchOPS.instruction = null;
-                        branchOPS.Busy = false;
-                        return;
+                        if (branchFUs[i].instruction == null && branchFUs[i].oneCycleFU)
+                        {
+                            branchFUs[i].instruction = branchRSs[instruction.reservationStationIndex].instruction;
+                            branchFUs[i].instruction.functionalUnitIndex = i;
+                            branchRSs[instruction.reservationStationIndex].instruction = null;
+                            branchRSs[instruction.reservationStationIndex].Busy = false;
+                            return;
+                        }
                     }
                     break;
                 case 12:
-                    if (shiftFu.instruction == null && shiftFu.oneCycleFU )
+                    for (int i = 0; i < config.shiftFUs; i++)
                     {
-                        shiftFu.instruction = shiftOPS.instruction;
-                        shiftOPS.instruction = null;
-                        shiftOPS.Busy = false;
-                        return;
+                        if (shiftFUs[i].instruction == null && shiftFUs[i].oneCycleFU)
+                        {
+                            shiftFUs[i].instruction = shiftRSs[instruction.reservationStationIndex].instruction;
+                            shiftFUs[i].instruction.functionalUnitIndex = i;
+                            shiftRSs[instruction.reservationStationIndex].instruction = null;
+                            shiftRSs[instruction.reservationStationIndex].Busy = false;
+                            return;
+                        }
                     }
                     break;
             }
@@ -873,15 +1070,15 @@ namespace ISA_GUI
             {
                 case 10:
                 case 12:
-                    checkOperandDependencies(ref memoryFu.instruction, ref registers);
+                    checkOperandDependencies(ref memoryFUs[instruction.functionalUnitIndex].instruction, ref registers);
                     if (instruction.isFloat)
                     {
-                        if (memoryFu.instruction.fOp1 != "")
+                        if (memoryFUs[instruction.functionalUnitIndex].instruction.fOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(memoryFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
+                            if (CDB.CDB.ContainsKey(memoryFUs[instruction.functionalUnitIndex].instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    memoryFu.instruction.fOperand1 = float.Parse(CDB.CDB[memoryFu.instruction.fOp1]);
+                                    memoryFUs[instruction.functionalUnitIndex].instruction.fOperand1 = float.Parse(CDB.CDB[memoryFUs[instruction.functionalUnitIndex].instruction.fOp1]);
                             }
                             else
                             {
@@ -890,16 +1087,16 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            memoryFu.instruction.fOperand1 = registers.floatRegisters[0];
+                            memoryFUs[instruction.functionalUnitIndex].instruction.fOperand1 = registers.floatRegisters[0];
                     }
                     else
                     {
-                        if (memoryFu.instruction.iOp1 != "")
+                        if (memoryFUs[instruction.functionalUnitIndex].instruction.iOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(memoryFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
+                            if (CDB.CDB.ContainsKey(memoryFUs[instruction.functionalUnitIndex].instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    memoryFu.instruction.iOperand1 = int.Parse(CDB.CDB[memoryFu.instruction.iOp1]);
+                                    memoryFUs[instruction.functionalUnitIndex].instruction.iOperand1 = int.Parse(CDB.CDB[memoryFUs[instruction.functionalUnitIndex].instruction.iOp1]);
                             }
                             else
                             {
@@ -908,19 +1105,19 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            memoryFu.instruction.iOperand1 = registers.intRegisters[0];
+                            memoryFUs[instruction.functionalUnitIndex].instruction.iOperand1 = registers.intRegisters[0];
                     }
                     break;
                 case 13:
                     if (instruction.isFloat)
                     {
-                        checkOperandDependencies(ref flSubFu.instruction, ref registers);
-                        if (flSubFu.instruction.fOp1 != "")
+                        checkOperandDependencies(ref flSubFUs[instruction.functionalUnitIndex].instruction, ref registers);
+                        if (flSubFUs[instruction.functionalUnitIndex].instruction.fOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(flSubFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
+                            if (CDB.CDB.ContainsKey(flSubFUs[instruction.functionalUnitIndex].instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    flSubFu.instruction.fOperand1 = int.Parse(CDB.CDB[flSubFu.instruction.fOp1]);
+                                    flSubFUs[instruction.functionalUnitIndex].instruction.fOperand1 = int.Parse(CDB.CDB[flSubFUs[instruction.functionalUnitIndex].instruction.fOp1]);
                             }
                             else
                             {
@@ -929,17 +1126,17 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            flSubFu.instruction.fOperand1 = registers.floatRegisters[flSubFu.instruction.r3];
+                            flSubFUs[instruction.functionalUnitIndex].instruction.fOperand1 = registers.floatRegisters[flSubFUs[instruction.functionalUnitIndex].instruction.r3];
                     }
                     else
                     {
-                        checkOperandDependencies(ref intSubFu.instruction, ref registers);
-                        if (intSubFu.instruction.iOp1 != "")
+                        checkOperandDependencies(ref intSubFUs[instruction.functionalUnitIndex].instruction, ref registers);
+                        if (intSubFUs[instruction.functionalUnitIndex].instruction.iOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intSubFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
+                            if (CDB.CDB.ContainsKey(intSubFUs[instruction.functionalUnitIndex].instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    intSubFu.instruction.iOperand1 = int.Parse(CDB.CDB[intSubFu.instruction.iOp1]);
+                                    intSubFUs[instruction.functionalUnitIndex].instruction.iOperand1 = int.Parse(CDB.CDB[intSubFUs[instruction.functionalUnitIndex].instruction.iOp1]);
                             }
                             else
                             {
@@ -948,20 +1145,20 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            intSubFu.instruction.iOperand1 = registers.intRegisters[intSubFu.instruction.r3];
+                            intSubFUs[instruction.functionalUnitIndex].instruction.iOperand1 = registers.intRegisters[intSubFUs[instruction.functionalUnitIndex].instruction.r3];
                     }
                     break;
                 case 14:
                     
                     if (instruction.isFloat)
                     {
-                        checkOperandDependencies(ref flSubFu.instruction, ref registers);
-                        if (flSubFu.instruction.fOp1 != "")
+                        checkOperandDependencies(ref flSubFUs[instruction.functionalUnitIndex].instruction, ref registers);
+                        if (flSubFUs[instruction.functionalUnitIndex].instruction.fOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(flSubFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
+                            if (CDB.CDB.ContainsKey(flSubFUs[instruction.functionalUnitIndex].instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    flSubFu.instruction.fOperand1 = int.Parse(CDB.CDB[flSubFu.instruction.fOp1]);
+                                    flSubFUs[instruction.functionalUnitIndex].instruction.fOperand1 = int.Parse(CDB.CDB[flSubFUs[instruction.functionalUnitIndex].instruction.fOp1]);
                             }
                             else
                             {
@@ -970,13 +1167,13 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            flSubFu.instruction.fOperand1 = registers.floatRegisters[flSubFu.instruction.r1];
-                        if (flSubFu.instruction.fOp2 != "")
+                            flSubFUs[instruction.functionalUnitIndex].instruction.fOperand1 = registers.floatRegisters[flSubFUs[instruction.functionalUnitIndex].instruction.r1];
+                        if (flSubFUs[instruction.functionalUnitIndex].instruction.fOp2 != "")
                         {
-                            if (CDB.CDB.ContainsKey(flSubFu.instruction.fOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
+                            if (CDB.CDB.ContainsKey(flSubFUs[instruction.functionalUnitIndex].instruction.fOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                             {
                                 if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
-                                    flSubFu.instruction.fOperand2 = float.Parse(CDB.CDB[flSubFu.instruction.fOp2]);
+                                    flSubFUs[instruction.functionalUnitIndex].instruction.fOperand2 = float.Parse(CDB.CDB[flSubFUs[instruction.functionalUnitIndex].instruction.fOp2]);
                             }
                             else
                             {
@@ -985,17 +1182,17 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            flSubFu.instruction.fOperand2 = registers.floatRegisters[flSubFu.instruction.r2];
+                            flSubFUs[instruction.functionalUnitIndex].instruction.fOperand2 = registers.floatRegisters[flSubFUs[instruction.functionalUnitIndex].instruction.r2];
                     }
                     else
                     {
-                        checkOperandDependencies(ref flSubFu.instruction, ref registers);
-                        if (intSubFu.instruction.iOp1 != "")
+                        checkOperandDependencies(ref flSubFUs[instruction.functionalUnitIndex].instruction, ref registers);
+                        if (intSubFUs[instruction.functionalUnitIndex].instruction.iOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intSubFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
+                            if (CDB.CDB.ContainsKey(intSubFUs[instruction.functionalUnitIndex].instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    intSubFu.instruction.iOperand1 = int.Parse(CDB.CDB[intSubFu.instruction.iOp1]);
+                                    intSubFUs[instruction.functionalUnitIndex].instruction.iOperand1 = int.Parse(CDB.CDB[intSubFUs[instruction.functionalUnitIndex].instruction.iOp1]);
                             }
                             else
                             {
@@ -1004,31 +1201,31 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            intSubFu.instruction.iOperand1 = registers.intRegisters[intSubFu.instruction.r1];
-                        if (intSubFu.instruction.iOp2 != "")
+                            intSubFUs[instruction.functionalUnitIndex].instruction.iOperand1 = registers.intRegisters[intSubFUs[instruction.functionalUnitIndex].instruction.r1];
+                        if (intSubFUs[instruction.functionalUnitIndex].instruction.iOp2 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intSubFu.instruction.iOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
+                            if (CDB.CDB.ContainsKey(intSubFUs[instruction.functionalUnitIndex].instruction.iOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                             {
                                 if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
-                                    intSubFu.instruction.iOperand2 = int.Parse(CDB.CDB[intSubFu.instruction.iOp2]);
+                                    intSubFUs[instruction.functionalUnitIndex].instruction.iOperand2 = int.Parse(CDB.CDB[intSubFUs[instruction.functionalUnitIndex].instruction.iOp2]);
                             }
                             else
                                 trueDependenceDelay++;
                         }
                         else
-                            intSubFu.instruction.iOperand2 = registers.intRegisters[intSubFu.instruction.r2];
+                            intSubFUs[instruction.functionalUnitIndex].instruction.iOperand2 = registers.intRegisters[intSubFUs[instruction.functionalUnitIndex].instruction.r2];
                     }
                     break;
                 case 15:
                     if (instruction.isFloat)
                     {
-                        checkOperandDependencies(ref memoryFu.instruction, ref registers);
-                        if (memoryFu.instruction.fOp1 != "")
+                        checkOperandDependencies(ref memoryFUs[instruction.functionalUnitIndex].instruction, ref registers);
+                        if (memoryFUs[instruction.functionalUnitIndex].instruction.fOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(memoryFu.instruction.fOp1))
+                            if (CDB.CDB.ContainsKey(memoryFUs[instruction.functionalUnitIndex].instruction.fOp1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    memoryFu.instruction.fOperand1 = float.Parse(CDB.CDB[memoryFu.instruction.fOp1]);
+                                    memoryFUs[instruction.functionalUnitIndex].instruction.fOperand1 = float.Parse(CDB.CDB[memoryFUs[instruction.functionalUnitIndex].instruction.fOp1]);
                             }
                             else
                             {
@@ -1037,17 +1234,17 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            memoryFu.instruction.fOperand1 = registers.floatRegisters[memoryFu.instruction.r2];
+                            memoryFUs[instruction.functionalUnitIndex].instruction.fOperand1 = registers.floatRegisters[memoryFUs[instruction.functionalUnitIndex].instruction.r2];
                     }
                     else
                     {
-                        checkOperandDependencies(ref memoryFu.instruction, ref registers);
-                        if (memoryFu.instruction.iOp1 != "")
+                        checkOperandDependencies(ref memoryFUs[instruction.functionalUnitIndex].instruction, ref registers);
+                        if (memoryFUs[instruction.functionalUnitIndex].instruction.iOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(memoryFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
+                            if (CDB.CDB.ContainsKey(memoryFUs[instruction.functionalUnitIndex].instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    memoryFu.instruction.iOperand1 = int.Parse(CDB.CDB[memoryFu.instruction.iOp1]);
+                                    memoryFUs[instruction.functionalUnitIndex].instruction.iOperand1 = int.Parse(CDB.CDB[memoryFUs[instruction.functionalUnitIndex].instruction.iOp1]);
                             }
                             else
                             {
@@ -1056,20 +1253,20 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            memoryFu.instruction.iOperand1 = registers.intRegisters[memoryFu.instruction.r2];
+                            memoryFUs[instruction.functionalUnitIndex].instruction.iOperand1 = registers.intRegisters[memoryFUs[instruction.functionalUnitIndex].instruction.r2];
                     }
                     break;
                 case 16:
                 case 17:
                 case 18:
                 case 19:
-                    checkOperandDependencies(ref shiftFu.instruction, ref registers);
-                    if (shiftFu.instruction.iOp1 != "")
+                    checkOperandDependencies(ref shiftFUs[instruction.functionalUnitIndex].instruction, ref registers);
+                    if (shiftFUs[instruction.functionalUnitIndex].instruction.iOp1 != "")
                     {
-                        if (CDB.CDB.ContainsKey(shiftFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
+                        if (CDB.CDB.ContainsKey(shiftFUs[instruction.functionalUnitIndex].instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                         {
                             if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                shiftFu.instruction.iOperand1 = int.Parse(CDB.CDB[shiftFu.instruction.iOp1]);
+                                shiftFUs[instruction.functionalUnitIndex].instruction.iOperand1 = int.Parse(CDB.CDB[shiftFUs[instruction.functionalUnitIndex].instruction.iOp1]);
                         }
                         else
                         {
@@ -1078,13 +1275,13 @@ namespace ISA_GUI
                         }
                     }
                     else
-                        shiftFu.instruction.iOperand1 = registers.intRegisters[shiftFu.instruction.r1];
-                    if (shiftFu.instruction.iOp2 != "")
+                        shiftFUs[instruction.functionalUnitIndex].instruction.iOperand1 = registers.intRegisters[shiftFUs[instruction.functionalUnitIndex].instruction.r1];
+                    if (shiftFUs[instruction.functionalUnitIndex].instruction.iOp2 != "")
                     {
-                        if (CDB.CDB.ContainsKey(shiftFu.instruction.iOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
+                        if (CDB.CDB.ContainsKey(shiftFUs[instruction.functionalUnitIndex].instruction.iOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                         {
                             if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
-                                shiftFu.instruction.iOperand2 = int.Parse(CDB.CDB[shiftFu.instruction.iOp2]);
+                                shiftFUs[instruction.functionalUnitIndex].instruction.iOperand2 = int.Parse(CDB.CDB[shiftFUs[instruction.functionalUnitIndex].instruction.iOp2]);
                         }
                         else
                         {
@@ -1093,18 +1290,18 @@ namespace ISA_GUI
                         }
                     }
                     else
-                        shiftFu.instruction.iOperand2 = registers.intRegisters[shiftFu.instruction.r2];
+                        shiftFUs[instruction.functionalUnitIndex].instruction.iOperand2 = registers.intRegisters[shiftFUs[instruction.functionalUnitIndex].instruction.r2];
                     break;
                 case 20:
                     if (instruction.isFloat)
                     {
-                        checkOperandDependencies(ref flAddFu.instruction, ref registers);
-                        if (flAddFu.instruction.fOp1 != "")
+                        checkOperandDependencies(ref flAddFUs[instruction.functionalUnitIndex].instruction, ref registers);
+                        if (flAddFUs[instruction.functionalUnitIndex].instruction.fOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(flAddFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
+                            if (CDB.CDB.ContainsKey(flAddFUs[instruction.functionalUnitIndex].instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    flAddFu.instruction.fOperand1 = float.Parse(CDB.CDB[flAddFu.instruction.fOp1]);
+                                    flAddFUs[instruction.functionalUnitIndex].instruction.fOperand1 = float.Parse(CDB.CDB[flAddFUs[instruction.functionalUnitIndex].instruction.fOp1]);
                             }
                             else
                             {
@@ -1113,13 +1310,13 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            flAddFu.instruction.fOperand1 = registers.floatRegisters[flAddFu.instruction.r1];
-                        if (flAddFu.instruction.fOp2 != "")
+                            flAddFUs[instruction.functionalUnitIndex].instruction.fOperand1 = registers.floatRegisters[flAddFUs[instruction.functionalUnitIndex].instruction.r1];
+                        if (flAddFUs[instruction.functionalUnitIndex].instruction.fOp2 != "")
                         {
-                            if (CDB.CDB.ContainsKey(flAddFu.instruction.fOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
+                            if (CDB.CDB.ContainsKey(flAddFUs[instruction.functionalUnitIndex].instruction.fOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                             {
                                 if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
-                                    flAddFu.instruction.fOperand2 = float.Parse(CDB.CDB[flAddFu.instruction.fOp2]);
+                                    flAddFUs[instruction.functionalUnitIndex].instruction.fOperand2 = float.Parse(CDB.CDB[flAddFUs[instruction.functionalUnitIndex].instruction.fOp2]);
                             }
                             else
                             {
@@ -1128,17 +1325,17 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            flAddFu.instruction.fOperand2 = registers.floatRegisters[flAddFu.instruction.r2];
+                            flAddFUs[instruction.functionalUnitIndex].instruction.fOperand2 = registers.floatRegisters[flAddFUs[instruction.functionalUnitIndex].instruction.r2];
                     }
                     else
                     {
-                        checkOperandDependencies(ref intAddFu.instruction, ref registers);
-                        if (intAddFu.instruction.iOp1 != "")
+                        checkOperandDependencies(ref intAddFUs[instruction.functionalUnitIndex].instruction, ref registers);
+                        if (intAddFUs[instruction.functionalUnitIndex].instruction.iOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intAddFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
+                            if (CDB.CDB.ContainsKey(intAddFUs[instruction.functionalUnitIndex].instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    intAddFu.instruction.iOperand1 = int.Parse(CDB.CDB[intAddFu.instruction.iOp1]);
+                                    intAddFUs[instruction.functionalUnitIndex].instruction.iOperand1 = int.Parse(CDB.CDB[intAddFUs[instruction.functionalUnitIndex].instruction.iOp1]);
                             }
                             else
                             {
@@ -1147,13 +1344,13 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            intAddFu.instruction.iOperand1 = registers.intRegisters[intAddFu.instruction.r1];
-                        if (intAddFu.instruction.iOp2 != "")
+                            intAddFUs[instruction.functionalUnitIndex].instruction.iOperand1 = registers.intRegisters[intAddFUs[instruction.functionalUnitIndex].instruction.r1];
+                        if (intAddFUs[instruction.functionalUnitIndex].instruction.iOp2 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intAddFu.instruction.iOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
+                            if (CDB.CDB.ContainsKey(intAddFUs[instruction.functionalUnitIndex].instruction.iOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                             {
                                 if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
-                                    intAddFu.instruction.iOperand2 = int.Parse(CDB.CDB[intAddFu.instruction.iOp2]);
+                                    intAddFUs[instruction.functionalUnitIndex].instruction.iOperand2 = int.Parse(CDB.CDB[intAddFUs[instruction.functionalUnitIndex].instruction.iOp2]);
                             }
                             else
                             {
@@ -1162,19 +1359,19 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            intAddFu.instruction.iOperand2 = registers.intRegisters[intAddFu.instruction.r2];
+                            intAddFUs[instruction.functionalUnitIndex].instruction.iOperand2 = registers.intRegisters[intAddFUs[instruction.functionalUnitIndex].instruction.r2];
                     }
                     break;
                 case 21:
                     if (instruction.isFloat)
                     {
-                        checkOperandDependencies(ref flSubFu.instruction, ref registers);
-                        if (flSubFu.instruction.fOp1 != "")
+                        checkOperandDependencies(ref flSubFUs[instruction.functionalUnitIndex].instruction, ref registers);
+                        if (flSubFUs[instruction.functionalUnitIndex].instruction.fOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(flSubFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
+                            if (CDB.CDB.ContainsKey(flSubFUs[instruction.functionalUnitIndex].instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    flSubFu.instruction.fOperand1 = float.Parse(CDB.CDB[flSubFu.instruction.fOp1]);
+                                    flSubFUs[instruction.functionalUnitIndex].instruction.fOperand1 = float.Parse(CDB.CDB[flSubFUs[instruction.functionalUnitIndex].instruction.fOp1]);
                             }
                             else
                             {
@@ -1183,13 +1380,13 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            flSubFu.instruction.fOperand1 = registers.floatRegisters[flSubFu.instruction.r1];
-                        if (flSubFu.instruction.fOp2 != "")
+                            flSubFUs[instruction.functionalUnitIndex].instruction.fOperand1 = registers.floatRegisters[flSubFUs[instruction.functionalUnitIndex].instruction.r1];
+                        if (flSubFUs[instruction.functionalUnitIndex].instruction.fOp2 != "")
                         {
-                            if (CDB.CDB.ContainsKey(flSubFu.instruction.fOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
+                            if (CDB.CDB.ContainsKey(flSubFUs[instruction.functionalUnitIndex].instruction.fOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                             {
                                 if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
-                                    flSubFu.instruction.fOperand2 = float.Parse(CDB.CDB[flSubFu.instruction.fOp2]);
+                                    flSubFUs[instruction.functionalUnitIndex].instruction.fOperand2 = float.Parse(CDB.CDB[flSubFUs[instruction.functionalUnitIndex].instruction.fOp2]);
                             }
                             else
                             {
@@ -1198,17 +1395,17 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            flSubFu.instruction.fOperand2 = registers.floatRegisters[flSubFu.instruction.r2];
+                            flSubFUs[instruction.functionalUnitIndex].instruction.fOperand2 = registers.floatRegisters[flSubFUs[instruction.functionalUnitIndex].instruction.r2];
                     }
                     else
                     {
-                        checkOperandDependencies(ref intSubFu.instruction, ref registers);
-                        if (intSubFu.instruction.iOp1 != "")
+                        checkOperandDependencies(ref intSubFUs[instruction.functionalUnitIndex].instruction, ref registers);
+                        if (intSubFUs[instruction.functionalUnitIndex].instruction.iOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intSubFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
+                            if (CDB.CDB.ContainsKey(intSubFUs[instruction.functionalUnitIndex].instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    intSubFu.instruction.iOperand1 = int.Parse(CDB.CDB[intSubFu.instruction.iOp1]);
+                                    intSubFUs[instruction.functionalUnitIndex].instruction.iOperand1 = int.Parse(CDB.CDB[intSubFUs[instruction.functionalUnitIndex].instruction.iOp1]);
                             }
                             else
                             {
@@ -1217,13 +1414,13 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            intSubFu.instruction.iOperand1 = registers.intRegisters[intSubFu.instruction.r1];
-                        if (intSubFu.instruction.iOp2 != "")
+                            intSubFUs[instruction.functionalUnitIndex].instruction.iOperand1 = registers.intRegisters[intSubFUs[instruction.functionalUnitIndex].instruction.r1];
+                        if (intSubFUs[instruction.functionalUnitIndex].instruction.iOp2 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intSubFu.instruction.iOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
+                            if (CDB.CDB.ContainsKey(intSubFUs[instruction.functionalUnitIndex].instruction.iOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                             {
                                 if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
-                                    intSubFu.instruction.iOperand2 = int.Parse(CDB.CDB[intSubFu.instruction.iOp2]);
+                                    intSubFUs[instruction.functionalUnitIndex].instruction.iOperand2 = int.Parse(CDB.CDB[intSubFUs[instruction.functionalUnitIndex].instruction.iOp2]);
                             }
                             else
                             {
@@ -1232,19 +1429,19 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            intSubFu.instruction.iOperand2 = registers.intRegisters[intSubFu.instruction.r2];
+                            intSubFUs[instruction.functionalUnitIndex].instruction.iOperand2 = registers.intRegisters[intSubFUs[instruction.functionalUnitIndex].instruction.r2];
                     }
                     break;
                 case 22:
                     if (instruction.isFloat)
                     {
-                        checkOperandDependencies(ref flMultFu.instruction, ref registers);
-                        if (flMultFu.instruction.fOp1 != "")
+                        checkOperandDependencies(ref flMultFUs[instruction.functionalUnitIndex].instruction, ref registers);
+                        if (flMultFUs[instruction.functionalUnitIndex].instruction.fOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(flMultFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
+                            if (CDB.CDB.ContainsKey(flMultFUs[instruction.functionalUnitIndex].instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    flMultFu.instruction.fOperand1 = float.Parse(CDB.CDB[flMultFu.instruction.fOp1]);
+                                    flMultFUs[instruction.functionalUnitIndex].instruction.fOperand1 = float.Parse(CDB.CDB[flMultFUs[instruction.functionalUnitIndex].instruction.fOp1]);
                             }
                             else
                             {
@@ -1253,13 +1450,13 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            flMultFu.instruction.fOperand1 = registers.floatRegisters[flMultFu.instruction.r1];
-                        if (flMultFu.instruction.fOp2 != "")
+                            flMultFUs[instruction.functionalUnitIndex].instruction.fOperand1 = registers.floatRegisters[flMultFUs[instruction.functionalUnitIndex].instruction.r1];
+                        if (flMultFUs[instruction.functionalUnitIndex].instruction.fOp2 != "")
                         {
-                            if (CDB.CDB.ContainsKey(flMultFu.instruction.fOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
+                            if (CDB.CDB.ContainsKey(flMultFUs[instruction.functionalUnitIndex].instruction.fOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                             {
                                 if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
-                                    flMultFu.instruction.fOperand2 = float.Parse(CDB.CDB[flMultFu.instruction.fOp2]);
+                                    flMultFUs[instruction.functionalUnitIndex].instruction.fOperand2 = float.Parse(CDB.CDB[flMultFUs[instruction.functionalUnitIndex].instruction.fOp2]);
                             }
                             else
                             {
@@ -1268,17 +1465,17 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            flMultFu.instruction.fOperand2 = registers.floatRegisters[flMultFu.instruction.r2];
+                            flMultFUs[instruction.functionalUnitIndex].instruction.fOperand2 = registers.floatRegisters[flMultFUs[instruction.functionalUnitIndex].instruction.r2];
                     }
                     else
                     {
-                        checkOperandDependencies(ref intMulFu.instruction, ref registers);
-                        if (intMulFu.instruction.iOp1 != "")
+                        checkOperandDependencies(ref intMultFUs[instruction.functionalUnitIndex].instruction, ref registers);
+                        if (intMultFUs[instruction.functionalUnitIndex].instruction.iOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intMulFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
+                            if (CDB.CDB.ContainsKey(intMultFUs[instruction.functionalUnitIndex].instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    intMulFu.instruction.iOperand1 = int.Parse(CDB.CDB[intMulFu.instruction.iOp1]);
+                                    intMultFUs[instruction.functionalUnitIndex].instruction.iOperand1 = int.Parse(CDB.CDB[intMultFUs[instruction.functionalUnitIndex].instruction.iOp1]);
                             }
                             else
                             {
@@ -1287,13 +1484,13 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            intMulFu.instruction.iOperand1 = registers.intRegisters[intMulFu.instruction.r1];
-                        if (intMulFu.instruction.iOp2 != "")
+                            intMultFUs[instruction.functionalUnitIndex].instruction.iOperand1 = registers.intRegisters[intMultFUs[instruction.functionalUnitIndex].instruction.r1];
+                        if (intMultFUs[instruction.functionalUnitIndex].instruction.iOp2 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intMulFu.instruction.iOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
+                            if (CDB.CDB.ContainsKey(intMultFUs[instruction.functionalUnitIndex].instruction.iOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                             {
                                 if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
-                                    intMulFu.instruction.iOperand2 = int.Parse(CDB.CDB[intMulFu.instruction.iOp2]);
+                                    intMultFUs[instruction.functionalUnitIndex].instruction.iOperand2 = int.Parse(CDB.CDB[intMultFUs[instruction.functionalUnitIndex].instruction.iOp2]);
                             }
                             else
                             {
@@ -1302,19 +1499,19 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            intMulFu.instruction.iOperand2 = registers.intRegisters[intMulFu.instruction.r2];
+                            intMultFUs[instruction.functionalUnitIndex].instruction.iOperand2 = registers.intRegisters[intMultFUs[instruction.functionalUnitIndex].instruction.r2];
                     }
                     break;
                 case 23:
                     if(instruction.isFloat)
                     {
-                        checkOperandDependencies(ref flDivFu.instruction, ref registers);
-                        if (flDivFu.instruction.fOp1 != "")
+                        checkOperandDependencies(ref flDivFUs[instruction.functionalUnitIndex].instruction, ref registers);
+                        if (flDivFUs[instruction.functionalUnitIndex].instruction.fOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(flDivFu.instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
+                            if (CDB.CDB.ContainsKey(flDivFUs[instruction.functionalUnitIndex].instruction.fOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    flDivFu.instruction.fOperand1 = float.Parse(CDB.CDB[flDivFu.instruction.fOp1]);
+                                    flDivFUs[instruction.functionalUnitIndex].instruction.fOperand1 = float.Parse(CDB.CDB[flDivFUs[instruction.functionalUnitIndex].instruction.fOp1]);
                             }
                             else
                             {
@@ -1323,13 +1520,13 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            flDivFu.instruction.fOperand1 = registers.floatRegisters[flDivFu.instruction.r1];
-                        if (flDivFu.instruction.fOp2 != "")
+                            flDivFUs[instruction.functionalUnitIndex].instruction.fOperand1 = registers.floatRegisters[flDivFUs[instruction.functionalUnitIndex].instruction.r1];
+                        if (flDivFUs[instruction.functionalUnitIndex].instruction.fOp2 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intDivFu.instruction.fOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
+                            if (CDB.CDB.ContainsKey(flDivFUs[instruction.functionalUnitIndex].instruction.fOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                             {
                                 if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
-                                    flDivFu.instruction.fOperand2 = float.Parse(CDB.CDB[flDivFu.instruction.fOp2]);
+                                    flDivFUs[instruction.functionalUnitIndex].instruction.fOperand2 = float.Parse(CDB.CDB[flDivFUs[instruction.functionalUnitIndex].instruction.fOp2]);
                             }
                             else
                             {
@@ -1338,17 +1535,17 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            flDivFu.instruction.fOperand2 = registers.floatRegisters[flDivFu.instruction.r2];
+                            flDivFUs[instruction.functionalUnitIndex].instruction.fOperand2 = registers.floatRegisters[flDivFUs[instruction.functionalUnitIndex].instruction.r2];
                     }
                     else
                     {
-                        checkOperandDependencies(ref intDivFu.instruction, ref registers);
-                        if (intDivFu.instruction.iOp1 != "")
+                        checkOperandDependencies(ref intDivFUs[instruction.functionalUnitIndex].instruction, ref registers);
+                        if (intDivFUs[instruction.functionalUnitIndex].instruction.iOp1 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intDivFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
+                            if (CDB.CDB.ContainsKey(intDivFUs[instruction.functionalUnitIndex].instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                             {
                                 if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                    intDivFu.instruction.iOperand1 = int.Parse(CDB.CDB[intDivFu.instruction.iOp1]);
+                                    intDivFUs[instruction.functionalUnitIndex].instruction.iOperand1 = int.Parse(CDB.CDB[intDivFUs[instruction.functionalUnitIndex].instruction.iOp1]);
                             }
                             else
                             {
@@ -1357,13 +1554,13 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            intDivFu.instruction.iOperand1 = registers.intRegisters[intDivFu.instruction.r1];
-                        if (intDivFu.instruction.iOp2 != "")
+                            intDivFUs[instruction.functionalUnitIndex].instruction.iOperand1 = registers.intRegisters[intDivFUs[instruction.functionalUnitIndex].instruction.r1];
+                        if (intDivFUs[instruction.functionalUnitIndex].instruction.iOp2 != "")
                         {
-                            if (CDB.CDB.ContainsKey(intDivFu.instruction.iOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
+                            if (CDB.CDB.ContainsKey(intDivFUs[instruction.functionalUnitIndex].instruction.iOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                             {
                                 if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
-                                    intDivFu.instruction.iOperand2 = int.Parse(CDB.CDB[intDivFu.instruction.iOp2]);
+                                    intDivFUs[instruction.functionalUnitIndex].instruction.iOperand2 = int.Parse(CDB.CDB[intDivFUs[instruction.functionalUnitIndex].instruction.iOp2]);
                             }
                             else
                             {
@@ -1372,19 +1569,19 @@ namespace ISA_GUI
                             }
                         }
                         else
-                            intDivFu.instruction.iOperand2 = registers.intRegisters[intDivFu.instruction.r2];
+                            intDivFUs[instruction.functionalUnitIndex].instruction.iOperand2 = registers.intRegisters[intDivFUs[instruction.functionalUnitIndex].instruction.r2];
                     }
                     break;
                 case 24:
                 case 25:
                 case 26:
-                    checkOperandDependencies(ref bitFu.instruction, ref registers);
-                    if (bitFu.instruction.iOp1 != "")
+                    checkOperandDependencies(ref bitFUs[instruction.functionalUnitIndex].instruction, ref registers);
+                    if (bitFUs[instruction.functionalUnitIndex].instruction.iOp1 != "")
                     {
-                        if (CDB.CDB.ContainsKey(bitFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
+                        if (CDB.CDB.ContainsKey(bitFUs[instruction.functionalUnitIndex].instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                         {
                             if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                bitFu.instruction.iOperand1 = int.Parse(CDB.CDB[bitFu.instruction.iOp1]);
+                                bitFUs[instruction.functionalUnitIndex].instruction.iOperand1 = int.Parse(CDB.CDB[bitFUs[instruction.functionalUnitIndex].instruction.iOp1]);
                         }
                         else
                         {
@@ -1393,13 +1590,13 @@ namespace ISA_GUI
                         }
                     }
                     else
-                        bitFu.instruction.iOperand1 = registers.intRegisters[bitFu.instruction.r1];
-                    if (bitFu.instruction.iOp2 != "")
+                        bitFUs[instruction.functionalUnitIndex].instruction.iOperand1 = registers.intRegisters[bitFUs[instruction.functionalUnitIndex].instruction.r1];
+                    if (bitFUs[instruction.functionalUnitIndex].instruction.iOp2 != "")
                     {
-                        if (CDB.CDB.ContainsKey(bitFu.instruction.iOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
+                        if (CDB.CDB.ContainsKey(bitFUs[instruction.functionalUnitIndex].instruction.iOp2) && CDB.index.ContainsKey(instruction.dependantOpID2))
                         {
                             if (instruction.dependantOpID2 == CDB.IDIndex[CDB.index[instruction.dependantOpID2]])
-                                bitFu.instruction.iOperand2 = int.Parse(CDB.CDB[bitFu.instruction.iOp2]);
+                                bitFUs[instruction.functionalUnitIndex].instruction.iOperand2 = int.Parse(CDB.CDB[bitFUs[instruction.functionalUnitIndex].instruction.iOp2]);
                         }
                         else
                         {
@@ -1408,16 +1605,16 @@ namespace ISA_GUI
                         }
                     }
                     else
-                        bitFu.instruction.iOperand2 = registers.intRegisters[bitFu.instruction.r2];
+                        bitFUs[instruction.functionalUnitIndex].instruction.iOperand2 = registers.intRegisters[bitFu.instruction.r2];
                     break;
                 case 27:
-                    checkOperandDependencies(ref bitFu.instruction, ref registers);
-                    if (bitFu.instruction.iOp1 != "")
+                    checkOperandDependencies(ref bitFUs[instruction.functionalUnitIndex].instruction, ref registers);
+                    if (bitFUs[instruction.functionalUnitIndex].instruction.iOp1 != "")
                     {
-                        if (CDB.CDB.ContainsKey(bitFu.instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
+                        if (CDB.CDB.ContainsKey(bitFUs[instruction.functionalUnitIndex].instruction.iOp1) && CDB.index.ContainsKey(instruction.dependantOpID1))
                         {
                             if (instruction.dependantOpID1 == CDB.IDIndex[CDB.index[instruction.dependantOpID1]])
-                                bitFu.instruction.iOperand1 = int.Parse(CDB.CDB[bitFu.instruction.iOp1]);
+                                bitFUs[instruction.functionalUnitIndex].instruction.iOperand1 = int.Parse(CDB.CDB[bitFUs[instruction.functionalUnitIndex].instruction.iOp1]);
                         }
                         else
                         {
@@ -1426,7 +1623,7 @@ namespace ISA_GUI
                         }
                     }
                     else
-                        bitFu.instruction.iOperand1 = registers.intRegisters[bitFu.instruction.r1];
+                        bitFUs[instruction.functionalUnitIndex].instruction.iOperand1 = registers.intRegisters[bitFUs[instruction.functionalUnitIndex].instruction.r1];
                     break;
             }
             return false;

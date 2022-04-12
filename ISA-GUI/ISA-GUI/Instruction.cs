@@ -32,7 +32,7 @@ namespace ISA_GUI
 		public string instrType;
 		public string iOp1, iOp2, iOp3;
 		public string fOp1, fOp2, fOp3;
-		public int iOperand1, iOperand2, iOperand3, ASPR, dependantOpID1, dependantOpID2, reservationStationIndex;
+		public int iOperand1, iOperand2, iOperand3, ASPR, dependantOpID1, dependantOpID2, reservationStationIndex, functionalUnitIndex;
 		public float fOperand1, fOperand2, fOperand3;
 		public bool isFloat, executionInProgress, doneExecuting, stage2ExecutionFinished, justIssued;
 		public string assembly1, result;
@@ -62,6 +62,7 @@ namespace ISA_GUI
 			dependantOpID2 = -1;
 			stage2ExecutionFinished = false;
 			reservationStationIndex = -1;
+			functionalUnitIndex = -1;
 		}
 	}
 }

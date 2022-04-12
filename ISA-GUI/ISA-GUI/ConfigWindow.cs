@@ -68,8 +68,21 @@ namespace ISA_GUI
             staticFlDivValue.Value = configurations.flDiv;
             staticLoad_StoreValue.Value = configurations.load_store;
 
+             intAddFUValue.Value = configurations.intAddFUs;
+             intSubFUValue.Value = configurations.intSubFUs;
+             intMultFUValue.Value = configurations.intMultFUs;
+             intDivFUValue.Value = configurations.intDivFus;
+             flAddFUValue.Value = configurations.flAddFUs;
+             flSubFUValue.Value = configurations.flSubFUs;
+             flMultFUValue.Value = configurations.flMultFUs;
+             flDivFUValue.Value = configurations.flDivFUs;
+             shiftFUValue.Value = configurations.shiftFUs;
+             branchFUValue.Value = configurations.branchFUs;
+             bitwiseFUValue.Value = configurations.bitwiseFUs;
+             memoryFUValue.Value = configurations.memoryFUs;
 
-            if(configurations.dynamicPipelineSet)
+
+            if (configurations.dynamicPipelineSet)
             {
                 staticCheckbox.Checked = false;
                 dynamicCheckbox.Checked = true;
@@ -149,6 +162,18 @@ namespace ISA_GUI
             configurations.flDiv = (int)staticFlDivValue.Value;
             configurations.load_store = (int)staticLoad_StoreValue.Value;
 
+            configurations.intAddFUs = (int)intAddFUValue.Value;
+            configurations.intSubFUs = (int)intSubFUValue.Value;
+            configurations.intMultFUs = (int)intMultFUValue.Value;
+            configurations.intDivFus = (int)intDivFUValue.Value;
+            configurations.flAddFUs = (int)flAddFUValue.Value;
+            configurations.flSubFUs = (int)flSubFUValue.Value;
+            configurations.flMultFUs = (int)flMultFUValue.Value;
+            configurations.flDivFUs = (int)flDivFUValue.Value;
+            configurations.shiftFUs = (int)shiftFUValue.Value;
+            configurations.branchFUs = (int)branchFUValue.Value;
+            configurations.bitwiseFUs = (int)bitwiseFUValue.Value;
+            configurations.memoryFUs = (int)memoryFUValue.Value;
 
 
 
@@ -222,6 +247,19 @@ namespace ISA_GUI
             dynamicLoadConfigValue.Value = 1;
             dynamicStoreConfigValue.Value = 1;
             bitGlobalPredictorValue.Value = 1;
+
+            intAddFUValue.Value = 1;
+            intSubFUValue.Value = 1;
+            intMultFUValue.Value = 1;
+            intDivFUValue.Value = 1;
+            flAddFUValue.Value = 1;
+            flSubFUValue.Value = 1;
+            flMultFUValue.Value = 1;
+            flDivFUValue.Value = 1;
+            shiftFUValue.Value = 1;
+            branchFUValue.Value = 1;
+            bitwiseFUValue.Value = 1;
+            memoryFUValue.Value = 1;
             
 
             configurations.predictionSet = false;
@@ -236,6 +274,20 @@ namespace ISA_GUI
             configurations.flDiv = (int)staticFlDivValue.Value;
             configurations.calcAddress = (int)staticCalcAddressValue.Value;
 
+            configurations.intAdd = (int)dynamicIntAddConfigValue.Value;
+            configurations.intSub = (int)dynamicIntSubConfigValue.Value;
+            configurations.intMult = (int)dynamicIntMultConfigValue.Value;
+            configurations.intDiv = (int)dynamicIntDivConfigValue.Value;
+            configurations.flAdd = (int)dynamicFlAddConfigValue.Value;
+            configurations.flSub = (int)dynamicFlSubConfigValue.Value;
+            configurations.dynamicFlMult = (int)dynamicFlMultConfigValue.Value;
+            configurations.dynamicFlDiv = (int)dynamicFlDivConfigValue.Value;
+            configurations.effAddress = (int)dynamicEffAddressConfigValue.Value;
+            configurations.bitwise = (int)dynamicBitwiseConfigValue.Value;
+            configurations.load = (int)dynamicLoadConfigValue.Value;
+            configurations.reorderbuffersize = (int)dynamicReorderBufferSizeValue.Value;
+            configurations.store = (int)dynamicStoreConfigValue.Value;
+            configurations.shift = (int)dynamicShiftConfigValue.Value;
         }
 
         private void staticCheckbox_CheckedChanged(object sender, EventArgs e)
@@ -296,6 +348,76 @@ namespace ISA_GUI
                 bitGlobalPredictorValue.Enabled = false;
                 bitPredictorLabel.Enabled = false;
             }
+        }
+
+        private void setReorderBufferMinimum()
+        {
+            int min = (int)(intAddFUValue.Value + intSubFUValue.Value + intMultFUValue.Value + intDivFUValue.Value +
+                flAddFUValue.Value + flSubFUValue.Value + flMultFUValue.Value + flDivFUValue.Value + shiftFUValue.Value + branchFUValue.Value +
+                bitwiseFUValue.Value + memoryFUValue.Value);
+
+            dynamicReorderBufferSizeValue.Minimum = min;
+            dynamicReorderBufferSizeValue.Value = min;
+        }
+
+        private void intAddFUValue_ValueChanged(object sender, EventArgs e)
+        {
+            setReorderBufferMinimum();
+        }
+
+        private void intSubFUValue_ValueChanged(object sender, EventArgs e)
+        {
+            setReorderBufferMinimum();
+        }
+
+        private void intMultFUValue_ValueChanged(object sender, EventArgs e)
+        {
+            setReorderBufferMinimum();
+        }
+
+        private void intDivFUValue_ValueChanged(object sender, EventArgs e)
+        {
+            setReorderBufferMinimum();
+        }
+
+        private void flAddFUValue_ValueChanged(object sender, EventArgs e)
+        {
+            setReorderBufferMinimum();
+        }
+
+        private void flSubFUValue_ValueChanged(object sender, EventArgs e)
+        {
+            setReorderBufferMinimum();
+        }
+
+        private void flMultFUValue_ValueChanged(object sender, EventArgs e)
+        {
+            setReorderBufferMinimum();
+        }
+
+        private void flDivFUValue_ValueChanged(object sender, EventArgs e)
+        {
+            setReorderBufferMinimum();
+        }
+
+        private void bitwiseFUValue_ValueChanged(object sender, EventArgs e)
+        {
+            setReorderBufferMinimum();
+        }
+
+        private void shiftFUValue_ValueChanged(object sender, EventArgs e)
+        {
+            setReorderBufferMinimum();
+        }
+
+        private void branchFUValue_ValueChanged(object sender, EventArgs e)
+        {
+            setReorderBufferMinimum();
+        }
+
+        private void memoryFUValue_ValueChanged(object sender, EventArgs e)
+        {
+            setReorderBufferMinimum();
         }
     }
 }

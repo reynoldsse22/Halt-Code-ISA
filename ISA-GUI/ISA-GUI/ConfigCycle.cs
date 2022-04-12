@@ -26,6 +26,7 @@ namespace ISA_GUI
     {
 		public int fetch, memAccess, regAccess, load_store, intALU, flAddSub, flMult, flDiv, calcAddress, programSpeed;
 		public int load, store, intAdd, intSub, intMult, intDiv, flAdd, flSub, dynamicFlMult, dynamicFlDiv, bitwise, shift, effAddress, reorderbuffersize, whatBitPredictor;
+		public int intAddFUs, intSubFUs, intMultFUs, intDivFus, flAddFUs, flSubFUs, flMultFUs, flDivFUs, bitwiseFUs, branchFUs, shiftFUs, memoryFUs;
 		public bool predictionSet;
 		public bool forwardingSet;
 		public bool dynamicPipelineSet;
@@ -63,7 +64,19 @@ namespace ISA_GUI
 			dynamicFlMult = 5;
 			dynamicFlDiv = 10;
 			calcAddress = 1;
-			reorderbuffersize = 10;
+			reorderbuffersize = 12;
+			intAddFUs = 1;
+			intSubFUs = 1;
+			intMultFUs = 1;
+			intDivFus = 1;
+			flAddFUs = 1;
+			flSubFUs = 1;
+			flMultFUs = 1;
+			flDivFUs = 1;
+			bitwiseFUs = 1;
+			shiftFUs = 1;
+			branchFUs = 1;
+			memoryFUs = 1;
 			predictionSet = false;
 			forwardingSet = false;
 			dynamicPipelineSet = true;

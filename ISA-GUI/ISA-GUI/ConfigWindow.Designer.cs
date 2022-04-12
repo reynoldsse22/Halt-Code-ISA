@@ -88,6 +88,30 @@
             this.bitGlobalPredictorValue = new System.Windows.Forms.NumericUpDown();
             this.branchPredictionPanel = new System.Windows.Forms.Panel();
             this.dynamicFUPanel = new System.Windows.Forms.Panel();
+            this.flMultFUValue = new System.Windows.Forms.NumericUpDown();
+            this.flDivFUValue = new System.Windows.Forms.NumericUpDown();
+            this.bitwiseFUValue = new System.Windows.Forms.NumericUpDown();
+            this.shiftFUValue = new System.Windows.Forms.NumericUpDown();
+            this.branchFUValue = new System.Windows.Forms.NumericUpDown();
+            this.memoryFUValue = new System.Windows.Forms.NumericUpDown();
+            this.flSubFUValue = new System.Windows.Forms.NumericUpDown();
+            this.flAddFUValue = new System.Windows.Forms.NumericUpDown();
+            this.intDivFUValue = new System.Windows.Forms.NumericUpDown();
+            this.intMultFUValue = new System.Windows.Forms.NumericUpDown();
+            this.intSubFUValue = new System.Windows.Forms.NumericUpDown();
+            this.label40 = new System.Windows.Forms.Label();
+            this.label39 = new System.Windows.Forms.Label();
+            this.label38 = new System.Windows.Forms.Label();
+            this.label37 = new System.Windows.Forms.Label();
+            this.label36 = new System.Windows.Forms.Label();
+            this.label35 = new System.Windows.Forms.Label();
+            this.label34 = new System.Windows.Forms.Label();
+            this.label33 = new System.Windows.Forms.Label();
+            this.label32 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.intAddFUValue = new System.Windows.Forms.NumericUpDown();
+            this.label14 = new System.Windows.Forms.Label();
             this.dynamicReorderBufferSizeValue = new System.Windows.Forms.NumericUpDown();
             this.label30 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
@@ -118,6 +142,18 @@
             ((System.ComponentModel.ISupportInitialize)(this.bitGlobalPredictorValue)).BeginInit();
             this.branchPredictionPanel.SuspendLayout();
             this.dynamicFUPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.flMultFUValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.flDivFUValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bitwiseFUValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.shiftFUValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.branchFUValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.memoryFUValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.flSubFUValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.flAddFUValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.intDivFUValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.intMultFUValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.intSubFUValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.intAddFUValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicReorderBufferSizeValue)).BeginInit();
             this.SuspendLayout();
             // 
@@ -1103,25 +1139,493 @@
             // 
             // dynamicFUPanel
             // 
+            this.dynamicFUPanel.Controls.Add(this.flMultFUValue);
+            this.dynamicFUPanel.Controls.Add(this.flDivFUValue);
+            this.dynamicFUPanel.Controls.Add(this.bitwiseFUValue);
+            this.dynamicFUPanel.Controls.Add(this.shiftFUValue);
+            this.dynamicFUPanel.Controls.Add(this.branchFUValue);
+            this.dynamicFUPanel.Controls.Add(this.memoryFUValue);
+            this.dynamicFUPanel.Controls.Add(this.flSubFUValue);
+            this.dynamicFUPanel.Controls.Add(this.flAddFUValue);
+            this.dynamicFUPanel.Controls.Add(this.intDivFUValue);
+            this.dynamicFUPanel.Controls.Add(this.intMultFUValue);
+            this.dynamicFUPanel.Controls.Add(this.intSubFUValue);
+            this.dynamicFUPanel.Controls.Add(this.label40);
+            this.dynamicFUPanel.Controls.Add(this.label39);
+            this.dynamicFUPanel.Controls.Add(this.label38);
+            this.dynamicFUPanel.Controls.Add(this.label37);
+            this.dynamicFUPanel.Controls.Add(this.label36);
+            this.dynamicFUPanel.Controls.Add(this.label35);
+            this.dynamicFUPanel.Controls.Add(this.label34);
+            this.dynamicFUPanel.Controls.Add(this.label33);
+            this.dynamicFUPanel.Controls.Add(this.label32);
+            this.dynamicFUPanel.Controls.Add(this.label29);
+            this.dynamicFUPanel.Controls.Add(this.label27);
+            this.dynamicFUPanel.Controls.Add(this.intAddFUValue);
+            this.dynamicFUPanel.Controls.Add(this.label14);
             this.dynamicFUPanel.Controls.Add(this.dynamicReorderBufferSizeValue);
             this.dynamicFUPanel.Controls.Add(this.label30);
             this.dynamicFUPanel.Controls.Add(this.label31);
             this.dynamicFUPanel.Location = new System.Drawing.Point(599, 4);
             this.dynamicFUPanel.Name = "dynamicFUPanel";
-            this.dynamicFUPanel.Size = new System.Drawing.Size(232, 399);
+            this.dynamicFUPanel.Size = new System.Drawing.Size(255, 416);
             this.dynamicFUPanel.TabIndex = 35;
+            // 
+            // flMultFUValue
+            // 
+            this.flMultFUValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.flMultFUValue.Location = new System.Drawing.Point(7, 236);
+            this.flMultFUValue.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.flMultFUValue.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.flMultFUValue.Name = "flMultFUValue";
+            this.flMultFUValue.Size = new System.Drawing.Size(40, 22);
+            this.flMultFUValue.TabIndex = 38;
+            this.flMultFUValue.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.flMultFUValue.ValueChanged += new System.EventHandler(this.flMultFUValue_ValueChanged);
+            // 
+            // flDivFUValue
+            // 
+            this.flDivFUValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.flDivFUValue.Location = new System.Drawing.Point(7, 264);
+            this.flDivFUValue.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.flDivFUValue.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.flDivFUValue.Name = "flDivFUValue";
+            this.flDivFUValue.Size = new System.Drawing.Size(40, 22);
+            this.flDivFUValue.TabIndex = 37;
+            this.flDivFUValue.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.flDivFUValue.ValueChanged += new System.EventHandler(this.flDivFUValue_ValueChanged);
+            // 
+            // bitwiseFUValue
+            // 
+            this.bitwiseFUValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bitwiseFUValue.Location = new System.Drawing.Point(7, 292);
+            this.bitwiseFUValue.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.bitwiseFUValue.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.bitwiseFUValue.Name = "bitwiseFUValue";
+            this.bitwiseFUValue.Size = new System.Drawing.Size(40, 22);
+            this.bitwiseFUValue.TabIndex = 36;
+            this.bitwiseFUValue.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.bitwiseFUValue.ValueChanged += new System.EventHandler(this.bitwiseFUValue_ValueChanged);
+            // 
+            // shiftFUValue
+            // 
+            this.shiftFUValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.shiftFUValue.Location = new System.Drawing.Point(7, 320);
+            this.shiftFUValue.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.shiftFUValue.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.shiftFUValue.Name = "shiftFUValue";
+            this.shiftFUValue.Size = new System.Drawing.Size(40, 22);
+            this.shiftFUValue.TabIndex = 35;
+            this.shiftFUValue.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.shiftFUValue.ValueChanged += new System.EventHandler(this.shiftFUValue_ValueChanged);
+            // 
+            // branchFUValue
+            // 
+            this.branchFUValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.branchFUValue.Location = new System.Drawing.Point(7, 348);
+            this.branchFUValue.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.branchFUValue.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.branchFUValue.Name = "branchFUValue";
+            this.branchFUValue.Size = new System.Drawing.Size(40, 22);
+            this.branchFUValue.TabIndex = 34;
+            this.branchFUValue.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.branchFUValue.ValueChanged += new System.EventHandler(this.branchFUValue_ValueChanged);
+            // 
+            // memoryFUValue
+            // 
+            this.memoryFUValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.memoryFUValue.Location = new System.Drawing.Point(7, 376);
+            this.memoryFUValue.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.memoryFUValue.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.memoryFUValue.Name = "memoryFUValue";
+            this.memoryFUValue.Size = new System.Drawing.Size(40, 22);
+            this.memoryFUValue.TabIndex = 33;
+            this.memoryFUValue.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.memoryFUValue.ValueChanged += new System.EventHandler(this.memoryFUValue_ValueChanged);
+            // 
+            // flSubFUValue
+            // 
+            this.flSubFUValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.flSubFUValue.Location = new System.Drawing.Point(7, 208);
+            this.flSubFUValue.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.flSubFUValue.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.flSubFUValue.Name = "flSubFUValue";
+            this.flSubFUValue.Size = new System.Drawing.Size(40, 22);
+            this.flSubFUValue.TabIndex = 32;
+            this.flSubFUValue.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.flSubFUValue.ValueChanged += new System.EventHandler(this.flSubFUValue_ValueChanged);
+            // 
+            // flAddFUValue
+            // 
+            this.flAddFUValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.flAddFUValue.Location = new System.Drawing.Point(7, 180);
+            this.flAddFUValue.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.flAddFUValue.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.flAddFUValue.Name = "flAddFUValue";
+            this.flAddFUValue.Size = new System.Drawing.Size(40, 22);
+            this.flAddFUValue.TabIndex = 31;
+            this.flAddFUValue.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.flAddFUValue.ValueChanged += new System.EventHandler(this.flAddFUValue_ValueChanged);
+            // 
+            // intDivFUValue
+            // 
+            this.intDivFUValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.intDivFUValue.Location = new System.Drawing.Point(7, 152);
+            this.intDivFUValue.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.intDivFUValue.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.intDivFUValue.Name = "intDivFUValue";
+            this.intDivFUValue.Size = new System.Drawing.Size(40, 22);
+            this.intDivFUValue.TabIndex = 30;
+            this.intDivFUValue.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.intDivFUValue.ValueChanged += new System.EventHandler(this.intDivFUValue_ValueChanged);
+            // 
+            // intMultFUValue
+            // 
+            this.intMultFUValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.intMultFUValue.Location = new System.Drawing.Point(7, 124);
+            this.intMultFUValue.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.intMultFUValue.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.intMultFUValue.Name = "intMultFUValue";
+            this.intMultFUValue.Size = new System.Drawing.Size(40, 22);
+            this.intMultFUValue.TabIndex = 29;
+            this.intMultFUValue.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.intMultFUValue.ValueChanged += new System.EventHandler(this.intMultFUValue_ValueChanged);
+            // 
+            // intSubFUValue
+            // 
+            this.intSubFUValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.intSubFUValue.Location = new System.Drawing.Point(7, 96);
+            this.intSubFUValue.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.intSubFUValue.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.intSubFUValue.Name = "intSubFUValue";
+            this.intSubFUValue.Size = new System.Drawing.Size(40, 22);
+            this.intSubFUValue.TabIndex = 28;
+            this.intSubFUValue.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.intSubFUValue.ValueChanged += new System.EventHandler(this.intSubFUValue_ValueChanged);
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label40.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label40.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label40.Location = new System.Drawing.Point(53, 379);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(153, 16);
+            this.label40.TabIndex = 27;
+            this.label40.Text = "Memory Functional Units";
+            this.label40.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label39.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label39.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label39.Location = new System.Drawing.Point(53, 351);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(146, 16);
+            this.label39.TabIndex = 25;
+            this.label39.Text = "Branch Functional Units";
+            this.label39.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label38.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label38.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label38.Location = new System.Drawing.Point(53, 323);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(129, 16);
+            this.label38.TabIndex = 23;
+            this.label38.Text = "Shift Functional Units";
+            this.label38.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label37.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label37.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label37.Location = new System.Drawing.Point(53, 294);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(146, 16);
+            this.label37.TabIndex = 21;
+            this.label37.Text = "Bitwise Functional Units";
+            this.label37.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label36.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label36.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label36.Location = new System.Drawing.Point(53, 267);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(176, 16);
+            this.label36.TabIndex = 19;
+            this.label36.Text = "Float Divide Functional Units";
+            this.label36.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label35.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label35.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label35.Location = new System.Drawing.Point(53, 239);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(182, 16);
+            this.label35.TabIndex = 17;
+            this.label35.Text = "Float Multiply Functional Units";
+            this.label35.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label34.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label34.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label34.Location = new System.Drawing.Point(53, 210);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(161, 16);
+            this.label34.TabIndex = 15;
+            this.label34.Text = "Float Sub Functional Units";
+            this.label34.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label33.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label33.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label33.Location = new System.Drawing.Point(53, 182);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(162, 16);
+            this.label33.TabIndex = 13;
+            this.label33.Text = "Float Add Functional Units";
+            this.label33.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label32.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label32.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label32.Location = new System.Drawing.Point(53, 154);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(159, 16);
+            this.label32.TabIndex = 11;
+            this.label32.Text = "Int Divide Functional Units";
+            this.label32.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label29.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label29.Location = new System.Drawing.Point(53, 126);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(165, 16);
+            this.label29.TabIndex = 9;
+            this.label29.Text = "Int Multiply Functional Units";
+            this.label29.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label27.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label27.Location = new System.Drawing.Point(53, 98);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(144, 16);
+            this.label27.TabIndex = 7;
+            this.label27.Text = "Int Sub Functional Units";
+            this.label27.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // intAddFUValue
+            // 
+            this.intAddFUValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.intAddFUValue.Location = new System.Drawing.Point(7, 68);
+            this.intAddFUValue.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.intAddFUValue.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.intAddFUValue.Name = "intAddFUValue";
+            this.intAddFUValue.Size = new System.Drawing.Size(40, 22);
+            this.intAddFUValue.TabIndex = 4;
+            this.intAddFUValue.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.intAddFUValue.ValueChanged += new System.EventHandler(this.intAddFUValue_ValueChanged);
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label14.Location = new System.Drawing.Point(53, 70);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(145, 16);
+            this.label14.TabIndex = 5;
+            this.label14.Text = "Int Add Functional Units";
+            this.label14.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // dynamicReorderBufferSizeValue
             // 
             this.dynamicReorderBufferSizeValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dynamicReorderBufferSizeValue.Location = new System.Drawing.Point(7, 41);
+            this.dynamicReorderBufferSizeValue.Location = new System.Drawing.Point(7, 40);
             this.dynamicReorderBufferSizeValue.Maximum = new decimal(new int[] {
-            15,
+            60,
             0,
             0,
             0});
             this.dynamicReorderBufferSizeValue.Minimum = new decimal(new int[] {
-            5,
+            12,
             0,
             0,
             0});
@@ -1129,7 +1633,7 @@
             this.dynamicReorderBufferSizeValue.Size = new System.Drawing.Size(40, 22);
             this.dynamicReorderBufferSizeValue.TabIndex = 0;
             this.dynamicReorderBufferSizeValue.Value = new decimal(new int[] {
-            10,
+            12,
             0,
             0,
             0});
@@ -1150,7 +1654,7 @@
             this.label31.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.label31.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label31.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label31.Location = new System.Drawing.Point(53, 43);
+            this.label31.Location = new System.Drawing.Point(53, 42);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(123, 16);
             this.label31.TabIndex = 3;
@@ -1172,7 +1676,7 @@
             this.Controls.Add(this.applyChangesButton);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Configurations";
-            this.Text = "v";
+            this.Text = "Configuration Menu";
             ((System.ComponentModel.ISupportInitialize)(this.dynamicIntAddConfigValue)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicIntSubConfigValue)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicIntMultConfigValue)).EndInit();
@@ -1204,6 +1708,18 @@
             this.branchPredictionPanel.PerformLayout();
             this.dynamicFUPanel.ResumeLayout(false);
             this.dynamicFUPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.flMultFUValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.flDivFUValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bitwiseFUValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.shiftFUValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.branchFUValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.memoryFUValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.flSubFUValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.flAddFUValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.intDivFUValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.intMultFUValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.intSubFUValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.intAddFUValue)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicReorderBufferSizeValue)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1274,5 +1790,29 @@
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.NumericUpDown dynamicShiftConfigValue;
+        private System.Windows.Forms.NumericUpDown flMultFUValue;
+        private System.Windows.Forms.NumericUpDown flDivFUValue;
+        private System.Windows.Forms.NumericUpDown bitwiseFUValue;
+        private System.Windows.Forms.NumericUpDown shiftFUValue;
+        private System.Windows.Forms.NumericUpDown branchFUValue;
+        private System.Windows.Forms.NumericUpDown memoryFUValue;
+        private System.Windows.Forms.NumericUpDown flSubFUValue;
+        private System.Windows.Forms.NumericUpDown flAddFUValue;
+        private System.Windows.Forms.NumericUpDown intDivFUValue;
+        private System.Windows.Forms.NumericUpDown intMultFUValue;
+        private System.Windows.Forms.NumericUpDown intSubFUValue;
+        private System.Windows.Forms.Label label40;
+        private System.Windows.Forms.Label label39;
+        private System.Windows.Forms.Label label38;
+        private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.Label label35;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.NumericUpDown intAddFUValue;
+        private System.Windows.Forms.Label label14;
     }
 }

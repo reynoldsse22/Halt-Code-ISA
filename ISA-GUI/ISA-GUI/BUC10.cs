@@ -770,7 +770,7 @@ namespace ISA_GUI
             else
                 commitStageText.Text = "";
             instructionInFlightText.Text = instructionsInFlight;
-            instInExText.Text = cpu.DP.numOfInstructionsInExecution.ToString();
+            reorderBufferCountText.Text = cpu.DP.reorderBuffer.reorderBuffer.Count.ToString();
             currentCycleText.Text = cpu.DP.cycleCount.ToString();
             rbdText.Text = cpu.DP.reorderBufferDelay.ToString();
             rsdText.Text = cpu.DP.reservationStationDelay.ToString();

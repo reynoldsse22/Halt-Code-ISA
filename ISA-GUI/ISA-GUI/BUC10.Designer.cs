@@ -170,7 +170,7 @@
             this.rsdLabel = new System.Windows.Forms.Label();
             this.rbdLabel = new System.Windows.Forms.Label();
             this.instInExLabel1 = new System.Windows.Forms.Label();
-            this.instInExText = new System.Windows.Forms.RichTextBox();
+            this.reorderBufferCountText = new System.Windows.Forms.RichTextBox();
             this.instInExLabel2 = new System.Windows.Forms.Label();
             this.staticPanel = new System.Windows.Forms.Panel();
             this.dynamicPanel = new System.Windows.Forms.Panel();
@@ -846,7 +846,7 @@
             this.objectCodeBox.Location = new System.Drawing.Point(4, 22);
             this.objectCodeBox.Name = "objectCodeBox";
             this.objectCodeBox.Padding = new System.Windows.Forms.Padding(3);
-            this.objectCodeBox.Size = new System.Drawing.Size(549, 367);
+            this.objectCodeBox.Size = new System.Drawing.Size(549, 362);
             this.objectCodeBox.TabIndex = 0;
             this.objectCodeBox.Text = "Disassembler";
             this.objectCodeBox.UseVisualStyleBackColor = true;
@@ -1697,31 +1697,31 @@
             this.instInExLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.instInExLabel1.Location = new System.Drawing.Point(32, 80);
             this.instInExLabel1.Name = "instInExLabel1";
-            this.instInExLabel1.Size = new System.Drawing.Size(72, 13);
+            this.instInExLabel1.Size = new System.Drawing.Size(76, 13);
             this.instInExLabel1.TabIndex = 141;
-            this.instInExLabel1.Text = "Instructions in";
+            this.instInExLabel1.Text = "Reorder Buffer";
             // 
-            // instInExText
+            // reorderBufferCountText
             // 
-            this.instInExText.BackColor = System.Drawing.SystemColors.Menu;
-            this.instInExText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.instInExText.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.instInExText.Location = new System.Drawing.Point(111, 83);
-            this.instInExText.Name = "instInExText";
-            this.instInExText.ReadOnly = true;
-            this.instInExText.Size = new System.Drawing.Size(46, 25);
-            this.instInExText.TabIndex = 142;
-            this.instInExText.Text = "";
+            this.reorderBufferCountText.BackColor = System.Drawing.SystemColors.Menu;
+            this.reorderBufferCountText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.reorderBufferCountText.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.reorderBufferCountText.Location = new System.Drawing.Point(111, 83);
+            this.reorderBufferCountText.Name = "reorderBufferCountText";
+            this.reorderBufferCountText.ReadOnly = true;
+            this.reorderBufferCountText.Size = new System.Drawing.Size(46, 25);
+            this.reorderBufferCountText.TabIndex = 142;
+            this.reorderBufferCountText.Text = "";
             // 
             // instInExLabel2
             // 
             this.instInExLabel2.AutoSize = true;
             this.instInExLabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.instInExLabel2.Location = new System.Drawing.Point(50, 95);
+            this.instInExLabel2.Location = new System.Drawing.Point(74, 95);
             this.instInExLabel2.Name = "instInExLabel2";
-            this.instInExLabel2.Size = new System.Drawing.Size(54, 13);
+            this.instInExLabel2.Size = new System.Drawing.Size(35, 13);
             this.instInExLabel2.TabIndex = 143;
-            this.instInExLabel2.Text = "Execution";
+            this.instInExLabel2.Text = "Count";
             // 
             // staticPanel
             // 
@@ -1762,7 +1762,7 @@
             this.dynamicPanel.Controls.Add(this.reorder_cdbTabControl);
             this.dynamicPanel.Controls.Add(this.issueStageText);
             this.dynamicPanel.Controls.Add(this.instInExLabel2);
-            this.dynamicPanel.Controls.Add(this.instInExText);
+            this.dynamicPanel.Controls.Add(this.reorderBufferCountText);
             this.dynamicPanel.Controls.Add(this.commitStageText);
             this.dynamicPanel.Controls.Add(this.instInExLabel1);
             this.dynamicPanel.Controls.Add(this.issueStageLabel);
@@ -2317,7 +2317,7 @@
         private System.Windows.Forms.Label rsdLabel;
         private System.Windows.Forms.Label rbdLabel;
         private System.Windows.Forms.Label instInExLabel1;
-        private System.Windows.Forms.RichTextBox instInExText;
+        private System.Windows.Forms.RichTextBox reorderBufferCountText;
         private System.Windows.Forms.Label instInExLabel2;
         private System.Windows.Forms.TabPage pipelineStatsTab;
         private System.Windows.Forms.RichTextBox pipelineStatsTextBox;

@@ -26,6 +26,8 @@ namespace ISA_GUI
 	{
 		public Instruction instruction;
 		public bool oneCycleFU;
+		public string name;
+		public int indexer;
 		/**
 	    * Method Name: ShiftFU <br>
 	    * Method Purpose: Class constructor
@@ -34,9 +36,9 @@ namespace ISA_GUI
 	    * Date created: 4/2/22 <br>
 	    * @author Samuel Reynolds, Nick Farmer, Carlos Ortiz, & Brandon Beaudry	
 	    */
-		public ShiftFU()
+		public ShiftFU(string name)
 		{
-
+			this.name = name;
 		}
 	}
 }
