@@ -287,6 +287,7 @@ namespace ISA_GUI
          {
              string updatedAssembly = instOp.ToUpper();
 
+
              if (second != "")
                  first += ",";
              if (third != "")
@@ -302,6 +303,11 @@ namespace ISA_GUI
                         updatedAssembly = "f." + updatedAssembly + 's';
              }
              instruct.assembly1 = updatedAssembly;
+            if(instruct.opcode == 0 || instruct.opcode == 1)
+            {
+                assemblyString += (updatedAssembly.TrimEnd());
+                return;
+            }
              assemblyString += (updatedAssembly + " " + first + second + third + "\n");
              instruct.assembly2 = first + second + third;
             }

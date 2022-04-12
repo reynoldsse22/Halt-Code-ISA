@@ -1,0 +1,27 @@
+Summary Statistics
+------------------
+Total instructions:              5
+Control instructions:            1, 20%
+Arithmetic & logic instructions: 2, 40%
+Memory instructions:             2, 40%
+
+
+Pipeline Statistics
+------------------
+Total Cycles:                    13
+
+Delays
+-------
+Teorder buffer delays:           0
+Teservation station delays:      0
+True dependence delays:          2
+Total:                           2
+
+Program  Inst Inst Instruct                            Address/
+Counter  Flag Spec Mnemonic      Type FReg SReg DReg  Immediate
+-------- ---- ---- -------- --------- ---- ---- ---- ----------
+0x000000  N/A    B     LDHL    Memory  N/A  N/A    1         7A
+0x000003  N/A    B     LDHL    Memory  N/A  N/A    2         E8
+0x000006  N/A   14      ADD       ALU    3    2    6        N/A
+0x000009  N/A   14      ADD       ALU    4    1    3        N/A
+0x00000C  N/A    0     HALT   Control  N/A  N/A  N/A        N/A
