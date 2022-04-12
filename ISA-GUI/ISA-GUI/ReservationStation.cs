@@ -8,7 +8,7 @@ namespace ISA_GUI
 {
     class ReservationStation
     {
-        string stationName;        //Name of reservation station
+        public string stationName;        //Name of reservation station
         public bool Busy { get; set; }  //Is there an instruction within the station
         public Instruction instruction { get; set; } //Current instruction
         public int Vk { get; set; } //Register values the instruction needs

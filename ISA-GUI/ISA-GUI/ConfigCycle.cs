@@ -49,7 +49,7 @@ namespace ISA_GUI
 			load = 1;
 			store = 1;
 			intALU = 1;
-			intAdd = 3;
+			intAdd = 1;
 			intSub = 1;
 			intMult = 1;
 			intDiv = 2;

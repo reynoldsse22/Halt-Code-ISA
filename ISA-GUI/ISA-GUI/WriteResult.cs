@@ -149,7 +149,7 @@ namespace ISA_GUI
 			switch (instruction.functionalUnitID)
 			{
 				case 1:
-					if(!CDB.CDB.ContainsKey("intAddFu"))
+					if(!CDB.CDB.ContainsKey("intAddFu" + instruction.functionalUnitIndex))
                     {
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
@@ -158,7 +158,7 @@ namespace ISA_GUI
 					}
 					break;
 				case 2:
-					if (!CDB.CDB.ContainsKey("intSubFu"))
+					if (!CDB.CDB.ContainsKey("intSubFu" + instruction.functionalUnitIndex))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
@@ -167,7 +167,7 @@ namespace ISA_GUI
 					}
 					break;
 				case 3:
-					if (!CDB.CDB.ContainsKey("intMulFu"))
+					if (!CDB.CDB.ContainsKey("intMulFu" + instruction.functionalUnitIndex))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
@@ -176,7 +176,7 @@ namespace ISA_GUI
 					}
 					break;
 				case 4:
-					if (!CDB.CDB.ContainsKey("intDivFu"))
+					if (!CDB.CDB.ContainsKey("intDivFu" + instruction.functionalUnitIndex))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
@@ -185,7 +185,7 @@ namespace ISA_GUI
 					}
 					break;
 				case 5:
-					if (!CDB.CDB.ContainsKey("flAddFu"))
+					if (!CDB.CDB.ContainsKey("flAddFu" + instruction.functionalUnitIndex))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
@@ -194,7 +194,7 @@ namespace ISA_GUI
 					}
 					break;
 				case 6:
-					if (!CDB.CDB.ContainsKey("flSubFu"))
+					if (!CDB.CDB.ContainsKey("flSubFu" + instruction.functionalUnitIndex))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
@@ -203,7 +203,7 @@ namespace ISA_GUI
 					}
 					break;
 				case 7:
-					if (!CDB.CDB.ContainsKey("flMultFu"))
+					if (!CDB.CDB.ContainsKey("flMultFu" + instruction.functionalUnitIndex))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
@@ -212,7 +212,7 @@ namespace ISA_GUI
 					}
 					break;
 				case 8:
-					if (!CDB.CDB.ContainsKey("flDivFu"))
+					if (!CDB.CDB.ContainsKey("flDivFu" + instruction.functionalUnitIndex))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
@@ -221,7 +221,7 @@ namespace ISA_GUI
 					}
 					break;
 				case 9:
-					if (!CDB.CDB.ContainsKey("bitFu"))
+					if (!CDB.CDB.ContainsKey("bitFu" + instruction.functionalUnitIndex))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
@@ -230,7 +230,7 @@ namespace ISA_GUI
 					}
 					break;
 				case 10:
-					if (!CDB.CDB.ContainsKey("memoryFu"))
+					if (!CDB.CDB.ContainsKey("memoryFu" + instruction.functionalUnitIndex))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
@@ -239,7 +239,7 @@ namespace ISA_GUI
 					}
 					break;
 				case 11:
-					if (!CDB.CDB.ContainsKey("branchFu"))
+					if (!CDB.CDB.ContainsKey("branchFu" + instruction.functionalUnitIndex))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
@@ -248,7 +248,7 @@ namespace ISA_GUI
 					}
 					break;
 				case 12:
-					if (!CDB.CDB.ContainsKey("shiftFu"))
+					if (!CDB.CDB.ContainsKey("shiftFu" + instruction.functionalUnitIndex))
 					{
 						CDB.index.Add(instruction.ID, CDB.CDB.Count);
 						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
