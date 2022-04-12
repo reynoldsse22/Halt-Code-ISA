@@ -1121,7 +1121,15 @@ namespace ISA_GUI
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 StreamReader reader = new StreamReader(dlg.FileName, Encoding.Default);
-                assemblerTextBox.Text = reader.ReadToEnd();
+                if (objectCode.SelectedIndex == 0)
+                {
+                    assemblerTextBox.Text = reader.ReadToEnd();
+                }
+                else if(objectCode.SelectedIndex == 1)
+                {
+                    InputBox.Text = reader.ReadToEnd();
+                }
+                //assemblerTextBox.Text = reader.ReadToEnd();
                 reader.Close();
             }
 
@@ -1136,6 +1144,7 @@ namespace ISA_GUI
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 File.WriteAllText(dlg.FileName, StatsTextBox.Text);
+                File.AppendAllText(dlg.FileName, AssemblerListingTextBox.Text);
                 File.AppendAllText(dlg.FileName, pipelineStatsTextBox.Text);
             }
             MessageBox.Show("Saved File");
