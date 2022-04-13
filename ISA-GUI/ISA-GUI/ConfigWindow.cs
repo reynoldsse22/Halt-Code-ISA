@@ -242,7 +242,7 @@ namespace ISA_GUI
             dynamicFlMultConfigValue.Value = 5;
             dynamicFlDivConfigValue.Value = 10;
             dynamicBitwiseConfigValue.Value = 1;
-            dynamicReorderBufferSizeValue.Value = 12;
+           //dynamicReorderBufferSizeValue.Value = 12;
             dynamicShiftConfigValue.Value = 1;
             dynamicLoadConfigValue.Value = 1;
             dynamicStoreConfigValue.Value = 1;
@@ -288,6 +288,7 @@ namespace ISA_GUI
             configurations.reorderbuffersize = (int)dynamicReorderBufferSizeValue.Value;
             configurations.store = (int)dynamicStoreConfigValue.Value;
             configurations.shift = (int)dynamicShiftConfigValue.Value;
+            setReorderBufferMinimum();
         }
 
         private void staticCheckbox_CheckedChanged(object sender, EventArgs e)
