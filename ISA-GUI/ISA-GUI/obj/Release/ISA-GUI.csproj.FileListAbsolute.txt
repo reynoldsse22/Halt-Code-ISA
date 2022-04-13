@@ -1,0 +1,18 @@
+C:\Users\reynoldsse\OneDrive - East Tennessee State University\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Release\ISA-GUI.csproj.SuggestedBindingRedirects.cache
+C:\Users\reynoldsse\OneDrive - East Tennessee State University\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Release\ISA_GUI.BUC10.resources
+C:\Users\reynoldsse\OneDrive - East Tennessee State University\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Release\ISA_GUI.Configurations.resources
+C:\Users\reynoldsse\OneDrive - East Tennessee State University\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Release\ISA_GUI.Properties.Resources.resources
+C:\Users\reynoldsse\OneDrive - East Tennessee State University\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Release\ISA-GUI.csproj.GenerateResource.cache
+C:\Users\reynoldsse\OneDrive - East Tennessee State University\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Release\ISA-GUI.csproj.CoreCompileInputs.cache
+C:\Users\samre\OneDrive\Desktop\Comp Arch\Projects\Halt-Code-ISA\ISA-GUI\ISA-GUI\bin\Release\ISA-GUI.exe.config
+C:\Users\samre\OneDrive\Desktop\Comp Arch\Projects\Halt-Code-ISA\ISA-GUI\ISA-GUI\bin\Release\ISA-GUI.exe
+C:\Users\samre\OneDrive\Desktop\Comp Arch\Projects\Halt-Code-ISA\ISA-GUI\ISA-GUI\bin\Release\ISA-GUI.pdb
+C:\Users\samre\OneDrive\Desktop\Comp Arch\Projects\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Release\ISA-GUI.csproj.AssemblyReference.cache
+C:\Users\samre\OneDrive\Desktop\Comp Arch\Projects\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Release\ISA-GUI.csproj.SuggestedBindingRedirects.cache
+C:\Users\samre\OneDrive\Desktop\Comp Arch\Projects\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Release\ISA_GUI.BUC10.resources
+C:\Users\samre\OneDrive\Desktop\Comp Arch\Projects\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Release\ISA_GUI.Configurations.resources
+C:\Users\samre\OneDrive\Desktop\Comp Arch\Projects\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Release\ISA_GUI.Properties.Resources.resources
+C:\Users\samre\OneDrive\Desktop\Comp Arch\Projects\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Release\ISA-GUI.csproj.GenerateResource.cache
+C:\Users\samre\OneDrive\Desktop\Comp Arch\Projects\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Release\ISA-GUI.csproj.CoreCompileInputs.cache
+C:\Users\samre\OneDrive\Desktop\Comp Arch\Projects\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Release\ISA-GUI.exe
+C:\Users\samre\OneDrive\Desktop\Comp Arch\Projects\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Release\ISA-GUI.pdb

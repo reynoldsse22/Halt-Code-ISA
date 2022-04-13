@@ -24,7 +24,10 @@ namespace ISA_GUI
 	*/
 	internal class IntDivFU
 	{
-
+		public Instruction instruction;
+		public bool oneCycleFU;
+		public string name;
+		public int indexer;
 		/**
 	    * Method Name: IntDivFU <br>
 	    * Method Purpose: Class constructor
@@ -33,9 +36,9 @@ namespace ISA_GUI
 	    * Date created: 4/1/22 <br>
 	    * @author Samuel Reynolds, Nick Farmer, Carlos Ortiz, & Brandon Beaudry	
 	    */
-		public IntDivFU()
+		public IntDivFU(string name)
 		{
-
+			this.name = name;
 		}
 	}
 }

@@ -201,6 +201,110 @@ namespace ISA_GUI
             success = true;
             return;
         }
+
+
+        public void executeDynamic(ref RegisterFile registers, ref DataMemory memory, ref ALU alu, ref InstructionMemory IM,
+                ref Instruction instruction, ref ConfigCycle config, out string result)
+        {
+            result = "";
+            inProgress = true;
+            occupied = true;
+            hazardDetected = false;
+            int opcode = instruction.opcode;
+            int r1 = instruction.r1;
+            int r2 = instruction.r2;
+            int r3 = instruction.r3;
+            int address = instruction.address;
+            int instrFlag = instruction.instrFlag;
+            string instrType = instruction.instrType;
+            int ASPR = instrFlag & 1;                           //gets the ASPR bit from the first four bits 00X0
+
+            switch (opcode)
+            {
+                //CONTROL INSTRUCTIONS
+                case 0:
+                    instruction.cycleControl = 1;
+                    return;                                     //HALT
+                case 1:
+                    instruction.cycleControl = 1;
+                    return;                                     //No Operation
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                    instruction.cycleControl = config.effAddress;
+                    break;
+
+                //MEMORY INSTRUCTIONS
+                case 9:
+                    instruction.cycleControl = config.effAddress;
+                    instruction.destinationReg = 0;
+                    break;
+                case 10:
+                    instruction.cycleControl = config.store;
+                    if (!instruction.isFloat)
+                    {
+                        result = instruction.fOperand1.ToString();
+                        instruction.result = result;
+                    }
+                    else
+                    {
+                        result = instruction.iOperand1.ToString();
+                        instruction.result = result;
+                    }
+                    break;
+                case 11:
+                    instruction.cycleControl = config.effAddress;
+                    instruction.destinationReg = r3;
+                    break;
+                case 12:
+                    instruction.cycleControl = config.effAddress;
+                    instruction.destinationReg = r3;
+                    break;
+                case 13:
+                case 14:
+                    alu.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref instruction, ref config, out result);
+                    break;
+                case 15:
+                    instruction.cycleControl = 1;
+                    instruction.destinationReg = r3;
+                    if (!instruction.isFloat)
+                    {
+                        result = instruction.iOperand1.ToString();
+                        instruction.result = result;
+                    }
+                    else
+                    {
+                        result = instruction.iOperand1.ToString();
+                        instruction.result = result;
+                    }
+                    break;
+
+
+                //ALU INSTRUCTIONS
+                case 16:
+                case 17:
+                case 18:
+                case 19:
+                case 20:
+                case 21:
+                case 22:
+                case 23:
+                case 24:
+                case 25:
+                case 26:
+                case 27:
+                    alu.executeDynamic(ref registers, ref memory, ref alu, ref IM, ref instruction, ref config, out result);    //Transfer to the ALU
+                    break;
+            }
+            success = true;
+            return;
+        }
+
+
     }
 
 

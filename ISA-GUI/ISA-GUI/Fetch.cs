@@ -97,6 +97,64 @@ namespace ISA_GUI
             success = true;
             return instruction;
         }
+
+
+
+        /**
+		 * Method Name: getNextInstruction <br>
+		 * Method Purpose: Goes to the instruction memory unit and fetches the next instruction (2 bytes)
+		 * 
+		 * <br>
+		 * Date created: 2/19/22 <br>
+		 * <hr>
+		 *   @param  RegisterFile register
+		 *   @param  InstructionMemory IM
+		 *   @param  ConfigCycle config
+		 
+        public Instruction getNextInstructionDynamic(ref RegisterFile registers, ref InstructionMemory IM, ref ConfigCycle config, bool branchTaken)
+        {
+            occupied = true;
+            inProgress = true;
+            hazardDetected = false;
+            Instruction instruction = new Instruction();
+            if ((IM.ProgramCounter + 3) > IM.instructions.Count)
+                return null;
+
+            // BRANCH PREDICTION
+            if (config.predictionSet)
+            {
+                if (branchTaken)
+                {
+                    instruction.programCounterValue = stages[1].address;
+                    instruction.binInstruction[0] = IM.instructions[stages[1].address];
+                    instruction.binInstruction[1] = IM.instructions[stages[1].address + 1];
+                    instruction.binInstruction[2] = IM.instructions[stages[1].address + 2];
+                }
+                else
+                {
+                    instruction.programCounterValue = IM.ProgramCounter;
+                    instruction.binInstruction[0] = IM.instructions[IM.ProgramCounter++];
+                    instruction.binInstruction[1] = IM.instructions[IM.ProgramCounter++];
+                    instruction.binInstruction[2] = IM.instructions[IM.ProgramCounter++];
+                }
+            }
+            else
+            {
+                instruction.programCounterValue = IM.ProgramCounter;
+                instruction.binInstruction[0] = IM.instructions[IM.ProgramCounter++];
+                instruction.binInstruction[1] = IM.instructions[IM.ProgramCounter++];
+                instruction.binInstruction[2] = IM.instructions[IM.ProgramCounter++];
+            }
+
+            instruction.cycleControl = config.fetch;
+            IM.CurrentInstruction = (instruction.binInstruction[2] + (instruction.binInstruction[1] << 8) + (instruction.binInstruction[0] << 16));
+            success = true;
+            return instruction;
+        }
+
+        */
+
+
         /**
 		 * Method Name: getNextInstruction <br>
 		 * Method Purpose: Goes to the instruction memory unit and fetches the next instruction (2 bytes), solely used to get the next instruction

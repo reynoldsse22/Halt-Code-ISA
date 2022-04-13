@@ -24,8 +24,12 @@ namespace ISA_GUI
 	*/
     internal class RegisterFile
     {
-        public int[] intRegisters = new int[7];     //16 16-bit registers
-		public float[] floatRegisters = new float[7];
+        public int[] intRegisters = new int[16];     //16 16-bit registers
+		public float[] floatRegisters = new float[16];
+		public string[] intQi = new string[16];
+		public int[] intQiIndex = new int[16];
+		public string[] floatQi = new string[16];
+		public int[] floatQiIndex = new int[16];
 		public int ASPR;
 
 		/**
@@ -38,10 +42,48 @@ namespace ISA_GUI
 	    */
 		public RegisterFile()
         {
+			for(int i = 0; i < 16; i++)
+            {
+				intQi[i] = "0";
+				floatQi[i] = "0";
+				intQiIndex[i] = -1;
+				floatQiIndex[i] = -1;
+            }
             //Initialize registers
             Array.Clear(intRegisters, 0, intRegisters.Length);
 			Array.Clear(floatRegisters, 0, floatRegisters.Length);
 			ASPR = 0;
 		}
+
+		public void clearRegistersQI()
+        {
+			for (int i = 0; i < 16; i++)
+			{
+				intQi[i] = "0";
+				floatQi[i] = "0";
+				intQiIndex[i] = -1;
+				floatQiIndex[i] = -1;
+			}
+		}
+
+		public void clearSpecificRegisterQI(Instruction instruction)
+        {
+			if(instruction.isFloat)
+            {
+				if(instruction.ID == floatQiIndex[instruction.destinationReg])
+                {
+					floatQi[instruction.destinationReg] = "0";
+					floatQiIndex[instruction.destinationReg] = -1;
+				}
+			}
+            else
+            {
+				if(instruction.ID == intQiIndex[instruction.destinationReg])
+                {
+					intQi[instruction.destinationReg] = "0";
+					intQiIndex[instruction.destinationReg] = -1;
+				}
+			}
+        }
     }
 }

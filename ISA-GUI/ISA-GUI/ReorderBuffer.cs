@@ -25,9 +25,9 @@ namespace ISA_GUI
 	*/
 	internal class ReorderBuffer
 	{
-		bool hasEverything;					//used maybe to see if instruction in the reorderBuffer is good to leave
-
-
+		public List<Instruction> reorderBuffer;
+		public int reorderIndex;
+		public bool oneCommitPerCycle;		//The reorder buffer should only commit one instruction per cycle. Up for change
 		/**
 	    * Method Name: ReorderBuffer <br>
 	    * Method Purpose: Class constructor
@@ -38,9 +38,50 @@ namespace ISA_GUI
 	    */
 		public ReorderBuffer()
 		{
-			Instruction[] ReorderBuffer = new Instruction[9];
-
+			reorderBuffer = new List<Instruction>();
+			oneCommitPerCycle = true;
+			reorderIndex = 1;
 		}
+
+
+		public void addToReorderBuffer(Instruction inst, ref ConfigCycle config)
+        {
+			if (reorderBuffer.Count == config.reorderbuffersize)
+				throw new Exception();
+			else
+				reorderBuffer.Add(inst);
+			return;
+        }
+
+		public int checkCommit(Instruction inst, ref WriteResult WR, ref DataMemory memory, ref bool branchTaken, ref InstructionMemory IM, 
+			ref RegisterFile registers, ref bool halted, ref CommonDataBus CDB)
+        {
+			if(reorderIndex == inst.ID && oneCommitPerCycle)
+            {
+				WR.commit(ref registers, ref inst, ref memory, ref halted, ref IM, ref branchTaken);
+				reorderIndex++;
+				oneCommitPerCycle = false;
+				return removeFromReorderBuffer(inst, ref CDB);
+            }
+			return -1;
+        }
+
+        public int removeFromReorderBuffer(Instruction instruction, ref CommonDataBus CDB)
+        {
+			reorderBuffer.RemoveAt(reorderBuffer.FindIndex(Instruction => Instruction.ID == instruction.ID));
+			return instruction.ID;
+        }
+
+		public void removeAllInstructionsAfterHazard(int id)
+        {
+			foreach(Instruction inst in reorderBuffer.ToList())
+            {
+				if(inst.ID > id)
+                {
+					reorderBuffer.Remove(inst);
+                }
+            }
+        }
 	}
 }
 

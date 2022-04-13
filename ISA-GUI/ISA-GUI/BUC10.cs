@@ -16,6 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using System.IO;
 
 // THIS CLASS IS ONLY TO BE USED TO KICKOFF THE PIPELINE AND UPDATE THE GUI //
 
@@ -81,7 +82,6 @@ namespace ISA_GUI
             stage4Text.SelectionAlignment = HorizontalAlignment.Center;
             stage5Text.SelectionAlignment = HorizontalAlignment.Center;
             currentCycleText.SelectionAlignment = HorizontalAlignment.Center;
-            programSpeedBar.Value = config.programSpeed;
         }
 
         /**
@@ -131,7 +131,6 @@ namespace ISA_GUI
                 AssemblerListingTextBox.Text = message;
                 StatsTextBox.Text = message;
                 pipelineTextBox.Text = message;
-                assemblerTextBox.Text = message;
                 halted = true;
                 return;
             }
@@ -173,7 +172,8 @@ namespace ISA_GUI
                     if (!config.dynamicPipelineSet)
                         cpu.runStaticPipeline(program, true, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config, ref stages);      //Run the program one cycle at a time. Stepthrough flag is true
                     else
-                        return;//ELSE STATEMENT FOR DYNAMIC PIPELINE GOES HERE
+                        cpu.runDynamicPipeline(program, true, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config); //Calling Dynamic Pipeline
+
                     updateGUI();        //update the GUI
                 }
                 catch (Exception)       //Catch any errors when getting input from user or decoding invalid instructions
@@ -193,7 +193,7 @@ namespace ISA_GUI
                     if (!config.dynamicPipelineSet)
                         cpu.runStaticPipeline(program, true, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config, ref stages);      //Run the program one cycle at a time. Stepthrough flag is true
                     else
-                        return;//ELSE STATEMENT FOR DYNAMIC PIPELINE GOES HERE
+                        cpu.runDynamicPipeline(program, true, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config); //Calling Dynamic Pipeline
                 }
                 catch (Exception)       //Catch any errors when getting input from user or decoding invalid instructions
                 {
@@ -201,7 +201,6 @@ namespace ISA_GUI
                     AssemblerListingTextBox.Text = message;
                     StatsTextBox.Text = message;
                     pipelineTextBox.Text = message;
-                    assemblerTextBox.Text = message;
                     halted = true;
                     return;
                 }
@@ -334,28 +333,50 @@ namespace ISA_GUI
             "   Team: Beaudry, Farmer, Ortiz, Reynolds\n" +
             "Project: Static Pipeline ISA Implementation\n" +
             "---------------------------------------------------------------\n\n");
-
-            pipelineOutput.Append(
+            if (!config.dynamicPipelineSet)
+            {
+                pipelineOutput.Append(
                 "                       Inst.   Decode/ Execute/  Access  Write To\n" +
                 "     Instruction       Fetch  Read Reg Calc Adr  Memory  Register\n" +
                 "--------------------- ------- -------- -------- ------- ---------");
+            }
+            else
+            {
+                pipelineOutput.Append(
+                "                                        Memory  Writes\n" +
+                "     Instruction      Issues  Executes   Read   Result  Commits\n" +
+                "--------------------- ------- -------- -------- ------- ---------");
+            }
+                
             assemblyOutput.Clear();
 
             cpu.IM.ProgramCounter = 0;
             cpu.IM.CurrentInstruction = 0;
             cpu.IM.instructions.Clear();
 
-            
-            cpu.SP.CU.instructionsProcessed = 0;
-            cpu.SP.CU.totalInstructions = 0;
-            cpu.SP.CU.ALUInstructionCount = 0;
-            cpu.SP.CU.memoryInstructionCount = 0;
-            cpu.SP.CU.controlInstructionCount = 0;
-            
-            
+            if(!config.dynamicPipelineSet)
+            {
+                cpu.SP.CU.instructionsProcessed = 0;
+                cpu.SP.CU.totalInstructions = 0;
+                cpu.SP.CU.ALUInstructionCount = 0;
+                cpu.SP.CU.memoryInstructionCount = 0;
+                cpu.SP.CU.controlInstructionCount = 0;
+                resetStaticPipeline();
+
+            }
+            else
+            {
+                cpu.DP.CU.instructionsProcessed = 0;
+                cpu.DP.CU.totalInstructions = 0;
+                cpu.DP.CU.ALUInstructionCount = 0;
+                cpu.DP.CU.memoryInstructionCount = 0;
+                cpu.DP.CU.controlInstructionCount = 0;
+                resetDynamicPipeline();
+            }
+
             StatsTextBox.Text = "";
+            pipelineStatsTextBox.Text = "";
             currentCycleText.SelectionAlignment = HorizontalAlignment.Center;
-            resetStaticPipeline();
             clearRegandMem();
             updateGUI();
         }
@@ -410,6 +431,28 @@ namespace ISA_GUI
             cpu.SP.cycleCount = 0;
         }
 
+
+        private void resetDynamicPipeline()
+        {
+            cpu.DP.fetch.inProgress = false;
+            cpu.DP.fetch.occupied = false;
+            cpu.DP.fetch.success = false;
+            cpu.DP.CU.inProgress = false;
+            cpu.DP.CU.occupied = false;
+            cpu.DP.CU.success = false;
+            cpu.DP.EU.inProgress = false;
+            cpu.DP.EU.occupied = false;
+            cpu.DP.EU.success = false;
+            cpu.DP.AM.inProgress = false;
+            cpu.DP.AM.occupied = false;
+            cpu.DP.AM.success = false;
+            cpu.DP.WR.inProgress = false;
+            cpu.DP.WR.occupied = false;
+            cpu.DP.WR.success = false;
+            cpu.DP.clearDynamicPipeline();
+            cpu.registers.clearRegistersQI();
+        }
+
         /**
         * Method Name: clearPipeline <br>
         * Method Purpose: Resets the values in the pipeline
@@ -423,25 +466,36 @@ namespace ISA_GUI
             for(int i = 0; i<5; i++)    
                 stages[i] = null;
 
-            cpu.SP.cycleCount = 0;
-            cpu.SP.WAR = 0;
-            cpu.SP.WAW = 0;
-            cpu.SP.RAW = 0;
-            cpu.SP.totalCyclesStalled = 0;
-            cpu.SP.fetchStalled = 0;
-            cpu.SP.decodeStalled = 0;
-            cpu.SP.executeStalled = 0;
-            cpu.SP.accessMemStalled = 0;
-            cpu.SP.writeRegStalled = 0;
-            cpu.SP.dataHazard = 0;
-            cpu.SP.controlHazard = 0;
-            cpu.SP.structuralHazard = 0;
-            cpu.SP.totalHazard = 0;
-            stage1Text.Text = "";
-            stage2Text.Text = "";
-            stage3Text.Text = "";
-            stage4Text.Text = "";
-            stage5Text.Text = "";
+            if (!config.dynamicPipelineSet)
+            {
+                cpu.SP.cycleCount = 0;
+                cpu.SP.WAR = 0;
+                cpu.SP.WAW = 0;
+                cpu.SP.RAW = 0;
+                cpu.SP.fetchStalled = 0;
+                cpu.SP.decodeStalled = 0;
+                cpu.SP.executeStalled = 0;
+                cpu.SP.accessMemStalled = 0;
+                cpu.SP.writeRegStalled = 0;
+                cpu.SP.dataHazard = 0;
+                cpu.SP.controlHazard = 0;
+                cpu.SP.structuralHazard = 0;
+                cpu.SP.totalHazard = 0;
+                stage1Text.Text = "";
+                stage2Text.Text = "";
+                stage3Text.Text = "";
+                stage4Text.Text = "";
+                stage5Text.Text = "";
+            }
+            else
+            {
+                cpu.DP.cycleCount = 0;
+                cpu.DP.reservationStationDelay = 0;
+                cpu.DP.reorderBufferDelay = 0;
+                cpu.DP.trueDependenceDelay = 0;
+                issueStageText.Text = "";
+                commitStageText.Text = "";
+            }
         }
 
         /**
@@ -454,7 +508,11 @@ namespace ISA_GUI
 		 */
         private void updateGUI()
         {
-            updatePipeline();
+            updatePipelineGUIElements();
+            if (!config.dynamicPipelineSet)
+                updateStaticPipeline();
+            else
+                updateDynamicPipeline();
             setRegisters();
             setStatistics();
             setMemoryBox();
@@ -463,9 +521,28 @@ namespace ISA_GUI
                 currentCycleText.Text = cpu.SP.cycleCount.ToString();
 
             }
+            else
+            {
+                updateRegisterQiText();
+            }
             AssemblerListingTextBox.Text = decodedString.ToString();
             pipelineTextBox.Text = pipelineOutput.ToString();
         }
+
+        private void updatePipelineGUIElements()
+        {
+            if (config.dynamicPipelineSet)
+            {
+                staticPanel.Visible = false;
+                dynamicPanel.Visible = true;
+            }
+            else
+            {
+                staticPanel.Visible = true;
+                dynamicPanel.Visible = false;
+            }
+        }
+
 
         /**
 		 * Method Name: setRegisters <br>
@@ -477,22 +554,6 @@ namespace ISA_GUI
 		 */
         private void setRegisters()
         {
-            //Initialize the hexidecimal text field to 0
-            //Pad left ensures that the value will be 4 digits.
-            r0Hex.Text = "0x" + cpu.registers.intRegisters[0].ToString("X").PadLeft(6, '0');
-            r1Hex.Text = "0x" + cpu.registers.intRegisters[1].ToString("X").PadLeft(6, '0');
-            r2Hex.Text = "0x" + cpu.registers.intRegisters[2].ToString("X").PadLeft(6, '0');
-            r3Hex.Text = "0x" + cpu.registers.intRegisters[3].ToString("X").PadLeft(6, '0');
-            r4Hex.Text = "0x" + cpu.registers.intRegisters[4].ToString("X").PadLeft(6, '0');
-            r5Hex.Text = "0x" + cpu.registers.intRegisters[5].ToString("X").PadLeft(6, '0');
-            r6Hex.Text = "0x" + cpu.registers.intRegisters[6].ToString("X").PadLeft(6, '0');
-            f0Hex.Text = "0x" + (BitConverter.ToString(BitConverter.GetBytes(cpu.registers.floatRegisters[0]))).PadLeft(6, '0').Replace("-", "").Remove(0,2);
-            f1Hex.Text = "0x" + (BitConverter.ToString(BitConverter.GetBytes(cpu.registers.floatRegisters[1]))).PadLeft(6, '0').Replace("-", "").Remove(0,2);
-            f2Hex.Text = "0x" + (BitConverter.ToString(BitConverter.GetBytes(cpu.registers.floatRegisters[2]))).PadLeft(6, '0').Replace("-", "").Remove(0, 2);
-            f3Hex.Text = "0x" + (BitConverter.ToString(BitConverter.GetBytes(cpu.registers.floatRegisters[3]))).PadLeft(6, '0').Replace("-", "").Remove(0, 2);
-            f4Hex.Text = "0x" + (BitConverter.ToString(BitConverter.GetBytes(cpu.registers.floatRegisters[4]))).PadLeft(6, '0').Replace("-", "").Remove(0, 2);
-            f5Hex.Text = "0x" + (BitConverter.ToString(BitConverter.GetBytes(cpu.registers.floatRegisters[5]))).PadLeft(6, '0').Replace("-", "").Remove(0, 2);
-            f6Hex.Text = "0x" + (BitConverter.ToString(BitConverter.GetBytes(cpu.registers.floatRegisters[6]))).PadLeft(6, '0').Replace("-", "").Remove(0, 2);
             asprHex.Text = "0x" + cpu.registers.ASPR.ToString("X").PadLeft(6, '0');
             cirHex.Text = "0x" + cpu.IM.CurrentInstruction.ToString("X").PadLeft(6, '0');
             pcHex.Text = "0x" + cpu.IM.ProgramCounter.ToString("X").PadLeft(6, '0');
@@ -505,6 +566,16 @@ namespace ISA_GUI
             r4Dec.Text = cpu.registers.intRegisters[4].ToString();
             r5Dec.Text = cpu.registers.intRegisters[5].ToString();
             r6Dec.Text = cpu.registers.intRegisters[6].ToString();
+            r7Dec.Text = cpu.registers.intRegisters[7].ToString();
+            r8Dec.Text = cpu.registers.intRegisters[8].ToString();
+            r9Dec.Text = cpu.registers.intRegisters[9].ToString();
+            r10Dec.Text = cpu.registers.intRegisters[10].ToString();
+            r11Dec.Text = cpu.registers.intRegisters[11].ToString();
+            r12Dec.Text = cpu.registers.intRegisters[12].ToString();
+            r13Dec.Text = cpu.registers.intRegisters[13].ToString();
+            r14Dec.Text = cpu.registers.intRegisters[14].ToString();
+            r15Dec.Text = cpu.registers.intRegisters[15].ToString();
+
             f0Dec.Text = cpu.registers.floatRegisters[0].ToString();
             f1Dec.Text = cpu.registers.floatRegisters[1].ToString();
             f2Dec.Text = cpu.registers.floatRegisters[2].ToString();
@@ -512,9 +583,15 @@ namespace ISA_GUI
             f4Dec.Text = cpu.registers.floatRegisters[4].ToString();
             f5Dec.Text = cpu.registers.floatRegisters[5].ToString();
             f6Dec.Text = cpu.registers.floatRegisters[6].ToString();
-            asprDec.Text = cpu.registers.ASPR.ToString();
-            cirDec.Text = cpu.IM.CurrentInstruction.ToString();
-            pcDec.Text = cpu.IM.ProgramCounter.ToString();
+            f7Dec.Text = cpu.registers.floatRegisters[7].ToString();
+            f8Dec.Text = cpu.registers.floatRegisters[8].ToString();
+            f9Dec.Text = cpu.registers.floatRegisters[9].ToString();
+            f10Dec.Text = cpu.registers.floatRegisters[10].ToString();
+            f11Dec.Text = cpu.registers.floatRegisters[11].ToString();
+            f12Dec.Text = cpu.registers.floatRegisters[12].ToString();
+            f13Dec.Text = cpu.registers.floatRegisters[13].ToString();
+            f14Dec.Text = cpu.registers.floatRegisters[14].ToString();
+            f15Dec.Text = cpu.registers.floatRegisters[15].ToString();
 
             //Initialize the Z and C flags based on the ASPR register
             if ((cpu.registers.ASPR & 2) == 2)
@@ -539,6 +616,7 @@ namespace ISA_GUI
         private void setStatistics()
         {
             StringBuilder statistics = new StringBuilder("");
+            StringBuilder pipelineStats = new StringBuilder("");
 
             if (!config.dynamicPipelineSet)
             {
@@ -552,32 +630,54 @@ namespace ISA_GUI
                 statistics.Append(String.Format("Arithmetic & logic instructions: {0}, {1}%\n", cpu.SP.CU.ALUInstructionCount, Math.Round((double)cpu.SP.CU.ALUInstructionCount / totalInst * 100, 2)));
                 statistics.Append(String.Format("Memory instructions:             {0}, {1}%\n", cpu.SP.CU.memoryInstructionCount, Math.Round((double)cpu.SP.CU.memoryInstructionCount / totalInst * 100, 2)));
 
-                statistics.Append("\n\nPipeline Statistics\n");
-                statistics.Append("------------------\n");
-                statistics.Append(String.Format("Total Cycles:           {0}\n", cpu.SP.cycleCount - 1));
-                statistics.Append("\nHazards\n");
-                statistics.Append("-------\n");
-                statistics.Append(String.Format("structural:             {0}\n", cpu.SP.structuralHazard));
-                statistics.Append(String.Format("data:                   {0}\n", cpu.SP.dataHazard));
-                statistics.Append(String.Format("control:                {0}\n", cpu.SP.controlHazard));
-                statistics.Append(String.Format("Total:                  {0}\n\n", cpu.SP.structuralHazard + cpu.SP.dataHazard + cpu.SP.controlHazard));
-                statistics.Append("Dependencies\n");
-                statistics.Append("------------\n");
-                statistics.Append(String.Format("read-after-write:       {0}\n", cpu.SP.RAW));
-                statistics.Append(String.Format("write-after-read:       {0}\n", cpu.SP.WAR));
-                statistics.Append(String.Format("write-after-write:      {0}\n", cpu.SP.WAW));
-                statistics.Append(String.Format("Total:                  {0}\n\n", (cpu.SP.RAW + cpu.SP.WAR + cpu.SP.WAW)));
-                statistics.Append("Cycles Stalled\n");
-                statistics.Append("--------------\n");
-                statistics.Append(String.Format("instruction fetch:      {0}\n", cpu.SP.fetchStalled));
-                statistics.Append(String.Format("decode / read reg:      {0}\n", cpu.SP.decodeStalled));
-                statistics.Append(String.Format("execute / calc address: {0}\n", cpu.SP.executeStalled));
-                statistics.Append(String.Format("read / write memory:    {0}\n", cpu.SP.accessMemStalled));
-                statistics.Append(String.Format("write register:         {0}\n", cpu.SP.writeRegStalled));
-                statistics.Append(String.Format("Total:                  {0}\n\n", cpu.SP.totalCyclesStalled));
+                pipelineStats.Append("Pipeline Statistics\n");
+                pipelineStats.Append("------------------\n");
+                pipelineStats.Append(String.Format("Total Cycles:           {0}\n", cpu.SP.cycleCount - 1));
+                pipelineStats.Append("\nHazards\n");
+                pipelineStats.Append("-------\n");
+                pipelineStats.Append(String.Format("structural:             {0}\n", cpu.SP.structuralHazard));
+                pipelineStats.Append(String.Format("data:                   {0}\n", cpu.SP.dataHazard));
+                pipelineStats.Append(String.Format("control:                {0}\n", cpu.SP.controlHazard));
+                pipelineStats.Append(String.Format("Total:                  {0}\n\n", cpu.SP.structuralHazard + cpu.SP.dataHazard + cpu.SP.controlHazard));
+                pipelineStats.Append("Dependencies\n");
+                pipelineStats.Append("------------\n");
+                pipelineStats.Append(String.Format("read-after-write:       {0}\n", cpu.SP.RAW));
+                pipelineStats.Append(String.Format("write-after-read:       {0}\n", cpu.SP.WAR));
+                pipelineStats.Append(String.Format("write-after-write:      {0}\n", cpu.SP.WAW));
+                pipelineStats.Append(String.Format("Total:                  {0}\n\n", (cpu.SP.RAW + cpu.SP.WAR + cpu.SP.WAW)));
+                pipelineStats.Append("Cycles Stalled\n");
+                pipelineStats.Append("--------------\n");
+                pipelineStats.Append(String.Format("instruction fetch:      {0}\n", cpu.SP.fetchStalled));
+                pipelineStats.Append(String.Format("decode / read reg:      {0}\n", cpu.SP.decodeStalled));
+                pipelineStats.Append(String.Format("execute / calc address: {0}\n", cpu.SP.executeStalled));
+                pipelineStats.Append(String.Format("read / write memory:    {0}\n", cpu.SP.accessMemStalled));
+                pipelineStats.Append(String.Format("write register:         {0}\n", cpu.SP.writeRegStalled));
+                pipelineStats.Append(String.Format("Total:                  {0}\n\n", cpu.SP.totalCyclesStalled));
             }
-            
+            else
+            {
+                int totalInst = cpu.DP.CU.totalInstructions;
+                if (totalInst == 0)
+                    return;
+                statistics.Append("Summary Statistics\n");
+                statistics.Append("------------------\n");
+                statistics.Append(String.Format("Total instructions:              {0}\n", totalInst));                       //since we always go by 2's total instructions was pretty simple
+                statistics.Append(String.Format("Control instructions:            {0}, {1}%\n", cpu.DP.CU.controlInstructionCount, Math.Round((double)cpu.DP.CU.controlInstructionCount / totalInst * 100, 2)));
+                statistics.Append(String.Format("Arithmetic & logic instructions: {0}, {1}%\n", cpu.DP.CU.ALUInstructionCount, Math.Round((double)cpu.DP.CU.ALUInstructionCount / totalInst * 100, 2)));
+                statistics.Append(String.Format("Memory instructions:             {0}, {1}%\n", cpu.DP.CU.memoryInstructionCount, Math.Round((double)cpu.DP.CU.memoryInstructionCount / totalInst * 100, 2)));
+
+                pipelineStats.Append("Pipeline Statistics\n");
+                pipelineStats.Append("------------------\n");
+                pipelineStats.Append(String.Format("Total Cycles:                    {0}\n", cpu.DP.cycleCount - 1));
+                pipelineStats.Append("\nDelays\n");
+                pipelineStats.Append("-------\n");
+                pipelineStats.Append(String.Format("Reorder buffer delays:           {0}\n", cpu.DP.reorderBufferDelay));
+                pipelineStats.Append(String.Format("Reservation station delays:      {0}\n", cpu.DP.reservationStationDelay));
+                pipelineStats.Append(String.Format("True dependence delays:          {0}\n", cpu.DP.trueDependenceDelay));
+                pipelineStats.Append(String.Format("Total:                           {0}\n\n", cpu.DP.reorderBufferDelay + cpu.DP.reservationStationDelay + cpu.DP.trueDependenceDelay));
+            }
             StatsTextBox.Text = statistics.ToString();
+            pipelineStatsTextBox.Text = pipelineStats.ToString();
         }
 
 
@@ -589,42 +689,36 @@ namespace ISA_GUI
 		 * Date created: 3/2/22 <br>
 		 * <hr>
 		 */
-        private void updatePipeline()
+        private void updateStaticPipeline()
         {
-            int instructionHex;
 
             if (stages[0] != null)
             {
-                instructionHex = (stages[0].binInstruction[2] + (stages[0].binInstruction[1] << 8) + (stages[0].binInstruction[0] << 16));
-                stage1Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
+                stage1Text.Text = stages[0].fullAssemblySyntax;
             }
             else
                 stage1Text.Text = "";
             if (stages[1] != null)
             {
-                instructionHex = (stages[1].binInstruction[2] + (stages[1].binInstruction[1] << 8) + (stages[1].binInstruction[0] << 16));
-                stage2Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
+                stage2Text.Text = stages[1].fullAssemblySyntax;
             }
             else
                 stage2Text.Text = "";
             if (stages[2] != null)
             {
-                instructionHex = (stages[2].binInstruction[2] + (stages[2].binInstruction[1] << 8) + (stages[2].binInstruction[0] << 16));
-                stage3Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
+                stage3Text.Text = stages[2].fullAssemblySyntax;
             }
             else
                 stage3Text.Text = "";
             if (stages[3] != null)
             {
-                instructionHex = (stages[3].binInstruction[2] + (stages[3].binInstruction[1] << 8) + (stages[3].binInstruction[0] << 16));
-                stage4Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
+                stage4Text.Text = stages[3].fullAssemblySyntax;
             }
             else
                 stage4Text.Text = "";
             if (stages[4] != null)
             {
-                instructionHex = (stages[4].binInstruction[2] + (stages[4].binInstruction[1] << 8) + (stages[4].binInstruction[0] << 16));
-                stage5Text.Text = Regex.Replace(instructionHex.ToString("X").PadLeft(6, '0'), @"(.{2})", "$1 ");
+                stage5Text.Text = stages[4].fullAssemblySyntax;
             }
             else
                 stage5Text.Text = "";
@@ -644,6 +738,295 @@ namespace ISA_GUI
            
         }
 
+
+        private void updateDynamicPipeline()
+        {
+            string instructionsInFlight = "Reorder Buffer     ID\n";
+            instructionsInFlight += "---------------------";
+            string commonDataBus =        "CDB             Value\n";
+            commonDataBus += "---------------------";
+            foreach (Instruction inst in cpu.DP.reorderBuffer.reorderBuffer)
+            {
+                instructionsInFlight += string.Format("{0, 16} {1, 4}\n", inst.fullAssemblySyntax.PadRight(16, ' '), inst.ID.ToString().PadLeft(4,' '));
+                if (inst.justIssued && inst.stage1Cycle == cpu.DP.cycleCount)
+                    issueStageText.Text = inst.fullAssemblySyntax;
+                else
+                    issueStageText.Text = "";
+            }
+
+            foreach(KeyValuePair<string, string> instruction in cpu.DP.commonDataBus.CDB)
+            {
+                try
+                {
+                    commonDataBus += string.Format("{0, 16} {1, 4}\n", instruction.Key.PadRight(16, ' '), instruction.Value.ToString().PadLeft(4, ' '));
+
+                }
+                catch(Exception)
+                {
+
+                }
+            }
+            commonDataBusText.Text = commonDataBus;
+
+            if (cpu.DP.justCommitedInstruction != null)
+                commitStageText.Text = cpu.DP.justCommitedInstruction.fullAssemblySyntax;
+            else
+                commitStageText.Text = "";
+            instructionInFlightText.Text = instructionsInFlight;
+            reorderBufferCountText.Text = cpu.DP.reorderBuffer.reorderBuffer.Count.ToString();
+            currentCycleText.Text = cpu.DP.cycleCount.ToString();
+            rbdText.Text = cpu.DP.reorderBufferDelay.ToString();
+            rsdText.Text = cpu.DP.reservationStationDelay.ToString();
+            tddText.Text = cpu.DP.trueDependenceDelay.ToString();
+
+
+            updateRegisterQiText();
+            updateFunctionUnits();
+        }
+
+
+        private void updateRegisterQiText()
+        {
+            string registers =          "                                    Register Status                                       \n";
+            registers +=                "---------------------------------------------------------------------------------------\n";
+            registers +=                "Field -- r0        r1        r2        r3        r4        r5        r6        r7         \n";
+            registers += (string.Format("Qi       {0, 9} {1, 9} {2, 9} {3, 9} {4, 9} {5, 9} {6, 9} {7, 9}\n\n", cpu.registers.intQi[0].PadRight(9, ' '), cpu.registers.intQi[1].PadRight(9, ' '),
+                cpu.registers.intQi[2].PadRight(9, ' '), cpu.registers.intQi[3].PadRight(9, ' '), cpu.registers.intQi[4].PadRight(9, ' '), cpu.registers.intQi[5].PadRight(9, ' '), 
+                cpu.registers.intQi[6].PadRight(9, ' '), cpu.registers.intQi[7].PadRight(9, ' '))); 
+            registers +=                "Field -- r8        r9        r10       r11       r12       r13       r14       r15       \n";
+            registers += (string.Format("Qi       {0, 9} {1, 9} {2, 9} {3, 9} {4, 9} {5, 9} {6, 9} {7, 9}\n\n", cpu.registers.intQi[8].PadRight(9, ' '), cpu.registers.intQi[9].PadRight(9, ' '),
+                cpu.registers.intQi[10].PadRight(9, ' '), cpu.registers.intQi[11].PadRight(9, ' '), cpu.registers.intQi[12].PadRight(9, ' '), cpu.registers.intQi[13].PadRight(9, ' '),
+                cpu.registers.intQi[14].PadRight(9, ' '), cpu.registers.intQi[15].PadRight(9, ' ')));
+            registers +=                "Field -- f0        f1        f2        f3        f4        f5        f6        f7        \n";
+            registers += (string.Format("Qi       {0, 9} {1, 9} {2, 9} {3, 9} {4, 9} {5, 9} {6, 9} {7, 9}\n\n", cpu.registers.floatQi[0].PadRight(9, ' '), cpu.registers.floatQi[1].PadRight(9, ' '),
+                cpu.registers.floatQi[2].PadRight(9, ' '), cpu.registers.floatQi[3].PadRight(9, ' '), cpu.registers.floatQi[4].PadRight(9, ' '), cpu.registers.floatQi[5].PadRight(9, ' '),
+                cpu.registers.floatQi[6].PadRight(9, ' '), cpu.registers.floatQi[7].PadRight(9, ' ')));
+            registers +=                "Field -- f8        f9        f10       f11       f12       f13       f14       f15       \n";
+            registers += (string.Format("Qi       {0, 9} {1, 9} {2, 9} {3, 9} {4, 9} {5, 9} {6, 9} {7, 9}\n\n", cpu.registers.floatQi[8].PadRight(9, ' '), cpu.registers.floatQi[9].PadRight(9, ' '),
+                cpu.registers.floatQi[10].PadRight(9, ' '), cpu.registers.floatQi[11].PadRight(9, ' '), cpu.registers.floatQi[12].PadRight(9, ' '), cpu.registers.floatQi[13].PadRight(9, ' '),
+                cpu.registers.floatQi[14].PadRight(9, ' '), cpu.registers.floatQi[15].PadRight(9, ' ')));
+
+            registersQIText.Text = registers;
+        }
+
+        private void updateFunctionUnits()
+        {
+            if (!cpu.DP.programRanAtLeastOnce)
+                return;
+
+            string intAdd = "";
+            string intSub = "";
+            string intMult = "";
+            string intDiv = "";
+            string flAdd = "";
+            string flSub = "";
+            string flMult = "";
+            string flDiv = "";
+            string bitwise = "";
+            string branch = "";
+            string memory = "";
+            string load_storeBuffer = "";
+
+            intAdd += "     IntAddFU     \n";
+            intAdd += "-------------------\n";
+            foreach(IntAddFU fu in cpu.DP.intAddFUs)
+            {
+                if (fu.instruction != null)
+                {
+                    intAdd += fu.instruction.fullAssemblySyntax + "\n";
+                }
+            }
+            intAdd += "\n  Reserv. Station  \n";
+            intAdd += "-------------------\n";
+            foreach (ReservationStation rs in cpu.DP.intAddRSs)
+            {
+                if (rs.instruction != null)
+                    intAdd += rs.instruction.fullAssemblySyntax + "\n";
+            }
+            intAddText.Text = intAdd;
+
+            intSub += "     IntSubFU     \n";
+            intSub += "-------------------\n";
+            foreach(IntSubFU fu in cpu.DP.intSubFUs)
+            {
+                if (fu.instruction != null)
+                {
+                    intSub += fu.instruction.fullAssemblySyntax + "\n";
+                }
+            }
+            intSub += "\n  Reserv. Station  \n";
+            intSub += "-------------------\n";
+            foreach (ReservationStation rs in cpu.DP.intSubRSs)
+            {
+                if (rs.instruction != null)
+                    intSub += rs.instruction.fullAssemblySyntax + "\n";
+            }
+            intSubText.Text = intSub;
+
+            intMult += "     IntMulFU     \n";
+            intMult += "-------------------\n";
+            foreach(IntMultFU fu in cpu.DP.intMultFUs)
+            {
+                if (fu.instruction != null)
+                {
+                    intMult += fu.instruction.fullAssemblySyntax + "\n";
+                }
+            }
+            intMult += "\n  Reserv. Station  \n";
+            intMult += "-------------------\n";
+            foreach (ReservationStation rs in cpu.DP.intMultRSs)
+            {
+                if (rs.instruction != null)
+                    intMult += rs.instruction.fullAssemblySyntax + "\n";
+            }
+            intMultText.Text = intMult;
+
+            intDiv += "     IntDivFU     \n";
+            intDiv += "-------------------\n";
+            foreach(IntDivFU fu in cpu.DP.intDivFUs)
+            {
+                if (fu.instruction != null)
+                {
+                    intDiv += fu.instruction.fullAssemblySyntax + "\n";
+                }
+            }
+            intDiv += "\n  Reserv. Station  \n";
+            intDiv += "-------------------\n";
+            foreach (ReservationStation rs in cpu.DP.intDivRSs)
+            {
+                if (rs.instruction != null)
+                    intDiv += rs.instruction.fullAssemblySyntax + "\n";
+            }
+            intDivText.Text = intDiv;
+
+            flAdd += "      FlAddFU      \n";
+            flAdd += "-------------------\n";
+            foreach(FloatAddFU fu in cpu.DP.flAddFUs)
+            {
+                if (fu.instruction != null)
+                {
+                    flAdd += fu.instruction.fullAssemblySyntax + "\n";
+                }
+            }
+            flAdd += "\n  Reserv. Station  \n";
+            flAdd += "-------------------\n";
+            foreach (ReservationStation rs in cpu.DP.floatAddRSs)
+            {
+                if (rs.instruction != null)
+                    flAdd += rs.instruction.fullAssemblySyntax + "\n";
+            }
+            flAddText.Text = flAdd;
+
+            flSub += "      FlSubFU      \n";
+            flSub += "-------------------\n";
+            foreach(FloatSubFU fu in cpu.DP.flSubFUs)
+            {
+                if (fu.instruction != null)
+                {
+                    flSub += fu.instruction.fullAssemblySyntax + "\n";
+                }
+            }
+            flSub += "\n  Reserv. Station  \n";
+            flSub += "-------------------\n";
+            foreach (ReservationStation rs in cpu.DP.floatSubRSs)
+            {
+                if (rs.instruction != null)
+                    flSub += rs.instruction.fullAssemblySyntax + "\n";
+            }
+            flSubText.Text = flSub;
+
+            flMult += "      FlMultFU     \n";
+            flMult += "-------------------\n";
+            foreach(FloatMultFU fu in cpu.DP.flMultFUs)
+            {
+                if (fu.instruction != null)
+                {
+                    flMult += fu.instruction.fullAssemblySyntax + "\n";
+                }
+            }
+            flMult += "\n  Reserv. Station  \n";
+            flMult += "-------------------\n";
+            foreach (ReservationStation rs in cpu.DP.floatMultRSs)
+            {
+                if (rs.instruction != null)
+                    flMult += rs.instruction.fullAssemblySyntax + "\n";
+            }
+            flMultText.Text = flMult;
+
+            flDiv += "      FlDivFU      \n";
+            flDiv += "-------------------\n";
+            foreach(FloatDivFU fu in cpu.DP.flDivFUs)
+            {
+                if (fu.instruction != null)
+                {
+                    flDiv += fu.instruction.fullAssemblySyntax + "\n";
+                }
+            }
+            flDiv += "\n  Reserv. Station  \n";
+            flDiv += "-------------------\n";
+            foreach (ReservationStation rs in cpu.DP.floatDivRSs)
+            {
+                if (rs.instruction != null)
+                    flDiv += rs.instruction.fullAssemblySyntax + "\n";
+            }
+            flDivText.Text = flDiv;
+
+            bitwise += "       BitFU      \n";
+            bitwise += "-------------------\n";
+            foreach(BitwiseOPFU fu in cpu.DP.bitFUs)
+            {
+                if (fu.instruction != null)
+                {
+                    bitwise += fu.instruction.fullAssemblySyntax + "\n";
+                }
+            }
+            bitwise += "\n  Reserv. Station  \n";
+            bitwise += "-------------------\n";
+            foreach (ReservationStation rs in cpu.DP.bitwiseRSs)
+            {
+                if (rs.instruction != null)
+                    bitwise += rs.instruction.fullAssemblySyntax + "\n";
+            }
+            bitwiseText.Text = bitwise;
+
+            branch += "      BranchFU     \n";
+            branch += "-------------------\n";
+            foreach(BranchFU fu in cpu.DP.branchFUs)
+            {
+                if (fu.instruction != null)
+                {
+                    branch += fu.instruction.fullAssemblySyntax + "\n";
+                }
+            }
+            branch += "\n  Reserv. Station  \n";
+            branch += "-------------------\n";
+            foreach (ReservationStation rs in cpu.DP.branchRSs)
+            {
+                if (rs.instruction != null)
+                    branch += rs.instruction.fullAssemblySyntax + "\n";
+            }
+            branchText.Text = branch;
+
+            memory += "    Memory Unit   \n";
+            memory += "-------------------\n";
+            foreach(MemoryUnit fu in cpu.DP.memoryFUs)
+            {
+                if (fu.instruction != null)
+                    memory += fu.instruction.fullAssemblySyntax + "\n";
+            }
+            memoryFUText.Text = memory;
+
+            load_storeBuffer += " Load/Store Buffer\n";
+            load_storeBuffer += "-------------------\n";
+            foreach(ReservationStation rs in cpu.DP.loadStoreBuffer)
+            {
+                
+                if (rs.instruction != null)
+                    load_storeBuffer += rs.instruction.fullAssemblySyntax + "\n";
+            }
+            load_storeBufferText.Text = load_storeBuffer;
+
+        }
         
         /**
 		 * Method Name: setMemoryBox <br>
@@ -767,12 +1150,8 @@ namespace ISA_GUI
                 configWindow.ShowDialog();
 
                 config = configWindow.getConfig();
+                updateGUI();
             }
-        }
-
-        private void programSpeedBar_ValueChanged(object sender, EventArgs e)
-        {
-            config.programSpeed = programSpeedBar.Value;
         }
 
         private void buildButton_Click(object sender, EventArgs e)
@@ -786,7 +1165,55 @@ namespace ISA_GUI
                 List<string> program = getAssembly();      //get instructions from user
             }
         }
+        /**
+        * Method Name: button1_click <br>
+        * Method Purpose: load asembly fronm file
+        * <br>
+        * Date created:  <br>
+        * <hr>
+        *  
+        */
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.InitialDirectory = Path.Combine(Application.StartupPath, "");
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                StreamReader reader = new StreamReader(dlg.FileName, Encoding.Default);
+                if (objectCode.SelectedIndex == 0)
+                {
+                    assemblerTextBox.Text = reader.ReadToEnd();
+                }
+                else if(objectCode.SelectedIndex == 1)
+                {
+                    InputBox.Text = reader.ReadToEnd();
+                }
+                //assemblerTextBox.Text = reader.ReadToEnd();
+                reader.Close();
+            }
 
+            dlg.Dispose();
+        }
+
+        private void SaveFile_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.Filter = "*.txt|*.txt";
+            dlg.RestoreDirectory = true;
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                File.WriteAllText(dlg.FileName, StatsTextBox.Text);
+                File.AppendAllText(dlg.FileName, AssemblerListingTextBox.Text);
+                File.AppendAllText(dlg.FileName, pipelineStatsTextBox.Text);
+            }
+            MessageBox.Show("Saved File");
+        }
+
+        private void buildButton_MouseHover(object sender, EventArgs e)
+        {
+            toolTip1.Show("Build", buildButton);
+        }
     }
+    
 
 }

@@ -131,5 +131,291 @@ namespace ISA_GUI
 			success = true;
         }
 
-    }
+
+		/**
+		 * Method Name: writeToReg <br>
+		 * Method Purpose: Passes the instruction and the configuration file along with the registers in order to write the previously calculated result to
+		 * the appropriate register
+		 * 
+		 * <br>
+		 * Date created: 3/2/22 <br>
+		 * <hr>
+		 *   @param  RegisterFil registers
+		 *   @param  Instruction instruction
+		 *   @param ConfigCycle config
+		 */
+		public bool writeToCDB(Instruction instruction, ref CommonDataBus CDB, in string result)
+		{
+			switch (instruction.functionalUnitID)
+			{
+				case 1:
+					if(!CDB.CDB.ContainsKey("intAddFu" + instruction.functionalUnitIndex))
+                    {
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
+						CDB.CDB.Add("intAddFu" + instruction.functionalUnitIndex, result);
+						return true;
+					}
+					break;
+				case 2:
+					if (!CDB.CDB.ContainsKey("intSubFu" + instruction.functionalUnitIndex))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
+						CDB.CDB.Add("intSubFu" + instruction.functionalUnitIndex, result);
+						return true;
+					}
+					break;
+				case 3:
+					if (!CDB.CDB.ContainsKey("intMulFu" + instruction.functionalUnitIndex))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
+						CDB.CDB.Add("intMulFu" + instruction.functionalUnitIndex, result);
+						return true;
+					}
+					break;
+				case 4:
+					if (!CDB.CDB.ContainsKey("intDivFu" + instruction.functionalUnitIndex))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
+						CDB.CDB.Add("intDivFu" + instruction.functionalUnitIndex, result);
+						return true;
+					}
+					break;
+				case 5:
+					if (!CDB.CDB.ContainsKey("flAddFu" + instruction.functionalUnitIndex))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
+						CDB.CDB.Add("flAddFu" + instruction.functionalUnitIndex, result);
+						return true;
+					}
+					break;
+				case 6:
+					if (!CDB.CDB.ContainsKey("flSubFu" + instruction.functionalUnitIndex))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
+						CDB.CDB.Add("flSubFu" + instruction.functionalUnitIndex, result);
+						return true;
+					}
+					break;
+				case 7:
+					if (!CDB.CDB.ContainsKey("flMultFu" + instruction.functionalUnitIndex))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
+						CDB.CDB.Add("flMultFu" + instruction.functionalUnitIndex, result);
+						return true;
+					}
+					break;
+				case 8:
+					if (!CDB.CDB.ContainsKey("flDivFu" + instruction.functionalUnitIndex))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
+						CDB.CDB.Add("flDivFu" + instruction.functionalUnitIndex, result);
+						return true;
+					}
+					break;
+				case 9:
+					if (!CDB.CDB.ContainsKey("bitFu" + instruction.functionalUnitIndex))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
+						CDB.CDB.Add("bitFu" + instruction.functionalUnitIndex, result);
+						return true;
+					}
+					break;
+				case 10:
+					if (!CDB.CDB.ContainsKey("memoryFu" + instruction.functionalUnitIndex))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
+						CDB.CDB.Add("memoryFu" + instruction.functionalUnitIndex, result);
+						return true;
+					}
+					break;
+				case 11:
+					if (!CDB.CDB.ContainsKey("branchFu" + instruction.functionalUnitIndex))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
+						CDB.CDB.Add("branchFu" + instruction.functionalUnitIndex, result);
+						return true;
+					}
+					break;
+				case 12:
+					if (!CDB.CDB.ContainsKey("shiftFu" + instruction.functionalUnitIndex))
+					{
+						CDB.index.Add(instruction.ID, CDB.CDB.Count);
+						CDB.IDIndex.Add(CDB.CDB.Count, instruction.ID);
+						CDB.CDB.Add("shiftFu" + instruction.functionalUnitIndex, result);
+						return true;
+					}
+					break;
+			}
+			return false;
+		}
+
+		/**
+		 * Method Name: writeToReg <br>
+		 * Method Purpose: Passes the instruction and the configuration file along with the registers in order to write the previously calculated result to
+		 * the appropriate register
+		 * 
+		 * <br>
+		 * Date created: 3/2/22 <br>
+		 * <hr>
+		 *   @param  RegisterFil registers
+		 *   @param  Instruction instruction
+		 *   @param ConfigCycle config
+		 */
+		public void commit(ref RegisterFile registers, ref Instruction instruction, ref DataMemory memory, ref bool halted, ref InstructionMemory IM, ref bool branchTaken)
+		{
+			halted = false;
+			switch (instruction.opcode)
+			{
+				case 0:
+					halted = true;
+					break;
+				case 1:
+					break;
+				case 2:
+					IM.ProgramCounter = instruction.address;                            //Move the branching address into the program counter/instruction pointer
+					branchTaken = true;
+					break;
+				case 3:
+					if ((registers.ASPR & 2) == 0)
+					{
+						IM.ProgramCounter = instruction.address;                        //Move the BNE address into the program counter/instruction pointer
+						branchTaken = true;
+					}
+					else
+						branchTaken = false;
+					break;
+				case 4:
+					if ((registers.ASPR & 2) == 1)
+					{
+						IM.ProgramCounter = instruction.address;                        //Move the BEQ address into the program counter/instruction pointer
+						branchTaken = true;
+					}
+					else
+						branchTaken = false;
+					break;
+				case 5:
+					if ((registers.ASPR & 1) == 1 && (registers.ASPR & 1) == 0)
+					{
+						IM.ProgramCounter = instruction.address;                        //Move the BLT address into the program counter/instruction pointer
+						branchTaken = true;
+					}
+					else
+						branchTaken = false;
+					break;
+				case 6:
+					if ((registers.ASPR & 2) == 1 || (registers.ASPR & 1) == 1)
+					{
+						IM.ProgramCounter = instruction.address;                        //Move the BLE address into the program counter/instruction pointer
+						branchTaken = true;
+					}
+					else
+						branchTaken = false;
+					break;
+				case 7:
+					if ((registers.ASPR & 2) == 0 && (registers.ASPR & 1) == 0)
+					{
+						IM.ProgramCounter = instruction.address;                        //Move the BGT address into the program counter/instruction pointer
+						branchTaken = true;
+					}
+					else
+						branchTaken = false;
+					break;
+				case 8:
+					if (((registers.ASPR & 2) == 0 || (registers.ASPR & 1) == 0) || ((registers.ASPR & 2) == 1 || (registers.ASPR & 1) == 0))
+					{
+						IM.ProgramCounter = instruction.address;                        //Move the BGE address into the program counter/instruction pointer
+						branchTaken = true;
+					}
+					else
+						branchTaken = false;
+					break;
+
+				case 9:
+					registers.ASPR = instruction.ASPR;
+					if (instruction.isFloat)
+						registers.floatRegisters[0] = float.Parse(instruction.result);
+					else
+						registers.intRegisters[0] = int.Parse(instruction.result);
+					break;
+
+				case 10:
+					registers.ASPR = instruction.ASPR;
+					if (!instruction.isFloat)
+					{
+						memory.MainMemory[instruction.address] = (byte)((instruction.iOperand1 & 16711680) >> 16);      //Stores the MSB value of r0 at the address in memory
+						memory.MainMemory[instruction.address + 1] = (byte)((instruction.iOperand1 & 65280) >> 8);     //Stores the TSB value of r0 at the address in memory
+						memory.MainMemory[instruction.address + 2] = (byte)(instruction.iOperand1 & 255);       //Stores the LSB value of r0 at the address in memory
+					}
+					else
+					{
+						byte[] currentFloat = System.BitConverter.GetBytes(instruction.fOperand1);                          //Float to be stored
+						memory.MainMemory[instruction.address] = currentFloat[3];                                           //Stores the MSB value of f0 at the address in memory
+						memory.MainMemory[instruction.address + 1] = currentFloat[2];                                       //Stores the TSB value of f0 at the address in memory
+						memory.MainMemory[instruction.address + 2] = currentFloat[1];                                       //Stores the LSB value of f0 at the address in memory
+					}
+					break;
+				case 11:
+					if (!instruction.isFloat)
+						registers.intRegisters[instruction.r3] = int.Parse(instruction.result);
+					else
+						registers.floatRegisters[instruction.r3] = float.Parse(instruction.result);
+					break;
+				case 12:
+					registers.ASPR = instruction.ASPR;
+					if (!instruction.isFloat)
+						registers.intRegisters[instruction.r3] = int.Parse(instruction.result);
+					else
+						registers.floatRegisters[instruction.r3] = float.Parse(instruction.result);
+					break;
+				case 13:
+					registers.ASPR = instruction.ASPR;
+					break;
+				case 14:
+					registers.ASPR = instruction.ASPR;
+					break;
+				case 15:
+					//MOV
+					registers.ASPR = instruction.ASPR;
+					if (!instruction.isFloat)
+						registers.intRegisters[instruction.destinationReg] = int.Parse(instruction.result);
+					else
+						registers.floatRegisters[instruction.destinationReg] = float.Parse(instruction.result);
+					break;
+				case 16:
+				case 17:
+				case 18:
+				case 19:
+					//Shifting
+					registers.ASPR = instruction.ASPR;
+					registers.intRegisters[instruction.destinationReg] = int.Parse(instruction.result);
+					break;
+				case 20:
+				case 21:
+				case 22:
+				case 23:
+				case 24:
+				case 25:
+				case 26:
+				case 27:
+					registers.ASPR = instruction.ASPR;
+					//ALU instructions
+					if (!instruction.isFloat)
+						registers.intRegisters[instruction.destinationReg] = int.Parse(instruction.result);
+					else
+						registers.floatRegisters[instruction.destinationReg] = float.Parse(instruction.result);
+					break;
+			}
+		}
+	}
 }

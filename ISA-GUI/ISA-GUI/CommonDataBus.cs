@@ -24,7 +24,9 @@ namespace ISA_GUI
 	*/
 	internal class CommonDataBus
 	{
-
+		public Dictionary<string, string> CDB;
+		public Dictionary<int, int> index;
+		public Dictionary<int, int> IDIndex;
 		/**
 	    * Method Name: CommonDataBus <br>
 	    * Method Purpose: Class constructor
@@ -35,7 +37,9 @@ namespace ISA_GUI
 	    */
 		public CommonDataBus()
 		{
-			Dictionary<string, string> CDB = new Dictionary<string, string>();
+			CDB = new Dictionary<string, string>();
+			index = new Dictionary<int, int>();   //Instruction ID is key, CDB index is value
+			IDIndex = new Dictionary<int, int>(); //CDB index is key, instruction ID is value
 		}
 	}
 }

@@ -50,6 +50,7 @@
     <Compile Include="ALU.cs" />
     <Compile Include="Assembler.cs" />
     <Compile Include="BitwiseOPFU.cs" />
+    <Compile Include="BranchFU.cs" />
     <Compile Include="Disassembler.cs" />
     <Compile Include="FloatAddFU.cs" />
     <Compile Include="FloatDivFU.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="IntDivFU.cs" />
     <Compile Include="IntMultFU.cs" />
     <Compile Include="IntSubFU.cs" />
+    <Compile Include="MemoryUnit.cs" />
     <Compile Include="Printer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -92,6 +94,7 @@
     <Compile Include="RegisterFile.cs" />
     <Compile Include="ReorderBuffer.cs" />
     <Compile Include="ReservationStation.cs" />
+    <Compile Include="ShiftFU.cs" />
     <Compile Include="StaticPipeline.cs" />
     <Compile Include="WriteResult.cs" />
     <EmbeddedResource Include="BUC10.resx">
