@@ -1,5 +1,0 @@
-LDHL r1,#122
-LDHL r2,#232
-ADD r3,r2,r6
-ADD r4,r1,r3
-HALT

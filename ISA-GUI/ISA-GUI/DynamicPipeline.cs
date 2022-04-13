@@ -80,6 +80,9 @@ namespace ISA_GUI
             structuralHazard = 0;
             dataHazard = 0;
             controlHazard = 0;
+            reservationStationDelay = 0;
+            trueDependenceDelay = 0;
+            reorderBufferDelay = 0;
             WAR = 0;
             RAW = 0;
             WAW = 0;
@@ -390,7 +393,9 @@ namespace ISA_GUI
             {
                 intAddFUs[i] = new IntAddFU("intAddFU"+i);
                 intAddFUs[i].indexer = i;
+                intAddFUs[i].instruction = null;
                 intAddRSs[i] = new ReservationStation("intAddRS"+i);
+                intAddRSs[i].instruction = null;
                 intAddRSs[i].arrayIndex = i;
             }
 
@@ -399,7 +404,9 @@ namespace ISA_GUI
             {
                 intSubFUs[i] = new IntSubFU("intSubFU" + i);
                 intSubFUs[i].indexer = i;
+                intSubFUs[i].instruction = null;
                 intSubRSs[i] = new ReservationStation("intSubRS" + i);
+                intSubRSs[i].instruction = null;
                 intSubRSs[i].arrayIndex = i;
             }
 
@@ -408,7 +415,9 @@ namespace ISA_GUI
             {
                 intMultFUs[i] = new IntMultFU("intMulFU" + i);
                 intMultFUs[i].indexer = i;
+                intMultFUs[i].indexer = i;
                 intMultRSs[i] = new ReservationStation("intMulRS" + i);
+                intMultRSs[i].instruction = null;
                 intMultRSs[i].arrayIndex = i;
             }
 
@@ -417,7 +426,9 @@ namespace ISA_GUI
             {
                 intDivFUs[i] = new IntDivFU("intDivFU" + i);
                 intDivFUs[i].indexer = i;
+                intDivFUs[i].instruction = null;
                 intDivRSs[i] = new ReservationStation("intDivRS" + i);
+                intDivRSs[i].instruction = null;
                 intDivRSs[i].arrayIndex = i;
             }
 
@@ -426,7 +437,9 @@ namespace ISA_GUI
             {
                 flAddFUs[i] = new FloatAddFU("intAddFU" + i);
                 flAddFUs[i].indexer = i;
+                flAddFUs[i].instruction = null;
                 floatAddRSs[i] = new ReservationStation("flAddRS" + i);
+                floatAddRSs[i].instruction = null;
                 floatAddRSs[i].arrayIndex = i;
             }
 
@@ -435,7 +448,9 @@ namespace ISA_GUI
             {
                 flSubFUs[i] = new FloatSubFU("flSubFU" + i);
                 flSubFUs[i].indexer = i;
+                flSubFUs[i].instruction = null;
                 floatSubRSs[i] = new ReservationStation("flSubRS" + i);
+                floatSubRSs[i].instruction = null;
                 floatSubRSs[i].arrayIndex = i;
             }
 
@@ -444,8 +459,10 @@ namespace ISA_GUI
             {
                 flMultFUs[i] = new FloatMultFU("flMulFU" + i);
                 flMultFUs[i].indexer = i;
+                flMultFUs[i].instruction = null;
                 floatMultRSs[i] = new ReservationStation("flMulRS" + i);
                 floatMultRSs[i].arrayIndex = i;
+                floatMultRSs[i].instruction = null;
             }
 
             flDivFUs = new FloatDivFU[config.flDivFUs];
@@ -462,8 +479,10 @@ namespace ISA_GUI
             {
                 bitFUs[i] = new BitwiseOPFU("bitwiseFU" + i);
                 bitFUs[i].indexer = i;
+                bitFUs[i].instruction = null;
                 bitwiseRSs[i] = new ReservationStation("bitwiseRS" + i);
                 bitwiseRSs[i].arrayIndex = i;
+                bitwiseRSs[i].instruction = null;
             }
 
             branchFUs = new BranchFU[config.branchFUs];
@@ -471,8 +490,10 @@ namespace ISA_GUI
             {
                 branchFUs[i] = new BranchFU("branchFU" + i);
                 branchFUs[i].indexer = i;
+                branchFUs[i].instruction = null;
                 branchRSs[i] = new ReservationStation("branchRS" + i);
                 branchRSs[i].arrayIndex = i;
+                branchRSs[i].instruction = null;
             }
 
             shiftFUs = new ShiftFU[config.shiftFUs];
@@ -480,14 +501,17 @@ namespace ISA_GUI
             {
                 shiftFUs[i] = new ShiftFU("shiftFU" + i);
                 shiftFUs[i].indexer = i;
+                shiftFUs[i].instruction = null;
                 shiftRSs[i] = new ReservationStation("shiftRS" + i);
                 shiftRSs[i].arrayIndex = i;
+                shiftRSs[i].instruction = null;
             }
 
             memoryFUs = new MemoryUnit[config.memoryFUs];
             for (int i = 0; i < config.memoryFUs; i++)
             {
                 memoryFUs[i] = new MemoryUnit("memoryFU" + i);
+                memoryFUs[i].instruction = null;
                 memoryFUs[i].indexer = i;
             }
 
@@ -495,73 +519,8 @@ namespace ISA_GUI
             for (int i = 0; i < (config.memoryFUs + 5); i++)
             {
                 loadStoreBuffer[i] = new ReservationStation("load_storeBuffer" + i);
+                loadStoreBuffer[i].instruction = null;
                 loadStoreBuffer[i].arrayIndex = i;
-            }
-
-            for (int i = 0; i < config.intAddFUs; i++)
-            {
-                intAddRSs[i] = new ReservationStation("intAddRS" + i);
-                intAddRSs[i].arrayIndex = i;
-            }
-
-            for (int i = 0; i < config.intSubFUs; i++)
-            {
-                intSubRSs[i] = new ReservationStation("intSubRS" + i);
-                intSubRSs[i].arrayIndex = i;
-            }
-
-            for (int i = 0; i < config.intMultFUs; i++)
-            {
-                intMultRSs[i] = new ReservationStation("intMultRS" + i);
-                intMultRSs[i].arrayIndex = i;
-            }
-
-            for (int i = 0; i < config.intDivFus; i++)
-            {
-                intDivRSs[i] = new ReservationStation("intDivRS" + i);
-                intDivRSs[i].arrayIndex = i;
-            }
-
-            for (int i = 0; i < config.flAddFUs; i++)
-            {
-                floatAddRSs[i] = new ReservationStation("flAddRS" + i);
-                floatAddRSs[i].arrayIndex = i;
-            }
-
-            for (int i = 0; i < config.flSubFUs; i++)
-            {
-                floatSubRSs[i] = new ReservationStation("flSubRS" + i);
-                floatSubRSs[i].arrayIndex = i;
-            }
-
-            for (int i = 0; i < config.flMultFUs; i++)
-            {
-                floatMultRSs[i] = new ReservationStation("flMultRS" + i);
-                floatMultRSs[i].arrayIndex = i;
-            }
-
-            for (int i = 0; i < config.flDivFUs; i++)
-            {
-                floatDivRSs[i] = new ReservationStation("flDivRS" + i);
-                floatDivRSs[i].arrayIndex = i;
-            }
-
-            for (int i = 0; i < config.branchFUs; i++)
-            {
-                branchRSs[i] = new ReservationStation("branchRS" + i);
-                branchRSs[i].arrayIndex = i;
-            }
-
-            for (int i = 0; i < config.bitwiseFUs; i++)
-            {
-                bitwiseRSs[i] = new ReservationStation("bitwiseRS" + i);
-                bitwiseRSs[i].arrayIndex = i;
-            }
-
-            for (int i = 0; i < config.shiftFUs; i++)
-            {
-                shiftRSs[i] = new ReservationStation("shiftRS" + i);
-                shiftRSs[i].arrayIndex = i;
             }
         }
 
