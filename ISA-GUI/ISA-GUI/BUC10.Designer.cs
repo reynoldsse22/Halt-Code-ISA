@@ -1220,6 +1220,7 @@
             this.buildButton.TabIndex = 106;
             this.buildButton.TabStop = false;
             this.buildButton.Click += new System.EventHandler(this.buildButton_Click);
+            this.buildButton.MouseHover += new System.EventHandler(this.buildButton_MouseHover);
             // 
             // resetButton
             // 

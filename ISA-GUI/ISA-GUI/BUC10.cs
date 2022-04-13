@@ -375,6 +375,7 @@ namespace ISA_GUI
             }
 
             StatsTextBox.Text = "";
+            pipelineStatsTextBox.Text = "";
             currentCycleText.SelectionAlignment = HorizontalAlignment.Center;
             clearRegandMem();
             updateGUI();
@@ -615,6 +616,7 @@ namespace ISA_GUI
         private void setStatistics()
         {
             StringBuilder statistics = new StringBuilder("");
+            StringBuilder pipelineStats = new StringBuilder("");
 
             if (!config.dynamicPipelineSet)
             {
@@ -628,29 +630,29 @@ namespace ISA_GUI
                 statistics.Append(String.Format("Arithmetic & logic instructions: {0}, {1}%\n", cpu.SP.CU.ALUInstructionCount, Math.Round((double)cpu.SP.CU.ALUInstructionCount / totalInst * 100, 2)));
                 statistics.Append(String.Format("Memory instructions:             {0}, {1}%\n", cpu.SP.CU.memoryInstructionCount, Math.Round((double)cpu.SP.CU.memoryInstructionCount / totalInst * 100, 2)));
 
-                statistics.Append("\n\nPipeline Statistics\n");
-                statistics.Append("------------------\n");
-                statistics.Append(String.Format("Total Cycles:           {0}\n", cpu.SP.cycleCount - 1));
-                statistics.Append("\nHazards\n");
-                statistics.Append("-------\n");
-                statistics.Append(String.Format("structural:             {0}\n", cpu.SP.structuralHazard));
-                statistics.Append(String.Format("data:                   {0}\n", cpu.SP.dataHazard));
-                statistics.Append(String.Format("control:                {0}\n", cpu.SP.controlHazard));
-                statistics.Append(String.Format("Total:                  {0}\n\n", cpu.SP.structuralHazard + cpu.SP.dataHazard + cpu.SP.controlHazard));
-                statistics.Append("Dependencies\n");
-                statistics.Append("------------\n");
-                statistics.Append(String.Format("read-after-write:       {0}\n", cpu.SP.RAW));
-                statistics.Append(String.Format("write-after-read:       {0}\n", cpu.SP.WAR));
-                statistics.Append(String.Format("write-after-write:      {0}\n", cpu.SP.WAW));
-                statistics.Append(String.Format("Total:                  {0}\n\n", (cpu.SP.RAW + cpu.SP.WAR + cpu.SP.WAW)));
-                statistics.Append("Cycles Stalled\n");
-                statistics.Append("--------------\n");
-                statistics.Append(String.Format("instruction fetch:      {0}\n", cpu.SP.fetchStalled));
-                statistics.Append(String.Format("decode / read reg:      {0}\n", cpu.SP.decodeStalled));
-                statistics.Append(String.Format("execute / calc address: {0}\n", cpu.SP.executeStalled));
-                statistics.Append(String.Format("read / write memory:    {0}\n", cpu.SP.accessMemStalled));
-                statistics.Append(String.Format("write register:         {0}\n", cpu.SP.writeRegStalled));
-                statistics.Append(String.Format("Total:                  {0}\n\n", cpu.SP.totalCyclesStalled));
+                pipelineStats.Append("Pipeline Statistics\n");
+                pipelineStats.Append("------------------\n");
+                pipelineStats.Append(String.Format("Total Cycles:           {0}\n", cpu.SP.cycleCount - 1));
+                pipelineStats.Append("\nHazards\n");
+                pipelineStats.Append("-------\n");
+                pipelineStats.Append(String.Format("structural:             {0}\n", cpu.SP.structuralHazard));
+                pipelineStats.Append(String.Format("data:                   {0}\n", cpu.SP.dataHazard));
+                pipelineStats.Append(String.Format("control:                {0}\n", cpu.SP.controlHazard));
+                pipelineStats.Append(String.Format("Total:                  {0}\n\n", cpu.SP.structuralHazard + cpu.SP.dataHazard + cpu.SP.controlHazard));
+                pipelineStats.Append("Dependencies\n");
+                pipelineStats.Append("------------\n");
+                pipelineStats.Append(String.Format("read-after-write:       {0}\n", cpu.SP.RAW));
+                pipelineStats.Append(String.Format("write-after-read:       {0}\n", cpu.SP.WAR));
+                pipelineStats.Append(String.Format("write-after-write:      {0}\n", cpu.SP.WAW));
+                pipelineStats.Append(String.Format("Total:                  {0}\n\n", (cpu.SP.RAW + cpu.SP.WAR + cpu.SP.WAW)));
+                pipelineStats.Append("Cycles Stalled\n");
+                pipelineStats.Append("--------------\n");
+                pipelineStats.Append(String.Format("instruction fetch:      {0}\n", cpu.SP.fetchStalled));
+                pipelineStats.Append(String.Format("decode / read reg:      {0}\n", cpu.SP.decodeStalled));
+                pipelineStats.Append(String.Format("execute / calc address: {0}\n", cpu.SP.executeStalled));
+                pipelineStats.Append(String.Format("read / write memory:    {0}\n", cpu.SP.accessMemStalled));
+                pipelineStats.Append(String.Format("write register:         {0}\n", cpu.SP.writeRegStalled));
+                pipelineStats.Append(String.Format("Total:                  {0}\n\n", cpu.SP.totalCyclesStalled));
             }
             else
             {
@@ -664,17 +666,18 @@ namespace ISA_GUI
                 statistics.Append(String.Format("Arithmetic & logic instructions: {0}, {1}%\n", cpu.DP.CU.ALUInstructionCount, Math.Round((double)cpu.DP.CU.ALUInstructionCount / totalInst * 100, 2)));
                 statistics.Append(String.Format("Memory instructions:             {0}, {1}%\n", cpu.DP.CU.memoryInstructionCount, Math.Round((double)cpu.DP.CU.memoryInstructionCount / totalInst * 100, 2)));
 
-                statistics.Append("\n\nPipeline Statistics\n");
-                statistics.Append("------------------\n");
-                statistics.Append(String.Format("Total Cycles:                    {0}\n", cpu.DP.cycleCount - 1));
-                statistics.Append("\nDelays\n");
-                statistics.Append("-------\n");
-                statistics.Append(String.Format("Teorder buffer delays:           {0}\n", cpu.DP.reorderBufferDelay));
-                statistics.Append(String.Format("Teservation station delays:      {0}\n", cpu.DP.reservationStationDelay));
-                statistics.Append(String.Format("True dependence delays:          {0}\n", cpu.DP.trueDependenceDelay));
-                statistics.Append(String.Format("Total:                           {0}\n\n", cpu.DP.reorderBufferDelay + cpu.DP.reservationStationDelay + cpu.DP.trueDependenceDelay));
+                pipelineStats.Append("Pipeline Statistics\n");
+                pipelineStats.Append("------------------\n");
+                pipelineStats.Append(String.Format("Total Cycles:                    {0}\n", cpu.DP.cycleCount - 1));
+                pipelineStats.Append("\nDelays\n");
+                pipelineStats.Append("-------\n");
+                pipelineStats.Append(String.Format("Reorder buffer delays:           {0}\n", cpu.DP.reorderBufferDelay));
+                pipelineStats.Append(String.Format("Reservation station delays:      {0}\n", cpu.DP.reservationStationDelay));
+                pipelineStats.Append(String.Format("True dependence delays:          {0}\n", cpu.DP.trueDependenceDelay));
+                pipelineStats.Append(String.Format("Total:                           {0}\n\n", cpu.DP.reorderBufferDelay + cpu.DP.reservationStationDelay + cpu.DP.trueDependenceDelay));
             }
             StatsTextBox.Text = statistics.ToString();
+            pipelineStatsTextBox.Text = pipelineStats.ToString();
         }
 
 
@@ -1204,6 +1207,11 @@ namespace ISA_GUI
                 File.AppendAllText(dlg.FileName, pipelineStatsTextBox.Text);
             }
             MessageBox.Show("Saved File");
+        }
+
+        private void buildButton_MouseHover(object sender, EventArgs e)
+        {
+            toolTip1.Show("Build", buildButton);
         }
     }
     
