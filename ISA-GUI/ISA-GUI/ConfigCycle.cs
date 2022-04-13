@@ -76,7 +76,7 @@ namespace ISA_GUI
 			bitwiseFUs = 1;
 			shiftFUs = 1;
 			branchFUs = 1;
-			memoryFUs = 1;
+			memoryFUs = 2;
 			predictionSet = false;
 			forwardingSet = false;
 			dynamicPipelineSet = true;

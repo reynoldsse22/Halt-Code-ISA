@@ -1,0 +1,22 @@
+LDHL r0,#5
+MOV r0,r1
+LDHL r0,#10
+MOV r0,r2
+LDHL r0,#1
+ADD.s r4,r1,r4
+LDHL r5,#10
+LDHL r6,#10
+LDHL r7,#5
+LDHL r4,#2
+ADD r1,r2,r5
+ADD r2,r3,r6
+SUB r5,r2,r6
+SUB r4,r6,r6
+MULT r5,r1,r7
+DIV r7,r5,r8
+MULT r6,r8,r910
+DIV r9,r8,r9
+ADD.s r3,r0,r3
+SUB.s r2,r3,r5
+BRNE 0x000F
+HALT

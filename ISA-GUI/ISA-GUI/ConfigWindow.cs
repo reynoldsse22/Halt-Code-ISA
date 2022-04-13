@@ -93,6 +93,39 @@ namespace ISA_GUI
                 dynamicCheckbox.Checked = false;
             }
 
+            if (dynamicCheckbox.Checked)
+            {
+                staticCheckbox.Checked = false;
+                foreach (Control control in staticConfigPanel.Controls)
+                {
+                    control.Enabled = false;
+                }
+                foreach (Control control in dynamicConfigPanel.Controls)
+                {
+                    control.Enabled = true;
+                }
+                foreach (Control control in dynamicFUPanel.Controls)
+                {
+                    control.Enabled = true;
+                }
+            }
+            else
+            {
+                staticCheckbox.Checked = true;
+                foreach (Control control in staticConfigPanel.Controls)
+                {
+                    control.Enabled = true;
+                }
+                foreach (Control control in dynamicConfigPanel.Controls)
+                {
+                    control.Enabled = false;
+                }
+                foreach (Control control in dynamicFUPanel.Controls)
+                {
+                    control.Enabled = false;
+                }
+            }
+
 
             if (configurations.predictionSet)
             {
@@ -259,7 +292,7 @@ namespace ISA_GUI
             shiftFUValue.Value = 1;
             branchFUValue.Value = 1;
             bitwiseFUValue.Value = 1;
-            memoryFUValue.Value = 1;
+            memoryFUValue.Value = 2;
             
 
             configurations.predictionSet = false;
