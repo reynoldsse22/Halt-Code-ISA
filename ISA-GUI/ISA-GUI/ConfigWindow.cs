@@ -93,6 +93,15 @@ namespace ISA_GUI
                 dynamicCheckbox.Checked = false;
             }
 
+            if (configurations.cachingSet)
+            {
+                cachingCheckBox.Checked = true;
+            }
+            else
+            {
+                cachingCheckBox.Checked = false;
+            }
+
             if (dynamicCheckbox.Checked)
             {
                 staticCheckbox.Checked = false;
@@ -225,7 +234,14 @@ namespace ISA_GUI
                 configurations.whatBitPredictor = (int)bitGlobalPredictorValue.Value;
             }
 
-
+            if (cachingCheckBox.Checked)
+            {
+                configurations.cachingSet = true;
+            }
+            else
+            {
+                configurations.cachingSet = false;
+            }
 
             Dispose();
         }
