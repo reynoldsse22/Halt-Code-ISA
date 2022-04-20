@@ -120,7 +120,7 @@ namespace ISA_GUI
 		 *   @param	ConfigCycle config
 		 */
 		public void accessMemoryDynamic(ref DataMemory memory, ref RegisterFile registers, Instruction instruction, ref ConfigCycle config, 
-			out string result, ref MemoryUnit load_buffer)
+			out string result, ref MemoryUnit load_buffer, ref DataCache DC)
 		{
 			result = "";
 			int ASPR = instruction.instrFlag & 1;

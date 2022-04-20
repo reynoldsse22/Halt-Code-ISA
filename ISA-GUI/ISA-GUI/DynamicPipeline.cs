@@ -7,6 +7,7 @@ namespace ISA_GUI
 {
     internal class DynamicPipeline
     {
+        public DataCache DC;
         public Fetch fetch;
         public ControlUnit CU;
         public Queue<Instruction> instructionQueue;
@@ -60,6 +61,7 @@ namespace ISA_GUI
         /// <summary>Initializes a new instance of the <see cref="DynamicPipeline" /> class.</summary>
         public DynamicPipeline()
         {
+            DC = new DataCache();
             fetch = new Fetch();
             CU = new ControlUnit();
             printer = new Printer();
@@ -237,7 +239,7 @@ namespace ISA_GUI
                             if (inst.stage3CycleStart == 0)
                                 inst.stage3CycleStart = cycleCount;
                             memoryFUs[inst.functionalUnitIndex].instruction.doneExecuting = false;
-                            AM.accessMemoryDynamic(ref dataMemory, ref registers, inst, ref config, out result, ref memoryFUs[inst.functionalUnitIndex]);
+                            AM.accessMemoryDynamic(ref dataMemory, ref registers, inst, ref config, out result, ref memoryFUs[inst.functionalUnitIndex], ref DC);
                             inst.result = result;
                             inst.ASPR = memoryFUs[inst.functionalUnitIndex].instruction.ASPR;
                            // inst.stage2End = cycleCount - 1;        //End of the second stage
