@@ -353,13 +353,15 @@ namespace ISA_GUI
 					registers.ASPR = instruction.ASPR;
 					if (!instruction.isFloat)
 					{
-						memory.MainMemory[instruction.address] = (byte)((instruction.iOperand1 & 16711680) >> 16);      //Stores the MSB value of r0 at the address in memory
-						memory.MainMemory[instruction.address + 1] = (byte)((instruction.iOperand1 & 65280) >> 8);     //Stores the TSB value of r0 at the address in memory
-						memory.MainMemory[instruction.address + 2] = (byte)(instruction.iOperand1 & 255);       //Stores the LSB value of r0 at the address in memory
+						int iResult = int.Parse(instruction.result);
+						memory.MainMemory[instruction.address] = (byte)((iResult & 16711680) >> 16);      //Stores the MSB value of r0 at the address in memory
+						memory.MainMemory[instruction.address + 1] = (byte)((iResult & 65280) >> 8);     //Stores the TSB value of r0 at the address in memory
+						memory.MainMemory[instruction.address + 2] = (byte)(iResult & 255);       //Stores the LSB value of r0 at the address in memory
 					}
 					else
 					{
-						byte[] currentFloat = System.BitConverter.GetBytes(instruction.fOperand1);                          //Float to be stored
+						float fResult = float.Parse(instruction.result);
+						byte[] currentFloat = System.BitConverter.GetBytes(fResult);                          //Float to be stored
 						memory.MainMemory[instruction.address] = currentFloat[3];                                           //Stores the MSB value of f0 at the address in memory
 						memory.MainMemory[instruction.address + 1] = currentFloat[2];                                       //Stores the TSB value of f0 at the address in memory
 						memory.MainMemory[instruction.address + 2] = currentFloat[1];                                       //Stores the LSB value of f0 at the address in memory

@@ -273,7 +273,7 @@ namespace ISA_GUI
                                 inst.stage2CycleStart = executeInstruction.stage2CycleStart;
                                 if (inst.opcode == 0 || inst.opcode == 1 || (inst.opcode >= 2 && inst.opcode <= 8))
                                     inst.stage = 5;
-                                else if (inst.opcode == 9 || inst.opcode == 11 || inst.opcode == 12)
+                                else if (inst.opcode >= 9 && inst.opcode <= 12)
                                 {
                                     inst.doneExecuting = true;
                                     inst.stage = 3;

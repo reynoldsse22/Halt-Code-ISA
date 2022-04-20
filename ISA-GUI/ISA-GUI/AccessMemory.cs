@@ -132,6 +132,7 @@ namespace ISA_GUI
 			switch (instruction.opcode)
 			{
 				case 9:
+					//Insert caching logic here
 					if (!instruction.isFloat)
 					{
 						load_buffer.instruction.executionInProgress = true;
@@ -158,6 +159,34 @@ namespace ISA_GUI
 						result = load_buffer.instruction.floatResult.ToString();
 						if (float.Parse(result) == 0f && ASPR == 1)
 							instruction.ASPR = 1;
+						if (load_buffer.instruction.cycleControl == 0)
+						{
+							load_buffer.instruction.executionInProgress = false;
+							load_buffer.instruction.doneExecuting = true;
+						}
+					}
+					break;
+				case 10:
+					//Insert caching logic here
+					registers.ASPR = instruction.ASPR;
+					if (!instruction.isFloat)
+					{
+						load_buffer.instruction.executionInProgress = true;
+						result = load_buffer.instruction.iOperand1.ToString();
+						if (load_buffer.instruction.iOperand1 == 0 && ASPR == 1)
+							load_buffer.instruction.ASPR = 1;
+						if (load_buffer.instruction.cycleControl == 0)
+						{
+							load_buffer.instruction.executionInProgress = false;
+							load_buffer.instruction.doneExecuting = true;
+						}
+					}
+					else
+					{
+						load_buffer.instruction.executionInProgress = true;
+						result = load_buffer.instruction.fOperand1.ToString();
+						if (load_buffer.instruction.fOperand1 == 0f && ASPR == 1)
+							load_buffer.instruction.ASPR = 1;
 						if (load_buffer.instruction.cycleControl == 0)
 						{
 							load_buffer.instruction.executionInProgress = false;
