@@ -196,6 +196,8 @@
             this.registersQIText = new System.Windows.Forms.RichTextBox();
             this.uploadButton = new System.Windows.Forms.Button();
             this.SaveFile = new System.Windows.Forms.Button();
+            this.cachePage = new System.Windows.Forms.TabPage();
+            this.cacheTextBox = new System.Windows.Forms.RichTextBox();
             this.objectCode.SuspendLayout();
             this.assemblerPage.SuspendLayout();
             this.objectCodeBox.SuspendLayout();
@@ -216,6 +218,7 @@
             this.memoryTabControl.SuspendLayout();
             this.mainMemoryTab.SuspendLayout();
             this.dynamicPipelineMemoryTab.SuspendLayout();
+            this.cachePage.SuspendLayout();
             this.SuspendLayout();
             // 
             // CPU
@@ -1830,6 +1833,7 @@
             this.memoryTabControl.Appearance = System.Windows.Forms.TabAppearance.Buttons;
             this.memoryTabControl.Controls.Add(this.mainMemoryTab);
             this.memoryTabControl.Controls.Add(this.dynamicPipelineMemoryTab);
+            this.memoryTabControl.Controls.Add(this.cachePage);
             this.memoryTabControl.Location = new System.Drawing.Point(891, 27);
             this.memoryTabControl.Multiline = true;
             this.memoryTabControl.Name = "memoryTabControl";
@@ -2049,6 +2053,28 @@
             this.SaveFile.UseVisualStyleBackColor = true;
             this.SaveFile.Click += new System.EventHandler(this.SaveFile_Click);
             // 
+            // cachePage
+            // 
+            this.cachePage.Controls.Add(this.cacheTextBox);
+            this.cachePage.Location = new System.Drawing.Point(4, 23);
+            this.cachePage.Name = "cachePage";
+            this.cachePage.Padding = new System.Windows.Forms.Padding(3);
+            this.cachePage.Size = new System.Drawing.Size(619, 760);
+            this.cachePage.TabIndex = 2;
+            this.cachePage.Text = "Cache";
+            this.cachePage.UseVisualStyleBackColor = true;
+            // 
+            // cacheTextBox
+            // 
+            this.cacheTextBox.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cacheTextBox.Location = new System.Drawing.Point(4, 4);
+            this.cacheTextBox.Name = "cacheTextBox";
+            this.cacheTextBox.ReadOnly = true;
+            this.cacheTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.cacheTextBox.Size = new System.Drawing.Size(607, 746);
+            this.cacheTextBox.TabIndex = 3;
+            this.cacheTextBox.Text = "";
+            // 
             // BUC10
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2174,6 +2200,7 @@
             this.memoryTabControl.ResumeLayout(false);
             this.mainMemoryTab.ResumeLayout(false);
             this.dynamicPipelineMemoryTab.ResumeLayout(false);
+            this.cachePage.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2346,6 +2373,8 @@
         private System.Windows.Forms.RichTextBox commonDataBusText;
         private System.Windows.Forms.Button uploadButton;
         private System.Windows.Forms.Button SaveFile;
+        private System.Windows.Forms.TabPage cachePage;
+        private System.Windows.Forms.RichTextBox cacheTextBox;
     }
 }
 

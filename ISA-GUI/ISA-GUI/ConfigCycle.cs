@@ -30,6 +30,9 @@ namespace ISA_GUI
 		public bool predictionSet;
 		public bool forwardingSet;
 		public bool dynamicPipelineSet;
+		public bool cachingSet;
+		public int indexOfAssociativity; //0 == direct mapping, 1 == 2-way set, 2 == 4-way set
+		public int lineSize, numOfEntries;
 
 		/**
 	    * Method Name: ConfigCycle <br>
@@ -81,6 +84,10 @@ namespace ISA_GUI
 			forwardingSet = false;
 			dynamicPipelineSet = true;
 			whatBitPredictor = 1;
+			cachingSet = true;
+			indexOfAssociativity = 0;
+			lineSize = 4;
+			numOfEntries = 8;
         }
     }
 }
