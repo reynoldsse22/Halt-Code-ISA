@@ -24,7 +24,11 @@ namespace ISA_GUI
 	*/
 	internal class DataCache
 	{
-		public byte[] l1Cache;
+		public byte[][] l1Cache;
+		//Used to check if the tags are the same from addresses
+		public int[] tagIndexCache;
+		//Number of bytes that are going to be in a block
+		public int cacheBlock = 8;
 
 		/**
 	    * Method Name: DataCache <br>
@@ -36,7 +40,14 @@ namespace ISA_GUI
 	    */
 		public DataCache()
 		{
-			
+
+			l1Cache = new byte[16][];
+			tagIndexCache = new int[16];
+			//Setting up the cache to hold memory
+			for(int x = 0; x < l1Cache.Length; x++)
+            {
+				tagIndexCache[x] = 0;
+            }
 		}
 	}
 }
