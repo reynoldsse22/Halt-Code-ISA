@@ -48,6 +48,8 @@ namespace ISA_GUI
             "Program  Inst Inst Instruct                            Address/\n" +
             "Counter  Flag Spec Mnemonic      Type FReg SReg DReg  Immediate\n" +
             "-------- ---- ---- -------- --------- ---- ---- ---- ----------");
+
+       
         /**
 	    * Method Name: BUC10 <br>
 	    * Method Purpose: Class constructor

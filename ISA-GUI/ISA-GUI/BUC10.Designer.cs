@@ -136,6 +136,7 @@
             this.Output = new System.Windows.Forms.TabControl();
             this.pipelineStatsTab = new System.Windows.Forms.TabPage();
             this.pipelineStatsTextBox = new System.Windows.Forms.RichTextBox();
+            this.CacheStats = new System.Windows.Forms.TabPage();
             this.r2Dec = new System.Windows.Forms.RichTextBox();
             this.r1Dec = new System.Windows.Forms.RichTextBox();
             this.r0Dec = new System.Windows.Forms.RichTextBox();
@@ -194,10 +195,10 @@
             this.intMultText = new System.Windows.Forms.RichTextBox();
             this.intAddText = new System.Windows.Forms.RichTextBox();
             this.registersQIText = new System.Windows.Forms.RichTextBox();
-            this.uploadButton = new System.Windows.Forms.Button();
-            this.SaveFile = new System.Windows.Forms.Button();
             this.cachePage = new System.Windows.Forms.TabPage();
             this.cacheTextBox = new System.Windows.Forms.RichTextBox();
+            this.uploadButton = new System.Windows.Forms.Button();
+            this.SaveFile = new System.Windows.Forms.Button();
             this.objectCode.SuspendLayout();
             this.assemblerPage.SuspendLayout();
             this.objectCodeBox.SuspendLayout();
@@ -1339,6 +1340,7 @@
             this.Output.Controls.Add(this.sourceCodeBox);
             this.Output.Controls.Add(this.summaryStatsBox);
             this.Output.Controls.Add(this.pipelineStatsTab);
+            this.Output.Controls.Add(this.CacheStats);
             this.Output.Location = new System.Drawing.Point(9, 454);
             this.Output.Name = "Output";
             this.Output.SelectedIndex = 0;
@@ -1366,6 +1368,16 @@
             this.pipelineStatsTextBox.Size = new System.Drawing.Size(543, 318);
             this.pipelineStatsTextBox.TabIndex = 3;
             this.pipelineStatsTextBox.Text = "";
+            // 
+            // CacheStats
+            // 
+            this.CacheStats.Location = new System.Drawing.Point(4, 22);
+            this.CacheStats.Name = "CacheStats";
+            this.CacheStats.Padding = new System.Windows.Forms.Padding(3);
+            this.CacheStats.Size = new System.Drawing.Size(549, 324);
+            this.CacheStats.TabIndex = 5;
+            this.CacheStats.Text = "Cache stats";
+            this.CacheStats.UseVisualStyleBackColor = true;
             // 
             // r2Dec
             // 
@@ -2033,26 +2045,6 @@
             this.registersQIText.TabIndex = 3;
             this.registersQIText.Text = "";
             // 
-            // uploadButton
-            // 
-            this.uploadButton.Location = new System.Drawing.Point(9, 16);
-            this.uploadButton.Name = "uploadButton";
-            this.uploadButton.Size = new System.Drawing.Size(63, 23);
-            this.uploadButton.TabIndex = 148;
-            this.uploadButton.Text = "Input File";
-            this.uploadButton.UseVisualStyleBackColor = true;
-            this.uploadButton.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // SaveFile
-            // 
-            this.SaveFile.Location = new System.Drawing.Point(80, 17);
-            this.SaveFile.Name = "SaveFile";
-            this.SaveFile.Size = new System.Drawing.Size(63, 22);
-            this.SaveFile.TabIndex = 149;
-            this.SaveFile.Text = "Save";
-            this.SaveFile.UseVisualStyleBackColor = true;
-            this.SaveFile.Click += new System.EventHandler(this.SaveFile_Click);
-            // 
             // cachePage
             // 
             this.cachePage.Controls.Add(this.cacheTextBox);
@@ -2074,6 +2066,26 @@
             this.cacheTextBox.Size = new System.Drawing.Size(607, 746);
             this.cacheTextBox.TabIndex = 3;
             this.cacheTextBox.Text = "";
+            // 
+            // uploadButton
+            // 
+            this.uploadButton.Location = new System.Drawing.Point(9, 16);
+            this.uploadButton.Name = "uploadButton";
+            this.uploadButton.Size = new System.Drawing.Size(63, 23);
+            this.uploadButton.TabIndex = 148;
+            this.uploadButton.Text = "Input File";
+            this.uploadButton.UseVisualStyleBackColor = true;
+            this.uploadButton.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // SaveFile
+            // 
+            this.SaveFile.Location = new System.Drawing.Point(80, 17);
+            this.SaveFile.Name = "SaveFile";
+            this.SaveFile.Size = new System.Drawing.Size(63, 22);
+            this.SaveFile.TabIndex = 149;
+            this.SaveFile.Text = "Save";
+            this.SaveFile.UseVisualStyleBackColor = true;
+            this.SaveFile.Click += new System.EventHandler(this.SaveFile_Click);
             // 
             // BUC10
             // 
@@ -2375,6 +2387,7 @@
         private System.Windows.Forms.Button SaveFile;
         private System.Windows.Forms.TabPage cachePage;
         private System.Windows.Forms.RichTextBox cacheTextBox;
+        private System.Windows.Forms.TabPage CacheStats;
     }
 }
 
