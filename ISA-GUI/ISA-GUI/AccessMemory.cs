@@ -28,15 +28,7 @@ namespace ISA_GUI
 		public bool success;
 		public bool inProgress;
 		public bool hazardDetected;
-		public int tag, index, offset;
 
-		//Allows for configuration
-        public int offsetBitAmount { get; set; }
-        public int indexBitAmount { get; set; }
-		//Number of words allowed in the cache
-        public int numberOfWords { get; set; }
-        public int offsetMask;
-		public int indexMask;
 		public int startingAddress;
 
 		/**
@@ -53,18 +45,8 @@ namespace ISA_GUI
 			success = false;
 			inProgress = false;
 			hazardDetected = false;
-			tag = 0;
-			index = 0;
-			offset = 0;
+
 			startingAddress = 0;
-
-			offsetBitAmount = 5;
-			indexBitAmount = 4;
-
-			numberOfWords = 10;
-			//This should be configurable in the future to allow 2/4 way association
-			offsetMask = (int)Math.Pow(2, offsetBitAmount + 1) - 1;
-			indexMask = (int)Math.Pow(2, indexBitAmount + 1) - 1;
 		}
 
 		/**
@@ -156,19 +138,19 @@ namespace ISA_GUI
 				case 9:
 					//Insert caching logic here
 					//Call findCacheVariables to get the offset, index and tag to reference the cache
-					findCacheVariables(instruction, offset, index, tag);
+					DC.findCacheVariables(instruction);
 
 					//Find whether the index and tag exist within the cache
 
-					if(DC.tagIndexCache[index] == tag && DC.l1Cache[index] != null)
+					if(DC.tagIndexCache[DC.index] == DC.tag && DC.l1Cache[DC.index] != null)
                     {
 						//If there's a hit then get the memory from the offset plus the two bytes after
 						if (!instruction.isFloat)
 						{
 							load_buffer.instruction.executionInProgress = true;
-							load_buffer.instruction.intResult =  DC.l1Cache[index][offset] << 16;            //Loads the MSB value from the address in memory to r0
-							load_buffer.instruction.intResult += DC.l1Cache[index][offset + 1] << 8;      //Loads the TSB value from the address in memory to r0
-							load_buffer.instruction.intResult += DC.l1Cache[index][offset + 2];           //Loads the LSB value from the address in memory to r0
+							load_buffer.instruction.intResult =  DC.l1Cache[DC.index][DC.offset] << 16;            //Loads the MSB value from the address in memory to r0
+							load_buffer.instruction.intResult += DC.l1Cache[DC.index][DC.offset + 1] << 8;      //Loads the TSB value from the address in memory to r0
+							load_buffer.instruction.intResult += DC.l1Cache[DC.index][DC.offset + 2];           //Loads the LSB value from the address in memory to r0
 							result = load_buffer.instruction.intResult.ToString();
 							if (int.Parse(result) == 0 && ASPR == 1)
 								load_buffer.instruction.ASPR = 1;
@@ -177,9 +159,9 @@ namespace ISA_GUI
 						{
 							load_buffer.instruction.executionInProgress = true;
 							byte[] memoryFloat = new byte[4];
-							memoryFloat[3] = DC.l1Cache[index][offset];                           //Loads the MSB value from the address in memory to f0
-							memoryFloat[2] = DC.l1Cache[index][offset + 1];                       //Loads the TSB value from the address in memory to f0
-							memoryFloat[1] = DC.l1Cache[index][offset + 2];                       //Loads the LSB value from the address in memory to f0
+							memoryFloat[3] = DC.l1Cache[DC.index][DC.offset];                           //Loads the MSB value from the address in memory to f0
+							memoryFloat[2] = DC.l1Cache[DC.index][DC.offset + 1];                       //Loads the TSB value from the address in memory to f0
+							memoryFloat[1] = DC.l1Cache[DC.index][DC.offset + 2];                       //Loads the LSB value from the address in memory to f0
 							load_buffer.instruction.floatResult = System.BitConverter.ToSingle(memoryFloat, 0);
 							result = load_buffer.instruction.floatResult.ToString();
 							if (float.Parse(result) == 0f && ASPR == 1)
@@ -189,8 +171,8 @@ namespace ISA_GUI
 					else
                     {
 						//Update cache with the memory from main memory (Add index and tag to the cache)
-						startingAddress = instruction.address & ~offsetMask;
-						updateCache(startingAddress, ref memory, ref DC);
+						startingAddress = instruction.address & ~DC.offsetMask;
+						DC.updateCache(startingAddress, ref memory);
 
 						//Fix cycleControl to stall for the miss
 						//If there's a miss then fall to main memory
@@ -226,19 +208,15 @@ namespace ISA_GUI
 				case 10:
 					//Insert caching logic here
 					//Call findCacheVariables to get the offset, index and tag to reference the cache
-					registers.ASPR = instruction.ASPR;
-					findCacheVariables(instruction, offset, index, tag);
+
 					//Find whether the index and tag exist within the cache
-					if (DC.tagIndexCache[index] == tag && DC.l1Cache[index] != null)
-					{
-						//If there's a hit then store the new memory into the cache
-						//Update main memory as well
-					}
-                    else
-                    {
-						//If there's a miss then do NOT update the cache
-						//Update main memory by falling through
-                    }
+
+					//If there's a hit then store the new memory into the cache
+					//Update main memory as well
+
+					//If there's a miss then do NOT update the cache
+					//Update main memory by falling through
+
 
 
 
@@ -336,49 +314,6 @@ namespace ISA_GUI
 					}
 					break;
 			}
-		}
-
-        /// <summary>Updates the cache.</summary>
-        /// <param name="index">The index.</param>
-        /// <param name="address">The address.</param>
-        /// <param name="memory">The main memory.</param>
-        /// <param name="dC">
-        ///   <para>
-        /// The cache.
-        /// </para>
-        /// </param>
-        /// <exception cref="System.NotImplementedException"></exception>
-        private void updateCache(int address, ref DataMemory memory, ref DataCache DC)
-        {
-			//Adds new byte of memory into the cache
-			byte[] mem = new byte[numberOfWords];
-
-			for(int x = 0; x < numberOfWords; x++)
-            {
-				mem[x] = (byte)memory.MainMemory[address + x];
-            }
-
-			DC.l1Cache[index] = mem;
-			DC.tagIndexCache[index] = tag;
-        }
-
-        /// <summary>
-        ///   <para>
-        /// Finds the cache variables in order to check if the address is in the cache.
-        /// </para>
-        /// </summary>
-        /// <param name="inst">The instruction.</param>
-        /// <param name="offset">The offset.</param>
-        /// <param name="index">The index.</param>
-        /// <param name="tag">The tag.</param>
-        public void findCacheVariables(Instruction inst, int offset, int index, int tag)
-        {
-			int address = inst.address;
-			offset = address & offsetMask;
-			address = address >> offsetBitAmount;
-			index = address & indexMask;
-			address = address >> indexBitAmount;
-			tag = address;
 		}
 
 	}

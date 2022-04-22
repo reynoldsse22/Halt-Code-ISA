@@ -30,6 +30,16 @@ namespace ISA_GUI
 		//Number of bytes that are going to be in a block
 		public int cacheBlock = 8;
 
+		public int tag, index, offset;
+
+		//Allows for configuration
+		public int offsetBitAmount { get; set; }
+		public int indexBitAmount { get; set; }
+		//Number of words allowed in the cache
+		public int numberOfWords { get; set; }
+		public int offsetMask;
+		public int indexMask;
+
 		/**
 	    * Method Name: DataCache <br>
 	    * Method Purpose: Class constructor
@@ -40,6 +50,17 @@ namespace ISA_GUI
 	    */
 		public DataCache()
 		{
+			tag = 0;
+			index = 0;
+			offset = 0;
+
+			offsetBitAmount = 3;
+			indexBitAmount = 4;
+
+			numberOfWords = 10;
+			//This should be configurable in the future to allow 2/4 way association
+			offsetMask = (int)Math.Pow(2, offsetBitAmount) - 1;
+			indexMask = (int)Math.Pow(2, indexBitAmount) - 1;
 
 			l1Cache = new byte[16][];
 			tagIndexCache = new int[16];
@@ -48,6 +69,49 @@ namespace ISA_GUI
             {
 				tagIndexCache[x] = 0;
             }
+		}
+
+		/// <summary>Updates the cache.</summary>
+		/// <param name="index">The index.</param>
+		/// <param name="address">The address.</param>
+		/// <param name="memory">The main memory.</param>
+		/// <param name="dC">
+		///   <para>
+		/// The cache.
+		/// </para>
+		/// </param>
+		/// <exception cref="System.NotImplementedException"></exception>
+		public void updateCache(int address, ref DataMemory memory)
+		{
+			//Adds new byte of memory into the cache
+			byte[] mem = new byte[numberOfWords];
+
+			for (int x = 0; x < numberOfWords; x++)
+			{
+				mem[x] = (byte)memory.MainMemory[address + x];
+			}
+
+			l1Cache[index] = mem;
+			tagIndexCache[index] = tag;
+		}
+
+		/// <summary>
+		///   <para>
+		/// Finds the cache variables in order to check if the address is in the cache.
+		/// </para>
+		/// </summary>
+		/// <param name="inst">The instruction.</param>
+		/// <param name="offset">The offset.</param>
+		/// <param name="index">The index.</param>
+		/// <param name="tag">The tag.</param>
+		public void findCacheVariables(Instruction inst)
+		{
+			int address = inst.address;
+			offset = address & offsetMask;
+			address = address >> offsetBitAmount;
+			index = address & indexMask;
+			address = address >> indexBitAmount;
+			tag = address;
 		}
 	}
 }
