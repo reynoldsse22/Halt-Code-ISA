@@ -313,5 +313,27 @@ namespace ISA_GUI
 
             pipelineString.Append(output);
         }
+
+        public void buildCacheDataString(ref StringBuilder cacheString, Instruction instruction, ref DataCache DC)
+        {
+            int address = instruction.address;
+            string addressS = address.ToString();
+            DC.offset = address & DC.offsetMask;
+            address = address >> DC.offsetBitAmount;
+            DC.index = address & DC.indexMask;
+            address = address >> DC.indexBitAmount;
+            DC.tag = address;
+            //string addressS = address.ToString();
+            string offsets = DC.offset.ToString();
+            string indexs = DC.index.ToString();
+            string tagS = DC.tag.ToString();
+            string hitOrMiss = instruction.hitOrMiss.ToString();
+
+            string output = (string.Format("\n{0, 7} {1,13} {2, 7} {3, 8} {4, 8}",
+                           addressS.PadRight(7), offsets.PadRight(13), indexs.PadLeft(7), tagS.PadLeft(8), hitOrMiss.PadLeft(7)));
+
+            cacheString.Append(output);
+
+        }
     }
 }

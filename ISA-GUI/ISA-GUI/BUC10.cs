@@ -49,6 +49,8 @@ namespace ISA_GUI
             "Counter  Flag Spec Mnemonic      Type FReg SReg DReg  Immediate\n" +
             "-------- ---- ---- -------- --------- ---- ---- ---- ----------");
 
+        StringBuilder cacheString = new StringBuilder("");
+
        
         /**
 	    * Method Name: BUC10 <br>
@@ -122,7 +124,7 @@ namespace ISA_GUI
                     while (!halted)
                     {
 
-                        cpu.runDynamicPipeline(program, false, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config); //Calling Dynamic Pipeline
+                        cpu.runDynamicPipeline(program, false, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config, ref cacheString); //Calling Dynamic Pipeline
                     }
                     //return;//ELSE STATEMENT FOR DYNAMIC PIPELINE GOES HERE
                 }
@@ -174,7 +176,7 @@ namespace ISA_GUI
                     if (!config.dynamicPipelineSet)
                         cpu.runStaticPipeline(program, true, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config, ref stages);      //Run the program one cycle at a time. Stepthrough flag is true
                     else
-                        cpu.runDynamicPipeline(program, true, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config); //Calling Dynamic Pipeline
+                        cpu.runDynamicPipeline(program, true, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config, ref cacheString); //Calling Dynamic Pipeline
 
                     updateGUI();        //update the GUI
                 }
@@ -195,7 +197,7 @@ namespace ISA_GUI
                     if (!config.dynamicPipelineSet)
                         cpu.runStaticPipeline(program, true, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config, ref stages);      //Run the program one cycle at a time. Stepthrough flag is true
                     else
-                        cpu.runDynamicPipeline(program, true, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config); //Calling Dynamic Pipeline
+                        cpu.runDynamicPipeline(program, true, ref assemblyOutput, ref decodedString, ref pipelineOutput, ref halted, ref config, ref cacheString); //Calling Dynamic Pipeline
                 }
                 catch (Exception)       //Catch any errors when getting input from user or decoding invalid instructions
                 {
@@ -378,6 +380,7 @@ namespace ISA_GUI
 
             StatsTextBox.Text = "";
             pipelineStatsTextBox.Text = "";
+            cacheStatsTextBox.Text = "";
             currentCycleText.SelectionAlignment = HorizontalAlignment.Center;
             clearRegandMem();
             updateGUI();
@@ -529,6 +532,7 @@ namespace ISA_GUI
             }
             AssemblerListingTextBox.Text = decodedString.ToString();
             pipelineTextBox.Text = pipelineOutput.ToString();
+            cacheStatsTextBox.Text = cacheString.ToString();
         }
 
         private void updatePipelineGUIElements()

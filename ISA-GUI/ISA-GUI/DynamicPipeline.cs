@@ -114,7 +114,7 @@ namespace ISA_GUI
         /// <param name="IM">The im.</param>
         /// <param name="registers">The registers.</param>
         /// <param name="dataMemory">The data memory.</param>
-        public void runCycle(List<string> input, bool stepThrough, ref StringBuilder assemblyString, ref StringBuilder decodedString, ref StringBuilder pipelineString, 
+        public void runCycle(List<string> input, bool stepThrough, ref StringBuilder assemblyString, ref StringBuilder decodedString, ref StringBuilder cacheString, ref StringBuilder pipelineString, 
             ref bool halted, ref ConfigCycle config, ref InstructionMemory IM, ref RegisterFile registers, ref DataMemory dataMemory)
         {
             programRanAtLeastOnce = true;
@@ -159,7 +159,7 @@ namespace ISA_GUI
                             if (commitedThisCycle)
                                 continue;
 
-                            int instructionIndex = reorderBuffer.checkCommit(inst, ref WR, ref dataMemory, ref lastBranchDecision, ref IM, ref registers, ref haltFound, ref commonDataBus, ref DC);
+                            int instructionIndex = reorderBuffer.checkCommit(inst, ref WR, ref dataMemory, ref lastBranchDecision, ref IM, ref registers, ref haltFound, ref commonDataBus, ref DC, ref cacheString);
                             if (instructionIndex < 0)
                             {
                                 justCommitedInstruction = null;
@@ -173,6 +173,10 @@ namespace ISA_GUI
                             }
                             commitedThisCycle = true;
                             inst.stage5Cycle = cycleCount;
+                            if(inst.opcode == 10)
+                            {
+                                printer.buildCacheDataString(ref cacheString, inst, ref DC);
+                            }
                             printer.buildDecodedString(ref decodedString, inst);      //Build the decoded instruction string
                             printer.buildDynamicPipelineString(ref pipelineString, inst);
                             justCommitedInstruction = inst;
@@ -250,6 +254,10 @@ namespace ISA_GUI
                                 numOfInstructionsInExecution--;
                                 inst.stage3CycleEnd = cycleCount;
                                 inst.stage = 4;
+                                if (inst.opcode == 9)
+                                {
+                                    printer.buildCacheDataString(ref cacheString, inst, ref DC);
+                                }
                             }
                             break;
 

@@ -272,7 +272,7 @@ namespace ISA_GUI
 		 *   @param  Instruction instruction
 		 *   @param ConfigCycle config
 		 */
-		public void commit(ref RegisterFile registers, ref Instruction instruction, ref DataMemory memory, ref bool halted, ref InstructionMemory IM, ref bool branchTaken, ref DataCache DC)
+		public void commit(ref RegisterFile registers, ref Instruction instruction, ref DataMemory memory, ref bool halted, ref InstructionMemory IM, ref bool branchTaken, ref DataCache DC, ref StringBuilder cacheString)
 		{
 			halted = false;
 			switch (instruction.opcode)
@@ -368,6 +368,7 @@ namespace ISA_GUI
 							{
 								DC.updateWriteCache(int.Parse(instruction.result));
 								writeIntMemory(instruction, ref memory);
+							
 							}
 							else
 							{
@@ -375,6 +376,7 @@ namespace ISA_GUI
 								byte[] currentFloat = System.BitConverter.GetBytes(fResult);                          //Float to be stored
 								DC.updateWriteCache(currentFloat);
 								writeFloatMemory(instruction, ref memory);
+								
 							}
 
 							break;
@@ -385,10 +387,12 @@ namespace ISA_GUI
 							if (!instruction.isFloat)
 							{
 								writeIntMemory(instruction, ref memory);
+								
 							}
 							else
 							{
 								writeFloatMemory(instruction, ref memory);
+								
 							}
 							break;
 					}

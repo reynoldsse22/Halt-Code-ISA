@@ -136,7 +136,6 @@
             this.Output = new System.Windows.Forms.TabControl();
             this.pipelineStatsTab = new System.Windows.Forms.TabPage();
             this.pipelineStatsTextBox = new System.Windows.Forms.RichTextBox();
-            this.CacheStats = new System.Windows.Forms.TabPage();
             this.r2Dec = new System.Windows.Forms.RichTextBox();
             this.r1Dec = new System.Windows.Forms.RichTextBox();
             this.r0Dec = new System.Windows.Forms.RichTextBox();
@@ -199,6 +198,8 @@
             this.cacheTextBox = new System.Windows.Forms.RichTextBox();
             this.uploadButton = new System.Windows.Forms.Button();
             this.SaveFile = new System.Windows.Forms.Button();
+            this.cacheStatsTab = new System.Windows.Forms.TabPage();
+            this.cacheStatsTextBox = new System.Windows.Forms.RichTextBox();
             this.objectCode.SuspendLayout();
             this.assemblerPage.SuspendLayout();
             this.objectCodeBox.SuspendLayout();
@@ -220,6 +221,7 @@
             this.mainMemoryTab.SuspendLayout();
             this.dynamicPipelineMemoryTab.SuspendLayout();
             this.cachePage.SuspendLayout();
+            this.cacheStatsTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // CPU
@@ -1336,11 +1338,11 @@
             // 
             // Output
             // 
-            this.Output.Controls.Add(this.pipelineTab);
             this.Output.Controls.Add(this.sourceCodeBox);
             this.Output.Controls.Add(this.summaryStatsBox);
             this.Output.Controls.Add(this.pipelineStatsTab);
-            this.Output.Controls.Add(this.CacheStats);
+            this.Output.Controls.Add(this.pipelineTab);
+            this.Output.Controls.Add(this.cacheStatsTab);
             this.Output.Location = new System.Drawing.Point(9, 454);
             this.Output.Name = "Output";
             this.Output.SelectedIndex = 0;
@@ -1368,16 +1370,6 @@
             this.pipelineStatsTextBox.Size = new System.Drawing.Size(543, 318);
             this.pipelineStatsTextBox.TabIndex = 3;
             this.pipelineStatsTextBox.Text = "";
-            // 
-            // CacheStats
-            // 
-            this.CacheStats.Location = new System.Drawing.Point(4, 22);
-            this.CacheStats.Name = "CacheStats";
-            this.CacheStats.Padding = new System.Windows.Forms.Padding(3);
-            this.CacheStats.Size = new System.Drawing.Size(549, 324);
-            this.CacheStats.TabIndex = 5;
-            this.CacheStats.Text = "Cache stats";
-            this.CacheStats.UseVisualStyleBackColor = true;
             // 
             // r2Dec
             // 
@@ -2087,6 +2079,28 @@
             this.SaveFile.UseVisualStyleBackColor = true;
             this.SaveFile.Click += new System.EventHandler(this.SaveFile_Click);
             // 
+            // cacheStatsTab
+            // 
+            this.cacheStatsTab.Controls.Add(this.cacheStatsTextBox);
+            this.cacheStatsTab.Location = new System.Drawing.Point(4, 22);
+            this.cacheStatsTab.Name = "cacheStatsTab";
+            this.cacheStatsTab.Size = new System.Drawing.Size(549, 324);
+            this.cacheStatsTab.TabIndex = 5;
+            this.cacheStatsTab.Text = "Cache Statistics";
+            this.cacheStatsTab.UseVisualStyleBackColor = true;
+            // 
+            // cacheStatsTextBox
+            // 
+            this.cacheStatsTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.cacheStatsTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.cacheStatsTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cacheStatsTextBox.Location = new System.Drawing.Point(3, 3);
+            this.cacheStatsTextBox.Name = "cacheStatsTextBox";
+            this.cacheStatsTextBox.ReadOnly = true;
+            this.cacheStatsTextBox.Size = new System.Drawing.Size(543, 318);
+            this.cacheStatsTextBox.TabIndex = 4;
+            this.cacheStatsTextBox.Text = "";
+            // 
             // BUC10
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2213,6 +2227,7 @@
             this.mainMemoryTab.ResumeLayout(false);
             this.dynamicPipelineMemoryTab.ResumeLayout(false);
             this.cachePage.ResumeLayout(false);
+            this.cacheStatsTab.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2387,7 +2402,8 @@
         private System.Windows.Forms.Button SaveFile;
         private System.Windows.Forms.TabPage cachePage;
         private System.Windows.Forms.RichTextBox cacheTextBox;
-        private System.Windows.Forms.TabPage CacheStats;
+        private System.Windows.Forms.TabPage cacheStatsTab;
+        private System.Windows.Forms.RichTextBox cacheStatsTextBox;
     }
 }
 

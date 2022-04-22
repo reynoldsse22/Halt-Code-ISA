@@ -112,14 +112,14 @@ namespace ISA_GUI
         }
 
         public void runDynamicPipeline(List<string> input, bool stepThrough, ref StringBuilder assemblyString, ref StringBuilder decodedString,
-                ref StringBuilder pipelingString, ref bool halted, ref ConfigCycle config)
+                ref StringBuilder pipelingString, ref bool halted, ref ConfigCycle config, ref StringBuilder cacheString)
         {
             if(IM.instructions.Count == 0) //IMPLEMENTATION SOLEY TO GET ASSEMBLY TO WORK. *SUBJECT TO CHANGE
             {
                 IM.setInstructionSize(input.Count);
                 storeProgramInMemory(input);
             }
-            DP.runCycle(input, stepThrough, ref assemblyString, ref decodedString, ref pipelingString, ref halted, ref config, ref IM, ref registers, ref dataMemory);
+            DP.runCycle(input, stepThrough, ref assemblyString, ref decodedString, ref cacheString, ref pipelingString, ref halted, ref config, ref IM, ref registers, ref dataMemory );
 
         }
 

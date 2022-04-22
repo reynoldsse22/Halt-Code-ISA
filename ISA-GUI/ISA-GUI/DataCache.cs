@@ -150,26 +150,28 @@ namespace ISA_GUI
 				instruction.hitOrMiss = Instruction.cacheHit.HIT;
 			}
 		}
-
+		/*
 		public void buildCacheDataString(ref StringBuilder cacheString, Instruction instruction)
 		{
 			int address = instruction.address;
+			string addressS = address.ToString();
 			offset = address & offsetMask;
 			address = address >> offsetBitAmount;
 			index = address & indexMask;
 			address = address >> indexBitAmount;
 			tag = address;
-			string addressS = address.ToString();
+			//string addressS = address.ToString();
 			string offsets = offset.ToString();
 			string indexs =index.ToString();
 			string tagS = tag.ToString();
 			string hitOrMiss = instruction.hitOrMiss.ToString();
 
-			string output = (string.Format("\n{0, 7} {1,13} {2, 7} {3, 8} {4, 8} {5, 7} {6, 9}",
+			string output = (string.Format("\n{0, 7} {1,13} {2, 7} {3, 8} {4, 8}",
 						   addressS.PadRight(7), offsets.PadRight(13), indexs.PadLeft(7), tagS.PadLeft(8),hitOrMiss.PadLeft(7)));
 
 			cacheString.Append(output);
 			
 		}
+		*/
 	}
 }
