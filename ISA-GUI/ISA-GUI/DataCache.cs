@@ -95,6 +95,24 @@ namespace ISA_GUI
 			tagIndexCache[index] = tag;
 		}
 
+        /// <summary>Updates the cache with write instructions.</summary>
+        /// <param name="result">The result.</param>
+        public void updateWriteCache(int result)
+        {
+			l1Cache[index][offset] = (byte)((result & 16711680) >> 16);     //Stores the MSB value of r0 at the address in cache
+			l1Cache[index][offset + 1] = (byte)((result & 65280) >> 8);     //Stores the TSB value of r0 at the address in cache
+			l1Cache[index][offset + 2] = (byte)(result & 255);				//Stores the LSB value of r0 at the address in cache
+		}
+
+        /// <summary>Updates the cache with the write results for float instructions.</summary>
+        /// <param name="floatResult">The float result.</param>
+        public void updateWriteCache(byte[] floatResult)
+        {
+			l1Cache[index][offset] = floatResult[3];                                           //Stores the MSB value of f0 at the address in cache
+			l1Cache[index][offset + 1] = floatResult[2];                                       //Stores the TSB value of f0 at the address in cache
+			l1Cache[index][offset + 2] = floatResult[1];                                       //Stores the LSB value of f0 at the address in cache
+		}
+
 		/// <summary>
 		///   <para>
 		/// Finds the cache variables in order to check if the address is in the cache.
@@ -112,6 +130,24 @@ namespace ISA_GUI
 			index = address & indexMask;
 			address = address >> indexBitAmount;
 			tag = address;
+		}
+
+        /// <summary>Finds whether the instruction hit or missed in the cache.</summary>
+        /// <param name="instruction">The instruction.</param>
+        public void findInstuctionInCache(ref Instruction instruction)
+        {
+			if (l1Cache[index] == null)
+			{
+				instruction.hitOrMiss = Instruction.cacheHit.MISS;
+			}
+			else if (tagIndexCache[index] != tag)
+			{
+				instruction.hitOrMiss = Instruction.cacheHit.CONFLICTED;
+			}
+			else
+			{
+				instruction.hitOrMiss = Instruction.cacheHit.HIT;
+			}
 		}
 	}
 }

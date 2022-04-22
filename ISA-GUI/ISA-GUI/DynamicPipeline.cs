@@ -159,7 +159,7 @@ namespace ISA_GUI
                             if (commitedThisCycle)
                                 continue;
 
-                            int instructionIndex = reorderBuffer.checkCommit(inst, ref WR, ref dataMemory, ref lastBranchDecision, ref IM, ref registers, ref haltFound, ref commonDataBus);
+                            int instructionIndex = reorderBuffer.checkCommit(inst, ref WR, ref dataMemory, ref lastBranchDecision, ref IM, ref registers, ref haltFound, ref commonDataBus, ref DC);
                             if (instructionIndex < 0)
                             {
                                 justCommitedInstruction = null;

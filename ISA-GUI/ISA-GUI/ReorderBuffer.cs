@@ -54,11 +54,11 @@ namespace ISA_GUI
         }
 
 		public int checkCommit(Instruction inst, ref WriteResult WR, ref DataMemory memory, ref bool branchTaken, ref InstructionMemory IM, 
-			ref RegisterFile registers, ref bool halted, ref CommonDataBus CDB)
+			ref RegisterFile registers, ref bool halted, ref CommonDataBus CDB, ref DataCache DC)
         {
 			if(reorderIndex == inst.ID && oneCommitPerCycle)
             {
-				WR.commit(ref registers, ref inst, ref memory, ref halted, ref IM, ref branchTaken);
+				WR.commit(ref registers, ref inst, ref memory, ref halted, ref IM, ref branchTaken, ref DC);
 				reorderIndex++;
 				oneCommitPerCycle = false;
 				return removeFromReorderBuffer(inst, ref CDB);

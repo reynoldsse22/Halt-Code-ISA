@@ -37,7 +37,9 @@ namespace ISA_GUI
 		public bool isFloat, executionInProgress, doneExecuting, stage2ExecutionFinished, justIssued;
 		public string assembly1, result;
 		public string assembly2, fullAssemblySyntax;
-		/**
+
+        public cacheHit hitOrMiss { get; set; }
+        /**
 	    * Method Name: Instruction <br>
 	    * Method Purpose: Class constructor
 	    * 
@@ -45,7 +47,7 @@ namespace ISA_GUI
 	    * Date created: 2/27/21 <br>
 	    * @author Samuel Reynolds
 	    */
-		public Instruction()
+        public Instruction()
 		{
 			opcode = 1;
 			cycleControl = 0;
@@ -63,6 +65,13 @@ namespace ISA_GUI
 			stage2ExecutionFinished = false;
 			reservationStationIndex = -1;
 			functionalUnitIndex = -1;
+        }
+
+        public enum cacheHit
+        { 
+			HIT,
+			CONFLICTED,
+			MISS
 		}
-	}
+    }
 }

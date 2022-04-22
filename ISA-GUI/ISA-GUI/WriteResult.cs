@@ -272,7 +272,7 @@ namespace ISA_GUI
 		 *   @param  Instruction instruction
 		 *   @param ConfigCycle config
 		 */
-		public void commit(ref RegisterFile registers, ref Instruction instruction, ref DataMemory memory, ref bool halted, ref InstructionMemory IM, ref bool branchTaken)
+		public void commit(ref RegisterFile registers, ref Instruction instruction, ref DataMemory memory, ref bool halted, ref InstructionMemory IM, ref bool branchTaken, ref DataCache DC)
 		{
 			halted = false;
 			switch (instruction.opcode)
@@ -350,21 +350,47 @@ namespace ISA_GUI
 					break;
 
 				case 10:
+					//Insert caching logic here
 					registers.ASPR = instruction.ASPR;
-					if (!instruction.isFloat)
-					{
-						int iResult = int.Parse(instruction.result);
-						memory.MainMemory[instruction.address] = (byte)((iResult & 16711680) >> 16);      //Stores the MSB value of r0 at the address in memory
-						memory.MainMemory[instruction.address + 1] = (byte)((iResult & 65280) >> 8);     //Stores the TSB value of r0 at the address in memory
-						memory.MainMemory[instruction.address + 2] = (byte)(iResult & 255);       //Stores the LSB value of r0 at the address in memory
-					}
-					else
-					{
-						float fResult = float.Parse(instruction.result);
-						byte[] currentFloat = System.BitConverter.GetBytes(fResult);                          //Float to be stored
-						memory.MainMemory[instruction.address] = currentFloat[3];                                           //Stores the MSB value of f0 at the address in memory
-						memory.MainMemory[instruction.address + 1] = currentFloat[2];                                       //Stores the TSB value of f0 at the address in memory
-						memory.MainMemory[instruction.address + 2] = currentFloat[1];                                       //Stores the LSB value of f0 at the address in memory
+					//Call findCacheVariables to get the offset, index and tag to reference the cache
+					DC.findCacheVariables(instruction);
+
+					//Find whether the index and tag exist within the cache
+
+					DC.findInstuctionInCache(ref instruction);
+
+                    switch (instruction.hitOrMiss)
+                    { 
+						case Instruction.cacheHit.HIT:
+							//If there's a hit then store the new memory into the cache
+							//Update main memory as well
+							if (!instruction.isFloat)
+							{
+								DC.updateWriteCache(int.Parse(instruction.result));
+								writeIntMemory(instruction, ref memory);
+							}
+							else
+							{
+								float fResult = float.Parse(instruction.result);                    //CAN BE IMPLEMENTED BETTER BECAUSE THERE'S CODE DUPLICATION
+								byte[] currentFloat = System.BitConverter.GetBytes(fResult);                          //Float to be stored
+								DC.updateWriteCache(currentFloat);
+								writeFloatMemory(instruction, ref memory);
+							}
+
+							break;
+						case Instruction.cacheHit.CONFLICTED:
+						case Instruction.cacheHit.MISS:
+							//If there's a miss then do NOT update the cache
+							//Update main memory by falling through
+							if (!instruction.isFloat)
+							{
+								writeIntMemory(instruction, ref memory);
+							}
+							else
+							{
+								writeFloatMemory(instruction, ref memory);
+							}
+							break;
 					}
 					break;
 				case 11:
@@ -418,6 +444,29 @@ namespace ISA_GUI
 						registers.floatRegisters[instruction.destinationReg] = float.Parse(instruction.result);
 					break;
 			}
+		}
+
+        /// <summary>Writes the int result to memory.</summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="memory">The memory.</param>
+        public void writeIntMemory(Instruction instruction, ref DataMemory memory)
+        {
+			int iResult = int.Parse(instruction.result);
+			memory.MainMemory[instruction.address] = (byte)((iResult & 16711680) >> 16);      //Stores the MSB value of r0 at the address in memory
+			memory.MainMemory[instruction.address + 1] = (byte)((iResult & 65280) >> 8);     //Stores the TSB value of r0 at the address in memory
+			memory.MainMemory[instruction.address + 2] = (byte)(iResult & 255);       //Stores the LSB value of r0 at the address in memory
+		}
+
+        /// <summary>Writes the float result to memory.</summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="memory">The memory.</param>
+        public void writeFloatMemory(Instruction instruction, ref DataMemory memory)
+        {
+			float fResult = float.Parse(instruction.result);
+			byte[] currentFloat = System.BitConverter.GetBytes(fResult);                          //Float to be stored
+			memory.MainMemory[instruction.address] = currentFloat[3];                                           //Stores the MSB value of f0 at the address in memory
+			memory.MainMemory[instruction.address + 1] = currentFloat[2];                                       //Stores the TSB value of f0 at the address in memory
+			memory.MainMemory[instruction.address + 2] = currentFloat[1];                                       //Stores the LSB value of f0 at the address in memory
 		}
 	}
 }
