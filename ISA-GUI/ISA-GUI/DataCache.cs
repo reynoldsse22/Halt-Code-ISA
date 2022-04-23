@@ -150,6 +150,14 @@ namespace ISA_GUI
 				instruction.hitOrMiss = Instruction.cacheHit.HIT;
 			}
 		}
+
+		public void clearCache()
+        {
+			for (int x = 0; x < l1Cache.Length; x++)
+			{
+				tagIndexCache[x] = 0;
+			}
+		}
 		/*
 		public void buildCacheDataString(ref StringBuilder cacheString, Instruction instruction)
 		{

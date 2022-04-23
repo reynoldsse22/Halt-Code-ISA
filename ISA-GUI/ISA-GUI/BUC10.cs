@@ -378,6 +378,11 @@ namespace ISA_GUI
                 resetDynamicPipeline();
             }
 
+            if(config.cachingSet)
+            {
+                cpu.DP.DC.clearCache();
+            }
+
             StatsTextBox.Text = "";
             pipelineStatsTextBox.Text = "";
             cacheStatsTextBox.Text = "";

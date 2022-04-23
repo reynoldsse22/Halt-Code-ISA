@@ -131,6 +131,7 @@ namespace ISA_GUI
 			if(!load_buffer.instruction.executionInProgress && !load_buffer.instruction.doneExecuting)
             {
 				load_buffer.instruction.cycleControl = config.load;
+				load_buffer.instruction.cycleControl--;
 			}
 			else
             {
@@ -140,7 +141,7 @@ namespace ISA_GUI
 			switch (instruction.opcode)
 			{
 				case 9:
-					if (!load_buffer.instruction.executionInProgress && !load_buffer.instruction.doneExecuting)
+					if (!load_buffer.instruction.executionInProgress && !load_buffer.instruction.doneExecuting && config.cachingSet)
 					{
 						//Insert caching logic here
 						//Call findCacheVariables to get the offset, index and tag to reference the cache
@@ -150,73 +151,101 @@ namespace ISA_GUI
 						DC.findInstuctionInCache(ref instruction);
 					}
 
-					//Runs case depending on whether the instruction hits, conflicts, or misses
-					switch(instruction.hitOrMiss)
+					if (config.cachingSet)
+					{
+						//Runs case depending on whether the instruction hits, conflicts, or misses
+						switch (instruction.hitOrMiss)
+						{
+							case Instruction.cacheHit.HIT:
+								if (!load_buffer.instruction.executionInProgress && !load_buffer.instruction.doneExecuting)
+								{
+									load_buffer.instruction.cycleControl = config.cacheHit - 1;
+								}
+								//If there's a hit then get the memory from the offset plus the two bytes after
+								if (!instruction.isFloat)
+								{
+									load_buffer.instruction.executionInProgress = true;
+									load_buffer.instruction.intResult = DC.l1Cache[DC.index][DC.offset] << 16;            //Loads the MSB value from the address in memory to r0
+									load_buffer.instruction.intResult += DC.l1Cache[DC.index][DC.offset + 1] << 8;      //Loads the TSB value from the address in memory to r0
+									load_buffer.instruction.intResult += DC.l1Cache[DC.index][DC.offset + 2];           //Loads the LSB value from the address in memory to r0
+									result = load_buffer.instruction.intResult.ToString();
+									if (int.Parse(result) == 0 && ASPR == 1)
+										load_buffer.instruction.ASPR = 1;
+								}
+								else
+								{
+									load_buffer.instruction.executionInProgress = true;
+									byte[] memoryFloat = new byte[4];
+									memoryFloat[3] = DC.l1Cache[DC.index][DC.offset];                           //Loads the MSB value from the address in memory to f0
+									memoryFloat[2] = DC.l1Cache[DC.index][DC.offset + 1];                       //Loads the TSB value from the address in memory to f0
+									memoryFloat[1] = DC.l1Cache[DC.index][DC.offset + 2];                       //Loads the LSB value from the address in memory to f0
+									load_buffer.instruction.floatResult = System.BitConverter.ToSingle(memoryFloat, 0);
+									result = load_buffer.instruction.floatResult.ToString();
+									if (float.Parse(result) == 0f && ASPR == 1)
+										instruction.ASPR = 1;
+								}
+								break;
+							case Instruction.cacheHit.CONFLICTED:
+							case Instruction.cacheHit.MISS:
+								if (!load_buffer.instruction.executionInProgress && !load_buffer.instruction.doneExecuting)
+								{
+									//Update cache with the memory from main memory (Add index and tag to the cache)
+									startingAddress = instruction.address & ~DC.offsetMask;
+									DC.updateCache(startingAddress, ref memory);
+									load_buffer.instruction.cycleControl = config.cacheMiss - 1;
+								}
+
+								//Fix cycleControl to stall for the miss
+								//If there's a miss then fall to main memory
+								if (!instruction.isFloat)
+								{
+									load_buffer.instruction.executionInProgress = true;
+									load_buffer.instruction.intResult = memory.MainMemory[load_buffer.instruction.address] << 16;            //Loads the MSB value from the address in memory to r0
+									load_buffer.instruction.intResult += (memory.MainMemory[load_buffer.instruction.address + 1] << 8);      //Loads the TSB value from the address in memory to r0
+									load_buffer.instruction.intResult += (memory.MainMemory[load_buffer.instruction.address + 2]);           //Loads the LSB value from the address in memory to r0
+									result = load_buffer.instruction.intResult.ToString();
+									if (int.Parse(result) == 0 && ASPR == 1)
+										load_buffer.instruction.ASPR = 1;
+								}
+								else
+								{
+									load_buffer.instruction.executionInProgress = true;
+									byte[] memoryFloat = new byte[4];
+									memoryFloat[3] = (byte)(memory.MainMemory[load_buffer.instruction.address]);                           //Loads the MSB value from the address in memory to f0
+									memoryFloat[2] = (byte)(memory.MainMemory[load_buffer.instruction.address + 1]);                       //Loads the TSB value from the address in memory to f0
+									memoryFloat[1] = (byte)(memory.MainMemory[load_buffer.instruction.address + 2]);                       //Loads the LSB value from the address in memory to f0
+									load_buffer.instruction.floatResult = System.BitConverter.ToSingle(memoryFloat, 0);
+									result = load_buffer.instruction.floatResult.ToString();
+									if (float.Parse(result) == 0f && ASPR == 1)
+										instruction.ASPR = 1;
+								}
+								break;
+						}
+					}
+					else
                     {
-						case Instruction.cacheHit.HIT:
-							if (!load_buffer.instruction.executionInProgress && !load_buffer.instruction.doneExecuting)
-							{
-								load_buffer.instruction.cycleControl = config.cacheHit - 1;
-							}
-							//If there's a hit then get the memory from the offset plus the two bytes after
-							if (!instruction.isFloat)
-							{
-								load_buffer.instruction.executionInProgress = true;
-								load_buffer.instruction.intResult = DC.l1Cache[DC.index][DC.offset] << 16;            //Loads the MSB value from the address in memory to r0
-								load_buffer.instruction.intResult += DC.l1Cache[DC.index][DC.offset + 1] << 8;      //Loads the TSB value from the address in memory to r0
-								load_buffer.instruction.intResult += DC.l1Cache[DC.index][DC.offset + 2];           //Loads the LSB value from the address in memory to r0
-								result = load_buffer.instruction.intResult.ToString();
-								if (int.Parse(result) == 0 && ASPR == 1)
-									load_buffer.instruction.ASPR = 1;
-							}
-							else
-							{
-								load_buffer.instruction.executionInProgress = true;
-								byte[] memoryFloat = new byte[4];
-								memoryFloat[3] = DC.l1Cache[DC.index][DC.offset];                           //Loads the MSB value from the address in memory to f0
-								memoryFloat[2] = DC.l1Cache[DC.index][DC.offset + 1];                       //Loads the TSB value from the address in memory to f0
-								memoryFloat[1] = DC.l1Cache[DC.index][DC.offset + 2];                       //Loads the LSB value from the address in memory to f0
-								load_buffer.instruction.floatResult = System.BitConverter.ToSingle(memoryFloat, 0);
-								result = load_buffer.instruction.floatResult.ToString();
-								if (float.Parse(result) == 0f && ASPR == 1)
-									instruction.ASPR = 1;
-							}
-							break;
-						case Instruction.cacheHit.CONFLICTED:
-						case Instruction.cacheHit.MISS:
-							if (!load_buffer.instruction.executionInProgress && !load_buffer.instruction.doneExecuting)
-							{
-								//Update cache with the memory from main memory (Add index and tag to the cache)
-								startingAddress = instruction.address & ~DC.offsetMask;
-								DC.updateCache(startingAddress, ref memory);
-								load_buffer.instruction.cycleControl = config.cacheMiss - 1;
-							}
-							
-							//Fix cycleControl to stall for the miss
-							//If there's a miss then fall to main memory
-							if (!instruction.isFloat)
-							{
-								load_buffer.instruction.executionInProgress = true;
-								load_buffer.instruction.intResult = memory.MainMemory[load_buffer.instruction.address] << 16;            //Loads the MSB value from the address in memory to r0
-								load_buffer.instruction.intResult += (memory.MainMemory[load_buffer.instruction.address + 1] << 8);      //Loads the TSB value from the address in memory to r0
-								load_buffer.instruction.intResult += (memory.MainMemory[load_buffer.instruction.address + 2]);           //Loads the LSB value from the address in memory to r0
-								result = load_buffer.instruction.intResult.ToString();
-								if (int.Parse(result) == 0 && ASPR == 1)
-									load_buffer.instruction.ASPR = 1;
-							}
-							else
-							{
-								load_buffer.instruction.executionInProgress = true;
-								byte[] memoryFloat = new byte[4];
-								memoryFloat[3] = (byte)(memory.MainMemory[load_buffer.instruction.address]);                           //Loads the MSB value from the address in memory to f0
-								memoryFloat[2] = (byte)(memory.MainMemory[load_buffer.instruction.address + 1]);                       //Loads the TSB value from the address in memory to f0
-								memoryFloat[1] = (byte)(memory.MainMemory[load_buffer.instruction.address + 2]);                       //Loads the LSB value from the address in memory to f0
-								load_buffer.instruction.floatResult = System.BitConverter.ToSingle(memoryFloat, 0);
-								result = load_buffer.instruction.floatResult.ToString();
-								if (float.Parse(result) == 0f && ASPR == 1)
-									instruction.ASPR = 1;
-							}
-							break;
+						if (!instruction.isFloat)
+						{
+							load_buffer.instruction.executionInProgress = true;
+							load_buffer.instruction.intResult = memory.MainMemory[load_buffer.instruction.address] << 16;            //Loads the MSB value from the address in memory to r0
+							load_buffer.instruction.intResult += (memory.MainMemory[load_buffer.instruction.address + 1] << 8);      //Loads the TSB value from the address in memory to r0
+							load_buffer.instruction.intResult += (memory.MainMemory[load_buffer.instruction.address + 2]);           //Loads the LSB value from the address in memory to r0
+							result = load_buffer.instruction.intResult.ToString();
+							if (int.Parse(result) == 0 && ASPR == 1)
+								load_buffer.instruction.ASPR = 1;
+						}
+						else
+						{
+							load_buffer.instruction.executionInProgress = true;
+							byte[] memoryFloat = new byte[4];
+							memoryFloat[3] = (byte)(memory.MainMemory[load_buffer.instruction.address]);                           //Loads the MSB value from the address in memory to f0
+							memoryFloat[2] = (byte)(memory.MainMemory[load_buffer.instruction.address + 1]);                       //Loads the TSB value from the address in memory to f0
+							memoryFloat[1] = (byte)(memory.MainMemory[load_buffer.instruction.address + 2]);                       //Loads the LSB value from the address in memory to f0
+							load_buffer.instruction.floatResult = System.BitConverter.ToSingle(memoryFloat, 0);
+							result = load_buffer.instruction.floatResult.ToString();
+							if (float.Parse(result) == 0f && ASPR == 1)
+								instruction.ASPR = 1;
+						}
 					}
 					break;
 

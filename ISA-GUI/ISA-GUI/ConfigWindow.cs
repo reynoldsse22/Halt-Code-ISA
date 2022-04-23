@@ -98,10 +98,26 @@ namespace ISA_GUI
             if (configurations.cachingSet)
             {
                 cachingCheckBox.Checked = true;
+                cacheHitDelayValue.Enabled = true;
+                cacheMissDelayValue.Enabled = true;
+                lineSizeLabel.Enabled = true;
+                missCycleLabel.Enabled = true;
+                hitCycleLabel.Enabled = true;
+                associativityComboBox.Enabled = true;
+                associativityLabel.Enabled = true;
+                lineSizeValue.Enabled = true;
             }
             else
             {
                 cachingCheckBox.Checked = false;
+                cacheHitDelayValue.Enabled = false;
+                cacheMissDelayValue.Enabled = false;
+                lineSizeLabel.Enabled = false;
+                missCycleLabel.Enabled = false;
+                hitCycleLabel.Enabled = false;
+                associativityComboBox.Enabled = false;
+                associativityLabel.Enabled = false;
+                lineSizeValue.Enabled = false;
             }
 
             if (dynamicCheckbox.Checked)
@@ -315,7 +331,6 @@ namespace ISA_GUI
             memoryFUValue.Value = 2;
             cacheHitDelayValue.Value = 1;
             cacheMissDelayValue.Value = 50;
-            
             
 
             configurations.predictionSet = false;
