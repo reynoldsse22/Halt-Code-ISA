@@ -136,17 +136,25 @@ namespace ISA_GUI
 			switch (instruction.opcode)
 			{
 				case 9:
-					//Insert caching logic here
-					//Call findCacheVariables to get the offset, index and tag to reference the cache
-					DC.findCacheVariables(instruction);
+					if (!load_buffer.instruction.executionInProgress && !load_buffer.instruction.doneExecuting)
+					{
+						//Insert caching logic here
+						//Call findCacheVariables to get the offset, index and tag to reference the cache
+						DC.findCacheVariables(instruction);
 
-					//Find whether the index and tag exist within the cache
-					DC.findInstuctionInCache(ref instruction);
+						//Find whether the index and tag exist within the cache
+						DC.findInstuctionInCache(ref instruction);
+					}
 
 					//Runs case depending on whether the instruction hits, conflicts, or misses
 					switch(instruction.hitOrMiss)
                     {
 						case Instruction.cacheHit.HIT:
+							if (!load_buffer.instruction.executionInProgress && !load_buffer.instruction.doneExecuting)
+							{
+								load_buffer.instruction.cycleControl = config.cacheHit;
+							}
+							load_buffer.instruction.cycleControl--;
 							//If there's a hit then get the memory from the offset plus the two bytes after
 							if (!instruction.isFloat)
 							{
@@ -173,10 +181,15 @@ namespace ISA_GUI
 							break;
 						case Instruction.cacheHit.CONFLICTED:
 						case Instruction.cacheHit.MISS:
-							//Update cache with the memory from main memory (Add index and tag to the cache)
-							startingAddress = instruction.address & ~DC.offsetMask;
-							DC.updateCache(startingAddress, ref memory);
-
+							if (!load_buffer.instruction.executionInProgress && !load_buffer.instruction.doneExecuting)
+							{
+								//Update cache with the memory from main memory (Add index and tag to the cache)
+								startingAddress = instruction.address & ~DC.offsetMask;
+								DC.updateCache(startingAddress, ref memory);
+								load_buffer.instruction.cycleControl = config.cacheHit;
+							}
+							load_buffer.instruction.cycleControl--;
+							
 							//Fix cycleControl to stall for the miss
 							//If there's a miss then fall to main memory
 							if (!instruction.isFloat)
@@ -209,9 +222,8 @@ namespace ISA_GUI
 						load_buffer.instruction.doneExecuting = true;
 					}
 					break;
+
 				case 10:
-
-
 					if (!instruction.isFloat)
 					{
 						load_buffer.instruction.executionInProgress = true;

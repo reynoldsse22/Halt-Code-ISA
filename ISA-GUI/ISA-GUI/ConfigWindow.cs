@@ -68,19 +68,21 @@ namespace ISA_GUI
             staticFlDivValue.Value = configurations.flDiv;
             staticLoad_StoreValue.Value = configurations.load_store;
 
-             intAddFUValue.Value = configurations.intAddFUs;
-             intSubFUValue.Value = configurations.intSubFUs;
-             intMultFUValue.Value = configurations.intMultFUs;
-             intDivFUValue.Value = configurations.intDivFus;
-             flAddFUValue.Value = configurations.flAddFUs;
-             flSubFUValue.Value = configurations.flSubFUs;
-             flMultFUValue.Value = configurations.flMultFUs;
-             flDivFUValue.Value = configurations.flDivFUs;
-             shiftFUValue.Value = configurations.shiftFUs;
-             branchFUValue.Value = configurations.branchFUs;
-             bitwiseFUValue.Value = configurations.bitwiseFUs;
-             memoryFUValue.Value = configurations.memoryFUs;
+            intAddFUValue.Value = configurations.intAddFUs;
+            intSubFUValue.Value = configurations.intSubFUs;
+            intMultFUValue.Value = configurations.intMultFUs;
+            intDivFUValue.Value = configurations.intDivFus;
+            flAddFUValue.Value = configurations.flAddFUs;
+            flSubFUValue.Value = configurations.flSubFUs;
+            flMultFUValue.Value = configurations.flMultFUs;
+            flDivFUValue.Value = configurations.flDivFUs;
+            shiftFUValue.Value = configurations.shiftFUs;
+            branchFUValue.Value = configurations.branchFUs;
+            bitwiseFUValue.Value = configurations.bitwiseFUs;
+            memoryFUValue.Value = configurations.memoryFUs;
 
+            cacheHitDelayValue.Value = configurations.cacheHit;
+            cacheMissDelayValue.Value = configurations.cacheMiss;
 
             if (configurations.dynamicPipelineSet)
             {
@@ -217,6 +219,9 @@ namespace ISA_GUI
             configurations.bitwiseFUs = (int)bitwiseFUValue.Value;
             configurations.memoryFUs = (int)memoryFUValue.Value;
 
+            configurations.cacheHit = (int)cacheHitDelayValue.Value;
+            configurations.cacheMiss = (int)cacheMissDelayValue.Value;
+
 
 
             if (staticCheckbox.Checked)
@@ -308,10 +313,14 @@ namespace ISA_GUI
             branchFUValue.Value = 1;
             bitwiseFUValue.Value = 1;
             memoryFUValue.Value = 2;
+            cacheHitDelayValue.Value = 1;
+            cacheMissDelayValue.Value = 50;
+            
             
 
             configurations.predictionSet = false;
             configurations.forwardingSet = false;
+            configurations.cachingSet = true;
             configurations.fetch = (int)staticFetchValue.Value;
             configurations.memAccess = (int)staticMemAccessValue.Value;
             configurations.regAccess = (int)staticRegAccessValue.Value;
@@ -467,6 +476,32 @@ namespace ISA_GUI
         private void memoryFUValue_ValueChanged(object sender, EventArgs e)
         {
             setReorderBufferMinimum();
+        }
+
+        private void cachingCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if(cachingCheckBox.Checked)
+            {
+                cacheHitDelayValue.Enabled = true;
+                cacheMissDelayValue.Enabled = true;
+                lineSizeLabel.Enabled = true;
+                missCycleLabel.Enabled = true;
+                hitCycleLabel.Enabled = true;
+                associativityComboBox.Enabled = true;
+                associativityLabel.Enabled = true;
+                lineSizeValue.Enabled = true;
+            }
+            else
+            {
+                cacheHitDelayValue.Enabled = false;
+                cacheMissDelayValue.Enabled = false;
+                lineSizeLabel.Enabled = false;
+                missCycleLabel.Enabled = false;
+                hitCycleLabel.Enabled = false;
+                associativityComboBox.Enabled = false;
+                associativityLabel.Enabled = false;
+                lineSizeValue.Enabled = false;
+            }
         }
     }
 }

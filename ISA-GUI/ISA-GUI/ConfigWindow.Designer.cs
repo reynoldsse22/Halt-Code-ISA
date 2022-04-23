@@ -116,17 +116,15 @@
             this.label30 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.numEntriesLabel = new System.Windows.Forms.Label();
+            this.lineSizeValue = new System.Windows.Forms.ComboBox();
+            this.cacheHitDelayValue = new System.Windows.Forms.NumericUpDown();
+            this.hitCycleLabel = new System.Windows.Forms.Label();
+            this.cacheMissDelayValue = new System.Windows.Forms.NumericUpDown();
+            this.missCycleLabel = new System.Windows.Forms.Label();
+            this.cachingCheckBox = new System.Windows.Forms.CheckBox();
+            this.lineSizeLabel = new System.Windows.Forms.Label();
             this.associativityLabel = new System.Windows.Forms.Label();
             this.associativityComboBox = new System.Windows.Forms.ComboBox();
-            this.lineSizeLabel = new System.Windows.Forms.Label();
-            this.cachingCheckBox = new System.Windows.Forms.CheckBox();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.missCycleLabel = new System.Windows.Forms.Label();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
-            this.hitCycleLabel = new System.Windows.Forms.Label();
-            this.numOfEntriesValue = new System.Windows.Forms.ComboBox();
-            this.lineSizeValue = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicIntAddConfigValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicIntSubConfigValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicIntMultConfigValue)).BeginInit();
@@ -168,8 +166,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.intAddFUValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicReorderBufferSizeValue)).BeginInit();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cacheHitDelayValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cacheMissDelayValue)).BeginInit();
             this.SuspendLayout();
             // 
             // dynamicIntAddConfigValue
@@ -502,7 +500,7 @@
             // applyChangesButton
             // 
             this.applyChangesButton.BackColor = System.Drawing.SystemColors.Window;
-            this.applyChangesButton.Location = new System.Drawing.Point(579, 493);
+            this.applyChangesButton.Location = new System.Drawing.Point(579, 477);
             this.applyChangesButton.Name = "applyChangesButton";
             this.applyChangesButton.Size = new System.Drawing.Size(152, 46);
             this.applyChangesButton.TabIndex = 20;
@@ -533,12 +531,13 @@
             this.predictionBox.Name = "predictionBox";
             this.predictionBox.Size = new System.Drawing.Size(40, 24);
             this.predictionBox.TabIndex = 27;
+            this.predictionBox.Text = "Off";
             this.predictionBox.SelectedIndexChanged += new System.EventHandler(this.predictionBox_SelectedIndexChanged);
             // 
             // resetButton
             // 
             this.resetButton.BackColor = System.Drawing.SystemColors.Window;
-            this.resetButton.Location = new System.Drawing.Point(383, 493);
+            this.resetButton.Location = new System.Drawing.Point(383, 477);
             this.resetButton.Name = "resetButton";
             this.resetButton.Size = new System.Drawing.Size(152, 46);
             this.resetButton.TabIndex = 29;
@@ -550,7 +549,7 @@
             // 
             this.staticCheckbox.AutoSize = true;
             this.staticCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.staticCheckbox.Location = new System.Drawing.Point(394, 454);
+            this.staticCheckbox.Location = new System.Drawing.Point(394, 438);
             this.staticCheckbox.Name = "staticCheckbox";
             this.staticCheckbox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.staticCheckbox.Size = new System.Drawing.Size(128, 24);
@@ -563,7 +562,7 @@
             // 
             this.dynamicCheckbox.AutoSize = true;
             this.dynamicCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dynamicCheckbox.Location = new System.Drawing.Point(580, 454);
+            this.dynamicCheckbox.Location = new System.Drawing.Point(580, 438);
             this.dynamicCheckbox.Name = "dynamicCheckbox";
             this.dynamicCheckbox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.dynamicCheckbox.Size = new System.Drawing.Size(148, 24);
@@ -1681,69 +1680,100 @@
             // panel1
             // 
             this.panel1.Controls.Add(this.lineSizeValue);
-            this.panel1.Controls.Add(this.numOfEntriesValue);
-            this.panel1.Controls.Add(this.numericUpDown2);
+            this.panel1.Controls.Add(this.cacheHitDelayValue);
             this.panel1.Controls.Add(this.hitCycleLabel);
-            this.panel1.Controls.Add(this.numericUpDown1);
+            this.panel1.Controls.Add(this.cacheMissDelayValue);
             this.panel1.Controls.Add(this.missCycleLabel);
             this.panel1.Controls.Add(this.cachingCheckBox);
             this.panel1.Controls.Add(this.lineSizeLabel);
-            this.panel1.Controls.Add(this.numEntriesLabel);
             this.panel1.Controls.Add(this.associativityLabel);
             this.panel1.Controls.Add(this.associativityComboBox);
             this.panel1.Location = new System.Drawing.Point(12, 390);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(276, 176);
+            this.panel1.Size = new System.Drawing.Size(266, 149);
             this.panel1.TabIndex = 38;
             // 
-            // numEntriesLabel
+            // lineSizeValue
             // 
-            this.numEntriesLabel.AutoSize = true;
-            this.numEntriesLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.numEntriesLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numEntriesLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.numEntriesLabel.Location = new System.Drawing.Point(50, 39);
-            this.numEntriesLabel.Name = "numEntriesLabel";
-            this.numEntriesLabel.Size = new System.Drawing.Size(113, 16);
-            this.numEntriesLabel.TabIndex = 35;
-            this.numEntriesLabel.Text = "Number of Entries";
+            this.lineSizeValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lineSizeValue.FormattingEnabled = true;
+            this.lineSizeValue.Items.AddRange(new object[] {
+            "8"});
+            this.lineSizeValue.Location = new System.Drawing.Point(5, 32);
+            this.lineSizeValue.Name = "lineSizeValue";
+            this.lineSizeValue.Size = new System.Drawing.Size(40, 24);
+            this.lineSizeValue.TabIndex = 44;
+            this.lineSizeValue.Text = "8";
             // 
-            // associativityLabel
+            // cacheHitDelayValue
             // 
-            this.associativityLabel.AutoSize = true;
-            this.associativityLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.associativityLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.associativityLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.associativityLabel.Location = new System.Drawing.Point(139, 149);
-            this.associativityLabel.Name = "associativityLabel";
-            this.associativityLabel.Size = new System.Drawing.Size(131, 16);
-            this.associativityLabel.TabIndex = 22;
-            this.associativityLabel.Text = "Type of Associativity";
+            this.cacheHitDelayValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cacheHitDelayValue.Location = new System.Drawing.Point(5, 87);
+            this.cacheHitDelayValue.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.cacheHitDelayValue.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.cacheHitDelayValue.Name = "cacheHitDelayValue";
+            this.cacheHitDelayValue.Size = new System.Drawing.Size(40, 22);
+            this.cacheHitDelayValue.TabIndex = 43;
+            this.cacheHitDelayValue.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
-            // associativityComboBox
+            // hitCycleLabel
             // 
-            this.associativityComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.associativityComboBox.FormattingEnabled = true;
-            this.associativityComboBox.Items.AddRange(new object[] {
-            "Direct Mapped",
-            "2-Way Set",
-            "4-Way Set"});
-            this.associativityComboBox.Location = new System.Drawing.Point(5, 144);
-            this.associativityComboBox.Name = "associativityComboBox";
-            this.associativityComboBox.Size = new System.Drawing.Size(130, 24);
-            this.associativityComboBox.TabIndex = 27;
+            this.hitCycleLabel.AutoSize = true;
+            this.hitCycleLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.hitCycleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hitCycleLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.hitCycleLabel.Location = new System.Drawing.Point(49, 90);
+            this.hitCycleLabel.Name = "hitCycleLabel";
+            this.hitCycleLabel.Size = new System.Drawing.Size(99, 16);
+            this.hitCycleLabel.TabIndex = 42;
+            this.hitCycleLabel.Text = "Hit Cycle Delay";
             // 
-            // lineSizeLabel
+            // cacheMissDelayValue
             // 
-            this.lineSizeLabel.AutoSize = true;
-            this.lineSizeLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.lineSizeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lineSizeLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lineSizeLabel.Location = new System.Drawing.Point(50, 66);
-            this.lineSizeLabel.Name = "lineSizeLabel";
-            this.lineSizeLabel.Size = new System.Drawing.Size(61, 16);
-            this.lineSizeLabel.TabIndex = 37;
-            this.lineSizeLabel.Text = "Line Size";
+            this.cacheMissDelayValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cacheMissDelayValue.Location = new System.Drawing.Point(5, 60);
+            this.cacheMissDelayValue.Maximum = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
+            this.cacheMissDelayValue.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.cacheMissDelayValue.Name = "cacheMissDelayValue";
+            this.cacheMissDelayValue.Size = new System.Drawing.Size(40, 22);
+            this.cacheMissDelayValue.TabIndex = 41;
+            this.cacheMissDelayValue.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            // 
+            // missCycleLabel
+            // 
+            this.missCycleLabel.AutoSize = true;
+            this.missCycleLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.missCycleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.missCycleLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.missCycleLabel.Location = new System.Drawing.Point(48, 63);
+            this.missCycleLabel.Name = "missCycleLabel";
+            this.missCycleLabel.Size = new System.Drawing.Size(111, 16);
+            this.missCycleLabel.TabIndex = 40;
+            this.missCycleLabel.Text = "Miss Cycle Delay";
             // 
             // cachingCheckBox
             // 
@@ -1756,108 +1786,49 @@
             this.cachingCheckBox.TabIndex = 39;
             this.cachingCheckBox.Text = "Caching";
             this.cachingCheckBox.UseVisualStyleBackColor = true;
+            this.cachingCheckBox.CheckedChanged += new System.EventHandler(this.cachingCheckBox_CheckedChanged);
             // 
-            // numericUpDown1
+            // lineSizeLabel
             // 
-            this.numericUpDown1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown1.Location = new System.Drawing.Point(6, 89);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
-            500,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Minimum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(40, 22);
-            this.numericUpDown1.TabIndex = 41;
-            this.numericUpDown1.Value = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
+            this.lineSizeLabel.AutoSize = true;
+            this.lineSizeLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.lineSizeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lineSizeLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lineSizeLabel.Location = new System.Drawing.Point(49, 37);
+            this.lineSizeLabel.Name = "lineSizeLabel";
+            this.lineSizeLabel.Size = new System.Drawing.Size(156, 16);
+            this.lineSizeLabel.TabIndex = 37;
+            this.lineSizeLabel.Text = "Line Size (in 24-bit words)";
             // 
-            // missCycleLabel
+            // associativityLabel
             // 
-            this.missCycleLabel.AutoSize = true;
-            this.missCycleLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.missCycleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.missCycleLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.missCycleLabel.Location = new System.Drawing.Point(49, 92);
-            this.missCycleLabel.Name = "missCycleLabel";
-            this.missCycleLabel.Size = new System.Drawing.Size(111, 16);
-            this.missCycleLabel.TabIndex = 40;
-            this.missCycleLabel.Text = "Miss Cycle Delay";
+            this.associativityLabel.AutoSize = true;
+            this.associativityLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.associativityLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.associativityLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.associativityLabel.Location = new System.Drawing.Point(120, 120);
+            this.associativityLabel.Name = "associativityLabel";
+            this.associativityLabel.Size = new System.Drawing.Size(131, 16);
+            this.associativityLabel.TabIndex = 22;
+            this.associativityLabel.Text = "Type of Associativity";
             // 
-            // numericUpDown2
+            // associativityComboBox
             // 
-            this.numericUpDown2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown2.Location = new System.Drawing.Point(6, 116);
-            this.numericUpDown2.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown2.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(40, 22);
-            this.numericUpDown2.TabIndex = 43;
-            this.numericUpDown2.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // hitCycleLabel
-            // 
-            this.hitCycleLabel.AutoSize = true;
-            this.hitCycleLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.hitCycleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.hitCycleLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.hitCycleLabel.Location = new System.Drawing.Point(50, 119);
-            this.hitCycleLabel.Name = "hitCycleLabel";
-            this.hitCycleLabel.Size = new System.Drawing.Size(99, 16);
-            this.hitCycleLabel.TabIndex = 42;
-            this.hitCycleLabel.Text = "Hit Cycle Delay";
-            // 
-            // numOfEntriesValue
-            // 
-            this.numOfEntriesValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numOfEntriesValue.FormattingEnabled = true;
-            this.numOfEntriesValue.Items.AddRange(new object[] {
-            "8",
-            "16"});
-            this.numOfEntriesValue.Location = new System.Drawing.Point(6, 34);
-            this.numOfEntriesValue.Name = "numOfEntriesValue";
-            this.numOfEntriesValue.Size = new System.Drawing.Size(40, 24);
-            this.numOfEntriesValue.TabIndex = 37;
-            // 
-            // lineSizeValue
-            // 
-            this.lineSizeValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lineSizeValue.FormattingEnabled = true;
-            this.lineSizeValue.Items.AddRange(new object[] {
-            "2",
-            "4",
-            "8",
-            "16"});
-            this.lineSizeValue.Location = new System.Drawing.Point(6, 61);
-            this.lineSizeValue.Name = "lineSizeValue";
-            this.lineSizeValue.Size = new System.Drawing.Size(40, 24);
-            this.lineSizeValue.TabIndex = 44;
+            this.associativityComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.associativityComboBox.FormattingEnabled = true;
+            this.associativityComboBox.Items.AddRange(new object[] {
+            "Direct Mapped"});
+            this.associativityComboBox.Location = new System.Drawing.Point(4, 115);
+            this.associativityComboBox.Name = "associativityComboBox";
+            this.associativityComboBox.Size = new System.Drawing.Size(112, 24);
+            this.associativityComboBox.TabIndex = 27;
+            this.associativityComboBox.Text = "Direct Mapped";
             // 
             // Configurations
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(816, 572);
+            this.ClientSize = new System.Drawing.Size(816, 541);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.dynamicFUPanel);
             this.Controls.Add(this.branchPredictionPanel);
@@ -1916,8 +1887,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dynamicReorderBufferSizeValue)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cacheHitDelayValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cacheMissDelayValue)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2013,15 +1984,13 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lineSizeLabel;
-        private System.Windows.Forms.Label numEntriesLabel;
         private System.Windows.Forms.Label associativityLabel;
         private System.Windows.Forms.ComboBox associativityComboBox;
         private System.Windows.Forms.CheckBox cachingCheckBox;
         private System.Windows.Forms.ComboBox lineSizeValue;
-        private System.Windows.Forms.ComboBox numOfEntriesValue;
-        private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.NumericUpDown cacheHitDelayValue;
         private System.Windows.Forms.Label hitCycleLabel;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown cacheMissDelayValue;
         private System.Windows.Forms.Label missCycleLabel;
     }
 }

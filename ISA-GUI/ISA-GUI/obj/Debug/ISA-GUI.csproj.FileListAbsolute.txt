@@ -80,3 +80,15 @@ C:\Users\reynoldsse\OneDrive - East Tennessee State University\Documents\GitHub\
 C:\Users\reynoldsse\OneDrive - East Tennessee State University\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Debug\ISA-GUI.pdb
 C:\Users\cocar\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Debug\ISA-GUI.csproj.AssemblyReference.cache
 C:\Users\cocar\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Debug\ISA-GUI.csproj.SuggestedBindingRedirects.cache
+C:\Users\samre\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\bin\Debug\ISA-GUI.exe.config
+C:\Users\samre\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\bin\Debug\ISA-GUI.exe
+C:\Users\samre\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\bin\Debug\ISA-GUI.pdb
+C:\Users\samre\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Debug\ISA-GUI.csproj.AssemblyReference.cache
+C:\Users\samre\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Debug\ISA-GUI.csproj.SuggestedBindingRedirects.cache
+C:\Users\samre\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Debug\ISA_GUI.BUC10.resources
+C:\Users\samre\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Debug\ISA_GUI.Configurations.resources
+C:\Users\samre\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Debug\ISA_GUI.Properties.Resources.resources
+C:\Users\samre\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Debug\ISA-GUI.csproj.GenerateResource.cache
+C:\Users\samre\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Debug\ISA-GUI.csproj.CoreCompileInputs.cache
+C:\Users\samre\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Debug\ISA-GUI.exe
+C:\Users\samre\Documents\GitHub\Halt-Code-ISA\ISA-GUI\ISA-GUI\obj\Debug\ISA-GUI.pdb
