@@ -244,7 +244,11 @@ namespace ISA_GUI
                                 inst.stage3CycleStart = cycleCount;
                             memoryFUs[inst.functionalUnitIndex].instruction.doneExecuting = false;
                             AM.accessMemoryDynamic(ref dataMemory, ref registers, inst, ref config, out result, ref memoryFUs[inst.functionalUnitIndex], ref DC);
-                            inst.result = result;
+                            if (!result.Equals(""))
+                            {
+                                inst.result = result;
+
+                            }
                             inst.ASPR = memoryFUs[inst.functionalUnitIndex].instruction.ASPR;
                            // inst.stage2End = cycleCount - 1;        //End of the second stage
                            // inst.stage3Start = cycleCount;          //Start of the third
@@ -529,6 +533,7 @@ namespace ISA_GUI
             for (int i = 0; i < (config.memoryFUs + 5); i++)
             {
                 loadStoreBuffer[i] = new ReservationStation("load_storeBuffer" + i);
+                loadStoreBuffer[i].Busy = false;
                 loadStoreBuffer[i].instruction = null;
                 loadStoreBuffer[i].arrayIndex = i;
             }
@@ -1722,7 +1727,6 @@ namespace ISA_GUI
                     {
                         if (!loadstoreBuff.Busy)
                         {
-                            loadstoreBuff.Busy = true;
                             if (instruction.isFloat)
                             {
                                 if (registers.floatQi[0] != "0")
@@ -1737,6 +1741,7 @@ namespace ISA_GUI
                                 registers.intQi[0] = "memoryFU";
                                 registers.intQiIndex[0] = instruction.ID;
                             }
+                            loadstoreBuff.Busy = true;
                             instruction.functionalUnitID = 10;
                             instruction.reservationStationIndex = loadstoreBuff.arrayIndex;
                             loadstoreBuff.instruction = instruction;

@@ -132,7 +132,11 @@ namespace ISA_GUI
             {
 				load_buffer.instruction.cycleControl = config.load;
 			}
-			load_buffer.instruction.cycleControl--;
+			else
+            {
+				load_buffer.instruction.cycleControl--;
+				goto endCycleCheck;
+			}
 			switch (instruction.opcode)
 			{
 				case 9:
@@ -152,9 +156,8 @@ namespace ISA_GUI
 						case Instruction.cacheHit.HIT:
 							if (!load_buffer.instruction.executionInProgress && !load_buffer.instruction.doneExecuting)
 							{
-								load_buffer.instruction.cycleControl = config.cacheHit;
+								load_buffer.instruction.cycleControl = config.cacheHit - 1;
 							}
-							load_buffer.instruction.cycleControl--;
 							//If there's a hit then get the memory from the offset plus the two bytes after
 							if (!instruction.isFloat)
 							{
@@ -186,9 +189,8 @@ namespace ISA_GUI
 								//Update cache with the memory from main memory (Add index and tag to the cache)
 								startingAddress = instruction.address & ~DC.offsetMask;
 								DC.updateCache(startingAddress, ref memory);
-								load_buffer.instruction.cycleControl = config.cacheHit;
+								load_buffer.instruction.cycleControl = config.cacheMiss - 1;
 							}
-							load_buffer.instruction.cycleControl--;
 							
 							//Fix cycleControl to stall for the miss
 							//If there's a miss then fall to main memory
@@ -216,11 +218,6 @@ namespace ISA_GUI
 							}
 							break;
 					}
-					if (load_buffer.instruction.cycleControl == 0)
-					{
-						load_buffer.instruction.executionInProgress = false;
-						load_buffer.instruction.doneExecuting = true;
-					}
 					break;
 
 				case 10:
@@ -230,11 +227,6 @@ namespace ISA_GUI
 						result = load_buffer.instruction.iOperand1.ToString();
 						if (load_buffer.instruction.iOperand1 == 0 && ASPR == 1)
 							load_buffer.instruction.ASPR = 1;
-						if (load_buffer.instruction.cycleControl == 0)
-						{
-							load_buffer.instruction.executionInProgress = false;
-							load_buffer.instruction.doneExecuting = true;
-						}
 					}
 					else
 					{
@@ -242,11 +234,6 @@ namespace ISA_GUI
 						result = load_buffer.instruction.fOperand1.ToString();
 						if (load_buffer.instruction.fOperand1 == 0f && ASPR == 1)
 							load_buffer.instruction.ASPR = 1;
-						if (load_buffer.instruction.cycleControl == 0)
-						{
-							load_buffer.instruction.executionInProgress = false;
-							load_buffer.instruction.doneExecuting = true;
-						}
 					}
 					break;
 				case 11:
@@ -256,11 +243,6 @@ namespace ISA_GUI
 						result = load_buffer.instruction.address.ToString();
 						if (int.Parse(result) == 0 && ASPR == 1)
 							load_buffer.instruction.ASPR = 1;
-						if (load_buffer.instruction.cycleControl == 0)
-						{
-							load_buffer.instruction.executionInProgress = false;
-							load_buffer.instruction.doneExecuting = true;
-						}
 					}
 					else
 					{
@@ -274,11 +256,6 @@ namespace ISA_GUI
 						result = System.BitConverter.ToSingle(floatArray, 0).ToString();
 						if (float.Parse(result) == 0f && ASPR == 1)
 							load_buffer.instruction.ASPR = 1;
-						if (load_buffer.instruction.cycleControl == 0)
-						{
-							load_buffer.instruction.executionInProgress = false;
-							load_buffer.instruction.doneExecuting = true;
-						}
 					}
 					break;
 				case 12:
@@ -288,11 +265,6 @@ namespace ISA_GUI
 						result = (load_buffer.instruction.iOperand1 + (load_buffer.instruction.address << 12)).ToString();
 						if (int.Parse(result) == 0 && ASPR == 1)
 							load_buffer.instruction.ASPR = 1;
-						if (load_buffer.instruction.cycleControl == 0)
-						{
-							load_buffer.instruction.executionInProgress = false;
-							load_buffer.instruction.doneExecuting = true;
-						}
 					}
 					else
 					{
@@ -309,13 +281,15 @@ namespace ISA_GUI
 						result = System.BitConverter.ToSingle(floatArray, 0).ToString();
 						if (float.Parse(result) == 0f && ASPR == 1)
 							load_buffer.instruction.ASPR = 1;
-						if (load_buffer.instruction.cycleControl == 0)
-						{
-							load_buffer.instruction.executionInProgress = false;
-							load_buffer.instruction.doneExecuting = true;
-						}
 					}
 					break;
+			}
+
+			endCycleCheck:
+			if (load_buffer.instruction.cycleControl == 0)
+			{
+				load_buffer.instruction.executionInProgress = false;
+				load_buffer.instruction.doneExecuting = true;
 			}
 		}
 
