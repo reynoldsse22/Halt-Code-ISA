@@ -101,7 +101,7 @@ namespace ISA_GUI
                 cacheHitDelayValue.Enabled = true;
                 cacheMissDelayValue.Enabled = true;
                 lineSizeLabel.Enabled = true;
-                missCycleLabel.Enabled = true;
+                missCycleLabel.Enabled = true;  
                 hitCycleLabel.Enabled = true;
                 associativityComboBox.Enabled = true;
                 associativityLabel.Enabled = true;

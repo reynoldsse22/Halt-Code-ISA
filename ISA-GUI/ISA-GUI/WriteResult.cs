@@ -272,7 +272,8 @@ namespace ISA_GUI
 		 *   @param  Instruction instruction
 		 *   @param ConfigCycle config
 		 */
-		public void commit(ref RegisterFile registers, ref Instruction instruction, ref DataMemory memory, ref bool halted, ref InstructionMemory IM, ref bool branchTaken, ref DataCache DC, ref StringBuilder cacheString)
+		public void commit(ref RegisterFile registers, ref Instruction instruction, ref DataMemory memory, ref bool halted, ref InstructionMemory IM, ref bool branchTaken, 
+			ref DataCache DC, ref StringBuilder cacheString, ref MemoryUnit[] memFU, ref ConfigCycle config)
 		{
 			halted = false;
 			switch (instruction.opcode)
@@ -350,51 +351,98 @@ namespace ISA_GUI
 					break;
 
 				case 10:
+					if(instruction.ID != memFU[instruction.functionalUnitIndex].instruction.ID)
+                    {
+						throw new Exception();
+                    }
+
 					//Insert caching logic here
 					registers.ASPR = instruction.ASPR;
-					//Call findCacheVariables to get the offset, index and tag to reference the cache
-					DC.findCacheVariables(instruction);
 
-					//Find whether the index and tag exist within the cache
 
-					DC.findInstuctionInCache(ref instruction);
+					if (config.cachingSet)
+                    {
+						if (!memFU[instruction.functionalUnitIndex].instruction.executionInProgress && !memFU[instruction.functionalUnitIndex].instruction.doneExecuting)
+						{
+							//Insert caching logic here
+							//Call findCacheVariables to get the offset, index and tag to reference the cache
+							DC.findCacheVariables(instruction);
 
-                    switch (instruction.hitOrMiss)
-                    { 
-						case Instruction.cacheHit.HIT:
-							//If there's a hit then store the new memory into the cache
-							//Update main memory as well
-							if (!instruction.isFloat)
-							{
-								DC.updateWriteCache(int.Parse(instruction.result));
-								writeIntMemory(instruction, ref memory);
-							
-							}
-							else
-							{
-								float fResult = float.Parse(instruction.result);                    //CAN BE IMPLEMENTED BETTER BECAUSE THERE'S CODE DUPLICATION
-								byte[] currentFloat = System.BitConverter.GetBytes(fResult);                          //Float to be stored
-								DC.updateWriteCache(currentFloat);
-								writeFloatMemory(instruction, ref memory);
-								
-							}
+							//Find whether the index and tag exist within the cache
+							DC.findInstuctionInCache(ref instruction);
+						}
+						else
+						{
+							memFU[instruction.functionalUnitIndex].instruction.cycleControl--;
+							goto endCycleCheck;
+						}
 
-							break;
-						case Instruction.cacheHit.CONFLICTED:
-						case Instruction.cacheHit.MISS:
-							//If there's a miss then do NOT update the cache
-							//Update main memory by falling through
-							if (!instruction.isFloat)
-							{
-								writeIntMemory(instruction, ref memory);
-								
-							}
-							else
-							{
-								writeFloatMemory(instruction, ref memory);
-								
-							}
-							break;
+						switch (instruction.hitOrMiss)
+						{
+							case Instruction.cacheHit.HIT:
+								if (!memFU[instruction.functionalUnitIndex].instruction.executionInProgress && !memFU[instruction.functionalUnitIndex].instruction.doneExecuting)
+								{
+									memFU[instruction.functionalUnitIndex].instruction.cycleControl = config.cacheHit - 1;
+								}
+								//If there's a hit then store the new memory into the cache
+								//Update main memory as well
+								if (!instruction.isFloat)
+								{
+									memFU[instruction.functionalUnitIndex].instruction.executionInProgress = true;
+									DC.updateWriteCache(int.Parse(instruction.result));
+									writeIntMemory(instruction, ref memory);
+								}
+								else
+								{
+									memFU[instruction.functionalUnitIndex].instruction.executionInProgress = true;
+									float fResult = float.Parse(instruction.result);                    //CAN BE IMPLEMENTED BETTER BECAUSE THERE'S CODE DUPLICATION
+									byte[] currentFloat = System.BitConverter.GetBytes(fResult);                          //Float to be stored
+									DC.updateWriteCache(currentFloat);
+									writeFloatMemory(instruction, ref memory);
+
+								}
+
+								break;
+							case Instruction.cacheHit.CONFLICTED:
+							case Instruction.cacheHit.MISS:
+								if (!memFU[instruction.functionalUnitIndex].instruction.executionInProgress && !memFU[instruction.functionalUnitIndex].instruction.doneExecuting)
+								{
+									memFU[instruction.functionalUnitIndex].instruction.cycleControl = config.cacheMiss - 1;
+								}
+								//If there's a miss then do NOT update the cache
+								//Update main memory by falling through
+								if (!instruction.isFloat)
+								{
+									memFU[instruction.functionalUnitIndex].instruction.executionInProgress = true;
+									writeIntMemory(instruction, ref memory);
+								}
+								else
+								{
+									memFU[instruction.functionalUnitIndex].instruction.executionInProgress = true;
+									writeFloatMemory(instruction, ref memory);
+								}
+								break;
+						}
+
+					endCycleCheck:
+						if (memFU[instruction.functionalUnitIndex].instruction.cycleControl == 0)
+						{
+							memFU[instruction.functionalUnitIndex].instruction.executionInProgress = false;
+							memFU[instruction.functionalUnitIndex].instruction.doneExecuting = true;
+						}
+					}
+                    else
+                    {
+						if (!instruction.isFloat)
+						{
+							writeIntMemory(instruction, ref memory);
+						}
+						else
+						{
+							writeFloatMemory(instruction, ref memory);
+						}
+						memFU[instruction.functionalUnitIndex].instruction.executionInProgress = false;
+						memFU[instruction.functionalUnitIndex].instruction.doneExecuting = true;
 					}
 					break;
 				case 11:
@@ -448,6 +496,7 @@ namespace ISA_GUI
 						registers.floatRegisters[instruction.destinationReg] = float.Parse(instruction.result);
 					break;
 			}
+
 		}
 
         /// <summary>Writes the int result to memory.</summary>

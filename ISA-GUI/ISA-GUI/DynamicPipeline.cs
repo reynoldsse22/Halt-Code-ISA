@@ -159,7 +159,9 @@ namespace ISA_GUI
                             if (commitedThisCycle)
                                 continue;
 
-                            int instructionIndex = reorderBuffer.checkCommit(inst, ref WR, ref dataMemory, ref lastBranchDecision, ref IM, ref registers, ref haltFound, ref commonDataBus, ref DC, ref cacheString);
+                            int instructionIndex = reorderBuffer.checkCommit(inst, ref WR, ref dataMemory, ref lastBranchDecision, ref IM, 
+                                    ref registers, ref haltFound, ref commonDataBus, ref DC, ref cacheString, ref memoryFUs, ref config);
+
                             if (instructionIndex < 0)
                             {
                                 justCommitedInstruction = null;
@@ -176,6 +178,10 @@ namespace ISA_GUI
                             if(inst.opcode == 10)
                             {
                                 printer.buildCacheDataString(ref cacheString, inst, ref DC);
+                                if (memoryFUs[inst.functionalUnitIndex].instruction.doneExecuting)
+                                {
+                                    clearFU(inst);
+                                }
                             }
                             printer.buildDecodedString(ref decodedString, inst);      //Build the decoded instruction string
                             printer.buildDynamicPipelineString(ref pipelineString, inst);
@@ -247,7 +253,6 @@ namespace ISA_GUI
                             if (!result.Equals(""))
                             {
                                 inst.result = result;
-
                             }
                             inst.ASPR = memoryFUs[inst.functionalUnitIndex].instruction.ASPR;
                            // inst.stage2End = cycleCount - 1;        //End of the second stage
@@ -261,6 +266,12 @@ namespace ISA_GUI
                                 if (inst.opcode == 9)
                                 {
                                     printer.buildCacheDataString(ref cacheString, inst, ref DC);
+                                }
+                                if(inst.opcode == 10)
+                                {
+                                    memoryFUs[inst.functionalUnitIndex].instruction.doneExecuting = false;
+                                    memoryFUs[inst.functionalUnitIndex].instruction.executionInProgress = false;
+                                    inst.stage = 5;
                                 }
                             }
                             break;
