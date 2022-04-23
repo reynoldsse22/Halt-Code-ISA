@@ -148,7 +148,7 @@ namespace ISA_GUI
 						DC.findCacheVariables(instruction);
 
 						//Find whether the index and tag exist within the cache
-						DC.findInstuctionInCache(ref instruction);
+						DC.findInstructionInCache(ref instruction);
 					}
 
 					if (config.cachingSet)
