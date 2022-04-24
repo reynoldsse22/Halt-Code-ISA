@@ -52,7 +52,7 @@ namespace ISA_GUI
         StringBuilder cacheString = new StringBuilder(
             "Cache Statistics\n"+
             "----------------\n"+
-            "Address       Offset      index     tag    Data \n"+
+            "Address       Offset      Index     Tag    Data \n"+
             "-------       ------      -----     ---    ----");
 
        
@@ -389,7 +389,7 @@ namespace ISA_GUI
                 cacheString.Append(
             "Cache Statistics\n" +
             "----------------\n" +
-            "Address       Offset      index     tag    Data \n" +
+            "Address       Offset      Index     Tag    Data \n" +
             "-------       ------      -----     ---    ----");
             }
 
@@ -1169,25 +1169,6 @@ namespace ISA_GUI
             index13Mem.Text = index13;
             index14Mem.Text = index14;
             index15Mem.Text = index15;
-        }
-
-        /**
-		 * Method Name: setMemoryBox <br>
-		 * Method Purpose: Sets the GUI with the contents of Main Memory
-		 * 
-		 * <br>
-		 * Date created: 2/19/22 <br>
-		 * <hr>
-		 */
-        private void delayProgram(int delayTime)
-        {
-            var waitTime = new TimeSpan(0, 0, 0, 0, delayTime * 100);
-            var waitUntil = DateTime.Now + waitTime;
-            int i = 0;
-            while (DateTime.Now <= waitUntil)
-            {
-                i += 1;
-            }
         }
 
         /**

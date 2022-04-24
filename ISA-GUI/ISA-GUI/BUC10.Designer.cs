@@ -213,24 +213,24 @@
             this.label22 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
+            this.index15Mem = new System.Windows.Forms.RichTextBox();
+            this.index14Mem = new System.Windows.Forms.RichTextBox();
+            this.index13Mem = new System.Windows.Forms.RichTextBox();
+            this.index12Mem = new System.Windows.Forms.RichTextBox();
+            this.index11Mem = new System.Windows.Forms.RichTextBox();
+            this.index10Mem = new System.Windows.Forms.RichTextBox();
+            this.index9Mem = new System.Windows.Forms.RichTextBox();
+            this.index8Mem = new System.Windows.Forms.RichTextBox();
+            this.index7Mem = new System.Windows.Forms.RichTextBox();
+            this.index6Mem = new System.Windows.Forms.RichTextBox();
+            this.index5Mem = new System.Windows.Forms.RichTextBox();
+            this.index4Mem = new System.Windows.Forms.RichTextBox();
+            this.index3Mem = new System.Windows.Forms.RichTextBox();
+            this.index2Mem = new System.Windows.Forms.RichTextBox();
+            this.index1Mem = new System.Windows.Forms.RichTextBox();
+            this.index0Mem = new System.Windows.Forms.RichTextBox();
             this.uploadButton = new System.Windows.Forms.Button();
             this.SaveFile = new System.Windows.Forms.Button();
-            this.index0Mem = new System.Windows.Forms.RichTextBox();
-            this.index1Mem = new System.Windows.Forms.RichTextBox();
-            this.index2Mem = new System.Windows.Forms.RichTextBox();
-            this.index3Mem = new System.Windows.Forms.RichTextBox();
-            this.index4Mem = new System.Windows.Forms.RichTextBox();
-            this.index5Mem = new System.Windows.Forms.RichTextBox();
-            this.index6Mem = new System.Windows.Forms.RichTextBox();
-            this.index7Mem = new System.Windows.Forms.RichTextBox();
-            this.index8Mem = new System.Windows.Forms.RichTextBox();
-            this.index9Mem = new System.Windows.Forms.RichTextBox();
-            this.index10Mem = new System.Windows.Forms.RichTextBox();
-            this.index11Mem = new System.Windows.Forms.RichTextBox();
-            this.index12Mem = new System.Windows.Forms.RichTextBox();
-            this.index13Mem = new System.Windows.Forms.RichTextBox();
-            this.index14Mem = new System.Windows.Forms.RichTextBox();
-            this.index15Mem = new System.Windows.Forms.RichTextBox();
             this.objectCode.SuspendLayout();
             this.assemblerPage.SuspendLayout();
             this.objectCodeBox.SuspendLayout();
@@ -2129,7 +2129,7 @@
             this.cachePage.Padding = new System.Windows.Forms.Padding(3);
             this.cachePage.Size = new System.Drawing.Size(619, 760);
             this.cachePage.TabIndex = 2;
-            this.cachePage.Text = "Cache";
+            this.cachePage.Text = "L1 Cache";
             this.cachePage.UseVisualStyleBackColor = true;
             // 
             // label55
@@ -2279,6 +2279,198 @@
             this.label18.TabIndex = 0;
             this.label18.Text = "Index 0";
             // 
+            // index15Mem
+            // 
+            this.index15Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index15Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index15Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index15Mem.Location = new System.Drawing.Point(54, 426);
+            this.index15Mem.Name = "index15Mem";
+            this.index15Mem.ReadOnly = true;
+            this.index15Mem.Size = new System.Drawing.Size(460, 25);
+            this.index15Mem.TabIndex = 56;
+            this.index15Mem.Text = "";
+            // 
+            // index14Mem
+            // 
+            this.index14Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index14Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index14Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index14Mem.Location = new System.Drawing.Point(54, 398);
+            this.index14Mem.Name = "index14Mem";
+            this.index14Mem.ReadOnly = true;
+            this.index14Mem.Size = new System.Drawing.Size(460, 25);
+            this.index14Mem.TabIndex = 56;
+            this.index14Mem.Text = "";
+            // 
+            // index13Mem
+            // 
+            this.index13Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index13Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index13Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index13Mem.Location = new System.Drawing.Point(54, 370);
+            this.index13Mem.Name = "index13Mem";
+            this.index13Mem.ReadOnly = true;
+            this.index13Mem.Size = new System.Drawing.Size(460, 25);
+            this.index13Mem.TabIndex = 56;
+            this.index13Mem.Text = "";
+            // 
+            // index12Mem
+            // 
+            this.index12Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index12Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index12Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index12Mem.Location = new System.Drawing.Point(54, 342);
+            this.index12Mem.Name = "index12Mem";
+            this.index12Mem.ReadOnly = true;
+            this.index12Mem.Size = new System.Drawing.Size(460, 25);
+            this.index12Mem.TabIndex = 56;
+            this.index12Mem.Text = "";
+            // 
+            // index11Mem
+            // 
+            this.index11Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index11Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index11Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index11Mem.Location = new System.Drawing.Point(54, 315);
+            this.index11Mem.Name = "index11Mem";
+            this.index11Mem.ReadOnly = true;
+            this.index11Mem.Size = new System.Drawing.Size(460, 25);
+            this.index11Mem.TabIndex = 56;
+            this.index11Mem.Text = "";
+            // 
+            // index10Mem
+            // 
+            this.index10Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index10Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index10Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index10Mem.Location = new System.Drawing.Point(54, 286);
+            this.index10Mem.Name = "index10Mem";
+            this.index10Mem.ReadOnly = true;
+            this.index10Mem.Size = new System.Drawing.Size(460, 25);
+            this.index10Mem.TabIndex = 56;
+            this.index10Mem.Text = "";
+            // 
+            // index9Mem
+            // 
+            this.index9Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index9Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index9Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index9Mem.Location = new System.Drawing.Point(54, 258);
+            this.index9Mem.Name = "index9Mem";
+            this.index9Mem.ReadOnly = true;
+            this.index9Mem.Size = new System.Drawing.Size(460, 25);
+            this.index9Mem.TabIndex = 56;
+            this.index9Mem.Text = "";
+            // 
+            // index8Mem
+            // 
+            this.index8Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index8Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index8Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index8Mem.Location = new System.Drawing.Point(54, 230);
+            this.index8Mem.Name = "index8Mem";
+            this.index8Mem.ReadOnly = true;
+            this.index8Mem.Size = new System.Drawing.Size(460, 25);
+            this.index8Mem.TabIndex = 56;
+            this.index8Mem.Text = "";
+            // 
+            // index7Mem
+            // 
+            this.index7Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index7Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index7Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index7Mem.Location = new System.Drawing.Point(54, 202);
+            this.index7Mem.Name = "index7Mem";
+            this.index7Mem.ReadOnly = true;
+            this.index7Mem.Size = new System.Drawing.Size(460, 25);
+            this.index7Mem.TabIndex = 56;
+            this.index7Mem.Text = "";
+            // 
+            // index6Mem
+            // 
+            this.index6Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index6Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index6Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index6Mem.Location = new System.Drawing.Point(54, 174);
+            this.index6Mem.Name = "index6Mem";
+            this.index6Mem.ReadOnly = true;
+            this.index6Mem.Size = new System.Drawing.Size(460, 25);
+            this.index6Mem.TabIndex = 56;
+            this.index6Mem.Text = "";
+            // 
+            // index5Mem
+            // 
+            this.index5Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index5Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index5Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index5Mem.Location = new System.Drawing.Point(54, 146);
+            this.index5Mem.Name = "index5Mem";
+            this.index5Mem.ReadOnly = true;
+            this.index5Mem.Size = new System.Drawing.Size(460, 25);
+            this.index5Mem.TabIndex = 56;
+            this.index5Mem.Text = "";
+            // 
+            // index4Mem
+            // 
+            this.index4Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index4Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index4Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index4Mem.Location = new System.Drawing.Point(54, 118);
+            this.index4Mem.Name = "index4Mem";
+            this.index4Mem.ReadOnly = true;
+            this.index4Mem.Size = new System.Drawing.Size(460, 25);
+            this.index4Mem.TabIndex = 56;
+            this.index4Mem.Text = "";
+            // 
+            // index3Mem
+            // 
+            this.index3Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index3Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index3Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index3Mem.Location = new System.Drawing.Point(54, 90);
+            this.index3Mem.Name = "index3Mem";
+            this.index3Mem.ReadOnly = true;
+            this.index3Mem.Size = new System.Drawing.Size(460, 25);
+            this.index3Mem.TabIndex = 56;
+            this.index3Mem.Text = "";
+            // 
+            // index2Mem
+            // 
+            this.index2Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index2Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index2Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index2Mem.Location = new System.Drawing.Point(54, 62);
+            this.index2Mem.Name = "index2Mem";
+            this.index2Mem.ReadOnly = true;
+            this.index2Mem.Size = new System.Drawing.Size(460, 25);
+            this.index2Mem.TabIndex = 56;
+            this.index2Mem.Text = "";
+            // 
+            // index1Mem
+            // 
+            this.index1Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index1Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index1Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index1Mem.Location = new System.Drawing.Point(54, 34);
+            this.index1Mem.Name = "index1Mem";
+            this.index1Mem.ReadOnly = true;
+            this.index1Mem.Size = new System.Drawing.Size(460, 25);
+            this.index1Mem.TabIndex = 56;
+            this.index1Mem.Text = "";
+            // 
+            // index0Mem
+            // 
+            this.index0Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index0Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index0Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index0Mem.Location = new System.Drawing.Point(54, 6);
+            this.index0Mem.Name = "index0Mem";
+            this.index0Mem.ReadOnly = true;
+            this.index0Mem.Size = new System.Drawing.Size(460, 25);
+            this.index0Mem.TabIndex = 56;
+            this.index0Mem.Text = "";
+            // 
             // uploadButton
             // 
             this.uploadButton.Location = new System.Drawing.Point(9, 16);
@@ -2298,198 +2490,6 @@
             this.SaveFile.Text = "Save";
             this.SaveFile.UseVisualStyleBackColor = true;
             this.SaveFile.Click += new System.EventHandler(this.SaveFile_Click);
-            // 
-            // index0Mem
-            // 
-            this.index0Mem.BackColor = System.Drawing.SystemColors.Menu;
-            this.index0Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.index0Mem.Font = new System.Drawing.Font("Courier New", 9F);
-            this.index0Mem.Location = new System.Drawing.Point(54, 6);
-            this.index0Mem.Name = "index0Mem";
-            this.index0Mem.ReadOnly = true;
-            this.index0Mem.Size = new System.Drawing.Size(460, 25);
-            this.index0Mem.TabIndex = 56;
-            this.index0Mem.Text = "";
-            // 
-            // index1Mem
-            // 
-            this.index1Mem.BackColor = System.Drawing.SystemColors.Menu;
-            this.index1Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.index1Mem.Font = new System.Drawing.Font("Courier New", 9F);
-            this.index1Mem.Location = new System.Drawing.Point(54, 34);
-            this.index1Mem.Name = "index1Mem";
-            this.index1Mem.ReadOnly = true;
-            this.index1Mem.Size = new System.Drawing.Size(460, 25);
-            this.index1Mem.TabIndex = 56;
-            this.index1Mem.Text = "";
-            // 
-            // index2Mem
-            // 
-            this.index2Mem.BackColor = System.Drawing.SystemColors.Menu;
-            this.index2Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.index2Mem.Font = new System.Drawing.Font("Courier New", 9F);
-            this.index2Mem.Location = new System.Drawing.Point(54, 62);
-            this.index2Mem.Name = "index2Mem";
-            this.index2Mem.ReadOnly = true;
-            this.index2Mem.Size = new System.Drawing.Size(460, 25);
-            this.index2Mem.TabIndex = 56;
-            this.index2Mem.Text = "";
-            // 
-            // index3Mem
-            // 
-            this.index3Mem.BackColor = System.Drawing.SystemColors.Menu;
-            this.index3Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.index3Mem.Font = new System.Drawing.Font("Courier New", 9F);
-            this.index3Mem.Location = new System.Drawing.Point(54, 90);
-            this.index3Mem.Name = "index3Mem";
-            this.index3Mem.ReadOnly = true;
-            this.index3Mem.Size = new System.Drawing.Size(460, 25);
-            this.index3Mem.TabIndex = 56;
-            this.index3Mem.Text = "";
-            // 
-            // index4Mem
-            // 
-            this.index4Mem.BackColor = System.Drawing.SystemColors.Menu;
-            this.index4Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.index4Mem.Font = new System.Drawing.Font("Courier New", 9F);
-            this.index4Mem.Location = new System.Drawing.Point(54, 118);
-            this.index4Mem.Name = "index4Mem";
-            this.index4Mem.ReadOnly = true;
-            this.index4Mem.Size = new System.Drawing.Size(460, 25);
-            this.index4Mem.TabIndex = 56;
-            this.index4Mem.Text = "";
-            // 
-            // index5Mem
-            // 
-            this.index5Mem.BackColor = System.Drawing.SystemColors.Menu;
-            this.index5Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.index5Mem.Font = new System.Drawing.Font("Courier New", 9F);
-            this.index5Mem.Location = new System.Drawing.Point(54, 146);
-            this.index5Mem.Name = "index5Mem";
-            this.index5Mem.ReadOnly = true;
-            this.index5Mem.Size = new System.Drawing.Size(460, 25);
-            this.index5Mem.TabIndex = 56;
-            this.index5Mem.Text = "";
-            // 
-            // index6Mem
-            // 
-            this.index6Mem.BackColor = System.Drawing.SystemColors.Menu;
-            this.index6Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.index6Mem.Font = new System.Drawing.Font("Courier New", 9F);
-            this.index6Mem.Location = new System.Drawing.Point(54, 174);
-            this.index6Mem.Name = "index6Mem";
-            this.index6Mem.ReadOnly = true;
-            this.index6Mem.Size = new System.Drawing.Size(460, 25);
-            this.index6Mem.TabIndex = 56;
-            this.index6Mem.Text = "";
-            // 
-            // index7Mem
-            // 
-            this.index7Mem.BackColor = System.Drawing.SystemColors.Menu;
-            this.index7Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.index7Mem.Font = new System.Drawing.Font("Courier New", 9F);
-            this.index7Mem.Location = new System.Drawing.Point(54, 202);
-            this.index7Mem.Name = "index7Mem";
-            this.index7Mem.ReadOnly = true;
-            this.index7Mem.Size = new System.Drawing.Size(460, 25);
-            this.index7Mem.TabIndex = 56;
-            this.index7Mem.Text = "";
-            // 
-            // index8Mem
-            // 
-            this.index8Mem.BackColor = System.Drawing.SystemColors.Menu;
-            this.index8Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.index8Mem.Font = new System.Drawing.Font("Courier New", 9F);
-            this.index8Mem.Location = new System.Drawing.Point(54, 230);
-            this.index8Mem.Name = "index8Mem";
-            this.index8Mem.ReadOnly = true;
-            this.index8Mem.Size = new System.Drawing.Size(460, 25);
-            this.index8Mem.TabIndex = 56;
-            this.index8Mem.Text = "";
-            // 
-            // index9Mem
-            // 
-            this.index9Mem.BackColor = System.Drawing.SystemColors.Menu;
-            this.index9Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.index9Mem.Font = new System.Drawing.Font("Courier New", 9F);
-            this.index9Mem.Location = new System.Drawing.Point(54, 258);
-            this.index9Mem.Name = "index9Mem";
-            this.index9Mem.ReadOnly = true;
-            this.index9Mem.Size = new System.Drawing.Size(460, 25);
-            this.index9Mem.TabIndex = 56;
-            this.index9Mem.Text = "";
-            // 
-            // index10Mem
-            // 
-            this.index10Mem.BackColor = System.Drawing.SystemColors.Menu;
-            this.index10Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.index10Mem.Font = new System.Drawing.Font("Courier New", 9F);
-            this.index10Mem.Location = new System.Drawing.Point(54, 286);
-            this.index10Mem.Name = "index10Mem";
-            this.index10Mem.ReadOnly = true;
-            this.index10Mem.Size = new System.Drawing.Size(460, 25);
-            this.index10Mem.TabIndex = 56;
-            this.index10Mem.Text = "";
-            // 
-            // index11Mem
-            // 
-            this.index11Mem.BackColor = System.Drawing.SystemColors.Menu;
-            this.index11Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.index11Mem.Font = new System.Drawing.Font("Courier New", 9F);
-            this.index11Mem.Location = new System.Drawing.Point(54, 315);
-            this.index11Mem.Name = "index11Mem";
-            this.index11Mem.ReadOnly = true;
-            this.index11Mem.Size = new System.Drawing.Size(460, 25);
-            this.index11Mem.TabIndex = 56;
-            this.index11Mem.Text = "";
-            // 
-            // index12Mem
-            // 
-            this.index12Mem.BackColor = System.Drawing.SystemColors.Menu;
-            this.index12Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.index12Mem.Font = new System.Drawing.Font("Courier New", 9F);
-            this.index12Mem.Location = new System.Drawing.Point(54, 342);
-            this.index12Mem.Name = "index12Mem";
-            this.index12Mem.ReadOnly = true;
-            this.index12Mem.Size = new System.Drawing.Size(460, 25);
-            this.index12Mem.TabIndex = 56;
-            this.index12Mem.Text = "";
-            // 
-            // index13Mem
-            // 
-            this.index13Mem.BackColor = System.Drawing.SystemColors.Menu;
-            this.index13Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.index13Mem.Font = new System.Drawing.Font("Courier New", 9F);
-            this.index13Mem.Location = new System.Drawing.Point(54, 370);
-            this.index13Mem.Name = "index13Mem";
-            this.index13Mem.ReadOnly = true;
-            this.index13Mem.Size = new System.Drawing.Size(460, 25);
-            this.index13Mem.TabIndex = 56;
-            this.index13Mem.Text = "";
-            // 
-            // index14Mem
-            // 
-            this.index14Mem.BackColor = System.Drawing.SystemColors.Menu;
-            this.index14Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.index14Mem.Font = new System.Drawing.Font("Courier New", 9F);
-            this.index14Mem.Location = new System.Drawing.Point(54, 398);
-            this.index14Mem.Name = "index14Mem";
-            this.index14Mem.ReadOnly = true;
-            this.index14Mem.Size = new System.Drawing.Size(460, 25);
-            this.index14Mem.TabIndex = 56;
-            this.index14Mem.Text = "";
-            // 
-            // index15Mem
-            // 
-            this.index15Mem.BackColor = System.Drawing.SystemColors.Menu;
-            this.index15Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.index15Mem.Font = new System.Drawing.Font("Courier New", 9F);
-            this.index15Mem.Location = new System.Drawing.Point(54, 426);
-            this.index15Mem.Name = "index15Mem";
-            this.index15Mem.ReadOnly = true;
-            this.index15Mem.Size = new System.Drawing.Size(460, 25);
-            this.index15Mem.TabIndex = 56;
-            this.index15Mem.Text = "";
             // 
             // BUC10
             // 
