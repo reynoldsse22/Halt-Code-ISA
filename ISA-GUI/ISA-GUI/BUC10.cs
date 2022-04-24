@@ -793,6 +793,7 @@ namespace ISA_GUI
 
             updateRegisterQiText();
             updateFunctionUnits();
+            updateCacheIndexes();
         }
 
 
@@ -1038,15 +1039,16 @@ namespace ISA_GUI
             load_storeBufferText.Text = load_storeBuffer;
 
         }
-        
+
         /**
-		 * Method Name: setMemoryBox <br>
-		 * Method Purpose: Sets the GUI with the contents of Main Memory
-		 * 
-		 * <br>
-		 * Date created: 2/19/22 <br>
-		 * <hr>
-		 */
+         * Method Name: updateCacheIndexes 
+         * Method Purpose: Sets and updates the cache section of the GUI
+         * 
+         * Date created: 4/24/22
+         * 
+         */
+
+
         private void setMemoryBox()
         {
             int offset = 0;
@@ -1086,7 +1088,87 @@ namespace ISA_GUI
             MemoryText.Text = line.ToString();
         }
 
+        private void updateCacheIndexes()
+        {
+            if (!cpu.DP.programRanAtLeastOnce)
+                return;
 
+            string index0 = "",
+                   index1 = "",
+                   index2 = "",
+                   index3 = "",
+                   index4 = "",
+                   index5 = "",
+                   index6 = "",
+                   index7 = "",
+                   index8 = "",
+                   index9 = "",
+                   index10 = "",
+                   index11 = "",
+                   index12 = "",
+                   index13 = "",
+                   index14 = "",
+                   index15 = "";
+
+            if (cpu.DP.DC.l1Cache[0] != null)
+                index0 = BitConverter.ToString(cpu.DP.DC.l1Cache[0]).Replace("-"," ");
+            if (cpu.DP.DC.l1Cache[1] != null)
+                index1 = BitConverter.ToString(cpu.DP.DC.l1Cache[1]).Replace("-", " ");
+            if (cpu.DP.DC.l1Cache[2] != null)
+                index2 = BitConverter.ToString(cpu.DP.DC.l1Cache[2]).Replace("-", " ");
+            if (cpu.DP.DC.l1Cache[3] != null)
+                index3 = BitConverter.ToString(cpu.DP.DC.l1Cache[3]).Replace("-", " ");
+            if (cpu.DP.DC.l1Cache[4] != null)
+                index4 = BitConverter.ToString(cpu.DP.DC.l1Cache[4]).Replace("-", " ");
+            if (cpu.DP.DC.l1Cache[5] != null)
+                index5 = BitConverter.ToString(cpu.DP.DC.l1Cache[5]).Replace("-", " ");
+            if (cpu.DP.DC.l1Cache[6] != null)
+                index6 = BitConverter.ToString(cpu.DP.DC.l1Cache[6]).Replace("-", " ");
+            if (cpu.DP.DC.l1Cache[7] != null)
+                index7 = BitConverter.ToString(cpu.DP.DC.l1Cache[7]).Replace("-", " ");
+            if (cpu.DP.DC.l1Cache[8] != null)
+                index8 = BitConverter.ToString(cpu.DP.DC.l1Cache[8]).Replace("-", " ");
+            if (cpu.DP.DC.l1Cache[9] != null)
+                index9 = BitConverter.ToString(cpu.DP.DC.l1Cache[9]).Replace("-", " ");
+            if (cpu.DP.DC.l1Cache[10] != null)
+                index10 = BitConverter.ToString(cpu.DP.DC.l1Cache[10]).Replace("-", " ");
+            if (cpu.DP.DC.l1Cache[11] != null)
+                index11 = BitConverter.ToString(cpu.DP.DC.l1Cache[11]).Replace("-", " ");
+            if (cpu.DP.DC.l1Cache[12] != null)
+                index12 = BitConverter.ToString(cpu.DP.DC.l1Cache[12]).Replace("-", " ");
+            if (cpu.DP.DC.l1Cache[13] != null)
+                index13 = BitConverter.ToString(cpu.DP.DC.l1Cache[13]).Replace("-", " ");
+            if (cpu.DP.DC.l1Cache[14] != null)
+                index14 = BitConverter.ToString(cpu.DP.DC.l1Cache[14]).Replace("-", " ");
+            if (cpu.DP.DC.l1Cache[15] != null)
+                index15 = BitConverter.ToString(cpu.DP.DC.l1Cache[15]).Replace("-", " ");
+
+            index0Mem.Text = index0;
+            index1Mem.Text = index1;
+            index2Mem.Text = index2;
+            index3Mem.Text = index3;
+            index4Mem.Text = index4;
+            index5Mem.Text = index5;
+            index6Mem.Text = index6;
+            index7Mem.Text = index7;
+            index8Mem.Text = index8;
+            index9Mem.Text = index9;
+            index10Mem.Text = index10;
+            index11Mem.Text = index11;
+            index12Mem.Text = index12;
+            index13Mem.Text = index13;
+            index14Mem.Text = index14;
+            index15Mem.Text = index15;
+        }
+
+        /**
+		 * Method Name: setMemoryBox <br>
+		 * Method Purpose: Sets the GUI with the contents of Main Memory
+		 * 
+		 * <br>
+		 * Date created: 2/19/22 <br>
+		 * <hr>
+		 */
         private void delayProgram(int delayTime)
         {
             var waitTime = new TimeSpan(0, 0, 0, 0, delayTime * 100);
