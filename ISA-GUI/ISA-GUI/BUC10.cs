@@ -49,7 +49,11 @@ namespace ISA_GUI
             "Counter  Flag Spec Mnemonic      Type FReg SReg DReg  Immediate\n" +
             "-------- ---- ---- -------- --------- ---- ---- ---- ----------");
 
-        StringBuilder cacheString = new StringBuilder("");
+        StringBuilder cacheString = new StringBuilder(
+            "Cache Statistics\n"+
+            "----------------\n"+
+            "Address       Offset      index     tag    Data \n"+
+            "-------       ------      -----     ---    ----");
 
        
         /**
@@ -381,6 +385,12 @@ namespace ISA_GUI
             if(config.cachingSet)
             {
                 cpu.DP.DC.clearCache();
+                cacheString.Clear();
+                cacheString.Append(
+            "Cache Statistics\n" +
+            "----------------\n" +
+            "Address       Offset      index     tag    Data \n" +
+            "-------       ------      -----     ---    ----");
             }
 
             StatsTextBox.Text = "";

@@ -330,7 +330,7 @@ namespace ISA_GUI
             string hitOrMiss = instruction.hitOrMiss.ToString();
 
             string output = (string.Format("\n{0, 7} {1,13} {2, 7} {3, 8} {4, 8}",
-                           addressS.PadRight(7), offsets.PadRight(13), indexs.PadLeft(7), tagS.PadLeft(8), hitOrMiss.PadLeft(7)));
+                           addressS.PadRight(7), offsets.PadRight(5), indexs.PadLeft(7), tagS.PadLeft(8), hitOrMiss.PadLeft(7)));
 
             cacheString.Append(output);
 
