@@ -135,7 +135,7 @@ namespace ISA_GUI
 
         /// <summary>Finds whether the instruction hit or missed in the cache.</summary>
         /// <param name="instruction">The instruction.</param>
-        public void findInstuctionInCache(ref Instruction instruction)
+        public void findInstructionInCache(ref Instruction instruction)
         {
 			if (l1Cache[index] == null)
 			{
@@ -155,6 +155,7 @@ namespace ISA_GUI
         {
 			for (int x = 0; x < l1Cache.Length; x++)
 			{
+				l1Cache[x] = null;
 				tagIndexCache[x] = 0;
 			}
 		}

@@ -136,6 +136,8 @@
             this.Output = new System.Windows.Forms.TabControl();
             this.pipelineStatsTab = new System.Windows.Forms.TabPage();
             this.pipelineStatsTextBox = new System.Windows.Forms.RichTextBox();
+            this.cacheStatsTab = new System.Windows.Forms.TabPage();
+            this.cacheStatsTextBox = new System.Windows.Forms.RichTextBox();
             this.r2Dec = new System.Windows.Forms.RichTextBox();
             this.r1Dec = new System.Windows.Forms.RichTextBox();
             this.r0Dec = new System.Windows.Forms.RichTextBox();
@@ -195,11 +197,40 @@
             this.intAddText = new System.Windows.Forms.RichTextBox();
             this.registersQIText = new System.Windows.Forms.RichTextBox();
             this.cachePage = new System.Windows.Forms.TabPage();
-            this.cacheTextBox = new System.Windows.Forms.RichTextBox();
+            this.label55 = new System.Windows.Forms.Label();
+            this.label36 = new System.Windows.Forms.Label();
+            this.label35 = new System.Windows.Forms.Label();
+            this.label34 = new System.Windows.Forms.Label();
+            this.label33 = new System.Windows.Forms.Label();
+            this.label31 = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
             this.uploadButton = new System.Windows.Forms.Button();
             this.SaveFile = new System.Windows.Forms.Button();
-            this.cacheStatsTab = new System.Windows.Forms.TabPage();
-            this.cacheStatsTextBox = new System.Windows.Forms.RichTextBox();
+            this.index0Mem = new System.Windows.Forms.RichTextBox();
+            this.index1Mem = new System.Windows.Forms.RichTextBox();
+            this.index2Mem = new System.Windows.Forms.RichTextBox();
+            this.index3Mem = new System.Windows.Forms.RichTextBox();
+            this.index4Mem = new System.Windows.Forms.RichTextBox();
+            this.index5Mem = new System.Windows.Forms.RichTextBox();
+            this.index6Mem = new System.Windows.Forms.RichTextBox();
+            this.index7Mem = new System.Windows.Forms.RichTextBox();
+            this.index8Mem = new System.Windows.Forms.RichTextBox();
+            this.index9Mem = new System.Windows.Forms.RichTextBox();
+            this.index10Mem = new System.Windows.Forms.RichTextBox();
+            this.index11Mem = new System.Windows.Forms.RichTextBox();
+            this.index12Mem = new System.Windows.Forms.RichTextBox();
+            this.index13Mem = new System.Windows.Forms.RichTextBox();
+            this.index14Mem = new System.Windows.Forms.RichTextBox();
+            this.index15Mem = new System.Windows.Forms.RichTextBox();
             this.objectCode.SuspendLayout();
             this.assemblerPage.SuspendLayout();
             this.objectCodeBox.SuspendLayout();
@@ -212,6 +243,7 @@
             this.pipelineTab.SuspendLayout();
             this.Output.SuspendLayout();
             this.pipelineStatsTab.SuspendLayout();
+            this.cacheStatsTab.SuspendLayout();
             this.staticPanel.SuspendLayout();
             this.dynamicPanel.SuspendLayout();
             this.reorder_cdbTabControl.SuspendLayout();
@@ -221,7 +253,6 @@
             this.mainMemoryTab.SuspendLayout();
             this.dynamicPipelineMemoryTab.SuspendLayout();
             this.cachePage.SuspendLayout();
-            this.cacheStatsTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // CPU
@@ -1371,6 +1402,28 @@
             this.pipelineStatsTextBox.TabIndex = 3;
             this.pipelineStatsTextBox.Text = "";
             // 
+            // cacheStatsTab
+            // 
+            this.cacheStatsTab.Controls.Add(this.cacheStatsTextBox);
+            this.cacheStatsTab.Location = new System.Drawing.Point(4, 22);
+            this.cacheStatsTab.Name = "cacheStatsTab";
+            this.cacheStatsTab.Size = new System.Drawing.Size(549, 324);
+            this.cacheStatsTab.TabIndex = 5;
+            this.cacheStatsTab.Text = "Cache Statistics";
+            this.cacheStatsTab.UseVisualStyleBackColor = true;
+            // 
+            // cacheStatsTextBox
+            // 
+            this.cacheStatsTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.cacheStatsTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.cacheStatsTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cacheStatsTextBox.Location = new System.Drawing.Point(3, 3);
+            this.cacheStatsTextBox.Name = "cacheStatsTextBox";
+            this.cacheStatsTextBox.ReadOnly = true;
+            this.cacheStatsTextBox.Size = new System.Drawing.Size(543, 318);
+            this.cacheStatsTextBox.TabIndex = 4;
+            this.cacheStatsTextBox.Text = "";
+            // 
             // r2Dec
             // 
             this.r2Dec.BackColor = System.Drawing.SystemColors.Menu;
@@ -2039,7 +2092,38 @@
             // 
             // cachePage
             // 
-            this.cachePage.Controls.Add(this.cacheTextBox);
+            this.cachePage.Controls.Add(this.label55);
+            this.cachePage.Controls.Add(this.label36);
+            this.cachePage.Controls.Add(this.label35);
+            this.cachePage.Controls.Add(this.label34);
+            this.cachePage.Controls.Add(this.label33);
+            this.cachePage.Controls.Add(this.label31);
+            this.cachePage.Controls.Add(this.label30);
+            this.cachePage.Controls.Add(this.label29);
+            this.cachePage.Controls.Add(this.label28);
+            this.cachePage.Controls.Add(this.label27);
+            this.cachePage.Controls.Add(this.label25);
+            this.cachePage.Controls.Add(this.label24);
+            this.cachePage.Controls.Add(this.label23);
+            this.cachePage.Controls.Add(this.label22);
+            this.cachePage.Controls.Add(this.label20);
+            this.cachePage.Controls.Add(this.label18);
+            this.cachePage.Controls.Add(this.index15Mem);
+            this.cachePage.Controls.Add(this.index14Mem);
+            this.cachePage.Controls.Add(this.index13Mem);
+            this.cachePage.Controls.Add(this.index12Mem);
+            this.cachePage.Controls.Add(this.index11Mem);
+            this.cachePage.Controls.Add(this.index10Mem);
+            this.cachePage.Controls.Add(this.index9Mem);
+            this.cachePage.Controls.Add(this.index8Mem);
+            this.cachePage.Controls.Add(this.index7Mem);
+            this.cachePage.Controls.Add(this.index6Mem);
+            this.cachePage.Controls.Add(this.index5Mem);
+            this.cachePage.Controls.Add(this.index4Mem);
+            this.cachePage.Controls.Add(this.index3Mem);
+            this.cachePage.Controls.Add(this.index2Mem);
+            this.cachePage.Controls.Add(this.index1Mem);
+            this.cachePage.Controls.Add(this.index0Mem);
             this.cachePage.Location = new System.Drawing.Point(4, 23);
             this.cachePage.Name = "cachePage";
             this.cachePage.Padding = new System.Windows.Forms.Padding(3);
@@ -2048,16 +2132,152 @@
             this.cachePage.Text = "Cache";
             this.cachePage.UseVisualStyleBackColor = true;
             // 
-            // cacheTextBox
+            // label55
             // 
-            this.cacheTextBox.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cacheTextBox.Location = new System.Drawing.Point(4, 4);
-            this.cacheTextBox.Name = "cacheTextBox";
-            this.cacheTextBox.ReadOnly = true;
-            this.cacheTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.cacheTextBox.Size = new System.Drawing.Size(607, 746);
-            this.cacheTextBox.TabIndex = 3;
-            this.cacheTextBox.Text = "";
+            this.label55.AutoSize = true;
+            this.label55.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.label55.Location = new System.Drawing.Point(6, 429);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(48, 13);
+            this.label55.TabIndex = 3;
+            this.label55.Text = "Index 15";
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(6, 401);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(48, 13);
+            this.label36.TabIndex = 3;
+            this.label36.Text = "Index 14";
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(6, 373);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(48, 13);
+            this.label35.TabIndex = 3;
+            this.label35.Text = "Index 13";
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(6, 345);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(48, 13);
+            this.label34.TabIndex = 3;
+            this.label34.Text = "Index 12";
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(6, 318);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(48, 13);
+            this.label33.TabIndex = 3;
+            this.label33.Text = "Index 11";
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(6, 289);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(48, 13);
+            this.label31.TabIndex = 3;
+            this.label31.Text = "Index 10";
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(6, 261);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(42, 13);
+            this.label30.TabIndex = 3;
+            this.label30.Text = "Index 9";
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(6, 233);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(42, 13);
+            this.label29.TabIndex = 3;
+            this.label29.Text = "Index 8";
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(6, 205);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(42, 13);
+            this.label28.TabIndex = 3;
+            this.label28.Text = "Index 7";
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(6, 177);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(42, 13);
+            this.label27.TabIndex = 3;
+            this.label27.Text = "Index 6";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(6, 149);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(42, 13);
+            this.label25.TabIndex = 3;
+            this.label25.Text = "Index 5";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(6, 121);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(42, 13);
+            this.label24.TabIndex = 3;
+            this.label24.Text = "Index 4";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(6, 93);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(42, 13);
+            this.label23.TabIndex = 3;
+            this.label23.Text = "Index 3";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(6, 65);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(42, 13);
+            this.label22.TabIndex = 2;
+            this.label22.Text = "Index 2";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.label20.Location = new System.Drawing.Point(6, 37);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(42, 13);
+            this.label20.TabIndex = 1;
+            this.label20.Text = "Index 1";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.label18.Location = new System.Drawing.Point(6, 9);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(42, 13);
+            this.label18.TabIndex = 0;
+            this.label18.Text = "Index 0";
             // 
             // uploadButton
             // 
@@ -2079,27 +2299,197 @@
             this.SaveFile.UseVisualStyleBackColor = true;
             this.SaveFile.Click += new System.EventHandler(this.SaveFile_Click);
             // 
-            // cacheStatsTab
+            // index0Mem
             // 
-            this.cacheStatsTab.Controls.Add(this.cacheStatsTextBox);
-            this.cacheStatsTab.Location = new System.Drawing.Point(4, 22);
-            this.cacheStatsTab.Name = "cacheStatsTab";
-            this.cacheStatsTab.Size = new System.Drawing.Size(549, 324);
-            this.cacheStatsTab.TabIndex = 5;
-            this.cacheStatsTab.Text = "Cache Statistics";
-            this.cacheStatsTab.UseVisualStyleBackColor = true;
+            this.index0Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index0Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index0Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index0Mem.Location = new System.Drawing.Point(54, 6);
+            this.index0Mem.Name = "index0Mem";
+            this.index0Mem.ReadOnly = true;
+            this.index0Mem.Size = new System.Drawing.Size(460, 25);
+            this.index0Mem.TabIndex = 56;
+            this.index0Mem.Text = "";
             // 
-            // cacheStatsTextBox
+            // index1Mem
             // 
-            this.cacheStatsTextBox.BackColor = System.Drawing.SystemColors.Window;
-            this.cacheStatsTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.cacheStatsTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cacheStatsTextBox.Location = new System.Drawing.Point(3, 3);
-            this.cacheStatsTextBox.Name = "cacheStatsTextBox";
-            this.cacheStatsTextBox.ReadOnly = true;
-            this.cacheStatsTextBox.Size = new System.Drawing.Size(543, 318);
-            this.cacheStatsTextBox.TabIndex = 4;
-            this.cacheStatsTextBox.Text = "";
+            this.index1Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index1Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index1Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index1Mem.Location = new System.Drawing.Point(54, 34);
+            this.index1Mem.Name = "index1Mem";
+            this.index1Mem.ReadOnly = true;
+            this.index1Mem.Size = new System.Drawing.Size(460, 25);
+            this.index1Mem.TabIndex = 56;
+            this.index1Mem.Text = "";
+            // 
+            // index2Mem
+            // 
+            this.index2Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index2Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index2Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index2Mem.Location = new System.Drawing.Point(54, 62);
+            this.index2Mem.Name = "index2Mem";
+            this.index2Mem.ReadOnly = true;
+            this.index2Mem.Size = new System.Drawing.Size(460, 25);
+            this.index2Mem.TabIndex = 56;
+            this.index2Mem.Text = "";
+            // 
+            // index3Mem
+            // 
+            this.index3Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index3Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index3Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index3Mem.Location = new System.Drawing.Point(54, 90);
+            this.index3Mem.Name = "index3Mem";
+            this.index3Mem.ReadOnly = true;
+            this.index3Mem.Size = new System.Drawing.Size(460, 25);
+            this.index3Mem.TabIndex = 56;
+            this.index3Mem.Text = "";
+            // 
+            // index4Mem
+            // 
+            this.index4Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index4Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index4Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index4Mem.Location = new System.Drawing.Point(54, 118);
+            this.index4Mem.Name = "index4Mem";
+            this.index4Mem.ReadOnly = true;
+            this.index4Mem.Size = new System.Drawing.Size(460, 25);
+            this.index4Mem.TabIndex = 56;
+            this.index4Mem.Text = "";
+            // 
+            // index5Mem
+            // 
+            this.index5Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index5Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index5Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index5Mem.Location = new System.Drawing.Point(54, 146);
+            this.index5Mem.Name = "index5Mem";
+            this.index5Mem.ReadOnly = true;
+            this.index5Mem.Size = new System.Drawing.Size(460, 25);
+            this.index5Mem.TabIndex = 56;
+            this.index5Mem.Text = "";
+            // 
+            // index6Mem
+            // 
+            this.index6Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index6Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index6Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index6Mem.Location = new System.Drawing.Point(54, 174);
+            this.index6Mem.Name = "index6Mem";
+            this.index6Mem.ReadOnly = true;
+            this.index6Mem.Size = new System.Drawing.Size(460, 25);
+            this.index6Mem.TabIndex = 56;
+            this.index6Mem.Text = "";
+            // 
+            // index7Mem
+            // 
+            this.index7Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index7Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index7Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index7Mem.Location = new System.Drawing.Point(54, 202);
+            this.index7Mem.Name = "index7Mem";
+            this.index7Mem.ReadOnly = true;
+            this.index7Mem.Size = new System.Drawing.Size(460, 25);
+            this.index7Mem.TabIndex = 56;
+            this.index7Mem.Text = "";
+            // 
+            // index8Mem
+            // 
+            this.index8Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index8Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index8Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index8Mem.Location = new System.Drawing.Point(54, 230);
+            this.index8Mem.Name = "index8Mem";
+            this.index8Mem.ReadOnly = true;
+            this.index8Mem.Size = new System.Drawing.Size(460, 25);
+            this.index8Mem.TabIndex = 56;
+            this.index8Mem.Text = "";
+            // 
+            // index9Mem
+            // 
+            this.index9Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index9Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index9Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index9Mem.Location = new System.Drawing.Point(54, 258);
+            this.index9Mem.Name = "index9Mem";
+            this.index9Mem.ReadOnly = true;
+            this.index9Mem.Size = new System.Drawing.Size(460, 25);
+            this.index9Mem.TabIndex = 56;
+            this.index9Mem.Text = "";
+            // 
+            // index10Mem
+            // 
+            this.index10Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index10Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index10Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index10Mem.Location = new System.Drawing.Point(54, 286);
+            this.index10Mem.Name = "index10Mem";
+            this.index10Mem.ReadOnly = true;
+            this.index10Mem.Size = new System.Drawing.Size(460, 25);
+            this.index10Mem.TabIndex = 56;
+            this.index10Mem.Text = "";
+            // 
+            // index11Mem
+            // 
+            this.index11Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index11Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index11Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index11Mem.Location = new System.Drawing.Point(54, 315);
+            this.index11Mem.Name = "index11Mem";
+            this.index11Mem.ReadOnly = true;
+            this.index11Mem.Size = new System.Drawing.Size(460, 25);
+            this.index11Mem.TabIndex = 56;
+            this.index11Mem.Text = "";
+            // 
+            // index12Mem
+            // 
+            this.index12Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index12Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index12Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index12Mem.Location = new System.Drawing.Point(54, 342);
+            this.index12Mem.Name = "index12Mem";
+            this.index12Mem.ReadOnly = true;
+            this.index12Mem.Size = new System.Drawing.Size(460, 25);
+            this.index12Mem.TabIndex = 56;
+            this.index12Mem.Text = "";
+            // 
+            // index13Mem
+            // 
+            this.index13Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index13Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index13Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index13Mem.Location = new System.Drawing.Point(54, 370);
+            this.index13Mem.Name = "index13Mem";
+            this.index13Mem.ReadOnly = true;
+            this.index13Mem.Size = new System.Drawing.Size(460, 25);
+            this.index13Mem.TabIndex = 56;
+            this.index13Mem.Text = "";
+            // 
+            // index14Mem
+            // 
+            this.index14Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index14Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index14Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index14Mem.Location = new System.Drawing.Point(54, 398);
+            this.index14Mem.Name = "index14Mem";
+            this.index14Mem.ReadOnly = true;
+            this.index14Mem.Size = new System.Drawing.Size(460, 25);
+            this.index14Mem.TabIndex = 56;
+            this.index14Mem.Text = "";
+            // 
+            // index15Mem
+            // 
+            this.index15Mem.BackColor = System.Drawing.SystemColors.Menu;
+            this.index15Mem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.index15Mem.Font = new System.Drawing.Font("Courier New", 9F);
+            this.index15Mem.Location = new System.Drawing.Point(54, 426);
+            this.index15Mem.Name = "index15Mem";
+            this.index15Mem.ReadOnly = true;
+            this.index15Mem.Size = new System.Drawing.Size(460, 25);
+            this.index15Mem.TabIndex = 56;
+            this.index15Mem.Text = "";
             // 
             // BUC10
             // 
@@ -2216,6 +2606,7 @@
             this.pipelineTab.ResumeLayout(false);
             this.Output.ResumeLayout(false);
             this.pipelineStatsTab.ResumeLayout(false);
+            this.cacheStatsTab.ResumeLayout(false);
             this.staticPanel.ResumeLayout(false);
             this.staticPanel.PerformLayout();
             this.dynamicPanel.ResumeLayout(false);
@@ -2227,7 +2618,7 @@
             this.mainMemoryTab.ResumeLayout(false);
             this.dynamicPipelineMemoryTab.ResumeLayout(false);
             this.cachePage.ResumeLayout(false);
-            this.cacheStatsTab.ResumeLayout(false);
+            this.cachePage.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2401,9 +2792,40 @@
         private System.Windows.Forms.Button uploadButton;
         private System.Windows.Forms.Button SaveFile;
         private System.Windows.Forms.TabPage cachePage;
-        private System.Windows.Forms.RichTextBox cacheTextBox;
         private System.Windows.Forms.TabPage cacheStatsTab;
         private System.Windows.Forms.RichTextBox cacheStatsTextBox;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label55;
+        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.Label label35;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.RichTextBox index8Mem;
+        private System.Windows.Forms.RichTextBox index7Mem;
+        private System.Windows.Forms.RichTextBox index6Mem;
+        private System.Windows.Forms.RichTextBox index5Mem;
+        private System.Windows.Forms.RichTextBox index4Mem;
+        private System.Windows.Forms.RichTextBox index3Mem;
+        private System.Windows.Forms.RichTextBox index2Mem;
+        private System.Windows.Forms.RichTextBox index1Mem;
+        private System.Windows.Forms.RichTextBox index0Mem;
+        private System.Windows.Forms.RichTextBox index15Mem;
+        private System.Windows.Forms.RichTextBox index14Mem;
+        private System.Windows.Forms.RichTextBox index13Mem;
+        private System.Windows.Forms.RichTextBox index12Mem;
+        private System.Windows.Forms.RichTextBox index11Mem;
+        private System.Windows.Forms.RichTextBox index10Mem;
+        private System.Windows.Forms.RichTextBox index9Mem;
     }
 }
 
