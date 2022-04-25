@@ -151,16 +151,18 @@ namespace ISA_GUI
 				{
 					index = x;
 					instruction.hitOrMiss = Instruction.cacheHit.MISS;
+					memoryKicked = 0;
 					return;
 				}
 				else if (tagIndexCache[x] != tag)
 				{
-					instruction.hitOrMiss = Instruction.cacheHit.CONFLICTED;
+					instruction.hitOrMiss = Instruction.cacheHit.CONF;
 				}
 				else
 				{
 					index = x;
 					instruction.hitOrMiss = Instruction.cacheHit.HIT;
+					memoryKicked = 0;
 					return;
 				}
 			}

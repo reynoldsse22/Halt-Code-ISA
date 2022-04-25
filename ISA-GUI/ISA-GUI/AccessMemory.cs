@@ -185,7 +185,7 @@ namespace ISA_GUI
 										instruction.ASPR = 1;
 								}
 								break;
-							case Instruction.cacheHit.CONFLICTED:
+							case Instruction.cacheHit.CONF:
 							case Instruction.cacheHit.MISS:
 								if (!load_buffer.instruction.executionInProgress && !load_buffer.instruction.doneExecuting)
 								{

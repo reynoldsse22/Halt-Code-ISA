@@ -403,7 +403,7 @@ namespace ISA_GUI
 								}
 
 								break;
-							case Instruction.cacheHit.CONFLICTED:
+							case Instruction.cacheHit.CONF:
 							case Instruction.cacheHit.MISS:
 								if (!memFU[instruction.functionalUnitIndex].instruction.executionInProgress && !memFU[instruction.functionalUnitIndex].instruction.doneExecuting)
 								{

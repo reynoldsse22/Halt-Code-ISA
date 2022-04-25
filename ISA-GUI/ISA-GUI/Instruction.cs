@@ -70,7 +70,7 @@ namespace ISA_GUI
         public enum cacheHit
         { 
 			HIT,
-			CONFLICTED,
+			CONF,
 			MISS
 		}
     }
