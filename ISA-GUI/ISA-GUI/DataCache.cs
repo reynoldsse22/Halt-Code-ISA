@@ -30,6 +30,11 @@ namespace ISA_GUI
 		//Number of bytes that are going to be in a block
 		public int cacheBlock = 8;
 
+		//Sets up the association for the cache
+		private int association = 4;
+		private int memoryKicked = 0;
+		private Random rand;
+
 		public int tag, index, offset, cacheLines;
 
 		//Allows for configuration
@@ -39,6 +44,7 @@ namespace ISA_GUI
 		public int numberOfWords { get; set; }
 		public int offsetMask;
 		public int indexMask;
+		public int indexSize;
 
 		/**
 	    * Method Name: DataCache <br>
@@ -54,10 +60,12 @@ namespace ISA_GUI
 			index = 0;
 			offset = 0;
 
+			rand = new Random();
 			offsetBitAmount = 3;
-			indexBitAmount = 4;
+			indexBitAmount = 2;
+			indexSize = (int)Math.Pow(2, indexBitAmount);
 
-			cacheLines = 16;
+			cacheLines = 16; 
 			numberOfWords = 10;
 			//This should be configurable in the future to allow 2/4 way association
 			offsetMask = (int)Math.Pow(2, offsetBitAmount) - 1;
@@ -73,10 +81,8 @@ namespace ISA_GUI
 		}
 
 		/// <summary>Updates the cache.</summary>
-		/// <param name="index">The index.</param>
 		/// <param name="address">The address.</param>
 		/// <param name="memory">The main memory.</param>
-		/// <param name="dC">
 		///   <para>
 		/// The cache.
 		/// </para>
@@ -92,8 +98,8 @@ namespace ISA_GUI
 				mem[x] = (byte)memory.MainMemory[address + x];
 			}
 
-			l1Cache[index] = mem;
-			tagIndexCache[index] = tag;
+			l1Cache[index + indexSize * memoryKicked] = mem;
+			tagIndexCache[index + indexSize * memoryKicked] = tag;
 		}
 
         /// <summary>Updates the cache with write instructions.</summary>
@@ -137,18 +143,28 @@ namespace ISA_GUI
         /// <param name="instruction">The instruction.</param>
         public void findInstructionInCache(ref Instruction instruction)
         {
-			if (l1Cache[index] == null)
-			{
-				instruction.hitOrMiss = Instruction.cacheHit.MISS;
+			//finds the offset for the types of association
+			int assocOffset = cacheLines / association;
+			for(int x = index; x < l1Cache.Length; x = x + assocOffset)
+            {
+				if (l1Cache[x] == null)
+				{
+					index = x;
+					instruction.hitOrMiss = Instruction.cacheHit.MISS;
+					return;
+				}
+				else if (tagIndexCache[x] != tag)
+				{
+					instruction.hitOrMiss = Instruction.cacheHit.CONFLICTED;
+				}
+				else
+				{
+					index = x;
+					instruction.hitOrMiss = Instruction.cacheHit.HIT;
+					return;
+				}
 			}
-			else if (tagIndexCache[index] != tag)
-			{
-				instruction.hitOrMiss = Instruction.cacheHit.CONFLICTED;
-			}
-			else
-			{
-				instruction.hitOrMiss = Instruction.cacheHit.HIT;
-			}
+			findRandomOffset();
 		}
 
 		public void clearCache()
@@ -158,7 +174,22 @@ namespace ISA_GUI
 				l1Cache[x] = null;
 				tagIndexCache[x] = 0;
 			}
+			memoryKicked = 0;
 		}
+
+		public void findRandomOffset()
+        {
+            switch (association)
+            {
+				case 1:
+					memoryKicked = 0;
+					break;
+				case 2:
+				case 4:
+					memoryKicked = rand.Next(association);
+					break;
+			}
+        }
 		/*
 		public void buildCacheDataString(ref StringBuilder cacheString, Instruction instruction)
 		{
@@ -183,4 +214,5 @@ namespace ISA_GUI
 		}
 		*/
 	}
+
 }
