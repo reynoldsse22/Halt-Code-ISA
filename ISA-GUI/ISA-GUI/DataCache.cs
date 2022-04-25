@@ -31,7 +31,7 @@ namespace ISA_GUI
 		public int cacheBlock = 8;
 
 		//Sets up the association for the cache
-		private int association = 4;
+		private int association = 1;
 		private int memoryKicked = 0;
 		private Random rand;
 
@@ -54,15 +54,16 @@ namespace ISA_GUI
 	    * Date created: 4/19/21 <br>
 	    * @author Samuel Reynolds
 	    */
-		public DataCache()
+		public DataCache(ConfigCycle config)
 		{
 			tag = 0;
 			index = 0;
 			offset = 0;
+			association = config.associativity;
 
 			rand = new Random();
 			offsetBitAmount = 3;
-			indexBitAmount = 2;
+			indexBitAmount = config.indexBitAmount;
 			indexSize = (int)Math.Pow(2, indexBitAmount);
 
 			cacheLines = 16; 

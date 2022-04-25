@@ -1817,7 +1817,9 @@
             this.associativityComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.associativityComboBox.FormattingEnabled = true;
             this.associativityComboBox.Items.AddRange(new object[] {
-            "Direct Mapped"});
+            "Direct Mapped",
+            "2-Way Set",
+            "4-Way Set"});
             this.associativityComboBox.Location = new System.Drawing.Point(4, 115);
             this.associativityComboBox.Name = "associativityComboBox";
             this.associativityComboBox.Size = new System.Drawing.Size(112, 24);

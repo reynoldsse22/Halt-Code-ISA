@@ -384,7 +384,8 @@ namespace ISA_GUI
 
             if(config.cachingSet)
             {
-                cpu.DP.DC.clearCache();
+                if(cpu.DP.DC != null)
+                    cpu.DP.DC.clearCache();
                 cacheString.Clear();
                 cacheString.Append(
             "Cache Statistics\n" +

@@ -106,6 +106,18 @@ namespace ISA_GUI
                 associativityComboBox.Enabled = true;
                 associativityLabel.Enabled = true;
                 lineSizeValue.Enabled = true;
+                switch (configurations.associativity)
+                {
+                    case 1:
+                        associativityComboBox.SelectedIndex = 0;
+                        break;
+                    case 2:
+                        associativityComboBox.SelectedIndex = 1;
+                        break;
+                    case 4:
+                        associativityComboBox.SelectedIndex = 2;
+                        break;
+                }
             }
             else
             {
@@ -258,6 +270,21 @@ namespace ISA_GUI
             if (cachingCheckBox.Checked)
             {
                 configurations.cachingSet = true;
+                switch (associativityComboBox.SelectedIndex)
+                {
+                    case 0:
+                        configurations.associativity = 1;
+                        configurations.indexBitAmount = 4;
+                        break;
+                    case 1:
+                        configurations.associativity = 2;
+                        configurations.indexBitAmount = 3;
+                        break;
+                    case 2:
+                        configurations.associativity = 4;
+                        configurations.indexBitAmount = 2;
+                        break;
+                }
             }
             else
             {
@@ -331,8 +358,11 @@ namespace ISA_GUI
             memoryFUValue.Value = 2;
             cacheHitDelayValue.Value = 1;
             cacheMissDelayValue.Value = 50;
-            
+            associativityComboBox.SelectedIndex = 0;
 
+
+            configurations.associativity = 1;
+            configurations.indexBitAmount = 8;
             configurations.predictionSet = false;
             configurations.forwardingSet = false;
             configurations.cachingSet = true;
