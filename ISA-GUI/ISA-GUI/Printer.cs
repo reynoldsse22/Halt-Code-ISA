@@ -328,9 +328,19 @@ namespace ISA_GUI
             string indexs = DC.index.ToString();
             string tagS = DC.tag.ToString();
             string hitOrMiss = instruction.hitOrMiss.ToString();
+            int instrucOp = instruction.opcode;
+            string instrucOpString = "";
+            if (instrucOp == 9)
+            {
+                instrucOpString = "LDWM";
+            }
+            else if(instrucOp == 10)
+            {
+                instrucOpString = "STWM";
+            }
 
-            string output = (string.Format("\n{0, 7} {1,13} {2, 7} {3, 8} {4, 8}",
-                           addressS.PadRight(7), offsets.PadRight(5), indexs.PadLeft(7), tagS.PadLeft(8), hitOrMiss.PadLeft(7)));
+            string output = (string.Format("\n{0, 7} {1,13} {2, 7} {3, 8} {4, 8} {5,5}",
+                         instrucOpString.PadRight(5), addressS.PadRight(7), offsets.PadRight(5), indexs.PadLeft(7), tagS.PadLeft(8), hitOrMiss.PadLeft(7)));
 
             cacheString.Append(output);
 
