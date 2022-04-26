@@ -61,7 +61,7 @@ namespace ISA_GUI
         /// <summary>Initializes a new instance of the <see cref="DynamicPipeline" /> class.</summary>
         public DynamicPipeline()
         {
-            DC = new DataCache();
+            
             fetch = new Fetch();
             CU = new ControlUnit();
             printer = new Printer();
@@ -120,6 +120,7 @@ namespace ISA_GUI
             programRanAtLeastOnce = true;
             if (cycleCount == 0)
             {
+                DC = new DataCache(config);
                 initializeFUs(config);
             }
 

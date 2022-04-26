@@ -52,8 +52,8 @@ namespace ISA_GUI
         StringBuilder cacheString = new StringBuilder(
             "Cache Statistics\n"+
             "----------------\n"+
-            "Address       Offset      Index     Tag    Data \n"+
-            "-------       ------      -----     ---    ----");
+            "Mnemonic    Address   Offset    Index   Tag   Cache \n" +
+            "--------    -------   ------    -----   ---   ----------");
 
        
         /**
@@ -384,13 +384,14 @@ namespace ISA_GUI
 
             if(config.cachingSet)
             {
-                cpu.DP.DC.clearCache();
+                if(cpu.DP.DC != null)
+                    cpu.DP.DC.clearCache();
                 cacheString.Clear();
                 cacheString.Append(
             "Cache Statistics\n" +
             "----------------\n" +
-            "Address       Offset      Index     Tag    Data \n" +
-            "-------       ------      -----     ---    ----");
+            "Mnemonic    Address   Offset    Index   Tag   Cache \n" +
+            "--------    -------   ------    -----   ---   ----------");
             }
 
             StatsTextBox.Text = "";
