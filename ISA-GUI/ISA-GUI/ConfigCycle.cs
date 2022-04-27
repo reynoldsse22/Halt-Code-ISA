@@ -88,7 +88,7 @@ namespace ISA_GUI
 			lineSize = 4;
 			numOfEntries = 8;
 			cacheHit = 1;
-			cacheMiss = 50;
+			cacheMiss = 10;
 			associativity = 1;
 			indexBitAmount = 4;
         }
