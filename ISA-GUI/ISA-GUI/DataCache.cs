@@ -62,12 +62,12 @@ namespace ISA_GUI
 			association = config.associativity;
 
 			rand = new Random();
-			offsetBitAmount = 3;
+			offsetBitAmount = 4;
 			indexBitAmount = config.indexBitAmount;
 			indexSize = (int)Math.Pow(2, indexBitAmount);
 
 			cacheLines = 16;
-			numberOfBytes = (int)Math.Pow(2, indexBitAmount) + 2;
+			numberOfBytes = (int)Math.Pow(2, offsetBitAmount) + 2;
 			//This should be configurable in the future to allow 2/4 way association
 			offsetMask = (int)Math.Pow(2, offsetBitAmount) - 1;
 			indexMask = (int)Math.Pow(2, indexBitAmount) - 1;
