@@ -317,19 +317,20 @@ namespace ISA_GUI
         public void buildCacheDataString(ref StringBuilder cacheString, Instruction instruction, ref DataCache DC)
         {
             int address = instruction.address;
-            string addressS = address.ToString();
+            string addressS = address.ToString("X");
             DC.offset = address & DC.offsetMask;
             address = address >> DC.offsetBitAmount;
             DC.index = address & DC.indexMask;
             address = address >> DC.indexBitAmount;
             DC.tag = address;
             //string addressS = address.ToString();
-            string offsets = DC.offset.ToString();
-            string indexs = DC.index.ToString();
-            string tagS = DC.tag.ToString();
+            string offsets = DC.offset.ToString("X");
+            string indexs = DC.index.ToString("X");
+            string tagS = DC.tag.ToString("X");
             string hitOrMiss = instruction.hitOrMiss.ToString();
             int instrucOp = instruction.opcode;
             string instrucOpString = "";
+
             if (instrucOp == 9)
             {
                 instrucOpString = "LDWM";
