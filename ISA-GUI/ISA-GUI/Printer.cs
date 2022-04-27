@@ -294,7 +294,11 @@ namespace ISA_GUI
 
             stage4 = instruction.stage4Cycle.ToString();
 
-            stage5 = instruction.stage5Cycle.ToString();
+            if (instruction.stage5CycleStart != instruction.stage5Cycle && !instruction.stage5CycleStart.Equals(""))
+                stage5 = instruction.stage5CycleStart.ToString() + "-" + instruction.stage5Cycle.ToString();
+            else
+                stage5 = instruction.stage5Cycle.ToString();
+           
 
 
             if (stage1 == "0")

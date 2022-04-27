@@ -160,6 +160,12 @@ namespace ISA_GUI
                             if (commitedThisCycle)
                                 continue;
 
+
+                            if (!inst.executionInProgress)
+                            {
+                                inst.stage5CycleStart = cycleCount;
+                            }
+
                             int instructionIndex = reorderBuffer.checkCommit(inst, ref WR, ref dataMemory, ref lastBranchDecision, ref IM, 
                                     ref registers, ref haltFound, ref commonDataBus, ref DC, ref cacheString, ref memoryFUs, ref config);
 
@@ -168,7 +174,7 @@ namespace ISA_GUI
                                 justCommitedInstruction = null;
                                 continue;
                             }
-                            
+
                             if (haltFound)
                             {
                                 totalDelays = trueDependenceDelay + reservationStationDelay + reorderBufferDelay;
