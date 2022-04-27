@@ -41,7 +41,7 @@ namespace ISA_GUI
 		public int offsetBitAmount { get; set; }
 		public int indexBitAmount { get; set; }
 		//Number of words allowed in the cache
-		public int numberOfWords { get; set; }
+		public int numberOfBytes { get; set; }
 		public int offsetMask;
 		public int indexMask;
 		public int indexSize;
@@ -62,12 +62,12 @@ namespace ISA_GUI
 			association = config.associativity;
 
 			rand = new Random();
-			offsetBitAmount = 3;
+			offsetBitAmount = 4;
 			indexBitAmount = config.indexBitAmount;
 			indexSize = (int)Math.Pow(2, indexBitAmount);
 
-			cacheLines = 16; 
-			numberOfWords = 10;
+			cacheLines = 16;
+			numberOfBytes = (int)Math.Pow(2, offsetBitAmount) + 2;
 			//This should be configurable in the future to allow 2/4 way association
 			offsetMask = (int)Math.Pow(2, offsetBitAmount) - 1;
 			indexMask = (int)Math.Pow(2, indexBitAmount) - 1;
@@ -92,9 +92,9 @@ namespace ISA_GUI
 		public void updateCache(int address, ref DataMemory memory)
 		{
 			//Adds new byte of memory into the cache
-			byte[] mem = new byte[numberOfWords];
+			byte[] mem = new byte[numberOfBytes];
 
-			for (int x = 0; x < numberOfWords; x++)
+			for (int x = 0; x < numberOfBytes; x++)
 			{
 				mem[x] = (byte)memory.MainMemory[address + x];
 			}
